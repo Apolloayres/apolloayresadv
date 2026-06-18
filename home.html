@@ -1,311 +1,344 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle do Escritório</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-    <style>
-        body {
-            background-color: #f0f2f5;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        .navbar {
-            background-color: #0a58ca !important;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .navbar-brand {
-            color: #ffffff;
-            font-weight: 600;
-        }
-
-        .navbar-brand:hover {
-            color: #f8f9fa;
-        }
-
-        .btn-logout {
-            color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-
-        .btn-logout:hover {
-            background-color: #ffffff;
-            color: #0a58ca;
-        }
-
-        .section-title {
-            color: #1a1a2e;
-            font-weight: 700;
-            margin-bottom: 30px;
-        }
-
-        .card {
-            border-radius: 12px;
-            border: none;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-            background-color: #ffffff;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(13, 110, 253, 0.15);
-            color: inherit;
-        }
-
-        .card-icon {
-            font-size: 2.5rem;
-            color: #0d6efd;
-            margin-bottom: 10px;
-        }
-
-        .card-title {
-            font-weight: 600;
-            color: #1a1a2e;
-        }
-
-        .card-text {
-            color: #6c757d;
-            font-size: 0.9rem;
-        }
-
-        .stats-card {
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s ease;
-        }
-
-        .stats-card:hover {
-            box-shadow: 0 8px 25px rgba(13, 110, 253, 0.12);
-        }
-
-        .stats-icon {
-            font-size: 1.5rem;
-            color: #0d6efd;
-            margin-bottom: 8px;
-        }
-
-        .stats-number {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #0d6efd;
-            margin-bottom: 4px;
-        }
-
-        .stats-label {
-            color: #6c757d;
-            font-size: 0.85rem;
-        }
-
-        footer {
-            background-color: #ffffff;
-            color: #6c757d;
-            padding: 20px 0;
-            margin-top: 40px;
-            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle do Escritório</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f0f2f5 0%, #e8ecf1 100%);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+    }
+    .navbar {
+      background: #0a58ca;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 20px rgba(10, 88, 202, 0.3);
+    }
+    .section-title {
+      color: #1a1a2e;
+      font-weight: 700;
+      font-size: 1.4rem;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .stats-card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(8px);
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      transition: all 0.3s;
+    }
+    .stats-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(13, 110, 253, 0.12);
+    }
+    .stats-icon {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+    .stats-number {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #0d6efd;
+    }
+    .stats-label {
+      color: #6c757d;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .card-modulo {
+      background: white;
+      border-radius: 14px;
+      border: none;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      color: inherit;
+      overflow: hidden;
+      position: relative;
+    }
+    .card-modulo:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 35px rgba(13, 110, 253, 0.18);
+    }
+    .card-modulo::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #0d6efd, #6ea8fe);
+    }
+    .card-modulo-body {
+      padding: 24px 20px 20px;
+      text-align: center;
+    }
+    .card-icon {
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+    }
+    .card-title {
+      font-weight: 600;
+      color: #1a1a2e;
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+    .card-text {
+      color: #8c8fa3;
+      font-size: 0.8rem;
+    }
+    .container-main {
+      max-width: 1300px;
+      padding: 30px 20px;
+    }
+    .welcome-text {
+      font-size: 0.9rem;
+      color: #0b5ed7;
+      margin-bottom: 4px;
+    }
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 40px;
+    }
+  </style>
 </head>
 <body>
-
-    <!-- TOPO -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="home.html">
-                <span class="me-2">🏛️</span>Controle do Escritório
-            </a>
-            <button class="btn btn-outline-light btn-logout" type="button" onclick="sair()">
-                <i class="fas fa-sign-out-alt me-1"></i>Sair
-            </button>
-        </div>
-    </nav>
-
-    <!-- CORPO -->
-    <div class="container py-5">
-
-        <!-- SEÇÃO DE ESTATÍSTICAS -->
-        <div class="row g-4 mb-5">
-            <div class="col-12">
-                <h2 class="section-title">Resumo do Sistema</h2>
-            </div>
-            <div class="col-6 col-lg-3">
-                <div class="stats-card">
-                    <div class="stats-icon"><i class="fas fa-money-bill-wave"></i></div>
-                    <div class="stats-number">R$ 0,00</div>
-                    <div class="stats-label">Receitas do Mês</div>
-                </div>
-            </div>
-            <div class="col-6 col-lg-3">
-                <div class="stats-card">
-                    <div class="stats-icon"><i class="fas fa-users"></i></div>
-                    <div class="stats-number">0</div>
-                    <div class="stats-label">Clientes Ativos</div>
-                </div>
-            </div>
-            <div class="col-6 col-lg-3">
-                <div class="stats-card">
-                    <div class="stats-icon"><i class="fas fa-university"></i></div>
-                    <div class="stats-number">0</div>
-                    <div class="stats-label">Contas Bancárias</div>
-                </div>
-            </div>
-            <div class="col-6 col-lg-3">
-                <div class="stats-card">
-                    <div class="stats-icon"><i class="fas fa-building"></i></div>
-                    <div class="stats-number">0</div>
-                    <div class="stats-label">Imóveis</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- MÓDULOS -->
-        <h2 class="section-title">Módulos do Sistema</h2>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-
-            <div class="col">
-                <a href="dashboard.html" class="card h-100 p-4 text-center">
-                    <div class="card-icon"><i class="fas fa-chart-line"></i></div>
-                    <h5 class="card-title">Dashboard</h5>
-                    <p class="card-text">Visão financeira completa</p>
-                </a>
-            </div>
-
-            <div class="col">
-                <a href="clientes.html" class="card h-100 p-4 text-center">
-                    <div class="card-icon"><i class="fas fa-users"></i></div>
-                    <h5 class="card-title">Clientes</h5>
-                    <p class="card-text">Cadastro e gestão</p>
-                </a>
-            </div>
-
-            <div class="col">
-                <a href="receitas.html" class="card h-100 p-4 text-center">
-                    <div class="card-icon"><i class="fas fa-money-bill-wave"></i></div>
-                    <h5 class="card-title">Receitas</h5>
-                    <p class="card-text">Controle de entradas</p>
-                </a>
-            </div>
-
-            <div class="col">
-                <a href="marketing.html" class="card h-100 p-4 text-center">
-                    <div class="card-icon"><i class="fas fa-bullhorn"></i></div>
-                    <h5 class="card-title">Marketing</h5>
-                    <p class="card-text">Campanhas e leads</p>
-                </a>
-            </div>
-
-            <div class="col">
-                <a href="financeiro.html" class="card h-100 p-4 text-center">
-                    <div class="card-icon"><i class="fas fa-coins"></i></div>
-                    <h5 class="card-title">Financeiro</h5>
-                    <p class="card-text">Despesas e contas</p>
-                </a>
-            </div>
-
-            <div class="col">
-                <a href="imoveis.html" class="card h-100 p-4 text-center">
-                    <div class="card-icon"><i class="fas fa-building"></i></div>
-                    <h5 class="card-title">Imóveis</h5>
-                    <p class="card-text">Gestão de imóveis</p>
-                </a>
-            </div>
-
-            <div class="col">
-                <a href="aplicacoes.html" class="card h-100 p-4 text-center">
-                    <div class="card-icon"><i class="fas fa-chart-pie"></i></div>
-                    <h5 class="card-title">Aplicações</h5>
-                    <p class="card-text">Investimentos</p>
-                </a>
-            </div>
-
-            <div class="col">
-                <a href="contas.html" class="card h-100 p-4 text-center">
-                    <div class="card-icon"><i class="fas fa-university"></i></div>
-                    <h5 class="card-title">Contas</h5>
-                    <p class="card-text">Contas bancárias</p>
-                </a>
-            </div>
-
-            <div class="col">
-                <a href="unidades.html" class="card h-100 p-4 text-center">
-                    <div class="card-icon"><i class="fas fa-store"></i></div>
-                    <h5 class="card-title">Unidades</h5>
-                    <p class="card-text">Filiais e equipe</p>
-                </a>
-            </div>
-
-            <div class="col">
-                <a href="proventos.html" class="card h-100 p-4 text-center">
-                    <div class="card-icon"><i class="fas fa-percentage"></i></div>
-                    <h5 class="card-title">Proventos</h5>
-                    <p class="card-text">Cálculo 2% H+S</p>
-                </a>
-            </div>
-
-            <div class="col">
-                <a href="prestacao-contas.html" class="card h-100 p-4 text-center">
-                    <div class="card-icon"><i class="fas fa-file-invoice"></i></div>
-                    <h5 class="card-title">Prestação de Contas</h5>
-                    <p class="card-text">Prestação de contas</p>
-                </a>
-            </div>
-
-            <div class="col">
-                <a href="relatorio-prestacao-contas.html" class="card h-100 p-4 text-center">
-                    <div class="card-icon"><i class="fas fa-file-alt"></i></div>
-                    <h5 class="card-title">Relatório Prestação</h5>
-                    <p class="card-text">Relatório de prestação</p>
-                </a>
-            </div>
-
-            <div class="col">
-                <a href="usuarios.html" class="card h-100 p-4 text-center">
-                    <div class="card-icon"><i class="fas fa-user-cog"></i></div>
-                    <h5 class="card-title">Usuários</h5>
-                    <p class="card-text">Perfis e acesso</p>
-                </a>
-            </div>
-
-            <div class="col">
-                <a href="relatorios.html" class="card h-100 p-4 text-center">
-                    <div class="card-icon"><i class="fas fa-chart-bar"></i></div>
-                    <h5 class="card-title">Relatórios</h5>
-                    <p class="card-text">Insights financeiros</p>
-                </a>
-            </div>
-
-        </div>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="home.html">
+        🏛️ Controle do Escritório
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item">
+            <span class="nav-link text-white welcome-text" id="usuarioNomeDisplay">👤 Usuário</span>
+          </li>
+          <li class="nav-item ms-lg-3">
+            <button class="btn btn-light btn-sm fw-semibold" onclick="logout()">Sair</button>
+          </li>
+        </ul>
+      </div>
     </div>
+  </nav>
 
-    <!-- RODAPÉ -->
-    <footer class="text-center">
-        <div class="container">
-            <p class="mb-0">© 2025 Controle do Escritório - Todos os direitos reservados</p>
+  <main class="container-main mx-auto">
+    <section class="mb-5">
+      <h2 class="section-title">📊 Resumo do Sistema</h2>
+      <div class="row g-4">
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="stats-card">
+            <div class="stats-icon">💰</div>
+            <div class="stats-number">R$ 0,00</div>
+            <div class="stats-label">Receitas do Mês</div>
+          </div>
         </div>
-    </footer>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="stats-card">
+            <div class="stats-icon">📈</div>
+            <div class="stats-number">0</div>
+            <div class="stats-label">Clientes Ativos</div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="stats-card">
+            <div class="stats-icon">🏦</div>
+            <div class="stats-number">0</div>
+            <div class="stats-label">Contas Bancárias</div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="stats-card">
+            <div class="stats-icon">🏢</div>
+            <div class="stats-number">0</div>
+            <div class="stats-label">Unidades</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="auth.js"></script>
-    <script>
-        // Verificar se o usuário está logado
-        if (localStorage.getItem('logado') !== 'true') {
-            window.location.href = 'index.html';
-        }
+    <section>
+      <h2 class="section-title">🔧 Módulos do Sistema</h2>
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+        <div class="col">
+          <a href="aplicacoes.html" class="card-modulo d-block h-100">
+            <div class="card-modulo-body">
+              <div class="card-icon">📈</div>
+              <div class="card-title">Aplicações</div>
+              <div class="card-text">Investimentos e aplicações</div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="auditoria.html" class="card-modulo d-block h-100">
+            <div class="card-modulo-body">
+              <div class="card-icon">📋</div>
+              <div class="card-title">Auditoria</div>
+              <div class="card-text">Histórico de ações do sistema</div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="clientes.html" class="card-modulo d-block h-100">
+            <div class="card-modulo-body">
+              <div class="card-icon">👥</div>
+              <div class="card-title">Clientes</div>
+              <div class="card-text">Cadastro e gestão de clientes</div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="contas.html" class="card-modulo d-block h-100">
+            <div class="card-modulo-body">
+              <div class="card-icon">🏦</div>
+              <div class="card-title">Contas</div>
+              <div class="card-text">Contas bancárias</div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="dashboard.html" class="card-modulo d-block h-100">
+            <div class="card-modulo-body">
+              <div class="card-icon">📊</div>
+              <div class="card-title">Dashboard</div>
+              <div class="card-text">Visão financeira completa</div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="financeiro.html" class="card-modulo d-block h-100">
+            <div class="card-modulo-body">
+              <div class="card-icon">💳</div>
+              <div class="card-title">Financeiro</div>
+              <div class="card-text">Despesas e contas a pagar</div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="imoveis.html" class="card-modulo d-block h-100">
+            <div class="card-modulo-body">
+              <div class="card-icon">🏠</div>
+              <div class="card-title">Imóveis</div>
+              <div class="card-text">Gestão de imóveis</div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="marketing.html" class="card-modulo d-block h-100">
+            <div class="card-modulo-body">
+              <div class="card-icon">📣</div>
+              <div class="card-title">Marketing</div>
+              <div class="card-text">Campanhas e leads</div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="prestacao-contas.html" class="card-modulo d-block h-100">
+            <div class="card-modulo-body">
+              <div class="card-icon">📋</div>
+              <div class="card-title">Prestação de Contas</div>
+              <div class="card-text">Prestação de contas</div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="proventos.html" class="card-modulo d-block h-100">
+            <div class="card-modulo-body">
+              <div class="card-icon">💵</div>
+              <div class="card-title">Proventos</div>
+              <div class="card-text">Cálculo 2% H+S e proventos</div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="receitas.html" class="card-modulo d-block h-100">
+            <div class="card-modulo-body">
+              <div class="card-icon">💰</div>
+              <div class="card-title">Receitas</div>
+              <div class="card-text">Controle de entradas</div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="relatorio-prestacao-contas.html" class="card-modulo d-block h-100">
+            <div class="card-modulo-body">
+              <div class="card-icon">📄</div>
+              <div class="card-title">Relatório Prestação</div>
+              <div class="card-text">Relatório detalhado</div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="relatorios.html" class="card-modulo d-block h-100">
+            <div class="card-modulo-body">
+              <div class="card-icon">📊</div>
+              <div class="card-title">Relatórios</div>
+              <div class="card-text">Insights financeiros</div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="trocar-senha.html" class="card-modulo d-block h-100">
+            <div class="card-modulo-body">
+              <div class="card-icon">🔒</div>
+              <div class="card-title">Trocar Senha</div>
+              <div class="card-text">Alterar senha de acesso</div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="unidades.html" class="card-modulo d-block h-100">
+            <div class="card-modulo-body">
+              <div class="card-icon">🏢</div>
+              <div class="card-title">Unidades</div>
+              <div class="card-text">Filiais e equipe</div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="usuarios.html" class="card-modulo d-block h-100">
+            <div class="card-modulo-body">
+              <div class="card-icon">👤</div>
+              <div class="card-title">Usuários</div>
+              <div class="card-text">Perfis e acesso</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
 
-        // Função de logout
-        function sair() {
-            localStorage.clear();
-            window.location.href = 'index.html';
-        }
-    </script>
+  <footer>
+    © 2025 Controle do Escritório. Todos os direitos reservados.
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    if (localStorage.getItem('logado') !== 'true') {
+      window.location.href = 'index.html';
+    }
+
+    const nome = localStorage.getItem('usuarioNome');
+    if (nome) {
+      document.getElementById('usuarioNomeDisplay').textContent = '👤 ' + nome;
+    }
+  </script>
 </body>
 </html>

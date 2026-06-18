@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Controle do Escritório</title>
+    <title>Login — Controle do Escritório</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -32,7 +33,7 @@
         }
 
         .logo {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 8px;
         }
 
@@ -41,6 +42,13 @@
             color: #1e293b;
             margin-bottom: 28px;
             font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-top: -20px;
+            margin-bottom: 28px;
         }
 
         .form-group {
@@ -56,35 +64,51 @@
             font-weight: 500;
         }
 
+        input[type="email"],
         input[type="password"] {
             width: 100%;
-            padding: 12px 14px;
+            padding: 12px 14px 12px 42px;
             border: 2px solid #e2e8f0;
             border-radius: 10px;
             font-size: 1rem;
             outline: none;
-            transition: border-color 0.2s ease;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
         }
 
-        input[type="password"]:focus {
+        input:focus {
             border-color: #3b82f6;
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1.1rem;
         }
 
         .btn-entrar {
             width: 100%;
             padding: 14px;
-            background-color: #10b981;
+            background: #0d6efd;
             color: #ffffff;
             border: none;
             border-radius: 10px;
             font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.1s ease;
+            transition: all 0.2s;
         }
 
         .btn-entrar:hover {
-            background-color: #059669;
+            background: #0b5ed7;
+            transform: translateY(-1px);
         }
 
         .btn-entrar:active {
@@ -96,16 +120,38 @@
             font-size: 0.9rem;
             margin-top: 14px;
             display: none;
+            background: #fef2f2;
+            padding: 10px 14px;
+            border-radius: 8px;
+            text-align: left;
         }
 
-        @media (max-width: 480px) {
-            .login-card {
-                padding: 32px 24px;
-            }
+        .erro i {
+            margin-right: 6px;
+        }
 
-            .title {
-                font-size: 1.25rem;
-            }
+        .info-text {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 20px;
+        }
+
+        .senha-info {
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            margin-top: 16px;
+        }
+
+        .senha-link {
+            font-size: 0.8rem;
+            color: #0d6efd;
+            text-decoration: none;
+            display: block;
+            margin-top: 12px;
+        }
+
+        .senha-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -113,47 +159,66 @@
     <div class="login-card">
         <div class="logo">🏛️</div>
         <h1 class="title">Controle do Escritório</h1>
-        <form id="loginForm" onsubmit="return false;">
+        <p class="subtitle">Faça login para acessar o sistema</p>
+
+        <form id="formLogin">
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <div class="input-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" placeholder="seu@email.com" required autocomplete="email">
+                </div>
+            </div>
+
             <div class="form-group">
                 <label for="senha">Senha</label>
-                <input type="password" id="senha" placeholder="Digite sua senha" autocomplete="off">
+                <div class="input-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="senha" placeholder="Digite sua senha" required autocomplete="current-password">
+                </div>
             </div>
-            <button type="button" id="btnEntrar" class="btn-entrar">ENTRAR</button>
-            <p id="mensagemErro" class="erro">Senha incorreta. Tente novamente.</p>
+
+            <div class="erro" id="erroLogin">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="erroMsg">Email ou senha incorretos</span>
+            </div>
+
+            <button type="submit" class="btn-entrar">
+                <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> Entrar
+            </button>
         </form>
+
+        <p class="info-text">Sistema de Gestão Financeira</p>
+        <p class="senha-info">© 2025 Controle do Escritório</p>
     </div>
 
+    <script src="auth.js"></script>
     <script>
-        const senhaCorreta = '#Felipe01*';
+        function logar() {
+            const email = document.getElementById('email').value.trim();
+            const senha = document.getElementById('senha').value;
+            const erroDiv = document.getElementById('erroLogin');
+            const erroMsg = document.getElementById('erroMsg');
 
-        const senhaInput = document.getElementById('senha');
-        const btnEntrar = document.getElementById('btnEntrar');
-        const mensagemErro = document.getElementById('mensagemErro');
+            erroDiv.style.display = 'none';
 
-        function realizarLogin() {
-            const senhaDigitada = senhaInput.value;
+            if (!email || !senha) {
+                erroMsg.textContent = 'Preencha todos os campos';
+                erroDiv.style.display = 'block';
+                return;
+            }
 
-            if (senhaDigitada === senhaCorreta) {
-                localStorage.setItem('logado', 'true');
-                window.location.href = 'home.html';
-            } else {
-                mensagemErro.style.display = 'block';
-                senhaInput.value = '';
-                senhaInput.focus();
+            const resultado = fazerLogin(email, senha);
+
+            if (resultado === false) {
+                erroMsg.textContent = 'Email ou senha incorretos';
+                erroDiv.style.display = 'block';
             }
         }
 
-        btnEntrar.addEventListener('click', realizarLogin);
-
-        senhaInput.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                realizarLogin();
-            }
-        });
-
-        senhaInput.addEventListener('input', function() {
-            mensagemErro.style.display = 'none';
+        document.getElementById('formLogin').addEventListener('submit', function (e) {
+            e.preventDefault();
+            logar();
         });
     </script>
 </body>
