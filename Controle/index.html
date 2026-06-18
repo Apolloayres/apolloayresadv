@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Controle do Escritório</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            padding: 20px;
+        }
+
+        .login-card {
+            background: #ffffff;
+            padding: 40px 32px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        .title {
+            font-size: 1.5rem;
+            color: #1e293b;
+            margin-bottom: 28px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #475569;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        input[type="password"]:focus {
+            border-color: #3b82f6;
+        }
+
+        .btn-entrar {
+            width: 100%;
+            padding: 14px;
+            background-color: #10b981;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        .btn-entrar:hover {
+            background-color: #059669;
+        }
+
+        .btn-entrar:active {
+            transform: scale(0.98);
+        }
+
+        .erro {
+            color: #dc2626;
+            font-size: 0.9rem;
+            margin-top: 14px;
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 32px 24px;
+            }
+
+            .title {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="logo">🏛️</div>
+        <h1 class="title">Controle do Escritório</h1>
+        <form id="loginForm" onsubmit="return false;">
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" placeholder="Digite sua senha" autocomplete="off">
+            </div>
+            <button type="button" id="btnEntrar" class="btn-entrar">ENTRAR</button>
+            <p id="mensagemErro" class="erro">Senha incorreta. Tente novamente.</p>
+        </form>
+    </div>
+
+    <script>
+        const senhaCorreta = '#Felipe01*';
+
+        const senhaInput = document.getElementById('senha');
+        const btnEntrar = document.getElementById('btnEntrar');
+        const mensagemErro = document.getElementById('mensagemErro');
+
+        function realizarLogin() {
+            const senhaDigitada = senhaInput.value;
+
+            if (senhaDigitada === senhaCorreta) {
+                localStorage.setItem('logado', 'true');
+                window.location.href = 'home.html';
+            } else {
+                mensagemErro.style.display = 'block';
+                senhaInput.value = '';
+                senhaInput.focus();
+            }
+        }
+
+        btnEntrar.addEventListener('click', realizarLogin);
+
+        senhaInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                realizarLogin();
+            }
+        });
+
+        senhaInput.addEventListener('input', function() {
+            mensagemErro.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rel. Prestação - Controle do Escritório</title>
+  <link rel="stylesheet" href="css/auth.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #F0FFF0; color: #333; }
+    header { background: #1e3a8a; color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 1.4rem; }
+    header div { display: flex; align-items: center; gap: 10px; }
+    .btn-inicio { background: #10b981; color: white; padding: 8px 14px; text-decoration: none; border-radius: 6px; font-size: 0.9rem; }
+    .btn-bloquear { background: #6b7280; color: white; padding: 8px 12px; text-decoration: none; border-radius: 6px; font-size: 0.9rem; }
+    nav { background: #3b82f6; display: flex; flex-wrap: wrap; padding: 10px 15px; gap: 8px; }
+    nav a { color: white; text-decoration: none; padding: 8px 12px; border-radius: 6px; font-size: 0.9rem; transition: background 0.2s; }
+    nav a:hover { background: rgba(255,255,255,0.1); }
+    .nav-ativo { background: rgba(255,255,255,0.2); font-weight: bold; }
+    .container { max-width: 1400px; margin: 20px auto; padding: 0 20px; }
+    .card { background: white; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 20px; margin-bottom: 20px; }
+    .indicadores { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+    .indicador { background: white; border-radius: 10px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); text-align: center; }
+    .indicador h3 { color: #1e3a8a; font-size: 0.9rem; margin-bottom: 8px; text-transform: uppercase; }
+    .indicador p { font-size: 1.6rem; font-weight: bold; color: #10b981; }
+    .indicador p.quantidade { color: #3b82f6; }
+    .controles { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 20px; }
+    .controles label { font-weight: bold; color: #1e3a8a; }
+    .controles select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; }
+    .btn { background: #3b82f6; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-size: 0.95rem; }
+    .btn:hover { background: #2563eb; }
+    .btn-print { background: #10b981; }
+    .btn-print:hover { background: #059669; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 15px; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px; }
+    .tab { background: #e5e7eb; border: none; padding: 10px 18px; border-radius: 6px 6px 0 0; cursor: pointer; font-weight: bold; color: #4b5563; }
+    .tab.ativa { background: #3b82f6; color: white; }
+    .aba-conteudo { display: none; }
+    .aba-conteudo.ativa { display: block; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+    th, td { border: 1px solid #e5e7eb; padding: 10px; text-align: left; }
+    th { background: #1e3a8a; color: white; font-weight: 600; }
+    tr:nth-child(even) { background: #f9fafb; }
+    .text-right { text-align: right; }
+    .total-secao { background: #1e3a8a; color: white; font-weight: bold; }
+    .sem-registros { text-align: center; padding: 30px; color: #6b7280; font-style: italic; }
+    .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+    .badge-pendente { background: #fef3c7; color: #92400e; }
+    .badge-pago { background: #d1fae5; color: #065f46; }
+    .badge-cancelado { background: #fee2e2; color: #991b1b; }
+    @media print {
+      header, nav, .tabs, .controles, .btn-print { display: none !important; }
+      body { background: white; }
+      .container { margin: 0; padding: 0; max-width: 100%; }
+      .aba-conteudo { display: block !important; }
+      .card, .indicador { box-shadow: none; border: 1px solid #ddd; }
+      table { font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🏛️ Controle do Escritório</h1>
+    <div>
+      <span style="color:white;margin-right:15px;">👤 Admin</span>
+      <a href="home.html" class="btn-inicio">🏠 Início</a>
+      <a href="#" onclick="bloquear(); return false;" class="btn-bloquear">🔒</a>
+    </div>
+  </header>
+
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="clientes.html">Clientes</a>
+    <a href="receitas.html">Receitas</a>
+    <a href="marketing.html">Marketing</a>
+    <a href="financeiro.html">Financeiro</a>
+    <a href="imoveis.html">Imóveis</a>
+    <a href="aplicacoes.html">Aplicações</a>
+    <a href="contas.html">Contas</a>
+    <a href="unidades.html">Unidades</a>
+    <a href="proventos.html">Proventos</a>
+    <a href="prestacao-contas.html">Prestação de Contas</a>
+    <a href="relatorio-prestacao-contas.html" class="nav-ativo">Rel. Prestação</a>
+    <a href="relatorios.html">Relatórios</a>
+    <a href="usuarios.html">Usuários</a>
+  </nav>
+
+  <div class="container">
+    <div class="indicadores">
+      <div class="indicador">
+        <h3>Total Geral</h3>
+        <p id="indTotalGeral">R$ 0,00</p>
+      </div>
+      <div class="indicador">
+        <h3>Total Honorários</h3>
+        <p id="indTotalHonorarios">R$ 0,00</p>
+      </div>
+      <div class="indicador">
+        <h3>Total Repasse</h3>
+        <p id="indTotalRepasse">R$ 0,00</p>
+      </div>
+      <div class="indicador">
+        <h3>Registros</h3>
+        <p id="indRegistros" class="quantidade">0</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="controles">
+        <label for="filtroMes">Mês:</label>
+        <select id="filtroMes">
+          <option value="">Todos</option>
+          <option value="01">Janeiro</option>
+          <option value="02">Fevereiro</option>
+          <option value="03">Março</option>
+          <option value="04">Abril</option>
+          <option value="05">Maio</option>
+          <option value="06">Junho</option>
+          <option value="07">Julho</option>
+          <option value="08">Agosto</option>
+          <option value="09">Setembro</option>
+          <option value="10">Outubro</option>
+          <option value="11">Novembro</option>
+          <option value="12">Dezembro</option>
+        </select>
+        <label for="filtroAno">Ano:</label>
+        <select id="filtroAno">
+          <option value="">Todos</option>
+        </select>
+        <button class="btn btn-print" onclick="window.print()">🖨️ Imprimir</button>
+      </div>
+
+      <div class="tabs">
+        <button class="tab ativa" onclick="abrirAba('contador')">Contador</button>
+        <button class="tab" onclick="abrirAba('completo')">Completo</button>
+        <button class="tab" onclick="abrirAba('nf')">NF</button>
+      </div>
+
+      <div id="aba-contador" class="aba-conteudo ativa">
+        <div id="tabelaContador"></div>
+      </div>
+      <div id="aba-completo" class="aba-conteudo">
+        <div id="tabelaCompleto"></div>
+      </div>
+      <div id="aba-nf" class="aba-conteudo">
+        <div id="tabelaNF"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    const STORAGE_KEY = 'prestacaoContas';
+
+    function formatarMoeda(valor) {
+      const v = parseFloat(valor) || 0;
+      return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function formatarData(data) {
+      if (!data) return '-';
+      const d = new Date(data);
+      if (isNaN(d.getTime())) return data;
+      return d.toLocaleDateString('pt-BR');
+    }
+
+    function getBadgeStatus(status) {
+      const s = (status || '').toLowerCase();
+      let classe = 'badge-pendente';
+      if (s === 'pago' || s === 'recebido' || s === 'quitado') classe = 'badge-pago';
+      if (s === 'cancelado' || s === 'inativo') classe = 'badge-cancelado';
+      return `<span class="badge ${classe}">${status || 'Pendente'}</span>`;
+    }
+
+    function carregarDados() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+      try {
+        return JSON.parse(raw);
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function popularAnos() {
+      const dados = carregarDados();
+      const anos = new Set();
+      dados.forEach(item => {
+        [item.dataRecebimento, item.dataEmissaoNF, item.dataRepasse].forEach(data => {
+          if (data) {
+            const ano = data.substring(0, 4);
+            if (/^\d{4}$/.test(ano)) anos.add(ano);
+          }
+        });
+      });
+      const select = document.getElementById('filtroAno');
+      const atual = select.value;
+      select.innerHTML = '<option value="">Todos</option>';
+      Array.from(anos).sort((a, b) => b - a).forEach(ano => {
+        select.innerHTML += `<option value="${ano}">${ano}</option>`;
+      });
+      select.value = atual;
+    }
+
+    function filtrarPorPeriodo(dados) {
+      const mes = document.getElementById('filtroMes').value;
+      const ano = document.getElementById('filtroAno').value;
+      if (!mes && !ano) return dados;
+      return dados.filter(item => {
+        const dataRef = item.dataRecebimento || item.dataEmissaoNF || '';
+        if (!dataRef) return false;
+        const refMes = dataRef.substring(5, 7);
+        const refAno = dataRef.substring(0, 4);
+        const matchMes = mes ? refMes === mes : true;
+        const matchAno = ano ? refAno === ano : true;
+        return matchMes && matchAno;
+      });
+    }
+
+    function calcularIndicadores(dados) {
+      let totalGeral = 0, totalHonorarios = 0, totalRepasse = 0;
+      dados.forEach(item => {
+        totalGeral += parseFloat(item.total) || 0;
+        totalHonorarios += parseFloat(item.honorarios) || 0;
+        totalRepasse += parseFloat(item.repasse) || 0;
+      });
+      document.getElementById('indTotalGeral').textContent = formatarMoeda(totalGeral);
+      document.getElementById('indTotalHonorarios').textContent = formatarMoeda(totalHonorarios);
+      document.getElementById('indTotalRepasse').textContent = formatarMoeda(totalRepasse);
+      document.getElementById('indRegistros').textContent = dados.length;
+    }
+
+    function renderContador(dados) {
+      const container = document.getElementById('tabelaContador');
+      if (dados.length === 0) {
+        container.innerHTML = '<p class="sem-registros">Nenhum registro encontrado para o período selecionado.</p>';
+        return;
+      }
+      let html = '<table><thead><tr>' +
+        '<th>Processo</th><th>Cliente</th><th>CPF</th><th>Endereço</th><th>NF</th><th>Emissão NF</th><th>Honorários</th><th>Status</th>' +
+        '</tr></thead><tbody>';
+      dados.forEach(item => {
+        html += `<tr>` +
+          `<td>${item.numeroProcesso || '-'}</td>` +
+          `<td>${item.nomeCliente || '-'}</td>` +
+          `<td>${item.cpfCliente || '-'}</td>` +
+          `<td>${item.enderecoCompleto || '-'}</td>` +
+          `<td>${item.numeroNotaFiscal || '-'}</td>` +
+          `<td>${formatarData(item.dataEmissaoNF)}</td>` +
+          `<td class="text-right">${formatarMoeda(item.honorarios)}</td>` +
+          `<td>${getBadgeStatus(item.status)}</td>` +
+          `</tr>`;
+      });
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+
+    function renderCompleto(dados) {
+      const container = document.getElementById('tabelaCompleto');
+      if (dados.length === 0) {
+        container.innerHTML = '<p class="sem-registros">Nenhum registro encontrado para o período selecionado.</p>';
+        return;
+      }
+      const campos = [
+        { k: 'enderecoCompleto', t: 'Endereço', m: false },
+        { k: 'banco', t: 'Banco', m: false },
+        { k: 'agencia', t: 'Agência', m: false },
+        { k: 'operacao', t: 'Operação', m: false },
+        { k: 'conta', t: 'Conta', m: false },
+        { k: 'tipoConta', t: 'Tipo Conta', m: false },
+        { k: 'chavePix', t: 'Chave Pix', m: false },
+        { k: 'numeroNotaFiscal', t: 'NF', m: false },
+        { k: 'dataEmissaoNF', t: 'Emissão NF', m: false },
+        { k: 'dataRecebimento', t: 'Recebimento', m: false },
+        { k: 'dataRepasse', t: 'Repasse', m: false },
+        { k: 'fgts', t: 'FGTS', m: true },
+        { k: 'decimoTerceiro', t: '13º', m: true },
+        { k: 'funcefEmpregado', t: 'Funcef Emp.', m: true },
+        { k: 'funcefCaixa', t: 'Funcef Cx.', m: true },
+        { k: 'liminar', t: 'Liminar', m: true },
+        { k: 'incontroverso', t: 'Incontroverso', m: true },
+        { k: 'correcao', t: 'Correção', m: true },
+        { k: 'total', t: 'Total', m: true },
+        { k: 'honorarios', t: 'Honorários', m: true },
+        { k: 'repasse', t: 'Repasse', m: true },
+        { k: 'status', t: 'Status', m: false }
+      ];
+      let html = '<table><thead><tr>';
+      campos.forEach(c => html += `<th>${c.t}</th>`);
+      html += '</tr></thead><tbody>';
+      dados.forEach(item => {
+        html += '<tr>';
+        campos.forEach(c => {
+          let val = item[c.k];
+          if (c.k.toLowerCase().includes('data') && val) val = formatarData(val);
+          else if (c.m) val = formatarMoeda(val);
+          else if (!val) val = '-';
+          if (c.k === 'status') val = getBadgeStatus(val);
+          html += `<td${c.m ? ' class="text-right"' : ''}>${val}</td>`;
+        });
+        html += '</tr>';
+      });
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+
+    function renderNF(dados) {
+      const container = document.getElementById('tabelaNF');
+      if (dados.length === 0) {
+        container.innerHTML = '<p class="sem-registros">Nenhum registro encontrado para o período selecionado.</p>';
+        return;
+      }
+      const grupos = {};
+      dados.forEach(item => {
+        const nf = item.numeroNotaFiscal || 'Sem NF';
+        if (!grupos[nf]) grupos[nf] = { dataEmissaoNF: item.dataEmissaoNF, clientes: [], totalHonorarios: 0 };
+        grupos[nf].clientes.push(item);
+        grupos[nf].totalHonorarios += parseFloat(item.honorarios) || 0;
+      });
+
+      let html = '<table><thead><tr>' +
+        '<th>Nota Fiscal</th><th>Emissão NF</th><th>Cliente(s)</th><th>Processo(s)</th><th>Honorários</th>' +
+        '</tr></thead><tbody>';
+      Object.keys(grupos).sort().forEach(nf => {
+        const g = grupos[nf];
+        const clientes = g.clientes.map(c => c.nomeCliente || '-').join('<br>');
+        const processos = g.clientes.map(c => c.numeroProcesso || '-').join('<br>');
+        const honorarios = g.clientes.map(c => formatarMoeda(c.honorarios)).join('<br>');
+        html += `<tr>` +
+          `<td>${nf}</td>` +
+          `<td>${formatarData(g.dataEmissaoNF)}</td>` +
+          `<td>${clientes}</td>` +
+          `<td>${processos}</td>` +
+          `<td class="text-right">${honorarios}<br><strong>${formatarMoeda(g.totalHonorarios)}</strong></td>` +
+          `</tr>`;
+      });
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+
+    function atualizarRelatorio() {
+      const dados = filtrarPorPeriodo(carregarDados());
+      calcularIndicadores(dados);
+      renderContador(dados);
+      renderCompleto(dados);
+      renderNF(dados);
+    }
+
+    function abrirAba(aba) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('ativa'));
+      document.querySelectorAll('.aba-conteudo').forEach(c => c.classList.remove('ativa'));
+      event.target.classList.add('ativa');
+      document.getElementById('aba-' + aba).classList.add('ativa');
+    }
+
+    document.getElementById('filtroMes').addEventListener('change', atualizarRelatorio);
+    document.getElementById('filtroAno').addEventListener('change', atualizarRelatorio);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      popularAnos();
+      atualizarRelatorio();
+    });
+  </script>
+</body>
+</html>

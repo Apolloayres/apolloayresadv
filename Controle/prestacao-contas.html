@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prestação de Contas</title>
+  <script src="auth.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { background: #F0FFF0; color: #333; }
+    header { background: #1e3a8a; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 1.4rem; }
+    header div { display: flex; align-items: center; gap: 8px; }
+    .btn-inicio { background: #10b981; color: white; padding: 8px 14px; border-radius: 5px; text-decoration: none; }
+    .btn-bloquear { background: #6b7280; color: white; padding: 8px 12px; border-radius: 5px; text-decoration: none; }
+    nav { background: #3b82f6; padding: 10px 20px; display: flex; flex-wrap: wrap; gap: 8px; }
+    nav a { color: white; text-decoration: none; padding: 6px 10px; border-radius: 4px; font-size: 0.9rem; }
+    .nav-ativo { background: rgba(255,255,255,0.2); font-weight: bold; }
+    main { padding: 20px; max-width: 1400px; margin: 0 auto; }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+    .btn { padding: 8px 14px; border: none; border-radius: 5px; cursor: pointer; color: white; }
+    .btn-primary { background: #1e3a8a; }
+    .btn-success { background: #10b981; }
+    .btn-danger { background: #ef4444; }
+    .btn-warning { background: #f59e0b; }
+    .btn-secondary { background: #6b7280; }
+    .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 15px; }
+    .grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
+    .resumo-card { background: #eff6ff; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #bfdbfe; }
+    .resumo-card h3 { font-size: 0.9rem; color: #1e3a8a; margin-bottom: 5px; }
+    .resumo-card p { font-size: 1.4rem; font-weight: bold; color: #1e3a8a; }
+    .filtro-mes { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
+    .tabela { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
+    .tabela th { background: #1e3a8a; color: white; padding: 12px; text-align: left; }
+    .tabela td { padding: 10px; border-bottom: 1px solid #e5e7eb; }
+    .tabela tr:hover { background: #f9fafb; }
+    .badge { padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; color: white; }
+    .badge-repassado { background: #10b981; }
+    .badge-pendente { background: #f59e0b; }
+    .badge-cancelado { background: #ef4444; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: flex-start; padding-top: 30px; z-index: 1000; overflow-y: auto; }
+    .modal-content { background: white; padding: 25px; border-radius: 8px; width: 95%; max-width: 1000px; max-height: 90vh; overflow-y: auto; position: relative; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .modal-close { font-size: 1.5rem; cursor: pointer; color: #6b7280; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-col { display: flex; flex-direction: column; gap: 12px; }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group label { font-size: 0.85rem; font-weight: bold; color: #374151; margin-bottom: 4px; }
+    .form-group input, .form-group select { padding: 8px; border: 1px solid #d1d5db; border-radius: 5px; font-size: 0.9rem; }
+    .autocomplete { position: relative; }
+    .sugestoes { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #d1d5db; border-radius: 0 0 5px 5px; max-height: 150px; overflow-y: auto; z-index: 10; }
+    .sugestao-item { padding: 8px; cursor: pointer; border-bottom: 1px solid #f3f4f6; }
+    .sugestao-item:hover { background: #eff6ff; }
+    .bancario-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .resumo-card-body { background: #eff6ff; padding: 15px; border-radius: 8px; border: 1px solid #bfdbfe; margin-top: 10px; }
+    .resumo-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #dbeafe; }
+    .resumo-item:last-child { border-bottom: none; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+    @media (max-width: 768px) {
+      .form-row { grid-template-columns: 1fr; }
+      .bancario-grid { grid-template-columns: 1fr; }
+      .grid4 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🏛️ Controle do Escritório</h1>
+    <div>
+      <span style="color:white;margin-right:15px;">👤 Admin</span>
+      <a href="home.html" class="btn-inicio">🏠 Início</a>
+      <a href="#" onclick="bloquear(); return false;" class="btn-bloquear">🔒</a>
+    </div>
+  </header>
+
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="clientes.html">Clientes</a>
+    <a href="receitas.html">Receitas</a>
+    <a href="marketing.html">Marketing</a>
+    <a href="financeiro.html">Financeiro</a>
+    <a href="imoveis.html">Imóveis</a>
+    <a href="aplicacoes.html">Aplicações</a>
+    <a href="contas.html">Contas</a>
+    <a href="unidades.html">Unidades</a>
+    <a href="proventos.html">Proventos</a>
+    <a href="prestacao-contas.html" class="nav-ativo">Prestação de Contas</a>
+    <a href="relatorio-prestacao-contas.html">Rel. Prestação</a>
+    <a href="relatorios.html">Relatórios</a>
+    <a href="usuarios.html">Usuários</a>
+  </nav>
+
+  <main>
+    <div class="toolbar">
+      <h2>Prestação de Contas</h2>
+      <button class="btn btn-primary" onclick="abrirModal()">+ Novo Lançamento</button>
+    </div>
+
+    <div class="card grid4">
+      <div class="resumo-card">
+        <h3>Total em Alvarás</h3>
+        <p id="totalAlvaras">R$ 0,00</p>
+      </div>
+      <div class="resumo-card">
+        <h3>Total Honorários</h3>
+        <p id="totalHonorarios">R$ 0,00</p>
+      </div>
+      <div class="resumo-card">
+        <h3>Total Repasse</h3>
+        <p id="totalRepasse">R$ 0,00</p>
+      </div>
+      <div class="resumo-card">
+        <h3>Total Lançamentos</h3>
+        <p id="totalLancamentos">0</p>
+      </div>
+    </div>
+
+    <div class="card filtro-mes">
+      <label for="filtroMes">Mês/Ano:</label>
+      <input type="month" id="filtroMes" onchange="renderizar()">
+      <button class="btn btn-secondary" onclick="limparFiltro()">Limpar</button>
+    </div>
+
+    <div class="card" style="overflow-x: auto;">
+      <table class="tabela">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>CPF</th>
+            <th>Processo</th>
+            <th>NF</th>
+            <th>Total Alvará</th>
+            <th>Honorários</th>
+            <th>Repasse</th>
+            <th>Data Recebimento</th>
+            <th>Data Repasse</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaLancamentos"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <div class="modal" id="modalLancamento">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitulo">Novo Lançamento</h2>
+        <span class="modal-close" onclick="fecharModal()">&times;</span>
+      </div>
+      <form id="formLancamento" onsubmit="salvar(event)">
+        <input type="hidden" id="lancamentoId">
+        <div class="form-row">
+          <div class="form-col">
+            <h3 style="color:#1e3a8a; margin-bottom:5px;">Valores do Alvará</h3>
+            <div class="form-group">
+              <label>FGTS</label>
+              <input type="number" id="fgts" step="0.01" min="0" value="0" oninput="calcular()">
+            </div>
+            <div class="form-group">
+              <label>13º Salário</label>
+              <input type="number" id="decimoTerceiro" step="0.01" min="0" value="0" oninput="calcular()">
+            </div>
+            <div class="form-group">
+              <label>FUNCEF Empregado</label>
+              <input type="number" id="funcefEmpregado" step="0.01" min="0" value="0" oninput="calcular()">
+            </div>
+            <div class="form-group">
+              <label>FUNCEF Caixa</label>
+              <input type="number" id="funcefCaixa" step="0.01" min="0" value="0" oninput="calcular()">
+            </div>
+            <div class="form-group">
+              <label>Liminar</label>
+              <input type="number" id="liminar" step="0.01" min="0" value="0" oninput="calcular()">
+            </div>
+            <div class="form-group">
+              <label>Incontroverso</label>
+              <input type="number" id="incontroverso" step="0.01" min="0" value="0" oninput="calcular()">
+            </div>
+            <div class="form-group">
+              <label>Correção</label>
+              <input type="number" id="correcao" step="0.01" min="0" value="0" oninput="calcular()">
+            </div>
+
+            <div class="resumo-card-body">
+              <div class="resumo-item">
+                <span>Total Alvará</span>
+                <strong id="resumoTotal">R$ 0,00</strong>
+              </div>
+              <div class="resumo-item">
+                <span>Honorários (20%)</span>
+                <strong id="resumoHonorarios">R$ 0,00</strong>
+              </div>
+              <div class="resumo-item">
+                <span>Repasse</span>
+                <strong id="resumoRepasse">R$ 0,00</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-col">
+            <h3 style="color:#1e3a8a; margin-bottom:5px;">Dados do Cliente</h3>
+            <div class="form-group autocomplete">
+              <label>Nome do Cliente</label>
+              <input type="text" id="nomeCliente" autocomplete="off" oninput="filtrarClientes(this.value)">
+              <div class="sugestoes" id="sugestoesCliente"></div>
+            </div>
+            <div class="form-group">
+              <label>CPF do Cliente</label>
+              <input type="text" id="cpfCliente">
+            </div>
+            <div class="form-group">
+              <label>Endereço Completo</label>
+              <input type="text" id="enderecoCompleto" placeholder="Rua, Nº, Complemento, Bairro, Cidade-UF">
+            </div>
+            <div class="bancario-grid">
+              <div class="form-group">
+                <label>Banco</label>
+                <input type="text" id="banco">
+              </div>
+              <div class="form-group">
+                <label>Agência</label>
+                <input type="text" id="agencia">
+              </div>
+              <div class="form-group">
+                <label>Operação</label>
+                <input type="text" id="operacao">
+              </div>
+              <div class="form-group">
+                <label>Conta</label>
+                <input type="text" id="conta">
+              </div>
+              <div class="form-group">
+                <label>Tipo de Conta</label>
+                <input type="text" id="tipoConta">
+              </div>
+              <div class="form-group">
+                <label>Chave PIX</label>
+                <input type="text" id="chavePix">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Nº Processo</label>
+              <input type="text" id="numeroProcesso">
+            </div>
+            <div class="form-group">
+              <label>Nº Nota Fiscal</label>
+              <input type="text" id="numeroNotaFiscal">
+            </div>
+            <div class="form-group">
+              <label>Data Emissão NF</label>
+              <input type="date" id="dataEmissaoNF">
+            </div>
+            <div class="form-group">
+              <label>Data Recebimento</label>
+              <input type="date" id="dataRecebimento">
+            </div>
+            <div class="form-group">
+              <label>Data Repasse</label>
+              <input type="date" id="dataRepasse">
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select id="status">
+                <option value="Pendente">Pendente</option>
+                <option value="Recebido">Recebido</option>
+                <option value="Repassado">Repassado</option>
+                <option value="Cancelado">Cancelado</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
+          <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'prestacaoContas';
+    const CLIENTES_KEY = 'clientes';
+
+    let lancamentoEditando = null;
+
+    function bloquear() {
+      localStorage.removeItem('logado');
+      window.location.href = 'login.html';
+    }
+
+    function formatarMoeda(valor) {
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor || 0);
+    }
+
+    function obterLancamentos() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    }
+
+    function salvarLancamentos(lancamentos) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(lancamentos));
+    }
+
+    function obterClientes() {
+      return JSON.parse(localStorage.getItem(CLIENTES_KEY) || '[]');
+    }
+
+    function buscarCliente(nome) {
+      const clientes = obterClientes();
+      return clientes.find(c => c.nome && c.nome.toLowerCase().trim() === nome.toLowerCase().trim()) || null;
+    }
+
+    function filtrarClientes(nome) {
+      const sugestoes = document.getElementById('sugestoesCliente');
+      sugestoes.innerHTML = '';
+      if (!nome.trim()) return;
+      const clientes = obterClientes().filter(c => c.nome && c.nome.toLowerCase().includes(nome.toLowerCase()));
+      clientes.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'sugestao-item';
+        div.textContent = c.nome;
+        div.onclick = () => selecionarCliente(c);
+        sugestoes.appendChild(div);
+      });
+    }
+
+    function selecionarCliente(cliente) {
+      document.getElementById('nomeCliente').value = cliente.nome || '';
+      document.getElementById('cpfCliente').value = cliente.cpf || '';
+      const endereco = [
+        cliente.rua || cliente.endereco || '',
+        cliente.numero || '',
+        cliente.complemento || '',
+        cliente.bairro || '',
+        cliente.cidade || '',
+        cliente.uf || ''
+      ].filter(Boolean).join(', ');
+      document.getElementById('enderecoCompleto').value = endereco;
+      document.getElementById('banco').value = cliente.banco || '';
+      document.getElementById('agencia').value = cliente.agencia || '';
+      document.getElementById('operacao').value = cliente.operacao || '';
+      document.getElementById('conta').value = cliente.conta || '';
+      document.getElementById('tipoConta').value = cliente.tipoConta || '';
+      document.getElementById('chavePix').value = cliente.chavePix || '';
+      document.getElementById('sugestoesCliente').innerHTML = '';
+    }
+
+    function calcular() {
+      const fgts = parseFloat(document.getElementById('fgts').value) || 0;
+      const decimo = parseFloat(document.getElementById('decimoTerceiro').value) || 0;
+      const funcefEmp = parseFloat(document.getElementById('funcefEmpregado').value) || 0;
+      const funcefCai = parseFloat(document.getElementById('funcefCaixa').value) || 0;
+      const liminar = parseFloat(document.getElementById('liminar').value) || 0;
+      const incontroverso = parseFloat(document.getElementById('incontroverso').value) || 0;
+      const correcao = parseFloat(document.getElementById('correcao').value) || 0;
+
+      const total = fgts + decimo + funcefEmp + funcefCai + liminar + incontroverso + correcao;
+      const honorarios = total * 0.20;
+      const repasse = total - honorarios;
+
+      document.getElementById('resumoTotal').textContent = formatarMoeda(total);
+      document.getElementById('resumoHonorarios').textContent = formatarMoeda(honorarios);
+      document.getElementById('resumoRepasse').textContent = formatarMoeda(repasse);
+    }
+
+    function abrirModal(id = null) {
+      document.getElementById('formLancamento').reset();
+      document.getElementById('sugestoesCliente').innerHTML = '';
+      document.getElementById('lancamentoId').value = '';
+      lancamentoEditando = null;
+      document.getElementById('modalTitulo').textContent = 'Novo Lançamento';
+      calcular();
+
+      if (id) {
+        const lancamento = obterLancamentos().find(l => l.id === id);
+        if (lancamento) {
+          lancamentoEditando = lancamento;
+          document.getElementById('modalTitulo').textContent = 'Editar Lançamento';
+          document.getElementById('lancamentoId').value = lancamento.id;
+          document.getElementById('fgts').value = lancamento.fgts || 0;
+          document.getElementById('decimoTerceiro').value = lancamento.decimoTerceiro || 0;
+          document.getElementById('funcefEmpregado').value = lancamento.funcefEmpregado || 0;
+          document.getElementById('funcefCaixa').value = lancamento.funcefCaixa || 0;
+          document.getElementById('liminar').value = lancamento.liminar || 0;
+          document.getElementById('incontroverso').value = lancamento.incontroverso || 0;
+          document.getElementById('correcao').value = lancamento.correcao || 0;
+          document.getElementById('nomeCliente').value = lancamento.nomeCliente || '';
+          document.getElementById('cpfCliente').value = lancamento.cpfCliente || '';
+          document.getElementById('enderecoCompleto').value = lancamento.enderecoCompleto || '';
+          document.getElementById('banco').value = lancamento.banco || '';
+          document.getElementById('agencia').value = lancamento.agencia || '';
+          document.getElementById('operacao').value = lancamento.operacao || '';
+          document.getElementById('conta').value = lancamento.conta || '';
+          document.getElementById('tipoConta').value = lancamento.tipoConta || '';
+          document.getElementById('chavePix').value = lancamento.chavePix || '';
+          document.getElementById('numeroProcesso').value = lancamento.numeroProcesso || '';
+          document.getElementById('numeroNotaFiscal').value = lancamento.numeroNotaFiscal || '';
+          document.getElementById('dataEmissaoNF').value = lancamento.dataEmissaoNF || '';
+          document.getElementById('dataRecebimento').value = lancamento.dataRecebimento || '';
+          document.getElementById('dataRepasse').value = lancamento.dataRepasse || '';
+          document.getElementById('status').value = lancamento.status || 'Pendente';
+          calcular();
+        }
+      }
+      document.getElementById('modalLancamento').style.display = 'flex';
+    }
+
+    function fecharModal() {
+      document.getElementById('modalLancamento').style.display = 'none';
+    }
+
+    function salvar(event) {
+      event.preventDefault();
+      const lancamentos = obterLancamentos();
+      const id = document.getElementById('lancamentoId').value;
+
+      const fgts = parseFloat(document.getElementById('fgts').value) || 0;
+      const decimo = parseFloat(document.getElementById('decimoTerceiro').value) || 0;
+      const funcefEmp = parseFloat(document.getElementById('funcefEmpregado').value) || 0;
+      const funcefCai = parseFloat(document.getElementById('funcefCaixa').value) || 0;
+      const liminar = parseFloat(document.getElementById('liminar').value) || 0;
+      const incontroverso = parseFloat(document.getElementById('incontroverso').value) || 0;
+      const correcao = parseFloat(document.getElementById('correcao').value) || 0;
+      const total = fgts + decimo + funcefEmp + funcefCai + liminar + incontroverso + correcao;
+      const honorarios = total * 0.20;
+      const repasse = total - honorarios;
+
+      const nomeCliente = document.getElementById('nomeCliente').value.trim();
+      const cliente = buscarCliente(nomeCliente);
+
+      const novoLancamento = {
+        id: id || Date.now().toString(),
+        fgts,
+        decimoTerceiro: decimo,
+        funcefEmpregado: funcefEmp,
+        funcefCaixa: funcefCai,
+        liminar,
+        incontroverso,
+        correcao,
+        total,
+        honorarios,
+        repasse,
+        nomeCliente,
+        cpfCliente: document.getElementById('cpfCliente').value.trim(),
+        enderecoCompleto: document.getElementById('enderecoCompleto').value.trim(),
+        banco: document.getElementById('banco').value.trim(),
+        agencia: document.getElementById('agencia').value.trim(),
+        operacao: document.getElementById('operacao').value.trim(),
+        conta: document.getElementById('conta').value.trim(),
+        tipoConta: document.getElementById('tipoConta').value.trim(),
+        chavePix: document.getElementById('chavePix').value.trim(),
+        numeroProcesso: document.getElementById('numeroProcesso').value.trim(),
+        numeroNotaFiscal: document.getElementById('numeroNotaFiscal').value.trim(),
+        dataEmissaoNF: document.getElementById('dataEmissaoNF').value,
+        dataRecebimento: document.getElementById('dataRecebimento').value,
+        dataRepasse: document.getElementById('dataRepasse').value,
+        status: document.getElementById('status').value,
+        clienteId: cliente ? cliente.id : null,
+        dataCadastro: lancamentoEditando ? lancamentoEditando.dataCadastro : new Date().toISOString()
+      };
+
+      if (id) {
+        const index = lancamentos.findIndex(l => l.id === id);
+        if (index >= 0) lancamentos[index] = novoLancamento;
+      } else {
+        lancamentos.push(novoLancamento);
+      }
+
+      salvarLancamentos(lancamentos);
+      fecharModal();
+      renderizar();
+    }
+
+    function excluir(id) {
+      if (!confirm('Deseja realmente excluir este lançamento?')) return;
+      const lancamentos = obterLancamentos().filter(l => l.id !== id);
+      salvarLancamentos(lancamentos);
+      renderizar();
+    }
+
+    function limparFiltro() {
+      document.getElementById('filtroMes').value = '';
+      renderizar();
+    }
+
+    function renderizar() {
+      let lancamentos = obterLancamentos();
+      const filtroMes = document.getElementById('filtroMes').value;
+      if (filtroMes) {
+        lancamentos = lancamentos.filter(l => {
+          const data = l.dataRecebimento || l.dataCadastro;
+          if (!data) return false;
+          return data.startsWith(filtroMes);
+        });
+      }
+
+      const tbody = document.getElementById('tabelaLancamentos');
+      tbody.innerHTML = '';
+
+      let totalAlvaras = 0, totalHonorarios = 0, totalRepasse = 0;
+
+      lancamentos.forEach(l => {
+        totalAlvaras += l.total || 0;
+        totalHonorarios += l.honorarios || 0;
+        totalRepasse += l.repasse || 0;
+
+        const tr = document.createElement('tr');
+        let classeBadge = 'badge-pendente';
+        if (l.status === 'Repassado') classeBadge = 'badge-repassado';
+        if (l.status === 'Cancelado') classeBadge = 'badge-cancelado';
+        if (l.status === 'Recebido') classeBadge = 'badge-pendente';
+
+        tr.innerHTML = `
+          <td>${l.nomeCliente || '-'}</td>
+          <td>${l.cpfCliente || '-'}</td>
+          <td>${l.numeroProcesso || '-'}</td>
+          <td>${l.numeroNotaFiscal || '-'}</td>
+          <td>${formatarMoeda(l.total)}</td>
+          <td>${formatarMoeda(l.honorarios)}</td>
+          <td>${formatarMoeda(l.repasse)}</td>
+          <td>${l.dataRecebimento ? new Date(l.dataRecebimento).toLocaleDateString('pt-BR') : '-'}</td>
+          <td>${l.dataRepasse ? new Date(l.dataRepasse).toLocaleDateString('pt-BR') : '-'}</td>
+          <td><span class="badge ${classeBadge}">${l.status || 'Pendente'}</span></td>
+          <td>
+            <button class="btn btn-warning" onclick="abrirModal('${l.id}')" style="padding:4px 8px; font-size:0.8rem;">Editar</button>
+            <button class="btn btn-danger" onclick="excluir('${l.id}')" style="padding:4px 8px; font-size:0.8rem;">Excluir</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('totalAlvaras').textContent = formatarMoeda(totalAlvaras);
+      document.getElementById('totalHonorarios').textContent = formatarMoeda(totalHonorarios);
+      document.getElementById('totalRepasse').textContent = formatarMoeda(totalRepasse);
+      document.getElementById('totalLancamentos').textContent = lancamentos.length;
+    }
+
+    window.onclick = function(e) {
+      const modal = document.getElementById('modalLancamento');
+      if (e.target === modal) fecharModal();
+      if (!e.target.closest('.autocomplete')) document.getElementById('sugestoesCliente').innerHTML = '';
+    };
+
+    document.addEventListener('DOMContentLoaded', renderizar);
+  </script>
+</body>
+</html>
