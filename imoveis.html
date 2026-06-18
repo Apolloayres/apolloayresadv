@@ -1,339 +1,148 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Imóveis - Controle do Escritório</title>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-body { background: #F0FFF0; color: #111827; min-height: 100vh; }
-header { background: #1e3a8a; color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
-header h1 { font-size: 22px; }
-nav { background: #3b82f6; padding: 10px 20px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-nav a { color: white; text-decoration: none; padding: 8px 12px; border-radius: 6px; font-size: 14px; transition: 0.2s; }
-nav a:hover { background: rgba(255,255,255,0.15); }
-.container { max-width: 1300px; margin: 24px auto; padding: 0 16px; }
-.indicadores { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
-.card { background: white; padding: 18px; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); text-align: center; }
-.card h3 { font-size: 13px; color: #6b7280; margin-bottom: 8px; text-transform: uppercase; }
-.card p { font-size: 26px; font-weight: bold; color: #1e3a8a; }
-.card span { font-size: 12px; color: #10b981; }
-.content { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
-.toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
-.toolbar h2 { font-size: 18px; color: #1e3a8a; }
-input[type="text"], input[type="number"], select { padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; }
-button { background: #3b82f6; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 14px; }
-button:hover { opacity: 0.9; }
-.btn-success { background: #10b981; }
-.btn-danger { background: #ef4444; }
-.btn-warning { background: #f59e0b; }
-.btn-secondary { background: #6b7280; }
-.btn-sm { padding: 5px 10px; font-size: 12px; }
-.search-area { display: flex; gap: 8px; }
-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb; }
-th { background: #f3f4f6; color: #374151; font-weight: 600; }
-tr:hover { background: #f9fafb; }
-.status { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; }
-.status-alugado { background: #dcfce7; color: #166534; }
-.status-disponivel { background: #dbeafe; color: #1e40af; }
-.status-venda { background: #fef3c7; color: #92400e; }
-.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 999; }
-.modal { background: white; padding: 24px; border-radius: 10px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; }
-.modal h2 { margin-bottom: 16px; color: #1e3a8a; }
-.form-group { margin-bottom: 12px; }
-.form-group label { display: block; font-size: 13px; color: #374151; margin-bottom: 4px; }
-.form-group input, .form-group select { width: 100%; }
-.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
-@media (max-width: 900px) { .indicadores { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 600px) { .indicadores { grid-template-columns: 1fr; } .toolbar { flex-direction: column; align-items: stretch; } .search-area { flex-direction: column; } }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imóveis — Controle do Escritório</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .navbar {
+            background-color: #0a58ca !important;
+        }
+        .card {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        .stats-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stats-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0d6efd;
+        }
+        .table-actions {
+            white-space: nowrap;
+        }
+    </style>
 </head>
 <body>
-<<header>
-  <h1>🏛️ Controle do Escritório</h1>
-  <div>
-    <span style="color:white;margin-right:15px;">👤 Admin</span>
-    <a href="home.html" style="background:#10b981;color:white;padding:8px 16px;border-radius:6px;text-decoration:none;font-size:14px;margin-right:8px;">🏠 Início</a>
-    <a href="#" onclick="bloquear(); return false;" style="background:#6b7280;color:white;padding:8px 12px;border-radius:6px;text-decoration:none;font-size:13px;">🔒</a>
-  </div>
-</header>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="home.html">
+                <span class="me-2">🏛️</span>Controle do Escritório
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="home.html">Voltar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="sair()">Sair</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-<<nav>
-  <a href="home.html">Home</a>
-  <a href="dashboard.html">Dashboard</a>
-  <a href="clientes.html">Clientes</a>
-  <a href="receitas.html">Receitas</a>
-  <a href="marketing.html">Marketing</a>
-  <a href="financeiro.html">Financeiro</a>
-  <a href="imoveis.html" style="background:rgba(255,255,255,0.2);font-weight:bold;">Imóveis</a>
-  <a href="aplicacoes.html">Aplicações</a>
-  <a href="contas.html">Contas</a>
-  <a href="unidades.html">Unidades</a>
-  <a href="proventos.html">Proventos</a>
-  <a href="prestacao-contas.html">Prestação de Contas</a>
-  <a href="relatorio-prestacao-contas.html">Rel. Prestação</a>
-  <a href="relatorios.html">Relatórios</a>
-  <a href="usuarios.html">Usuários</a>
-</nav>
+    <div class="container py-4">
+        <div class="text-center mb-4">
+            <h1 class="display-6 fw-bold">🏠 Gestão de Imóveis</h1>
+            <p class="text-muted">Cadastro e acompanhamento de imóveis</p>
+        </div>
 
-<div class="container">
-  <div class="indicadores">
-    <div class="card">
-      <h3>Total Imóveis</h3>
-      <p id="indTotal">0</p>
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="stats-card card">
+                    <div class="card-body">
+                        <div class="stats-number">0</div>
+                        <div class="text-muted">Imóveis Cadastrados</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card card">
+                    <div class="card-body">
+                        <div class="stats-number">0</div>
+                        <div class="text-muted">Imóveis Alugados</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card card">
+                    <div class="card-body">
+                        <div class="stats-number">0</div>
+                        <div class="text-muted">Imóveis Disponíveis</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="h5 mb-0">📋 Imóveis Cadastrados</h2>
+                    <button class="btn btn-primary">➕ Novo Imóvel</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Nome</th>
+                                <th>Endereço</th>
+                                <th>Tipo</th>
+                                <th>Status</th>
+                                <th>Valor</th>
+                                <th class="text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">Nenhum imóvel cadastrado</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button class="btn btn-primary btn-lg">➕ Novo Imóvel</button>
+        </div>
     </div>
-    <div class="card">
-      <h3>Alugados</h3>
-      <p id="indAlugados">0</p>
-    </div>
-    <div class="card">
-      <h3>Disponíveis</h3>
-      <p id="indDisponiveis">0</p>
-    </div>
-    <div class="card">
-      <h3>Receita Aluguel</h3>
-      <p id="indReceita">R$ 0,00</p>
-    </div>
-  </div>
 
-  <div class="content">
-    <div class="toolbar">
-      <h2>📋 Lista de Imóveis</h2>
-      <div class="search-area">
-        <input type="text" id="busca" placeholder="Buscar imóvel..." onkeyup="renderImoveis()" />
-        <button class="btn-success" onclick="abrirModal()">+ Novo Imóvel</button>
-      </div>
-    </div>
+    <footer class="text-center text-muted py-4 mt-4">
+        <div class="container">
+            <p class="mb-0">© 2025 Controle do Escritório - Todos os direitos reservados</p>
+        </div>
+    </footer>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Tipo</th>
-          <th>Proprietário</th>
-          <th>Status</th>
-          <th>Valor</th>
-          <th>Inquilino</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody id="tabelaImoveis"></tbody>
-    </table>
-  </div>
-</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function verificarLogin() {
+            if (localStorage.getItem('logado') !== 'true') {
+                window.location.href = 'index.html';
+            }
+        }
 
-<div class="modal-overlay" id="modalOverlay" onclick="fecharModalOverlay(event)">
-  <div class="modal" onclick="event.stopPropagation()">
-    <h2 id="modalTitulo">Novo Imóvel</h2>
-    <form id="formImovel" onsubmit="salvarImovel(event)">
-      <input type="hidden" id="imovelId" />
-      <div class="form-group">
-        <label for="nome">Nome</label>
-        <input type="text" id="nome" required />
-      </div>
-      <div class="form-group">
-        <label for="tipo">Tipo</label>
-        <select id="tipo" required>
-          <option value="">Selecione</option>
-          <option value="Casa">Casa</option>
-          <option value="Apartamento">Apartamento</option>
-          <option value="Sala Comercial">Sala Comercial</option>
-          <option value="Galpão">Galpão</option>
-          <option value="Terreno">Terreno</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="proprietario">Proprietário</label>
-        <input type="text" id="proprietario" required />
-      </div>
-      <div class="form-group">
-        <label for="status">Status</label>
-        <select id="status" required>
-          <option value="">Selecione</option>
-          <option value="Alugado">Alugado</option>
-          <option value="Disponível">Disponível</option>
-          <option value="Venda">Venda</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="valor">Valor (R$)</label>
-        <input type="number" id="valor" step="0.01" min="0" required />
-      </div>
-      <div class="form-group">
-        <label for="inquilino">Inquilino</label>
-        <input type="text" id="inquilino" placeholder="Preencher se alugado" />
-      </div>
-      <div class="modal-actions">
-        <button type="button" class="btn-secondary" onclick="fecharModal()">Cancelar</button>
-        <button type="submit" class="btn-success">Salvar</button>
-      </div>
-    </form>
-  </div>
-</div>
+        function sair() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
 
-<script src="auth.js"></script>
-<script>
-const STORAGE_KEY = 'imoveis';
-
-function getImoveis() {
-  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-}
-
-function setImoveis(lista) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
-}
-
-function seedInicial() {
-  if (!localStorage.getItem(STORAGE_KEY)) {
-    setImoveis([
-      { id: 1, nome: 'Residencial das Flores', tipo: 'Apartamento', proprietario: 'João Silva', status: 'Alugado', valor: 1800, inquilino: 'Maria Oliveira' },
-      { id: 2, nome: 'Galpão Industrial Norte', tipo: 'Galpão', proprietario: 'Empresa ABC', status: 'Disponível', valor: 4500, inquilino: '' },
-      { id: 3, nome: 'Casa Jardim Europa', tipo: 'Casa', proprietario: 'Ana Souza', status: 'Alugado', valor: 3200, inquilino: 'Carlos Mendes' },
-      { id: 4, nome: 'Sala Comercial Centro', tipo: 'Sala Comercial', proprietario: 'Pedro Rocha', status: 'Venda', valor: 250000, inquilino: '' }
-    ]);
-  }
-}
-
-function formatarMoeda(valor) {
-  return 'R$ ' + parseFloat(valor || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-}
-
-function statusClasse(status) {
-  if (status === 'Alugado') return 'status-alugado';
-  if (status === 'Disponível') return 'status-disponivel';
-  return 'status-venda';
-}
-
-function atualizarIndicadores() {
-  const lista = getImoveis();
-  const alugados = lista.filter(i => i.status === 'Alugado');
-  const disponiveis = lista.filter(i => i.status === 'Disponível');
-  const receita = alugados.reduce((s, i) => s + parseFloat(i.valor || 0), 0);
-  document.getElementById('indTotal').textContent = lista.length;
-  document.getElementById('indAlugados').textContent = alugados.length;
-  document.getElementById('indDisponiveis').textContent = disponiveis.length;
-  document.getElementById('indReceita').textContent = formatarMoeda(receita);
-}
-
-function renderImoveis() {
-  const busca = document.getElementById('busca').value.toLowerCase();
-  const lista = getImoveis().filter(i =>
-    Object.values(i).some(v => String(v).toLowerCase().includes(busca))
-  );
-  const tbody = document.getElementById('tabelaImoveis');
-  tbody.innerHTML = '';
-
-  if (lista.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#6b7280;">Nenhum imóvel encontrado.</td></tr>';
-    return;
-  }
-
-  lista.forEach(i => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${i.nome}</td>
-      <td>${i.tipo}</td>
-      <td>${i.proprietario}</td>
-      <td><span class="status ${statusClasse(i.status)}">${i.status}</span></td>
-      <td>${formatarMoeda(i.valor)}</td>
-      <td>${i.inquilino || '-'}</td>
-      <td>
-        <button class="btn-warning btn-sm" onclick="editarImovel(${i.id})">✏️</button>
-        <button class="btn-danger btn-sm" onclick="excluirImovel(${i.id})">🗑️</button>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function abrirModal(id = null) {
-  document.getElementById('modalOverlay').style.display = 'flex';
-  document.getElementById('formImovel').reset();
-  document.getElementById('imovelId').value = '';
-  document.getElementById('modalTitulo').textContent = 'Novo Imóvel';
-
-  if (id) {
-    const lista = getImoveis();
-    const i = lista.find(x => x.id === id);
-    if (i) {
-      document.getElementById('imovelId').value = i.id;
-      document.getElementById('nome').value = i.nome;
-      document.getElementById('tipo').value = i.tipo;
-      document.getElementById('proprietario').value = i.proprietario;
-      document.getElementById('status').value = i.status;
-      document.getElementById('valor').value = i.valor;
-      document.getElementById('inquilino').value = i.inquilino;
-      document.getElementById('modalTitulo').textContent = 'Editar Imóvel';
-    }
-  }
-}
-
-function fecharModal() {
-  document.getElementById('modalOverlay').style.display = 'none';
-}
-
-function fecharModalOverlay(e) {
-  if (e.target.id === 'modalOverlay') fecharModal();
-}
-
-function salvarImovel(e) {
-  e.preventDefault();
-  const id = document.getElementById('imovelId').value;
-  const nome = document.getElementById('nome').value.trim();
-  const tipo = document.getElementById('tipo').value;
-  const proprietario = document.getElementById('proprietario').value.trim();
-  const status = document.getElementById('status').value;
-  const valor = parseFloat(document.getElementById('valor').value) || 0;
-  const inquilino = document.getElementById('inquilino').value.trim();
-
-  let lista = getImoveis();
-
-  if (id) {
-    const idx = lista.findIndex(x => x.id === parseInt(id));
-    if (idx >= 0) {
-      lista[idx] = { id: parseInt(id), nome, tipo, proprietario, status, valor, inquilino };
-    }
-  } else {
-    const novoId = lista.length > 0 ? Math.max(...lista.map(x => x.id)) + 1 : 1;
-    lista.push({ id: novoId, nome, tipo, proprietario, status, valor, inquilino });
-  }
-
-  setImoveis(lista);
-  fecharModal();
-  renderImoveis();
-  atualizarIndicadores();
-}
-
-function editarImovel(id) {
-  abrirModal(id);
-}
-
-function excluirImovel(id) {
-  if (confirm('Deseja realmente excluir este imóvel?')) {
-    let lista = getImoveis().filter(x => x.id !== id);
-    setImoveis(lista);
-    renderImoveis();
-    atualizarIndicadores();
-  }
-}
-
-function bloquear() {
-  if (typeof logout === 'function') {
-    logout();
-  } else {
-    localStorage.removeItem('usuarioLogado');
-    localStorage.removeItem('token');
-    alert('Sessão encerrada. Tela bloqueada.');
-    window.location.href = 'login.html';
-  }
-}
-
-window.onload = function() {
-  seedInicial();
-  renderImoveis();
-  atualizarIndicadores();
-};
-</script>
+        verificarLogin();
+    </script>
 </body>
 </html>
