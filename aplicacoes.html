@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplicações Financeiras - Controle do Escritório</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #F0FFF0; color: #333; min-height: 100vh; display: flex; flex-direction: column; }
+    header { background: #1e3a8a; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    header h1 { font-size: 24px; }
+    nav { background: #3b82f6; display: flex; flex-wrap: wrap; justify-content: center; padding: 10px; gap: 8px; }
+    nav a { color: white; text-decoration: none; padding: 10px 14px; border-radius: 6px; font-size: 14px; transition: background 0.2s; }
+    nav a:hover { background: rgba(255,255,255,0.2); }
+    main { flex: 1; padding: 25px; max-width: 1400px; width: 100%; margin: 0 auto; }
+    .grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px; }
+    .card-ind { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); text-align: center; }
+    .card-ind h3 { font-size: 14px; color: #666; margin-bottom: 8px; text-transform: uppercase; }
+    .card-ind p { font-size: 26px; font-weight: bold; color: #1e3a8a; }
+    .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+    .card-header h2 { font-size: 20px; color: #1e3a8a; }
+    .btn { padding: 10px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; display: inline-block; }
+    .btn-primary { background: #10b981; color: white; }
+    .btn-primary:hover { background: #059669; }
+    .btn-edit { background: #3b82f6; color: white; padding: 6px 10px; font-size: 13px; margin-right: 5px; }
+    .btn-edit:hover { background: #2563eb; }
+    .btn-delete { background: #ef4444; color: white; padding: 6px 10px; font-size: 13px; }
+    .btn-delete:hover { background: #dc2626; }
+    .btn-cancel { background: #6b7280; color: white; }
+    .btn-cancel:hover { background: #4b5563; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+    th { background: #f3f4f6; color: #1e3a8a; font-weight: 600; }
+    tr:hover { background: #f9fafb; }
+    .status { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+    .status-ativo { background: #d1fae5; color: #065f46; }
+    .status-vencido { background: #fee2e2; color: #991b1b; }
+    .status-resgatado { background: #e5e7eb; color: #374151; }
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
+    .modal { background: white; padding: 25px; border-radius: 10px; width: 100%; max-width: 500px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+    .modal h2 { margin-bottom: 20px; color: #1e3a8a; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-size: 14px; font-weight: 600; }
+    .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+    .empty { text-align: center; padding: 30px; color: #6b7280; }
+    @media (max-width: 768px) { header { flex-direction: column; gap: 10px; text-align: center; } nav { gap: 5px; } nav a { padding: 8px 10px; font-size: 13px; } .grid4 { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🏛️ Controle do Escritório</h1>
+    <div>
+      <span style="color:white;margin-right:15px;">👤 Admin</span>
+      <a href="home.html" style="background:#10b981;color:white;padding:8px 16px;border-radius:6px;text-decoration:none;font-size:14px;margin-right:8px;">🏠 Início</a>
+      <a href="#" onclick="bloquear(); return false;" style="background:#6b7280;color:white;padding:8px 12px;border-radius:6px;text-decoration:none;font-size:13px;">🔒</a>
+    </div>
+  </header>
+
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="clientes.html">Clientes</a>
+    <a href="receitas.html">Receitas</a>
+    <a href="marketing.html">Marketing</a>
+    <a href="financeiro.html">Financeiro</a>
+    <a href="imoveis.html">Imóveis</a>
+    <a href="aplicacoes.html" style="background:rgba(255,255,255,0.2);font-weight:bold;">Aplicações</a>
+    <a href="contas.html">Contas</a>
+    <a href="unidades.html">Unidades</a>
+    <a href="proventos.html">Proventos</a>
+    <a href="prestacao-contas.html">Prestação de Contas</a>
+    <a href="relatorio-prestacao-contas.html">Rel. Prestação</a>
+    <a href="relatorios.html">Relatórios</a>
+    <a href="usuarios.html">Usuários</a>
+  </nav>
+
+  <main>
+    <div class="grid4">
+      <div class="card-ind">
+        <h3>Total Investido</h3>
+        <p id="totalInvestido">R$ 0,00</p>
+      </div>
+      <div class="card-ind">
+        <h3>Saldo Atual</h3>
+        <p id="saldoAtual">R$ 0,00</p>
+      </div>
+      <div class="card-ind">
+        <h3>Rentabilidade Média</h3>
+        <p id="rentabilidadeMedia">0,00%</p>
+      </div>
+      <div class="card-ind">
+        <h3>Total Aplicações</h3>
+        <p id="totalAplicacoes">0</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>📈 Aplicações Financeiras</h2>
+        <button class="btn btn-primary" onclick="abrirModal()">+ Nova Aplicação</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table id="tabelaAplicacoes">
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Instituição</th>
+              <th>Valor</th>
+              <th>Saldo</th>
+              <th>Rentabilidade</th>
+              <th>Vencimento</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div id="emptyState" class="empty" style="display:none;">Nenhuma aplicação cadastrada.</div>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="modalOverlay" onclick="fecharModalFora(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <h2 id="modalTitulo">Nova Aplicação</h2>
+      <form id="formAplicacao" onsubmit="salvarAplicacao(event)">
+        <input type="hidden" id="idAplicacao">
+        <div class="form-group">
+          <label for="tipo">Tipo</label>
+          <select id="tipo" required>
+            <option value="">Selecione</option>
+            <option value="CDB">CDB</option>
+            <option value="LCI">LCI</option>
+            <option value="LCA">LCA</option>
+            <option value="Tesouro Direto">Tesouro Direto</option>
+            <option value="Fundo">Fundo</option>
+            <option value="Poupança">Poupança</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="instituicao">Instituição</label>
+          <input type="text" id="instituicao" required placeholder="Ex: Banco XYZ">
+        </div>
+        <div class="form-group">
+          <label for="valor">Valor Investido (R$)</label>
+          <input type="number" id="valor" step="0.01" min="0.01" required placeholder="0,00">
+        </div>
+        <div class="form-group">
+          <label for="saldo">Saldo Atual (R$)</label>
+          <input type="number" id="saldo" step="0.01" min="0" required placeholder="0,00">
+        </div>
+        <div class="form-group">
+          <label for="rentabilidade">Rentabilidade (% a.a.)</label>
+          <input type="number" id="rentabilidade" step="0.01" required placeholder="0,00">
+        </div>
+        <div class="form-group">
+          <label for="vencimento">Vencimento</label>
+          <input type="date" id="vencimento" required>
+        </div>
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status" required>
+            <option value="Ativo">Ativo</option>
+            <option value="Vencido">Vencido</option>
+            <option value="Resgatado">Resgatado</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-cancel" onclick="fecharModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    function bloquear() {
+      localStorage.removeItem('logado');
+      window.location.href = 'login.html';
+    }
+
+    const STORAGE_KEY = 'aplicacoes';
+
+    function formatarMoeda(valor) {
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor || 0);
+    }
+
+    function formatarPercentual(valor) {
+      return new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(valor || 0) + '%';
+    }
+
+    function formatarData(data) {
+      if (!data) return '-';
+      const d = new Date(data + 'T00:00:00');
+      return d.toLocaleDateString('pt-BR');
+    }
+
+    function obterAplicacoes() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    }
+
+    function salvarAplicacoes(lista) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
+    }
+
+    function calcularIndicadores() {
+      const lista = obterAplicacoes();
+      const totalInvestido = lista.reduce((acc, item) => acc + parseFloat(item.valor || 0), 0);
+      const saldoAtual = lista.reduce((acc, item) => acc + parseFloat(item.saldo || 0), 0);
+      const rentabilidadeMedia = lista.length > 0
+        ? lista.reduce((acc, item) => acc + parseFloat(item.rentabilidade || 0), 0) / lista.length
+        : 0;
+
+      document.getElementById('totalInvestido').textContent = formatarMoeda(totalInvestido);
+      document.getElementById('saldoAtual').textContent = formatarMoeda(saldoAtual);
+      document.getElementById('rentabilidadeMedia').textContent = formatarPercentual(rentabilidadeMedia);
+      document.getElementById('totalAplicacoes').textContent = lista.length;
+    }
+
+    function renderizarTabela() {
+      const lista = obterAplicacoes();
+      const tbody = document.querySelector('#tabelaAplicacoes tbody');
+      const emptyState = document.getElementById('emptyState');
+      tbody.innerHTML = '';
+
+      if (lista.length === 0) {
+        emptyState.style.display = 'block';
+        document.getElementById('tabelaAplicacoes').style.display = 'none';
+      } else {
+        emptyState.style.display = 'none';
+        document.getElementById('tabelaAplicacoes').style.display = 'table';
+        lista.forEach(item => {
+          const tr = document.createElement('tr');
+          const statusClass = item.status === 'Ativo' ? 'status-ativo' : item.status === 'Vencido' ? 'status-vencido' : 'status-resgatado';
+          tr.innerHTML = `
+            <td>${item.tipo}</td>
+            <td>${item.instituicao}</td>
+            <td>${formatarMoeda(item.valor)}</td>
+            <td>${formatarMoeda(item.saldo)}</td>
+            <td>${formatarPercentual(item.rentabilidade)}</td>
+            <td>${formatarData(item.vencimento)}</td>
+            <td><span class="status ${statusClass}">${item.status}</span></td>
+            <td>
+              <button class="btn btn-edit" onclick="editarAplicacao('${item.id}')">✏️ Editar</button>
+              <button class="btn btn-delete" onclick="excluirAplicacao('${item.id}')">🗑️ Excluir</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      calcularIndicadores();
+    }
+
+    function abrirModal() {
+      document.getElementById('formAplicacao').reset();
+      document.getElementById('idAplicacao').value = '';
+      document.getElementById('modalTitulo').textContent = 'Nova Aplicação';
+      document.getElementById('modalOverlay').style.display = 'flex';
+    }
+
+    function fecharModal() {
+      document.getElementById('modalOverlay').style.display = 'none';
+    }
+
+    function fecharModalFora(event) {
+      if (event.target.id === 'modalOverlay') fecharModal();
+    }
+
+    function salvarAplicacao(event) {
+      event.preventDefault();
+      const id = document.getElementById('idAplicacao').value;
+      const tipo = document.getElementById('tipo').value;
+      const instituicao = document.getElementById('instituicao').value.trim();
+      const valor = parseFloat(document.getElementById('valor').value);
+      const saldo = parseFloat(document.getElementById('saldo').value);
+      const rentabilidade = parseFloat(document.getElementById('rentabilidade').value);
+      const vencimento = document.getElementById('vencimento').value;
+      const status = document.getElementById('status').value;
+
+      let lista = obterAplicacoes();
+
+      if (id) {
+        const index = lista.findIndex(i => i.id === id);
+        if (index >= 0) {
+          lista[index] = { id, tipo, instituicao, valor, saldo, rentabilidade, vencimento, status };
+        }
+      } else {
+        const novoId = 'app_' + Date.now();
+        lista.push({ id: novoId, tipo, instituicao, valor, saldo, rentabilidade, vencimento, status });
+      }
+
+      salvarAplicacoes(lista);
+      fecharModal();
+      renderizarTabela();
+    }
+
+    function editarAplicacao(id) {
+      const lista = obterAplicacoes();
+      const item = lista.find(i => i.id === id);
+      if (!item) return;
+
+      document.getElementById('idAplicacao').value = item.id;
+      document.getElementById('tipo').value = item.tipo;
+      document.getElementById('instituicao').value = item.instituicao;
+      document.getElementById('valor').value = item.valor;
+      document.getElementById('saldo').value = item.saldo;
+      document.getElementById('rentabilidade').value = item.rentabilidade;
+      document.getElementById('vencimento').value = item.vencimento;
+      document.getElementById('status').value = item.status;
+      document.getElementById('modalTitulo').textContent = 'Editar Aplicação';
+      document.getElementById('modalOverlay').style.display = 'flex';
+    }
+
+    function excluirAplicacao(id) {
+      if (!confirm('Tem certeza que deseja excluir esta aplicação?')) return;
+      let lista = obterAplicacoes();
+      lista = lista.filter(i => i.id !== id);
+      salvarAplicacoes(lista);
+      renderizarTabela();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof verificarAutenticacao === 'function') verificarAutenticacao();
+      renderizarTabela();
+    });
+  </script>
+</body>
+</html>
