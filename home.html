@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Controle do Escritório - Home</title>
+  <title>Home - Controle do Escritório</title>
   <style>
     body {
       background: #f0f2f5;
@@ -26,10 +26,7 @@
     .navbar .user-info {
       display: flex;
       align-items: center;
-      gap: 16px;
-    }
-    .navbar .user-info span {
-      color: rgba(255,255,255,0.9);
+      gap: 12px;
     }
     .btn-nav {
       padding: 8px 16px;
@@ -41,38 +38,41 @@
     }
     .btn-outline {
       background: transparent;
-      border: 2px solid rgba(255,255,255,0.5);
+      border: 2px solid rgba(255, 255, 255, 0.5);
       color: white;
     }
     .btn-outline:hover {
       border-color: white;
-      background: rgba(255,255,255,0.1);
-    }
-    .btn-danger-outline {
-      background: transparent;
-      border: 2px solid rgba(255,255,255,0.5);
-      color: white;
-    }
-    .btn-danger-outline:hover {
-      border-color: #dc3545;
-      background: rgba(220,53,69,0.2);
+      background: rgba(255, 255, 255, 0.1);
     }
     .container {
       max-width: 1200px;
       margin: 40px auto;
       padding: 0 20px;
     }
+    .welcome {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .welcome h2 {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+    }
+    .welcome p {
+      color: #6c757d;
+      font-size: 0.95rem;
+    }
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 14px;
     }
     .modulo-card {
       background: white;
       border-radius: 12px;
-      padding: 20px;
+      padding: 18px 14px;
       text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       cursor: pointer;
       transition: all 0.2s;
       text-decoration: none;
@@ -81,16 +81,15 @@
     }
     .modulo-card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
     }
     .modulo-card .icon {
-      font-size: 2rem;
-      margin-bottom: 10px;
+      font-size: 1.8rem;
+      margin-bottom: 8px;
     }
     .modulo-card .nome {
       font-weight: 600;
-      font-size: 0.95rem;
-      color: #333;
+      font-size: 0.9rem;
     }
     .badge {
       padding: 3px 10px;
@@ -109,7 +108,7 @@
     .modal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0, 0, 0, 0.5);
       display: none;
       justify-content: center;
       align-items: center;
@@ -135,6 +134,7 @@
     .form-group label {
       display: block;
       font-weight: 500;
+      color: #475569;
       margin-bottom: 6px;
       font-size: 0.9rem;
     }
@@ -171,49 +171,39 @@
       background: #6c757d;
       color: white;
     }
-    .sucesso {
-      color: #155724;
-      background: #d4edda;
+    .sucesso, .erro {
       padding: 10px;
       border-radius: 8px;
       text-align: center;
       display: none;
+      margin-bottom: 12px;
+    }
+    .sucesso {
+      background: #d4edda;
+      color: #155724;
     }
     .erro {
-      color: #721c24;
       background: #f8d7da;
-      padding: 10px;
-      border-radius: 8px;
-      text-align: center;
-      display: none;
-    }
-    .welcome-section {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-    .welcome-section h2 {
-      font-size: 1.8rem;
-      margin-bottom: 8px;
-    }
-    .welcome-section p {
-      color: #6c757d;
+      color: #721c24;
     }
   </style>
 </head>
 <body>
+
   <nav class="navbar">
-    <div class="brand">🏛️ Controle do Escritório</div>
+    <div class="brand">Controle do Escritório</div>
     <div class="user-info">
-      <span>Olá, <span id="userName">Usuário</span> <span id="userBadge" class="badge">Perfil</span></span>
-      <button class="btn-nav btn-outline" onclick="abrirModalSenha()">🔑 Alterar Senha</button>
-      <button class="btn-nav btn-danger-outline" onclick="sairDoSistema()">Sair</button>
+      <span>Olá, <span id="userName">Usuário</span></span>
+      <span id="userBadge" class="badge badge-usuario">Perfil</span>
+      <button class="btn-nav btn-outline" onclick="abrirModal()">🔑 Alterar Senha</button>
+      <button class="btn-nav btn-outline" onclick="window.logout()">Sair</button>
     </div>
   </nav>
 
   <div class="container">
-    <div class="welcome-section">
+    <div class="welcome">
       <h2>Bem-vindo ao Controle do Escritório</h2>
-      <p>Escolha um dos módulos abaixo para começar.</p>
+      <p>Sistema de gestão financeira e administrativa</p>
     </div>
 
     <div class="cards-grid">
@@ -269,20 +259,20 @@
         <div class="icon">📊</div>
         <div class="nome">Relatórios</div>
       </a>
-      <a href="usuarios.html" class="modulo-card" id="cardUsuarios" style="display: none;">
+      <a href="usuarios.html" id="cardUsuarios" class="modulo-card" style="display: none;">
         <div class="icon">👥</div>
         <div class="nome">Usuários</div>
       </a>
     </div>
   </div>
 
-  <div class="modal" id="modalAlterarSenha">
+  <div id="modalAlterarSenha" class="modal">
     <div class="modal-content">
       <h3>🔑 Alterar Senha</h3>
-      <div id="altSucesso" class="sucesso">Senha alterada com sucesso!</div>
-      <div id="altErro" class="erro"></div>
+      <div id="msgSucesso" class="sucesso"></div>
+      <div id="msgErro" class="erro"></div>
       <div class="form-group">
-        <label for="altEmail">Email</label>
+        <label for="altEmail">E-mail</label>
         <input type="email" id="altEmail" readonly>
       </div>
       <div class="form-group">
@@ -298,7 +288,7 @@
         <input type="password" id="altConfirmar" placeholder="Confirme a nova senha">
       </div>
       <div class="modal-actions">
-        <button class="btn btn-secondary" onclick="fecharModalSenha()">Cancelar</button>
+        <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
         <button class="btn btn-primary" onclick="alterarSenha()">Salvar</button>
       </div>
     </div>
@@ -308,18 +298,53 @@
   <script src="auth.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      verificarAutenticacao();
-      const usuario = getUsuarioLogado();
+      window.verificarAutenticacao();
+      var usuario = window.getUsuarioLogado();
       if (usuario) {
         document.getElementById('userName').textContent = usuario.nome;
-        const badge = document.getElementById('userBadge');
+        var badge = document.getElementById('userBadge');
         badge.textContent = usuario.perfil;
-        badge.className = 'badge ' + getBadgePerfil(usuario.perfil);
+        badge.className = 'badge ' + window.getBadgePerfil(usuario.perfil);
+        document.getElementById('altEmail').value = usuario.email || '';
         if (usuario.perfil === 'Administrador') {
           document.getElementById('cardUsuarios').style.display = 'block';
         }
       }
     });
+
+    function abrirModal() {
+      document.getElementById('modalAlterarSenha').classList.add('ativo');
+      var usuario = window.getUsuarioLogado();
+      if (usuario && usuario.email) {
+        document.getElementById('altEmail').value = usuario.email;
+      }
+    }
+
+    function fecharModal() {
+      document.getElementById('modalAlterarSenha').classList.remove('ativo');
+      limparMensagens();
+    }
+
+    function limparMensagens() {
+      document.getElementById('msgSucesso').style.display = 'none';
+      document.getElementById('msgSucesso').textContent = '';
+      document.getElementById('msgErro').style.display = 'none';
+      document.getElementById('msgErro').textContent = '';
+    }
+
+    function mostrarSucesso(texto) {
+      var el = document.getElementById('msgSucesso');
+      el.textContent = texto;
+      el.style.display = 'block';
+      document.getElementById('msgErro').style.display = 'none';
+    }
+
+    function mostrarErro(texto) {
+      var el = document.getElementById('msgErro');
+      el.textContent = texto;
+      el.style.display = 'block';
+      document.getElementById('msgSucesso').style.display = 'none';
+    }
 
     async function alterarSenha() {
       const email = document.getElementById('altEmail').value;
@@ -327,56 +352,43 @@
       const novaSenha = document.getElementById('altNovaSenha').value;
       const confirmar = document.getElementById('altConfirmar').value;
 
-      document.getElementById('altSucesso').style.display = 'none';
-      document.getElementById('altErro').style.display = 'none';
+      limparMensagens();
 
-      if (!senhaAtual || !novaSenha || !confirmar) {
-        document.getElementById('altErro').textContent = 'Preencha todos os campos.';
-        document.getElementById('altErro').style.display = 'block';
+      if (!email || !senhaAtual || !novaSenha || !confirmar) {
+        mostrarErro('Preencha todos os campos.');
         return;
       }
+
       if (novaSenha !== confirmar) {
-        document.getElementById('altErro').textContent = 'Nova senha e confirmação não conferem.';
-        document.getElementById('altErro').style.display = 'block';
+        mostrarErro('A nova senha e a confirmação não conferem.');
         return;
       }
+
       if (novaSenha.length < 6) {
-        document.getElementById('altErro').textContent = 'A nova senha deve ter no mínimo 6 caracteres.';
-        document.getElementById('altErro').style.display = 'block';
+        mostrarErro('A nova senha deve ter no mínimo 6 caracteres.');
         return;
       }
 
-      const resultado = await window.trocarSenha(email, senhaAtual, novaSenha);
-      if (resultado && resultado.success) {
-        document.getElementById('altSucesso').style.display = 'block';
-        document.getElementById('altSenhaAtual').value = '';
-        document.getElementById('altNovaSenha').value = '';
-        document.getElementById('altConfirmar').value = '';
-      } else {
-        document.getElementById('altErro').textContent = resultado?.message || 'Erro ao alterar senha. Verifique sua senha atual.';
-        document.getElementById('altErro').style.display = 'block';
+      try {
+        const resultado = await window.trocarSenha(email, senhaAtual, novaSenha);
+        if (resultado && resultado.sucesso) {
+          mostrarSucesso('Senha alterada com sucesso!');
+          document.getElementById('altSenhaAtual').value = '';
+          document.getElementById('altNovaSenha').value = '';
+          document.getElementById('altConfirmar').value = '';
+        } else {
+          mostrarErro((resultado && resultado.mensagem) || 'Erro ao alterar senha.');
+        }
+      } catch (erro) {
+        mostrarErro('Erro ao alterar senha: ' + (erro.message || 'Erro desconhecido.'));
       }
     }
 
-    function abrirModalSenha() {
-      document.getElementById('altEmail').value = getUsuarioLogado()?.email || '';
-      document.getElementById('modalAlterarSenha').classList.add('ativo');
-    }
-
-    function fecharModalSenha() {
-      document.getElementById('modalAlterarSenha').classList.remove('ativo');
-      document.getElementById('altSucesso').style.display = 'none';
-      document.getElementById('altErro').style.display = 'none';
-    }
-
-    function sairDoSistema() {
-      if (confirm('Deseja realmente sair?')) logout();
-    }
-
-    function getBadgePerfil(perfil) {
-      if (perfil === 'Administrador') return 'badge-admin';
-      return 'badge-usuario';
-    }
+    document.getElementById('modalAlterarSenha').addEventListener('click', function(e) {
+      if (e.target === this) {
+        fecharModal();
+      }
+    });
   </script>
 </body>
 </html>

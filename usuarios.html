@@ -1,72 +1,249 @@
-<script>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Usuários - Controle do Escritório</title>
+  <style>
+    body { background: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333; margin: 0; }
+    .navbar { background: #0a58ca; padding: 12px 24px; display: flex; align-items: center; flex-wrap: wrap; }
+    .nav-links { display: flex; gap: 12px; flex-wrap: wrap; }
+    .nav-links a { color: #dbe9ff; text-decoration: none; font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; }
+    .nav-links a:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .btn-voltar { display: inline-block; padding: 8px 16px; background: #e2e8f0; color: #475569; border-radius: 8px; text-decoration: none; font-size: 0.85rem; margin-bottom: 16px; }
+    .container { max-width: 1200px; margin: 28px auto; padding: 0 20px; }
+    .grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .card { background: white; border-radius: 12px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center; }
+    .card strong { font-size: 1.5rem; color: #0d6efd; display: block; }
+    .card label { font-size: 0.8rem; color: #6c757d; display: block; margin-top: 4px; }
+    .toolbar { display: flex; justify-content: flex-end; margin-bottom: 16px; }
+    .btn { padding: 10px 18px; border: none; border-radius: 8px; cursor: pointer; font-weight: 500; font-size: 0.9rem; }
+    .btn-primary { background: #0d6efd; color: white; }
+    .btn-warning { background: #ffc107; color: #212529; padding: 6px 12px; font-size: 0.8rem; }
+    .btn-danger { background: #dc3545; color: white; padding: 6px 12px; font-size: 0.8rem; }
+    .tabela { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .tabela th { background: #f8f9fa; padding: 12px 14px; font-size: 0.85rem; color: #475569; text-align: left; font-weight: 600; }
+    .tabela td { padding: 12px 14px; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; }
+    .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .badge-ativo { background: #d4edda; color: #155724; }
+    .badge-inativo { background: #f8d7da; color: #721c24; }
+    .badge-admin { background: #cce5ff; color: #004085; }
+    .badge-usuario { background: #e2e8f0; color: #475569; }
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
+    .modal.ativo { display: flex; }
+    .modal-content { background: white; border-radius: 14px; padding: 24px; max-width: 480px; width: 90%; }
+    .modal-content h3 { margin-bottom: 16px; color: #0a58ca; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-weight: 500; color: #475569; margin-bottom: 6px; font-size: 0.9rem; }
+    .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.95rem; box-sizing: border-box; }
+    .dica-senha { font-size: 0.78rem; color: #6c757d; margin-top: 4px; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+    footer { text-align: center; padding: 20px; color: #6c757d; margin-top: 40px; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-links">
+      <a href="home.html">Início</a>
+      <a href="clientes.html">Clientes</a>
+      <a href="servicos.html">Serviços</a>
+      <a href="contratos.html">Contratos</a>
+      <a href="financeiro.html">Financeiro</a>
+      <a href="usuarios.html">Usuários</a>
+      <a href="logout.html">Sair</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <a href="home.html" class="btn-voltar">← Voltar</a>
+
+    <h1>👥 Usuários</h1>
+    <p style="color:#6c757d; margin-bottom: 20px;">Gerencie os usuários do sistema Controle do Escritório.</p>
+
+    <div class="grid4">
+      <div class="card">
+        <strong id="indicador-total">0</strong>
+        <label>Total de Usuários</label>
+      </div>
+      <div class="card">
+        <strong id="indicador-admin">0</strong>
+        <label>Administradores</label>
+      </div>
+      <div class="card">
+        <strong id="indicador-ativo">0</strong>
+        <label>Ativos</label>
+      </div>
+      <div class="card">
+        <strong id="indicador-inativo">0</strong>
+        <label>Inativos</label>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn btn-primary" onclick="abrirModal()">+ Novo Usuário</button>
+    </div>
+
+    <table class="tabela">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Perfil</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="tabela-usuarios">
+        <tr><td colspan="5" style="text-align:center; color:#6c757d;">Carregando...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="modal-usuario" class="modal">
+    <div class="modal-content">
+      <h3 id="modal-titulo">Novo Usuário</h3>
+      <input type="hidden" id="usuario-id">
+
+      <div class="form-group">
+        <label for="usuario-nome">Nome</label>
+        <input type="text" id="usuario-nome" placeholder="Digite o nome completo">
+      </div>
+
+      <div class="form-group">
+        <label for="usuario-email">Email</label>
+        <input type="email" id="usuario-email" placeholder="Digite o email">
+      </div>
+
+      <div class="form-group">
+        <label for="usuario-senha">Senha</label>
+        <input type="password" id="usuario-senha" placeholder="Digite a senha">
+        <div class="dica-senha">Mínimo 6 caracteres, 1 letra maiúscula, 1 caractere especial</div>
+      </div>
+
+      <div class="form-group">
+        <label for="usuario-perfil">Perfil</label>
+        <select id="usuario-perfil">
+          <option value="Administrador">Administrador</option>
+          <option value="Usuário">Usuário</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="usuario-status">Status</label>
+        <select id="usuario-status">
+          <option value="Ativo">Ativo</option>
+          <option value="Inativo">Inativo</option>
+        </select>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-voltar" type="button" onclick="fecharModal()" style="margin-bottom:0;">Cancelar</button>
+        <button class="btn btn-primary" type="button" onclick="salvarUsuario()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>Controle do Escritório - Sistema com Supabase</footer>
+
+  <script src="db.js"></script>
+  <script src="auth.js"></script>
+  <script>
     var listaUsuarios = [];
 
     function validarSenha(senha) {
       if (senha.length < 6) return 'A senha deve ter no mínimo 6 caracteres.';
       if (!/[A-Z]/.test(senha)) return 'A senha deve conter pelo menos uma letra maiúscula.';
-      if (!/[!@#$%^&*(),.?":{}|<>_]/.test(senha)) return 'A senha deve conter pelo menos um caractere especial (!@#$% etc).';
+      if (!/[!@#$%^&*(),.?":{}|<>_]/.test(senha)) return 'A senha deve conter pelo menos um caractere especial.';
       return null;
     }
 
     function escapeHtml(text) {
-      if (text == null) return '';
-      return String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+      if (text === null || text === undefined) return '';
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
     }
 
     async function renderizarUsuarios() {
-      document.getElementById('loading').style.display = 'block';
-      document.getElementById('tabela-usuarios').style.display = 'none';
       try {
         listaUsuarios = await window.carregarUsuarios();
-        var total = 0, admins = 0, ativos = 0, inativos = 0;
-        listaUsuarios.forEach(function(u) {
-          total++;
-          if (u.perfil === 'Administrador') admins++;
-          if (u.status === 'Ativo') ativos++;
-          if (u.status === 'Inativo') inativos++;
-        });
-        document.getElementById('ind-total').textContent = total;
-        document.getElementById('ind-admin').textContent = admins;
-        document.getElementById('ind-ativo').textContent = ativos;
-        document.getElementById('ind-inativo').textContent = inativos;
 
-        var tbody = document.getElementById('tbody-usuarios');
-        tbody.innerHTML = '';
-        if (listaUsuarios.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:#6c757d;">Nenhum usuário cadastrado.</td></tr>';
-        } else {
-          listaUsuarios.forEach(function(u) {
-            var tr = document.createElement('tr');
-            tr.innerHTML = '<td>' + escapeHtml(u.nome) + '</td>' +
-              '<td>' + escapeHtml(u.email) + '</td>' +
-              '<td><span class="badge ' + (u.perfil === 'Administrador' ? 'badge-admin' : 'badge-usuario') + '">' + escapeHtml(u.perfil) + '</span></td>' +
-              '<td><span class="badge ' + (u.status === 'Ativo' ? 'badge-ativo' : 'badge-inativo') + '">' + escapeHtml(u.status) + '</span></td>' +
-              '<td><button class="btn btn-warning" onclick="abrirModal(\'' + escapeHtml(u.id) + '\')">Editar</button> ' +
-              '<button class="btn btn-danger" onclick="excluirUsuario(\'' + escapeHtml(u.id) + '\')">Excluir</button></td>';
-            tbody.appendChild(tr);
-          });
+        var total = listaUsuarios.length;
+        var admin = 0;
+        var ativo = 0;
+        var inativo = 0;
+
+        for (var i = 0; i < listaUsuarios.length; i++) {
+          var u = listaUsuarios[i];
+          if (u.perfil === 'Administrador') admin++;
+          if (u.status === 'Ativo') ativo++;
+          else if (u.status === 'Inativo') inativo++;
         }
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('tabela-usuarios').style.display = 'table';
+
+        document.getElementById('indicador-total').textContent = total;
+        document.getElementById('indicador-admin').textContent = admin;
+        document.getElementById('indicador-ativo').textContent = ativo;
+        document.getElementById('indicador-inativo').textContent = inativo;
+
+        var tbody = document.getElementById('tabela-usuarios');
+        tbody.innerHTML = '';
+
+        if (listaUsuarios.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#6c757d;">Nenhum usuário encontrado.</td></tr>';
+          return;
+        }
+
+        for (var j = 0; j < listaUsuarios.length; j++) {
+          var usuario = listaUsuarios[j];
+          var id = usuario.id;
+          var nome = escapeHtml(usuario.nome);
+          var email = escapeHtml(usuario.email);
+          var perfil = escapeHtml(usuario.perfil || 'Usuário');
+          var status = escapeHtml(usuario.status || 'Ativo');
+
+          var classePerfil = perfil === 'Administrador' ? 'badge-admin' : 'badge-usuario';
+          var classeStatus = status === 'Ativo' ? 'badge-ativo' : 'badge-inativo';
+
+          var tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td>' + nome + '</td>' +
+            '<td>' + email + '</td>' +
+            '<td><span class="badge ' + classePerfil + '">' + perfil + '</span></td>' +
+            '<td><span class="badge ' + classeStatus + '">' + status + '</span></td>' +
+            '<td>' +
+              '<button class="btn btn-warning" onclick="abrirModal(' + escapeHtml(JSON.stringify(id)) + ')">Editar</button> ' +
+              '<button class="btn btn-danger" onclick="excluirUsuario(' + escapeHtml(JSON.stringify(id)) + ')">Excluir</button>' +
+            '</td>';
+          tbody.appendChild(tr);
+        }
       } catch (e) {
-        document.getElementById('loading').textContent = 'Erro ao carregar: ' + e.message;
+        alert('Erro: ' + e.message);
       }
     }
 
     function abrirModal(id) {
       if (id) {
-        document.getElementById('modal-titulo').textContent = 'Editar Usuário';
-        var u = null;
+        var usuario = null;
         for (var i = 0; i < listaUsuarios.length; i++) {
-          if (listaUsuarios[i].id === id) { u = listaUsuarios[i]; break; }
+          if (listaUsuarios[i].id === id) {
+            usuario = listaUsuarios[i];
+            break;
+          }
         }
-        if (!u) return alert('Usuário não encontrado.');
-        document.getElementById('usuario-id').value = u.id;
-        document.getElementById('usuario-nome').value = u.nome;
-        document.getElementById('usuario-email').value = u.email;
+        if (!usuario) {
+          alert('Usuário não encontrado.');
+          return;
+        }
+        document.getElementById('modal-titulo').textContent = 'Editar Usuário';
+        document.getElementById('usuario-id').value = usuario.id;
+        document.getElementById('usuario-nome').value = usuario.nome || '';
+        document.getElementById('usuario-email').value = usuario.email || '';
         document.getElementById('usuario-senha').value = '';
-        document.getElementById('usuario-perfil').value = u.perfil;
-        document.getElementById('usuario-status').value = u.status;
+        document.getElementById('usuario-perfil').value = usuario.perfil || 'Usuário';
+        document.getElementById('usuario-status').value = usuario.status || 'Ativo';
       } else {
         document.getElementById('modal-titulo').textContent = 'Novo Usuário';
         document.getElementById('usuario-id').value = '';
@@ -91,33 +268,32 @@
       var perfil = document.getElementById('usuario-perfil').value;
       var status = document.getElementById('usuario-status').value;
 
-      if (!nome || !email) { alert('Preencha nome e email.'); return; }
-      if (!id && !senha) { alert('Senha é obrigatória para novo usuário.'); return; }
+      if (!nome) { alert('Nome é obrigatório.'); return; }
+      if (!email) { alert('Email é obrigatório.'); return; }
+      if (!id && !senha) { alert('Senha obrigatória.'); return; }
       if (senha) {
         var erro = validarSenha(senha);
         if (erro) { alert(erro); return; }
       }
 
-      var obj = { nome: nome, email: email, senha: senha, perfil: perfil, status: status };
+      var obj = {
+        nome: nome,
+        email: email,
+        perfil: perfil,
+        status: status
+      };
+      if (senha) obj.senha = senha;
       if (id) obj.id = id;
 
-      try {
-        await window.salvarUsuario(obj);
-        fecharModal();
-        await renderizarUsuarios();
-      } catch (e) {
-        alert('Erro: ' + (e.message || e));
-      }
+      await window.salvarUsuario(obj);
+      fecharModal();
+      await renderizarUsuarios();
     }
 
     async function excluirUsuario(id) {
-      if (!confirm('Tem certeza?')) return;
-      try {
-        await window.excluirUsuario(id);
-        await renderizarUsuarios();
-      } catch (e) {
-        alert('Erro: ' + (e.message || e));
-      }
+      if (!confirm('Tem certeza que deseja excluir este usuário?')) return;
+      await window.excluirUsuario(id);
+      await renderizarUsuarios();
     }
 
     document.addEventListener('DOMContentLoaded', async function() {
@@ -125,4 +301,6 @@
       window.verificarAdmin();
       await renderizarUsuarios();
     });
-</script>
+  </script>
+</body>
+</html>
