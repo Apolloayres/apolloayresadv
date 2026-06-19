@@ -3,481 +3,456 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Usuários — Controle do Escritório</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <script src="auth.js"></script>
+  <title>Controle do Escritório - Usuários</title>
   <style>
-    body { background: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    .navbar { background: #0a58ca !important; }
-    .nav { display: flex; gap: 8px; background: white; padding: 12px 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 24px; flex-wrap: wrap; }
-    .nav a { text-decoration: none; padding: 8px 16px; border-radius: 8px; color: #475569; font-size: 0.9rem; transition: all 0.2s; }
-    .nav a:hover { background: #e8f0fe; color: #0d6efd; }
-    .nav .nav-ativo { background: #0d6efd; color: white; }
-    .tabs { display: flex; gap: 8px; margin-bottom: 24px; }
-    .tab-btn { padding: 10px 20px; border: 2px solid #e2e8f0; border-radius: 8px; background: white; cursor: pointer; font-size: 0.9rem; font-weight: 500; color: #475569; transition: all 0.2s; }
-    .tab-btn.ativo { border-color: #0d6efd; color: #0d6efd; background: #e8f0fe; }
-    .tab-content { display: none; }
-    .tab-content.ativo { display: block; }
-    .grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
-    .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-    .card h3 { font-size: 0.85rem; color: #6c757d; margin-bottom: 8px; }
-    .card .valor { font-size: 1.8rem; font-weight: 700; color: #0d6efd; }
-    .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 16px; }
-    .toolbar input { flex: 1; max-width: 400px; padding: 10px 14px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; }
-    .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; }
-    .btn-primary { background: #0d6efd; color: white; }
-    .btn-primary:hover { background: #0b5ed7; }
-    .btn-warning { background: #ffc107; color: #212529; }
-    .btn-danger { background: #dc3545; color: white; }
-    .btn-success { background: #198754; color: white; }
-    .tabela { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-    .tabela th, .tabela td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #f0f0f0; }
-    .tabela th { background: #f8f9fa; font-weight: 600; color: #475569; font-size: 0.85rem; }
-    .tabela tr:hover { background: #f8f9fa; }
-    .badge { padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
-    .badge-ativo { background: #d4edda; color: #155724; }
-    .badge-inativo { background: #f8d7da; color: #721c24; }
-    .acoes { display: flex; gap: 8px; justify-content: center; }
-    .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
-    .modal.ativo { display: flex; }
-    .modal-content { background: white; border-radius: 16px; padding: 32px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-    .modal-header h2 { margin: 0; font-size: 1.3rem; }
-    .close { font-size: 1.5rem; cursor: pointer; color: #6c757d; }
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; font-weight: 500; color: #475569; margin-bottom: 6px; font-size: 0.9rem; }
-    .form-group input, .form-group select { width: 100%; padding: 10px 14px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; box-sizing: border-box; }
-    .form-group input:focus, .form-group select:focus { border-color: #0d6efd; outline: none; }
-    .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
-    .readonly-notice { background: #fef3cd; border: 1px solid #ffc107; padding: 10px; border-radius: 8px; font-size: 0.85rem; color: #856404; margin-bottom: 16px; }
-    .perm-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .perm-grid label { display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 6px; background: #f8f9fa; cursor: pointer; font-size: 0.85rem; }
-    footer { text-align: center; padding: 20px; color: #6c757d; margin-top: 40px; }
+    body {
+      margin: 0;
+      background: #f0f2f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+    }
+    .navbar {
+      background: #0a58ca;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .nav-links a {
+      color: #dbe9ff;
+      text-decoration: none;
+      font-size: 0.85rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-links a:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 28px auto;
+      padding: 0 20px;
+    }
+    .page-title {
+      margin-bottom: 4px;
+      font-size: 1.5rem;
+    }
+    .page-subtitle {
+      color: #6c757d;
+      margin-bottom: 24px;
+    }
+    .grid4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      text-align: center;
+    }
+    .card strong {
+      font-size: 1.5rem;
+      color: #0d6efd;
+      display: block;
+    }
+    .card label {
+      font-size: 0.8rem;
+      color: #6c757d;
+    }
+    .toolbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 16px;
+    }
+    .btn {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    .btn-primary {
+      background: #0d6efd;
+      color: white;
+    }
+    .btn-success {
+      background: #198754;
+      color: white;
+    }
+    .btn-warning {
+      background: #ffc107;
+      color: #212529;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+    .tabela {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    }
+    .tabela th {
+      background: #f8f9fa;
+      padding: 12px 14px;
+      font-size: 0.85rem;
+      color: #475569;
+      text-align: left;
+      font-weight: 600;
+    }
+    .tabela td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 0.9rem;
+    }
+    .tabela tr:hover {
+      background: #f8f9fa;
+    }
+    .badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-ativo {
+      background: #d4edda;
+      color: #155724;
+    }
+    .badge-inativo {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    .badge-admin {
+      background: #cce5ff;
+      color: #004085;
+    }
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal.ativo {
+      display: flex;
+    }
+    .modal-content {
+      background: white;
+      border-radius: 14px;
+      padding: 24px;
+      max-width: 480px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-content h3 {
+      margin-bottom: 16px;
+      color: #0a58ca;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 500;
+      color: #475569;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #0d6efd;
+      outline: none;
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #6c757d;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #6c757d;
+      margin-top: 40px;
+    }
   </style>
 </head>
 <body>
-
-<<nav class="navbar navbar-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="home.html">🏛️ Controle do Escritório</a>
-    <div class="d-flex gap-2">
-      <a href="home.html" class="btn btn-light btn-sm">Voltar</a>
-      <button class="btn btn-outline-light btn-sm" onclick="sair()">Sair</button>
+  <nav class="navbar">
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="clientes.html">Clientes</a>
+      <a href="receitas.html">Receitas</a>
+      <a href="marketing.html">Marketing</a>
+      <a href="financeiro.html">Financeiro</a>
+      <a href="imoveis.html">Imóveis</a>
+      <a href="aplicacoes.html">Aplicações</a>
+      <a href="contas.html">Contas</a>
+      <a href="unidades.html">Unidades</a>
+      <a href="proventos.html">Proventos</a>
+      <a href="prestacao.html">Prestação de Contas</a>
+      <a href="rel-prestacao.html">Rel. Prestação</a>
+      <a href="relatorios.html">Relatórios</a>
+      <a href="usuarios.html">Usuários</a>
     </div>
-  </div>
-</nav>
+  </nav>
 
-<div class="container py-4">
-  <h2>👥 Gestão de Usuários</h2>
-  <p class="text-muted">Cadastro e permissões</p>
+  <div class="container">
+    <h1 class="page-title">👥 Usuários</h1>
+    <p class="page-subtitle">Gerencie os usuários e permissões de acesso do sistema.</p>
 
-  <div class="nav">
-    <a href="home.html">🏠 Home</a>
-    <a href="dashboard.html">📊 Dashboard</a>
-    <a href="clientes.html">👤 Clientes</a>
-    <a href="imoveis.html">🏢 Imóveis</a>
-    <a href="receitas.html">💰 Receitas</a>
-    <a href="despesas.html">💸 Despesas</a>
-    <a href="aplicacoes.html">📈 Aplicações</a>
-    <a href="contas.html">🏦 Contas</a>
-    <a href="proventos.html">🧾 Proventos</a>
-    <a href="marketing.html">📢 Marketing</a>
-    <a href="usuarios.html" class="nav-ativo">👥 Usuários</a>
-    <a href="auditoria.html">🔍 Auditoria</a>
-    <a href="relatorios.html">📑 Relatórios</a>
-  </div>
-
-  <div class="tabs">
-    <button class="tab-btn ativo" onclick="mudarAba('usuarios')">👥 Usuários</button>
-    <button class="tab-btn" onclick="mudarAba('perfis')">🔐 Perfis de Acesso</button>
-  </div>
-
-  <div id="aba-usuarios" class="tab-content ativo">
     <div class="grid4">
       <div class="card">
-        <h3>Total de Usuários</h3>
-        <div class="valor" id="totalUsuarios">0</div>
+        <strong id="ind-total">0</strong>
+        <label>Total Usuários</label>
       </div>
       <div class="card">
-        <h3>Ativos</h3>
-        <div class="valor" id="usuariosAtivos">0</div>
+        <strong id="ind-admins">0</strong>
+        <label>Administradores</label>
       </div>
       <div class="card">
-        <h3>Inativos</h3>
-        <div class="valor" id="usuariosInativos">0</div>
+        <strong id="ind-ativos">0</strong>
+        <label>Ativos</label>
       </div>
       <div class="card">
-        <h3>Perfis</h3>
-        <div class="valor" id="totalPerfis">0</div>
+        <strong id="ind-inativos">0</strong>
+        <label>Inativos</label>
       </div>
     </div>
 
     <div class="toolbar">
-      <input type="text" id="buscaUsuario" placeholder="Buscar por nome, email ou perfil..." oninput="renderizarUsuarios()" />
-      <button class="btn btn-primary" onclick="abrirModalUsuario()">+ Novo Usuário</button>
+      <button class="btn btn-primary" onclick="abrirModal()">+ Novo Usuário</button>
     </div>
 
-    <table class="tabela">
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Email</th>
-          <th>Perfil</th>
-          <th>Status</th>
-          <th style="text-align:center">Ações</th>
-        </tr>
-      </thead>
-      <tbody id="tabelaUsuarios"></tbody>
-    </table>
+    <div id="tabela-container">
+      <div class="loading">Carregando usuários...</div>
+    </div>
   </div>
 
-  <div id="aba-perfis" class="tab-content">
-    <div class="grid4">
-      <div class="card">
-        <h3>Total de Perfis</h3>
-        <div class="valor" id="cardTotalPerfis">0</div>
-      </div>
-      <div class="card">
-        <h3>Administradores</h3>
-        <div class="valor" id="contarAdmin">0</div>
-      </div>
-      <div class="card">
-        <h3>Administrativo</h3>
-        <div class="valor" id="contarAdministrativo">0</div>
-      </div>
-      <div class="card">
-        <h3>Advogadas</h3>
-        <div class="valor" id="contarAdvogada">0</div>
-      </div>
+  <div id="modal-usuario" class="modal">
+    <div class="modal-content">
+      <h3 id="modal-titulo">Novo Usuário</h3>
+      <form id="form-usuario" onsubmit="event.preventDefault(); salvarUsuario();">
+        <input type="hidden" id="usuario-id" />
+        <div class="form-group">
+          <label for="usuario-nome">Nome</label>
+          <input type="text" id="usuario-nome" required />
+        </div>
+        <div class="form-group">
+          <label for="usuario-email">Email</label>
+          <input type="email" id="usuario-email" required />
+        </div>
+        <div class="form-group">
+          <label for="usuario-senha">Senha</label>
+          <input type="password" id="usuario-senha" />
+          <small style="color: #6c757d; font-size: 0.8rem;">Deixe em branco na edição para manter a senha atual.</small>
+        </div>
+        <div class="form-group">
+          <label for="usuario-perfil">Perfil</label>
+          <select id="usuario-perfil" required>
+            <option value="Administrador">Administrador</option>
+            <option value="Usuário">Usuário</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="usuario-status">Status</label>
+          <select id="usuario-status" required>
+            <option value="Ativo">Ativo</option>
+            <option value="Inativo">Inativo</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn" style="background: #6c757d; color: white;" onclick="fecharModal()">Cancelar</button>
+          <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+      </form>
     </div>
-
-    <div class="toolbar">
-      <div></div>
-      <div class="d-flex gap-2">
-        <button class="btn btn-warning" onclick="redefinirPerfisPadrao()">Redefinir Padrões</button>
-        <button class="btn btn-primary" onclick="abrirModalPerfil()">+ Novo Perfil</button>
-      </div>
-    </div>
-
-    <table class="tabela">
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Permissões</th>
-          <th style="text-align:center">Ações</th>
-        </tr>
-      </thead>
-      <tbody id="tabelaPerfis"></tbody>
-    </table>
   </div>
-</div>
 
-<div class="modal" id="modalUsuario">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2 id="tituloModalUsuario">Novo Usuário</h2>
-      <span class="close" onclick="fecharModalUsuario()">&times;</span>
-    </div>
-    <form id="formUsuario" onsubmit="event.preventDefault(); salvarUsuario();">
-      <input type="hidden" id="usuarioId" />
-      <div class="form-group">
-        <label for="usuarioNome">Nome</label>
-        <input type="text" id="usuarioNome" required />
-      </div>
-      <div class="form-group">
-        <label for="usuarioEmail">Email</label>
-        <input type="email" id="usuarioEmail" required />
-      </div>
-      <div class="form-group">
-        <label for="usuarioSenha">Senha</label>
-        <input type="password" id="usuarioSenha" />
-      </div>
-      <div class="form-group">
-        <label for="usuarioPerfil">Perfil</label>
-        <select id="usuarioPerfil" required></select>
-      </div>
-      <div class="form-group">
-        <label for="usuarioStatus">Status</label>
-        <select id="usuarioStatus">
-          <option value="Ativo">Ativo</option>
-          <option value="Inativo">Inativo</option>
-        </select>
-      </div>
-      <div class="d-flex justify-content-end gap-2">
-        <button type="button" class="btn btn-secondary" onclick="fecharModalUsuario()">Cancelar</button>
-        <button type="submit" class="btn btn-primary">Salvar</button>
-      </div>
-    </form>
-  </div>
-</div>
+  <footer>Controle do Escritório - Usuários</footer>
 
-<div class="modal" id="modalPerfil">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2 id="tituloModalPerfil">Novo Perfil</h2>
-      <span class="close" onclick="fecharModalPerfil()">&times;</span>
-    </div>
-    <form id="formPerfil" onsubmit="event.preventDefault(); salvarPerfil();">
-      <input type="hidden" id="perfilId" />
-      <div class="form-group">
-        <label for="perfilNome">Nome do Perfil</label>
-        <input type="text" id="perfilNome" required />
-      </div>
-      <div class="form-group">
-        <label>Permissões</label>
-        <div class="perm-grid" id="permissoesGrid"></div>
-      </div>
-      <div class="d-flex justify-content-end gap-2">
-        <button type="button" class="btn btn-secondary" onclick="fecharModalPerfil()">Cancelar</button>
-        <button type="submit" class="btn btn-primary">Salvar</button>
-      </div>
-    </form>
-  </div>
-</div>
+  <script src="db.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    let listaUsuarios = [];
 
-<<footer>Controle do Escritório &copy; 2025</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  if (localStorage.getItem('logado') !== 'true') { window.location.href = 'index.html'; }
-
-  const MODULOS = ['Dashboard','Clientes','Receitas','Marketing','Financeiro','Imóveis','Aplicações','Contas','Unidades','Proventos','Prestação de Contas','Relatório Prestação','Usuários','Relatórios'];
-
-  const PERMISSOES_PADRAO = {
-    'Administrador': MODULOS,
-    'Administrativo': ['Dashboard','Clientes','Receitas','Contas','Unidades','Proventos','Imóveis'],
-    'Advogada': ['Dashboard','Clientes','Imóveis','Receitas','Relatórios'],
-    'Estagiária': ['Dashboard','Clientes','Imóveis','Marketing']
-  };
-
-  function getUsuarios() {
-    return JSON.parse(localStorage.getItem('usuarios') || '[]');
-  }
-  function setUsuarios(lista) {
-    localStorage.setItem('usuarios', JSON.stringify(lista));
-  }
-  function getPerfis() {
-    return JSON.parse(localStorage.getItem('perfis') || '[]');
-  }
-  function setPerfis(lista) {
-    localStorage.setItem('perfis', JSON.stringify(lista));
-  }
-
-  function init() {
-    let perfis = getPerfis();
-    if (perfis.length === 0) {
-      perfis = Object.keys(PERMISSOES_PADRAO).map(nome => ({ id: Date.now() + Math.random(), nome: nome, permissoes: PERMISSOES_PADRAO[nome] }));
-      setPerfis(perfis);
-    }
-    let usuarios = getUsuarios();
-    if (usuarios.length === 0) {
-      const admin = perfis.find(p => p.nome === 'Administrador') || perfis[0];
-      usuarios.push({ id: Date.now() + Math.random(), nome: 'Administrador', email: 'admin@sistema.com', senha: 'admin123', perfilId: admin.id, status: 'Ativo' });
-      setUsuarios(usuarios);
-    }
-    renderizarUsuarios();
-    renderizarPerfis();
-  }
-
-  function contarUsuariosPerfil(perfilId) {
-    return getUsuarios().filter(u => u.perfilId === perfilId).length;
-  }
-  function getPerfilNome(perfilId) {
-    const perfil = getPerfis().find(p => p.id === perfilId);
-    return perfil ? perfil.nome : 'Sem perfil';
-  }
-
-  function renderizarUsuarios() {
-    const busca = document.getElementById('buscaUsuario').value.toLowerCase();
-    const usuarios = getUsuarios().filter(u =>
-      u.nome.toLowerCase().includes(busca) ||
-      u.email.toLowerCase().includes(busca) ||
-      getPerfilNome(u.perfilId).toLowerCase().includes(busca)
-    );
-    const tbody = document.getElementById('tabelaUsuarios');
-    tbody.innerHTML = '';
-    usuarios.forEach(u => {
-      const statusClass = u.status === 'Ativo' ? 'badge-ativo' : 'badge-inativo';
-      tbody.innerHTML += `
-        <tr>
-          <td>${u.nome}</td>
-          <td>${u.email}</td>
-          <td>${getPerfilNome(u.perfilId)}</td>
-          <td><span class="badge ${statusClass}">${u.status}</span></td>
-          <td class="acoes">
-            <button class="btn btn-warning btn-sm" onclick="editarUsuario('${u.id}')">Editar</button>
-            <button class="btn btn-danger btn-sm" onclick="excluirUsuario('${u.id}')">Excluir</button>
-          </td>
-        </tr>
-      `;
+    document.addEventListener('DOMContentLoaded', () => {
+      renderizarUsuarios();
     });
-    document.getElementById('totalUsuarios').textContent = getUsuarios().length;
-    document.getElementById('usuariosAtivos').textContent = getUsuarios().filter(u => u.status === 'Ativo').length;
-    document.getElementById('usuariosInativos').textContent = getUsuarios().filter(u => u.status === 'Inativo').length;
-    document.getElementById('totalPerfis').textContent = getPerfis().length;
-  }
 
-  function preencherSelectPerfis() {
-    const select = document.getElementById('usuarioPerfil');
-    select.innerHTML = '';
-    getPerfis().forEach(p => {
-      const opt = document.createElement('option');
-      opt.value = p.id;
-      opt.textContent = p.nome;
-      select.appendChild(opt);
-    });
-  }
+    async function renderizarUsuarios() {
+      const container = document.getElementById('tabela-container');
+      try {
+        listaUsuarios = await window.db.usuarios_listar();
 
-  function abrirModalUsuario() {
-    document.getElementById('formUsuario').reset();
-    document.getElementById('usuarioId').value = '';
-    document.getElementById('tituloModalUsuario').textContent = 'Novo Usuário';
-    preencherSelectPerfis();
-    document.getElementById('modalUsuario').classList.add('ativo');
-  }
-  function fecharModalUsuario() {
-    document.getElementById('modalUsuario').classList.remove('ativo');
-  }
+        const total = listaUsuarios.length;
+        const admins = listaUsuarios.filter(u => u.perfil === 'Administrador').length;
+        const ativos = listaUsuarios.filter(u => u.status === 'Ativo').length;
+        const inativos = listaUsuarios.filter(u => u.status === 'Inativo').length;
 
-  function salvarUsuario() {
-    const id = document.getElementById('usuarioId').value;
-    const nome = document.getElementById('usuarioNome').value.trim();
-    const email = document.getElementById('usuarioEmail').value.trim();
-    const senha = document.getElementById('usuarioSenha').value;
-    const perfilId = document.getElementById('usuarioPerfil').value;
-    const status = document.getElementById('usuarioStatus').value;
+        document.getElementById('ind-total').textContent = total;
+        document.getElementById('ind-admins').textContent = admins;
+        document.getElementById('ind-ativos').textContent = ativos;
+        document.getElementById('ind-inativos').textContent = inativos;
 
-    let usuarios = getUsuarios();
-    if (id) {
-      const idx = usuarios.findIndex(u => u.id === id);
-      if (idx >= 0) {
-        usuarios[idx] = { ...usuarios[idx], nome, email, perfilId, status };
-        if (senha) usuarios[idx].senha = senha;
+        if (total === 0) {
+          container.innerHTML = '<div class="loading">Nenhum usuário encontrado.</div>';
+          return;
+        }
+
+        let html = '<table class="tabela"><thead><tr>';
+        html += '<th>Nome</th><th>Email</th><th>Perfil</th><th>Status</th><th>Ações</th>';
+        html += '</tr></thead><tbody>';
+
+        for (const u of listaUsuarios) {
+          const statusClass = u.status === 'Ativo' ? 'badge-ativo' : 'badge-inativo';
+          const perfilClass = u.perfil === 'Administrador' ? 'badge-admin' : '';
+          html += '<tr>';
+          html += '<td>' + escapeHtml(u.nome) + '</td>';
+          html += '<td>' + escapeHtml(u.email) + '</td>';
+          html += '<td><span class="badge ' + perfilClass + '">' + escapeHtml(u.perfil) + '</span></td>';
+          html += '<td><span class="badge ' + statusClass + '">' + escapeHtml(u.status) + '</span></td>';
+          html += '<td>';
+          html += '<button class="btn btn-warning" onclick="abrirModal(\'' + u.id + '\')">Editar</button> ';
+          html += '<button class="btn btn-danger" onclick="excluirUsuario(\'' + u.id + '\')">Excluir</button>';
+          html += '</td>';
+          html += '</tr>';
+        }
+
+        html += '</tbody></table>';
+        container.innerHTML = html;
+      } catch (erro) {
+        container.innerHTML = '<div class="loading">Erro ao carregar usuários: ' + escapeHtml(erro.message) + '</div>';
       }
-      registrarAuditoria('Edição', 'Dados do usuário "' + nome + '" atualizados');
-    } else {
-      const novo = { id: Date.now().toString(), nome, email, senha: senha || '123456', perfilId, status };
-      usuarios.push(novo);
-      registrarAuditoria('Cadastro', 'Usuário "' + nome + '" cadastrado com perfil ' + getPerfilNome(perfilId));
     }
-    setUsuarios(usuarios);
-    fecharModalUsuario();
-    renderizarUsuarios();
-  }
 
-  function editarUsuario(id) {
-    const u = getUsuarios().find(x => x.id === id);
-    if (!u) return;
-    document.getElementById('usuarioId').value = u.id;
-    document.getElementById('usuarioNome').value = u.nome;
-    document.getElementById('usuarioEmail').value = u.email;
-    document.getElementById('usuarioSenha').value = '';
-    document.getElementById('usuarioStatus').value = u.status;
-    document.getElementById('tituloModalUsuario').textContent = 'Editar Usuário';
-    preencherSelectPerfis();
-    document.getElementById('usuarioPerfil').value = u.perfilId;
-    document.getElementById('modalUsuario').classList.add('ativo');
-  }
+    function abrirModal(id) {
+      const modal = document.getElementById('modal-usuario');
+      const titulo = document.getElementById('modal-titulo');
+      const campoId = document.getElementById('usuario-id');
+      const campoNome = document.getElementById('usuario-nome');
+      const campoEmail = document.getElementById('usuario-email');
+      const campoSenha = document.getElementById('usuario-senha');
+      const campoPerfil = document.getElementById('usuario-perfil');
+      const campoStatus = document.getElementById('usuario-status');
 
-  function excluirUsuario(id) {
-    if (!confirm('Deseja realmente excluir este usuário?')) return;
-    const usuario = getUsuarios().find(u => u.id === id);
-    let usuarios = getUsuarios().filter(u => u.id !== id);
-    setUsuarios(usuarios);
-    registrarAuditoria('Exclusão', 'Usuário "' + (usuario ? usuario.nome : id) + '" excluído do sistema');
-    renderizarUsuarios();
-  }
+      campoSenha.required = !id;
 
-  function renderizarPerfis() {
-    const perfis = getPerfis();
-    const tbody = document.getElementById('tabelaPerfis');
-    tbody.innerHTML = '';
-    perfis.forEach(p => {
-      tbody.innerHTML += `
-        <tr>
-          <td>${p.nome}</td>
-          <td>${p.permissoes.join(', ')}</td>
-          <td class="acoes">
-            <button class="btn btn-warning btn-sm" onclick="editarPerfil('${p.id}')">Editar</button>
-          </td>
-        </tr>
-      `;
-    });
-    document.getElementById('cardTotalPerfis').textContent = perfis.length;
-    document.getElementById('contarAdmin').textContent = contarUsuariosPerfil(perfis.find(p => p.nome === 'Administrador')?.id);
-    document.getElementById('contarAdministrativo').textContent = contarUsuariosPerfil(perfis.find(p => p.nome === 'Administrativo')?.id);
-    document.getElementById('contarAdvogada').textContent = contarUsuariosPerfil(perfis.find(p => p.nome === 'Advogada')?.id);
-  }
+      if (id) {
+        const usuario = listaUsuarios.find(u => u.id === id);
+        if (!usuario) return;
+        titulo.textContent = 'Editar Usuário';
+        campoId.value = usuario.id;
+        campoNome.value = usuario.nome || '';
+        campoEmail.value = usuario.email || '';
+        campoSenha.value = '';
+        campoPerfil.value = usuario.perfil || 'Usuário';
+        campoStatus.value = usuario.status || 'Ativo';
+      } else {
+        titulo.textContent = 'Novo Usuário';
+        campoId.value = '';
+        campoNome.value = '';
+        campoEmail.value = '';
+        campoSenha.value = '';
+        campoPerfil.value = 'Administrador';
+        campoStatus.value = 'Ativo';
+      }
 
-  function abrirModalPerfil() {
-    document.getElementById('formPerfil').reset();
-    document.getElementById('perfilId').value = '';
-    document.getElementById('tituloModalPerfil').textContent = 'Novo Perfil';
-    renderizarPermissoes();
-    document.getElementById('modalPerfil').classList.add('ativo');
-  }
-  function fecharModalPerfil() {
-    document.getElementById('modalPerfil').classList.remove('ativo');
-  }
-
-  function renderizarPermissoes(selecionadas = []) {
-    const grid = document.getElementById('permissoesGrid');
-    grid.innerHTML = '';
-    MODULOS.forEach(m => {
-      grid.innerHTML += `
-        <label><input type="checkbox" name="permissao" value="${m}" ${selecionadas.includes(m) ? 'checked' : ''}> ${m}</label>
-      `;
-    });
-  }
-
-  function salvarPerfil() {
-    const id = document.getElementById('perfilId').value;
-    const nome = document.getElementById('perfilNome').value.trim();
-    const permissoes = Array.from(document.querySelectorAll('input[name="permissao"]:checked')).map(cb => cb.value);
-    let perfis = getPerfis();
-    if (id) {
-      const idx = perfis.findIndex(p => p.id === id);
-      if (idx >= 0) perfis[idx] = { ...perfis[idx], nome, permissoes };
-    } else {
-      perfis.push({ id: Date.now().toString(), nome, permissoes });
+      modal.classList.add('ativo');
     }
-    setPerfis(perfis);
-    fecharModalPerfil();
-    renderizarPerfis();
-    renderizarUsuarios();
-  }
 
-  function editarPerfil(id) {
-    const p = getPerfis().find(x => x.id === id);
-    if (!p) return;
-    document.getElementById('perfilId').value = p.id;
-    document.getElementById('perfilNome').value = p.nome;
-    document.getElementById('tituloModalPerfil').textContent = 'Editar Perfil';
-    renderizarPermissoes(p.permissoes);
-    document.getElementById('modalPerfil').classList.add('ativo');
-  }
+    function fecharModal() {
+      document.getElementById('modal-usuario').classList.remove('ativo');
+    }
 
-  function redefinirPerfisPadrao() {
-    if (!confirm('Redefinir perfis para o padrão? Isso não exclui usuários.')) return;
-    const perfis = Object.keys(PERMISSOES_PADRAO).map(nome => ({ id: Date.now() + Math.random(), nome: nome, permissoes: PERMISSOES_PADRAO[nome] }));
-    setPerfis(perfis);
-    renderizarPerfis();
-  }
+    async function salvarUsuario() {
+      const id = document.getElementById('usuario-id').value;
+      const nome = document.getElementById('usuario-nome').value.trim();
+      const email = document.getElementById('usuario-email').value.trim();
+      const senha = document.getElementById('usuario-senha').value;
+      const perfil = document.getElementById('usuario-perfil').value;
+      const status = document.getElementById('usuario-status').value;
 
-  function mudarAba(aba) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('ativo'));
-    event.target.classList.add('ativo');
-    document.getElementById('aba-' + aba).classList.add('ativo');
-  }
+      if (!nome || !email) {
+        alert('Nome e email são obrigatórios.');
+        return;
+      }
+      if (!id && !senha) {
+        alert('Senha é obrigatória para novo usuário.');
+        return;
+      }
 
-  function sair() {
-    localStorage.removeItem('logado');
-    window.location.href = 'index.html';
-  }
+      const dados = { nome, email, perfil, status };
+      if (senha) dados.senha = senha;
+      if (id) dados.id = id;
 
-  init();
-</script>
+      try {
+        await window.db.usuarios_salvar(dados);
+        fecharModal();
+        await renderizarUsuarios();
+      } catch (erro) {
+        alert('Erro ao salvar usuário: ' + erro.message);
+      }
+    }
+
+    async function excluirUsuario(id) {
+      if (!confirm('Deseja realmente excluir este usuário?')) return;
+      try {
+        await window.db.usuarios_excluir(id);
+        await renderizarUsuarios();
+      } catch (erro) {
+        alert('Erro ao excluir usuário: ' + erro.message);
+      }
+    }
+
+    function escapeHtml(text) {
+      if (text === null || text === undefined) return '';
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return String(text).replace(/[&<>"']/g, m => map[m]);
+    }
+  </script>
 </body>
 </html>
