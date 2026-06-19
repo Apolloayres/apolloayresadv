@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fluxo de Caixa - Controle do Escritório</title>
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; color: #333; }
+.navbar { background: #0a58ca; color: #fff; padding: 12px 20px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.navbar .brand { font-weight: 700; font-size: 18px; }
+.navbar a { color: #fff; text-decoration: none; font-size: 14px; opacity: 0.9; }
+.navbar a:hover { opacity: 1; text-decoration: underline; }
+.container { max-width: 1400px; margin: 20px auto; padding: 0 20px; }
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+.header h1 { font-size: 24px; color: #0a58ca; }
+.btn { padding: 8px 14px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; text-decoration: none; display: inline-block; }
+.btn-voltar { background: #6c757d; color: #fff; }
+.btn-voltar:hover { background: #5a6268; }
+.periodo { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.periodo select { padding: 8px 12px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px; }
+
+/* Grid de cards */
+.grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.card { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid #0a58ca; }
+.card h3 { font-size: 12px; color: #6c757d; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.card .valor { font-size: 24px; font-weight: 700; }
+.card .valor.positivo { color: #198754; }
+.card .valor.negativo { color: #dc3545; }
+.card .valor.neutro { color: #0a58ca; }
+
+/* Tabela de meses */
+.tabela-meses { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 24px; }
+.tabela-meses th { background: #0a58ca; color: #fff; padding: 12px 14px; text-align: center; font-size: 13px; }
+.tabela-meses td { padding: 10px 14px; text-align: center; border-bottom: 1px solid #e9ecef; font-size: 14px; }
+.tabela-meses tr:hover { background: #f8f9fa; }
+.tabela-meses .total-row { background: #e8f0fe; font-weight: 700; }
+
+/* Gráfico */
+.chart-container { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 24px; height: 360px; position: relative; }
+
+/* Abas */
+.tabs { display: flex; gap: 6px; border-bottom: 2px solid #dee2e6; margin-bottom: 20px; }
+.tab { padding: 12px 24px; cursor: pointer; background: #e9ecef; border: none; border-radius: 6px 6px 0 0; font-weight: 600; color: #555; }
+.tab.active { background: #0a58ca; color: #fff; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Resumo cards coloridos */
+.card.caixa { border-left-color: #0a58ca; }
+.card.contas { border-left-color: #198754; }
+.card.aplicacoes { border-left-color: #fd7e14; }
+.card.total { border-left-color: #6f42c1; }
+
+@media (max-width: 768px) {
+  .grid4 { grid-template-columns: 1fr 1fr; }
+  .grid2 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="brand">🏛️ Controle do Escritório</div>
+  <a href="home.html">Home</a>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="cadastros.html">Cadastros</a>
+  <a href="financeiro.html">Financeiro</a>
+  <a href="fluxo-caixa.html">Fluxo de Caixa</a>
+  <a href="patrimonio.html">Patrimônio</a>
+  <a href="relatorios-gerenciais.html">Rel. Gerenciais</a>
+  <a href="usuarios.html">Usuários</a>
+</nav>
+
+<div class="container">
+  <div class="header">
+    <h1>💰 Fluxo de Caixa</h1>
+    <a href="home.html" class="btn btn-voltar">← Voltar</a>
+  </div>
+
+  <!-- Período -->
+  <div class="periodo" style="margin-bottom:20px;">
+    <label><strong>Período:</strong></label>
+    <select id="anoSelect" onchange="carregarTudo()"></select>
+    <span style="color:#6c757d;font-size:13px;">  Demonstrativo de 1º de janeiro a 31 de dezembro</span>
+  </div>
+
+  <!-- Cards de Saldos -->
+  <div class="grid4">
+    <div class="card caixa">
+      <h3>💳 Saldo em Caixa (Financeiro)</h3>
+      <div class="valor neutro" id="saldoCaixa">R$ 0,00</div>
+      <small style="color:#6c757d;">Receitas - Despesas (acumulado no ano)</small>
+    </div>
+    <div class="card contas">
+      <h3>🏦 Saldo em Contas Correntes</h3>
+      <div class="valor positivo" id="saldoContas">R$ 0,00</div>
+      <small style="color:#6c757d;">Soma de todas as contas bancárias ativas</small>
+    </div>
+    <div class="card aplicacoes">
+      <h3>📈 Saldo em Aplicações</h3>
+      <div class="valor positivo" id="saldoAplicacoes">R$ 0,00</div>
+      <small style="color:#6c757d;">Soma de todas as aplicações ativas</small>
+    </div>
+    <div class="card total">
+      <h3>💰 Patrimônio Financeiro Total</h3>
+      <div class="valor neutro" id="saldoTotal">R$ 0,00</div>
+      <small style="color:#6c757d;">Caixa + Contas + Aplicações</small>
+    </div>
+  </div>
+
+  <!-- Legendas -->
+  <div style="display:flex; gap:20px; margin-bottom:16px; flex-wrap:wrap; font-size:13px; color:#6c757d;">
+    <span>🟢 <strong style="color:#198754;">Receitas</strong> — entradas do período</span>
+    <span>🔴 <strong style="color:#dc3545;">Despesas</strong> — saídas do período</span>
+    <span>🔵 <strong style="color:#0a58ca;">Saldo</strong> — receitas - despesas (acumulado)</span>
+  </div>
+
+  <!-- Tabela Mensal -->
+  <table class="tabela-meses">
+    <thead>
+      <tr>
+        <th>Mês</th>
+        <th>Receitas</th>
+        <th>Despesas</th>
+        <th>Saldo do Mês</th>
+        <th>Saldo Acumulado</th>
+        <th>Saldo Contas</th>
+        <th>Saldo Aplicações</th>
+        <th>Total Geral</th>
+      </tr>
+    </thead>
+    <tbody id="tabelaMeses"></tbody>
+  </table>
+
+  <!-- Resumo Anual -->
+  <div class="grid2" style="margin-bottom:24px;">
+    <div class="card" style="border-left-color:#198754;">
+      <h3>📊 Total de Receitas (Ano)</h3>
+      <div class="valor positivo" id="totalReceitasAno">R$ 0,00</div>
+    </div>
+    <div class="card" style="border-left-color:#dc3545;">
+      <h3>📊 Total de Despesas (Ano)</h3>
+      <div class="valor negativo" id="totalDespesasAno">R$ 0,00</div>
+    </div>
+    <div class="card" style="border-left-color:#0a58ca;">
+      <h3>📊 Saldo Líquido do Ano</h3>
+      <div class="valor neutro" id="saldoLiquidoAno">R$ 0,00</div>
+    </div>
+    <div class="card" style="border-left-color:#6f42c1;">
+      <h3>📊 Saldo Anterior (Ano Anterior)</h3>
+      <div class="valor neutro" id="saldoAnterior">R$ 0,00</div>
+    </div>
+  </div>
+
+  <!-- Gráfico de Linha -->
+  <div class="chart-container">
+    <canvas id="graficoFluxo"></canvas>
+  </div>
+</div>
+
+<script>
+const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+let graficoFluxo = null;
+
+document.addEventListener('DOMContentLoaded', async () => {
+  if (window.verificarAutenticacao) window.verificarAutenticacao();
+  const anoAtual = new Date().getFullYear();
+  const sel = document.getElementById('anoSelect');
+  for (let a = anoAtual - 4; a <= anoAtual + 1; a++) {
+    const opt = document.createElement('option');
+    opt.value = a; opt.text = a;
+    if (a === anoAtual) opt.selected = true;
+    sel.appendChild(opt);
+  }
+  await carregarTudo();
+});
+
+function formatarMoeda(v) { return 'R$ ' + parseFloat(v || 0).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+
+function mesmoAno(dataStr, ano) {
+  if (!dataStr) return false;
+  const d = new Date(dataStr + 'T00:00:00');
+  return d.getFullYear() === ano;
+}
+
+async function carregarTudo() {
+  const ano = parseInt(document.getElementById('anoSelect').value);
+  const anoAnt = ano - 1;
+
+  const receitas = await window.db.receitas_listar() || [];
+  const despesas = await window.db.despesas_listar() || [];
+  const contas = await window.db.contas_listar() || [];
+  const aplicacoes = await window.db.aplicacoes_listar() || [];
+
+  // Filtrar por ano
+  const recAno = receitas.filter(r => mesmoAno(r.data || r.created_at, ano));
+  const despAno = despesas.filter(d => mesmoAno(d.data || d.created_at, ano));
+  const recAnoAnt = receitas.filter(r => mesmoAno(r.data || r.created_at, anoAnt));
+
+  // Saldo contas e aplicações
+  const saldoContas = contas.filter(c => c.status === 'Ativa').reduce((s, c) => s + (parseFloat(c.saldo) || 0), 0);
+  const saldoAplic = aplicacoes.filter(a => a.status === 'Ativa').reduce((s, a) => s + (parseFloat(a.saldo) || 0), 0);
+
+  document.getElementById('saldoContas').textContent = formatarMoeda(saldoContas);
+  document.getElementById('saldoAplicacoes').textContent = formatarMoeda(saldoAplic);
+
+  // Saldo anterior (receitas - despesas do ano anterior)
+  const despAnoAnt = despesas.filter(d => mesmoAno(d.data || d.created_at, anoAnt));
+  const recAnoAntTotal = recAnoAnt.reduce((s, r) => s + (parseFloat(r.valor) || 0), 0);
+  const despAnoAntTotal = despAnoAnt.reduce((s, d) => s + (parseFloat(d.valor) || 0), 0);
+  const saldoAnterior = recAnoAntTotal - despAnoAntTotal;
+  document.getElementById('saldoAnterior').textContent = formatarMoeda(saldoAnterior);
+
+  // Tabela mês a mês
+  let tbody = document.getElementById('tabelaMeses');
+  tbody.innerHTML = '';
+  let totalRecAno = 0, totalDespAno = 0, saldoAcum = saldoAnterior;
+  const dadosRec = [], dadosDesp = [], dadosSaldo = [], labels = [];
+
+  for (let m = 0; m < 12; m++) {
+    const recMes = recAno.filter(r => { const d = new Date((r.data || r.created_at) + 'T00:00:00'); return d.getMonth() === m; }).reduce((s, r) => s + (parseFloat(r.valor) || 0), 0);
+    const despMes = despAno.filter(d => { const dt = new Date((d.data || d.created_at) + 'T00:00:00'); return dt.getMonth() === m; }).reduce((s, d) => s + (parseFloat(d.valor) || 0), 0);
+    const saldoMes = recMes - despMes;
+    saldoAcum += saldoMes;
+    totalRecAno += recMes;
+    totalDespAno += despMes;
+    const totalGeral = saldoAcum + saldoContas + saldoAplic;
+
+    labels.push(MESES[m].substring(0, 3));
+    dadosRec.push(recMes);
+    dadosDesp.push(despMes);
+    dadosSaldo.push(saldoAcum);
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${MESES[m]}</strong></td>
+      <td style="color:#198754;">${formatarMoeda(recMes)}</td>
+      <td style="color:#dc3545;">${formatarMoeda(despMes)}</td>
+      <td style="color:${saldoMes >= 0 ? '#198754' : '#dc3545'}; font-weight:600;">${formatarMoeda(saldoMes)}</td>
+      <td style="color:#0a58ca; font-weight:600;">${formatarMoeda(saldoAcum)}</td>
+      <td>${formatarMoeda(saldoContas)}</td>
+      <td>${formatarMoeda(saldoAplic)}</td>
+      <td style="font-weight:700; color:#6f42c1;">${formatarMoeda(totalGeral)}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+
+  // Linha de total
+  const saldoFinal = totalRecAno - totalDespAno;
+  const totalGeralFinal = saldoFinal + saldoContas + saldoAplic;
+  const trTotal = document.createElement('tr');
+  trTotal.className = 'total-row';
+  trTotal.innerHTML = `
+    <td><strong>TOTAL</strong></td>
+    <td>${formatarMoeda(totalRecAno)}</td>
+    <td>${formatarMoeda(totalDespAno)}</td>
+    <td style="color:${saldoFinal >= 0 ? '#198754' : '#dc3545'};">${formatarMoeda(saldoFinal)}</td>
+    <td style="color:#0a58ca;">${formatarMoeda(saldoFinal)}</td>
+    <td>${formatarMoeda(saldoContas)}</td>
+    <td>${formatarMoeda(saldoAplic)}</td>
+    <td style="color:#6f42c1;">${formatarMoeda(totalGeralFinal)}</td>
+  `;
+  tbody.appendChild(trTotal);
+
+  // Atualizar cards
+  document.getElementById('saldoCaixa').textContent = formatarMoeda(saldoFinal);
+  document.getElementById('saldoTotal').textContent = formatarMoeda(totalGeralFinal);
+  document.getElementById('totalReceitasAno').textContent = formatarMoeda(totalRecAno);
+  document.getElementById('totalDespesasAno').textContent = formatarMoeda(totalDespAno);
+  document.getElementById('saldoLiquidoAno').textContent = formatarMoeda(saldoFinal);
+
+  // Gráfico de linha
+  const ctx = document.getElementById('graficoFluxo').getContext('2d');
+  if (graficoFluxo) graficoFluxo.destroy();
+  graficoFluxo = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Receitas',
+          data: dadosRec,
+          borderColor: '#198754',
+          backgroundColor: 'rgba(25, 135, 84, 0.1)',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 4
+        },
+        {
+          label: 'Despesas',
+          data: dadosDesp,
+          borderColor: '#dc3545',
+          backgroundColor: 'rgba(220, 53, 69, 0.1)',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 4
+        },
+        {
+          label: 'Saldo Acumulado',
+          data: dadosSaldo,
+          borderColor: '#0a58ca',
+          backgroundColor: 'rgba(10, 88, 202, 0.05)',
+          fill: false,
+          tension: 0.3,
+          borderDash: [5, 3],
+          pointRadius: 3
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: { display: true, text: `Evolução Mensal - Receitas, Despesas e Saldo Acumulado (${ano})` },
+        legend: { position: 'top' },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) { return ctx.dataset.label + ': ' + formatarMoeda(ctx.raw); }
+          }
+        }
+      },
+      scales: {
+        y: { beginAtZero: true, ticks: { callback: v => formatarMoeda(v) } }
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>

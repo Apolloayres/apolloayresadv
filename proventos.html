@@ -1,510 +1,576 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Proventos — Controle do Escritório</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-  <script src="auth.js"></script>
-  <style>
-    body { background: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    .navbar { background: #0a58ca; }
-    .container { max-width: 1200px; padding: 20px; }
-    h2 { color: #1a1a2e; font-weight: 700; }
-    .tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
-    .tab-btn { padding: 10px 20px; border: 2px solid #e2e8f0; border-radius: 8px; background: white; cursor: pointer; font-weight: 500; color: #475569; }
-    .tab-btn.ativo { border-color: #0d6efd; color: #0d6efd; background: #e8f0fe; }
-    .tab-content { display: none; }
-    .tab-content.ativo { display: block; }
-    .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; }
-    .grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 20px; }
-    .resumo-card { text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px; }
-    .resumo-card strong { font-size: 1.5rem; color: #0d6efd; display: block; }
-    .resumo-card label { font-size: 0.8rem; color: #6c757d; }
-    .filtro-mes { display: flex; gap: 16px; align-items: flex-end; margin-bottom: 20px; flex-wrap: wrap; }
-    .filtro-mes label { font-size: 0.85rem; font-weight: 500; color: #475569; margin-bottom: 4px; display: block; }
-    .filtro-mes select { padding: 8px 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; }
-    .filtro-mes button { padding: 8px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 500; }
-    .btn-primary { background: #0d6efd; color: white; }
-    .btn-success { background: #198754; color: white; }
-    .btn-warning { background: #ffc107; color: #212529; }
-    .btn-danger { background: #dc3545; color: white; }
-    .btn-small { padding: 4px 10px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
-    .tabela { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-    .tabela th { background: #f8f9fa; padding: 10px 14px; font-size: 0.85rem; color: #475569; text-align: left; font-weight: 600; }
-    .tabela td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; }
-    .tabela tr:hover { background: #f8f9fa; }
-    .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; }
-    .badge-ativo { background: #d4edda; color: #155724; }
-    .badge-inativo { background: #f8d7da; color: #721c24; }
-    .input-edicao { border: 1px solid #0d6efd; border-radius: 6px; padding: 6px 10px; width: 130px; font-size: 0.9rem; }
-    .input-edicao:focus { outline: none; border-color: #0d6efd; box-shadow: 0 0 0 2px rgba(13,110,253,0.15); }
-    footer { text-align: center; color: #6c757d; padding: 20px; margin-top: 40px; }
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1050; }
-    .modal-overlay.ativo { display: flex; }
-    .modal-box { background: white; border-radius: 12px; max-width: 450px; width: 90%; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proventos | Controle do Escritório</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #f4f6f8; color: #333; }
+  .navbar { background: #0a58ca; padding: 0 15px; display: flex; flex-wrap: wrap; align-items: center; }
+  .navbar a { color: #fff; text-decoration: none; padding: 14px 12px; font-size: 14px; display: inline-block; }
+  .navbar a:hover { background: rgba(255,255,255,0.15); }
+  .container { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
+  .header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+  .btn { background: #0a58ca; color: #fff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+  .btn:hover { background: #084298; }
+  .btn-voltar { background: #6c757d; }
+  .btn-voltar:hover { background: #565e64; }
+  .btn-danger { background: #dc3545; }
+  .btn-danger:hover { background: #b02a37; }
+  .btn-success { background: #198754; }
+  .btn-success:hover { background: #146c43; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 2px solid #0a58ca; }
+  .tab { padding: 10px 20px; cursor: pointer; background: #e9ecef; border-radius: 4px 4px 0 0; font-weight: bold; }
+  .tab.active { background: #0a58ca; color: #fff; }
+  .aba { display: none; }
+  .aba.active { display: block; }
+  .grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+  .card { background: #fff; padding: 18px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center; }
+  .card h3 { font-size: 13px; color: #666; margin-bottom: 8px; text-transform: uppercase; }
+  .card p { font-size: 24px; font-weight: bold; color: #0a58ca; }
+  .actions { margin-bottom: 15px; }
+  table { width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 6px; overflow: hidden; }
+  th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid #dee2e6; font-size: 14px; }
+  th { background: #0a58ca; color: #fff; }
+  tr:hover { background: #f8f9fa; }
+  .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+  .modal.active { display: flex; }
+  .modal-content { background: #fff; padding: 25px; border-radius: 8px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .modal-title { font-size: 18px; color: #0a58ca; }
+  .close { font-size: 24px; cursor: pointer; color: #666; }
+  .form-group { margin-bottom: 15px; }
+  .form-group label { display: block; margin-bottom: 5px; font-size: 14px; font-weight: bold; }
+  .form-group input, .form-group select { width: 100%; padding: 8px 10px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+  .filters { display: flex; gap: 10px; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+  .filters select { padding: 7px 10px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px; }
+  .empty { text-align: center; padding: 30px; color: #666; }
+  .badge { padding: 3px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+  .badge-ativo { background: #d1e7dd; color: #0f5132; }
+  .badge-inativo { background: #f8d7da; color: #842029; }
+  .badge-fixo { background: #cfe2ff; color: #084298; }
+  .badge-variavel { background: #e2e3e5; color: #41464b; }
+  .badge-misto { background: #fff3cd; color: #664d03; }
+  .acoes { display: flex; gap: 5px; }
+  .acoes button { padding: 5px 10px; font-size: 12px; }
+</style>
 </head>
 <body>
-  <nav class="navbar navbar-dark">
-    <div class="container">
-      <a class="navbar-brand" href="home.html">🏛️ Controle do Escritório</a>
-      <div>
-        <a href="home.html" class="btn btn-light btn-sm me-2">Voltar</a>
-        <button onclick="sair()" class="btn btn-outline-light btn-sm">Sair</button>
-      </div>
-    </div>
-  </nav>
 
-  <div class="container">
-    <h2>💰 Proventos</h2>
-    <p class="text-muted">Gestão de proventos e cálculos automáticos</p>
+<<nav class="navbar">
+  <a href="home.html">Dashboard</a>
+  <a href="clientes.html">Clientes</a>
+  <a href="receitas.html">Receitas</a>
+  <a href="despesas.html">Despesas</a>
+  <a href="marketing.html">Marketing</a>
+  <a href="financeiro.html">Financeiro</a>
+  <a href="imoveis.html">Imóveis</a>
+  <a href="aplicacoes.html">Aplicações</a>
+  <a href="contas.html">Contas</a>
+  <a href="unidades.html">Unidades</a>
+  <a href="proventos.html">Proventos</a>
+  <a href="prestacao.html">Prestação</a>
+  <a href="rel-prestacao.html">Rel. Prestação</a>
+  <a href="relatorios.html">Relatórios</a>
+  <a href="usuarios.html">Usuários</a>
+</nav>
 
-    <div class="tabs">
-      <button class="tab-btn ativo" onclick="abrirAba('aba-colaboradores', this)">Colaboradores</button>
-      <button class="tab-btn" onclick="abrirAba('aba-calculo', this)">Cálculo Mensal</button>
-      <button class="tab-btn" onclick="abrirAba('aba-proventos', this)">Proventos Mensais</button>
-      <button class="tab-btn" onclick="abrirAba('aba-bonus', this)">Bônus Anual</button>
-    </div>
-
-    <div id="aba-colaboradores" class="tab-content ativo">
-      <div class="grid4">
-        <div class="resumo-card"><strong id="resTotalCol">0</strong><label>Total Colaboradores</label></div>
-        <div class="resumo-card"><strong id="resAdv">0</strong><label>Advogadas</label></div>
-        <div class="resumo-card"><strong id="resAdm">0</strong><label>Administrativos</label></div>
-        <div class="resumo-card"><strong id="resTotalCusto">R$ 0,00</strong><label>Total Ajuda de Custo (mês atual)</label></div>
-      </div>
-      <div class="card">
-        <button class="btn btn-success mb-3" onclick="abrirModalColaborador()">+ Novo Colaborador</button>
-        <table class="tabela">
-          <thead>
-            <tr><th>Nome</th><th>Tipo</th><th>Ajuda de Custo Mensal</th><th>Admissão</th><th>Status</th><th>Ações</th></tr>
-          </thead>
-          <tbody id="tabelaColaboradores"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div id="aba-calculo" class="tab-content">
-      <div class="card">
-        <div class="filtro-mes">
-          <div><label>Mês</label><select id="calcMes" class="select-mes"></select></div>
-          <div><label>Ano</label><select id="calcAno" class="select-ano"></select></div>
-          <button class="btn-primary" onclick="calcularMensal()">📊 Calcular</button>
-        </div>
-        <div class="grid4">
-          <div class="resumo-card"><strong id="calcHonorarios">R$ 0,00</strong><label>Honorários</label></div>
-          <div class="resumo-card"><strong id="calcSucumbencia">R$ 0,00</strong><label>Sucumbência</label></div>
-          <div class="resumo-card"><strong id="calcBase">R$ 0,00</strong><label>Base (H+S)</label></div>
-          <div class="resumo-card"><strong id="calcDoisPct">R$ 0,00</strong><label>2% por Advogada</label></div>
-        </div>
-        <table class="tabela">
-          <thead>
-            <tr><th>Nome</th><th>Tipo</th><th>Fixo</th><th>Variável</th><th>2% sobre Base</th><th>Total</th></tr>
-          </thead>
-          <tbody id="tabelaCalculo"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div id="aba-proventos" class="tab-content">
-      <div class="card">
-        <div class="filtro-mes">
-          <div><label>Mês</label><select id="provMes" class="select-mes"></select></div>
-          <div><label>Ano</label><select id="provAno" class="select-ano"></select></div>
-          <button class="btn-success" onclick="gerarProventos()">💾 Gerar Proventos do Mês</button>
-        </div>
-        <div class="grid4">
-          <div class="resumo-card"><strong id="provTotalCol">0</strong><label>Total Colaboradores</label></div>
-          <div class="resumo-card"><strong id="provTotalFixo">R$ 0,00</strong><label>Total Fixo</label></div>
-          <div class="resumo-card"><strong id="provTotalDois">R$ 0,00</strong><label>Total 2%</label></div>
-          <div class="resumo-card"><strong id="provTotalGeral">R$ 0,00</strong><label>Total Geral</label></div>
-        </div>
-        <div id="proventosVazio" class="alert alert-info d-none">Nenhum provento gerado para o período selecionado.</div>
-        <table class="tabela" id="tabelaProventosWrap">
-          <thead>
-            <tr><th>Colaborador</th><th>Fixo</th><th>Variável</th><th>Base Cálculo</th><th>2%</th><th>Bônus Acumulado</th><th>Total</th><th>Ações</th></tr>
-          </thead>
-          <tbody id="tabelaProventos"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div id="aba-bonus" class="tab-content">
-      <div class="card">
-        <div class="filtro-mes">
-          <div><label>Ano</label><select id="bonusAno" class="select-ano"></select></div>
-          <button class="btn-primary" onclick="calcularBonusAnual()">📊 Calcular Bônus Anual</button>
-        </div>
-        <div class="grid4">
-          <div class="resumo-card"><strong id="bonusHonorarios">R$ 0,00</strong><label>Honorários Anual</label></div>
-          <div class="resumo-card"><strong id="bonusSucumbencia">R$ 0,00</strong><label>Sucumbência Anual</label></div>
-          <div class="resumo-card"><strong id="bonusBase">R$ 0,00</strong><label>Base Anual</label></div>
-          <div class="resumo-card"><strong id="bonusDoisPct">R$ 0,00</strong><label>2% Total por Advogada</label></div>
-        </div>
-        <div class="table-responsive">
-          <table class="tabela">
-            <thead id="cabecalhoBonus"></thead>
-            <tbody id="tabelaBonus"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+<div class="container">
+  <div class="header">
+    <button class="btn btn-voltar" onclick="window.location.href='home.html'">← Voltar</button>
+    <h1>📋 Proventos | 👥 Colaboradores</h1>
   </div>
 
-  <div class="modal-overlay" id="modalColaborador">
-    <div class="modal-box">
-      <h5 id="tituloModalCol">Novo Colaborador</h5>
-      <form id="formColaborador" onsubmit="event.preventDefault(); salvarColaborador();">
-        <input type="hidden" id="colId" />
-        <div class="mb-3">
-          <label class="form-label">Nome</label>
-          <input type="text" id="colNome" class="form-control" required />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Tipo</label>
-          <select id="colTipo" class="form-select" required>
-            <option value="Advogada">Advogada</option>
-            <option value="Administrativo">Administrativo</option>
-          </select>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Fixo</label>
-          <input type="number" id="colFixo" class="form-control" step="0.01" placeholder="Ajuda de custo fixa" required />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Variável Padrão</label>
-          <input type="number" id="colVariavel" class="form-control" step="0.01" placeholder="Valor variável mensal" required />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Admissão</label>
-          <input type="date" id="colAdmissao" class="form-control" required />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Status</label>
-          <select id="colStatus" class="form-select" required>
-            <option value="Ativo">Ativo</option>
-            <option value="Inativo">Inativo</option>
-          </select>
-        </div>
-        <div class="d-flex justify-content-end gap-2">
-          <button type="button" class="btn btn-primary" onclick="fecharModalColaborador()">Cancelar</button>
-          <button type="submit" class="btn btn-success">Salvar</button>
-        </div>
-      </form>
-    </div>
+  <div class="tabs">
+    <div class="tab active" onclick="selecionarAba('colaboradores')">Aba Colaboradores</div>
+    <div class="tab" onclick="selecionarAba('proventos')">Aba Proventos</div>
   </div>
 
-  <footer>Controle do Escritório © 2024</footer>
+  <div id="aba-colaboradores" class="aba active">
+    <div class="grid4">
+      <div class="card">
+        <h3>Total</h3>
+        <p id="col-total">0</p>
+      </div>
+      <div class="card">
+        <h3>Ativos</h3>
+        <p id="col-ativos">0</p>
+      </div>
+      <div class="card">
+        <h3>Inativos</h3>
+        <p id="col-inativos">0</p>
+      </div>
+      <div class="card">
+        <h3>Folha Total</h3>
+        <p id="col-folha">R$ 0,00</p>
+      </div>
+    </div>
 
-  <script>
-    const MESES = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+    <div class="actions">
+      <button class="btn" onclick="abrirModalColaborador()">+ Novo Colaborador</button>
+    </div>
 
-    function getColaboradores() { return JSON.parse(localStorage.getItem('colaboradores') || '[]'); }
-    function setColaboradores(lista) { localStorage.setItem('colaboradores', JSON.stringify(lista)); }
-    function getProventos() { return JSON.parse(localStorage.getItem('proventos') || '[]'); }
-    function setProventos(lista) { localStorage.setItem('proventos', JSON.stringify(lista)); }
-    function getReceitas() { return JSON.parse(localStorage.getItem('receitas') || '[]'); }
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>CPF</th>
+          <th>Tipo</th>
+          <th>Fixo (R$)</th>
+          <th>Admissão</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="tabela-colaboradores"></tbody>
+    </table>
+  </div>
 
-    function formatarMoeda(valor) {
-      return 'R$ ' + Number(valor || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
+  <div id="aba-proventos" class="aba">
+    <div class="filters">
+      <select id="filtro-mes"></select>
+      <select id="filtro-ano"></select>
+      <button class="btn" onclick="filtrarProventos()">Filtrar</button>
+    </div>
 
-    function preencherSelectsMes() {
-      document.querySelectorAll('.select-mes').forEach(sel => {
-        const atual = sel.value || String(new Date().getMonth() + 1);
-        sel.innerHTML = '';
-        for (let i = 1; i <= 12; i++) {
-          const opt = document.createElement('option');
-          opt.value = i;
-          opt.text = MESES[i-1];
-          if (String(i) === atual) opt.selected = true;
-          sel.appendChild(opt);
-        }
-      });
-    }
+    <div class="grid4">
+      <div class="card">
+        <h3>Total Proventos</h3>
+        <p id="prov-total">R$ 0,00</p>
+      </div>
+      <div class="card">
+        <h3>Total Fixo</h3>
+        <p id="prov-fixo">R$ 0,00</p>
+      </div>
+      <div class="card">
+        <h3>Total Variável</h3>
+        <p id="prov-variavel">R$ 0,00</p>
+      </div>
+      <div class="card">
+        <h3>Qtd Colaboradores</h3>
+        <p id="prov-qtd">0</p>
+      </div>
+    </div>
 
-    function preencherSelectsAno() {
-      document.querySelectorAll('.select-ano').forEach(sel => {
-        const atual = sel.value || String(new Date().getFullYear());
-        sel.innerHTML = '';
-        for (let i = 2024; i <= 2030; i++) {
-          const opt = document.createElement('option');
-          opt.value = i;
-          opt.text = i;
-          if (String(i) === atual) opt.selected = true;
-          sel.appendChild(opt);
-        }
-      });
-    }
+    <div class="actions">
+      <button class="btn" onclick="abrirModalProvento()">+ Novo Provento</button>
+    </div>
 
-    function calcularBase(mes, ano) {
-      const receitas = getReceitas();
-      const honorarios = receitas.filter(r => r.tipo === 'Honorários' && r.mes == mes && r.ano == ano).reduce((s, r) => s + Number(r.valor || 0), 0);
-      const sucumbencia = receitas.filter(r => r.tipo === 'Sucumbência' && r.mes == mes && r.ano == ano).reduce((s, r) => s + Number(r.valor || 0), 0);
-      const base = honorarios + sucumbencia;
-      return { honorarios, sucumbencia, base };
-    }
+    <table>
+      <thead>
+        <tr>
+          <th>Colaborador</th>
+          <th>Tipo</th>
+          <th>Fixo</th>
+          <th>Variável</th>
+          <th>Base</th>
+          <th>Bônus</th>
+          <th>Bônus Acum.</th>
+          <th>Total</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="tabela-proventos"></tbody>
+    </table>
+  </div>
+</div>
 
-    function abrirAba(id, btn) {
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('ativo'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo'));
-      document.getElementById(id).classList.add('ativo');
-      btn.classList.add('ativo');
-      if (id === 'aba-colaboradores') renderizarColaboradores();
-      if (id === 'aba-calculo') calcularMensal();
-      if (id === 'aba-proventos') renderizarProventos();
-      if (id === 'aba-bonus') calcularBonusAnual();
-    }
+<div id="modal-colaborador" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">Colaborador</h2>
+      <span class="close" onclick="fecharModalColaborador()">&times;</span>
+    </div>
+    <form id="form-colaborador" onsubmit="salvarColaborador(event)">
+      <input type="hidden" id="col-id">
+      <div class="form-group">
+        <label for="col-nome">Nome</label>
+        <input type="text" id="col-nome" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="col-cpf">CPF</label>
+          <input type="text" id="col-cpf" required>
+        </div>
+        <div class="form-group">
+          <label for="col-tipo">Tipo</label>
+          <select id="col-tipo" required>
+            <option value="Fixo">Fixo</option>
+            <option value="Variável">Variável</option>
+            <option value="Misto">Misto</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="col-fixo">Fixo (R$)</label>
+          <input type="number" id="col-fixo" step="0.01" min="0" required>
+        </div>
+        <div class="form-group">
+          <label for="col-admissao">Admissão</label>
+          <input type="date" id="col-admissao" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="col-status">Status</label>
+        <select id="col-status" required>
+          <option value="Ativo">Ativo</option>
+          <option value="Inativo">Inativo</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-success">Salvar</button>
+    </form>
+  </div>
+</div>
 
-    function renderizarColaboradores() {
-      const colabs = getColaboradores();
-      const tbody = document.getElementById('tabelaColaboradores');
-      tbody.innerHTML = '';
-      let adv = 0, adm = 0, totalCusto = 0;
-      const mesAtual = new Date().getMonth() + 1;
-      const anoAtual = new Date().getFullYear();
-      const proventos = getProventos();
-      colabs.forEach(c => {
-        if (c.tipo === 'Advogada') adv++; else adm++;
-        const prov = proventos.find(p => p.colaboradorId == c.id && p.mes == mesAtual && p.ano == anoAtual);
-        totalCusto += Number(c.fixo || 0) + Number(prov ? prov.variavel : c.variavel || 0);
+<div id="modal-provento" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">Provento</h2>
+      <span class="close" onclick="fecharModalProvento()">&times;</span>
+    </div>
+    <form id="form-provento" onsubmit="salvarProvento(event)">
+      <input type="hidden" id="prov-id">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="prov-mes">Mês</label>
+          <input type="number" id="prov-mes" min="1" max="12" required>
+        </div>
+        <div class="form-group">
+          <label for="prov-ano">Ano</label>
+          <input type="number" id="prov-ano" min="2000" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="prov-colaborador">Colaborador</label>
+        <select id="prov-colaborador" required onchange="preencherNomeColaborador()">
+          <option value="">Selecione</option>
+        </select>
+      </div>
+      <input type="hidden" id="prov-nome">
+      <div class="form-group">
+        <label for="prov-tipo">Tipo</label>
+        <select id="prov-tipo" required>
+          <option value="Fixo">Fixo</option>
+          <option value="Variável">Variável</option>
+          <option value="Misto">Misto</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="prov-fixo">Fixo (R$)</label>
+          <input type="number" id="prov-fixo" step="0.01" min="0" value="0" required oninput="calcularTotalProvento()">
+        </div>
+        <div class="form-group">
+          <label for="prov-variavel">Variável (R$)</label>
+          <input type="number" id="prov-variavel" step="0.01" min="0" value="0" required oninput="calcularTotalProvento()">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="prov-base">Base (R$)</label>
+          <input type="number" id="prov-base" step="0.01" min="0" value="0" required oninput="calcularTotalProvento()">
+        </div>
+        <div class="form-group">
+          <label for="prov-bonus">Bônus (R$)</label>
+          <input type="number" id="prov-bonus" step="0.01" min="0" value="0" required oninput="calcularTotalProvento()">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="prov-bonus-acumulado">Bônus Acumulado (R$)</label>
+          <input type="number" id="prov-bonus-acumulado" step="0.01" min="0" value="0" required oninput="calcularTotalProvento()">
+        </div>
+        <div class="form-group">
+          <label for="prov-total">Total (R$)</label>
+          <input type="number" id="prov-total" step="0.01" min="0" value="0" readonly>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-success">Salvar</button>
+    </form>
+  </div>
+</div>
+
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script>
+  let colaboradores = [];
+  let proventos = [];
+
+  function formatarMoeda(valor) {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor || 0);
+  }
+
+  function formatarData(data) {
+    if (!data) return '-';
+    const d = new Date(data);
+    return d.toLocaleDateString('pt-BR');
+  }
+
+  function selecionarAba(aba) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.aba').forEach(a => a.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('aba-' + aba).classList.add('active');
+    if (aba === 'proventos') carregarProventos();
+    if (aba === 'colaboradores') carregarColaboradores();
+  }
+
+  async function carregarColaboradores() {
+    colaboradores = await window.db.colaboradores_listar();
+    renderizarColaboradores();
+  }
+
+  function renderizarColaboradores() {
+    const tbody = document.getElementById('tabela-colaboradores');
+    tbody.innerHTML = '';
+    let total = 0, ativos = 0, inativos = 0, folha = 0;
+
+    if (!colaboradores.length) {
+      tbody.innerHTML = '<tr><td colspan="7" class="empty">Nenhum colaborador cadastrado.</td></tr>';
+    } else {
+      colaboradores.forEach(c => {
+        total++;
+        if (c.status === 'Ativo') ativos++;
+        else inativos++;
+        folha += parseFloat(c.fixo || 0);
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>${c.nome}</td>
-          <td>${c.tipo}</td>
-          <td>${formatarMoeda(Number(c.fixo || 0) + Number(c.variavel || 0))}</td>
-          <td>${c.admissao ? new Date(c.admissao).toLocaleDateString('pt-BR') : '-'}</td>
-          <td><span class="badge ${c.status === 'Ativo' ? 'badge-ativo' : 'badge-inativo'}">${c.status}</span></td>
-          <td>
-            <button class="btn-small btn-warning" onclick="editarColaborador(${c.id})">Editar</button>
-            <button class="btn-small btn-danger" onclick="excluirColaborador(${c.id})">Excluir</button>
-          </td>`;
-        tbody.appendChild(tr);
-      });
-      document.getElementById('resTotalCol').textContent = colabs.length;
-      document.getElementById('resAdv').textContent = adv;
-      document.getElementById('resAdm').textContent = adm;
-      document.getElementById('resTotalCusto').textContent = formatarMoeda(totalCusto);
-    }
-
-    function abrirModalColaborador(id) {
-      document.getElementById('modalColaborador').classList.add('ativo');
-      document.getElementById('tituloModalCol').textContent = id ? 'Editar Colaborador' : 'Novo Colaborador';
-      if (!id) {
-        document.getElementById('formColaborador').reset();
-        document.getElementById('colId').value = '';
-      }
-    }
-
-    function fecharModalColaborador() {
-      document.getElementById('modalColaborador').classList.remove('ativo');
-    }
-
-    function salvarColaborador() {
-      const id = document.getElementById('colId').value;
-      const colabs = getColaboradores();
-      const nome = document.getElementById('colNome').value;
-      const tipo = document.getElementById('colTipo').value;
-      const fixo = Number(document.getElementById('colFixo').value || 0);
-      const variavel = Number(document.getElementById('colVariavel').value || 0);
-      const admissao = document.getElementById('colAdmissao').value;
-      const status = document.getElementById('colStatus').value;
-      if (id) {
-        const idx = colabs.findIndex(c => c.id == id);
-        if (idx >= 0) colabs[idx] = { ...colabs[idx], nome, tipo, fixo, variavel, admissao, status };
-      } else {
-        const novoId = colabs.length ? Math.max(...colabs.map(c => c.id)) + 1 : 1;
-        colabs.push({ id: novoId, nome, tipo, fixo, variavel, admissao, status });
-      }
-      setColaboradores(colabs);
-      fecharModalColaborador();
-      renderizarColaboradores();
-      if (typeof registrarAuditoria === 'function') registrarAuditoria('Cadastro', 'Colaborador ' + nome + ' ' + (id ? 'atualizado' : 'cadastrado'));
-    }
-
-    function editarColaborador(id) {
-      const c = getColaboradores().find(x => x.id == id);
-      if (!c) return;
-      document.getElementById('colId').value = c.id;
-      document.getElementById('colNome').value = c.nome;
-      document.getElementById('colTipo').value = c.tipo;
-      document.getElementById('colFixo').value = c.fixo;
-      document.getElementById('colVariavel').value = c.variavel;
-      document.getElementById('colAdmissao').value = c.admissao;
-      document.getElementById('colStatus').value = c.status;
-      abrirModalColaborador(id);
-    }
-
-    function excluirColaborador(id) {
-      if (!confirm('Deseja excluir este colaborador?')) return;
-      const colabs = getColaboradores().filter(c => c.id != id);
-      setColaboradores(colabs);
-      renderizarColaboradores();
-      if (typeof registrarAuditoria === 'function') registrarAuditoria('Exclusão', 'Colaborador ' + id + ' excluído');
-    }
-
-    function calcularMensal() {
-      const mes = Number(document.getElementById('calcMes').value);
-      const ano = Number(document.getElementById('calcAno').value);
-      const { honorarios, sucumbencia, base } = calcularBase(mes, ano);
-      const doisPct = base * 0.02;
-      document.getElementById('calcHonorarios').textContent = formatarMoeda(honorarios);
-      document.getElementById('calcSucumbencia').textContent = formatarMoeda(sucumbencia);
-      document.getElementById('calcBase').textContent = formatarMoeda(base);
-      document.getElementById('calcDoisPct').textContent = formatarMoeda(doisPct);
-      const proventos = getProventos();
-      const tbody = document.getElementById('tabelaCalculo');
-      tbody.innerHTML = '';
-      getColaboradores().filter(c => c.status === 'Ativo').forEach(c => {
-        const prov = proventos.find(p => p.colaboradorId == c.id && p.mes == mes && p.ano == ano);
-        const variavel = prov ? Number(prov.variavel) : Number(c.variavel || 0);
-        const pct = c.tipo === 'Advogada' ? doisPct : 0;
-        const total = Number(c.fixo || 0) + variavel + pct;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${c.nome}</td>
-          <td>${c.tipo}</td>
+          <td>${c.cpf}</td>
+          <td><span class="badge badge-${c.tipo.toLowerCase()}">${c.tipo}</span></td>
           <td>${formatarMoeda(c.fixo)}</td>
-          <td>${formatarMoeda(variavel)}</td>
-          <td>${formatarMoeda(pct)}</td>
-          <td>${formatarMoeda(total)}</td>`;
+          <td>${formatarData(c.admissao)}</td>
+          <td><span class="badge badge-${c.status.toLowerCase()}">${c.status}</span></td>
+          <td class="acoes">
+            <button class="btn" onclick="editarColaborador('${c.id}')">Editar</button>
+            <button class="btn btn-danger" onclick="excluirColaborador('${c.id}')">Excluir</button>
+          </td>
+        `;
         tbody.appendChild(tr);
       });
     }
 
-    function renderizarProventos() {
-      const mes = Number(document.getElementById('provMes').value);
-      const ano = Number(document.getElementById('provAno').value);
-      const proventos = getProventos().filter(p => p.mes == mes && p.ano == ano);
-      const tbody = document.getElementById('tabelaProventos');
-      const vazio = document.getElementById('proventosVazio');
-      const wrap = document.getElementById('tabelaProventosWrap');
-      tbody.innerHTML = '';
-      let totalCol = 0, totalFixo = 0, totalDois = 0, totalGeral = 0;
-      if (!proventos.length) {
-        vazio.classList.remove('d-none');
-        wrap.classList.add('d-none');
-      } else {
-        vazio.classList.add('d-none');
-        wrap.classList.remove('d-none');
-        proventos.forEach(p => {
-          totalCol++;
-          totalFixo += Number(p.fixo || 0);
-          totalDois += Number(p.bonus || 0);
-          totalGeral += Number(p.total || 0);
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${p.nome}</td>
-            <td>${formatarMoeda(p.fixo)}</td>
-            <td><input type="number" step="0.01" id="var-${p.id}" class="input-edicao" value="${p.variavel}" /></td>
-            <td>${formatarMoeda(p.base)}</td>
-            <td>${formatarMoeda(p.bonus)}</td>
-            <td>${formatarMoeda(p.bonusAcumulado)}</td>
-            <td>${formatarMoeda(p.total)}</td>
-            <td>
-              <button class="btn-small btn-success" onclick="salvarProventoIndividual(${p.id})">💾 Salvar</button>
-              <button class="btn-small btn-danger" onclick="excluirProvento(${p.id})">Excluir</button>
-            </td>`;
-          tbody.appendChild(tr);
-        });
-      }
-      document.getElementById('provTotalCol').textContent = totalCol;
-      document.getElementById('provTotalFixo').textContent = formatarMoeda(totalFixo);
-      document.getElementById('provTotalDois').textContent = formatarMoeda(totalDois);
-      document.getElementById('provTotalGeral').textContent = formatarMoeda(totalGeral);
-    }
+    document.getElementById('col-total').textContent = total;
+    document.getElementById('col-ativos').textContent = ativos;
+    document.getElementById('col-inativos').textContent = inativos;
+    document.getElementById('col-folha').textContent = formatarMoeda(folha);
+  }
 
-    function gerarProventos() {
-      const mes = Number(document.getElementById('provMes').value);
-      const ano = Number(document.getElementById('provAno').value);
-      const colabs = getColaboradores().filter(c => c.status === 'Ativo');
-      const proventos = getProventos();
-      const { base } = calcularBase(mes, ano);
-      const doisPct = base * 0.02;
-      let criados = 0;
-      colabs.forEach(c => {
-        const existe = proventos.find(p => p.colaboradorId == c.id && p.mes == mes && p.ano == ano);
-        if (existe) return;
-        let bonusAcumulado = 0;
-        for (let m = 1; m <= mes; m++) {
-          const b = calcularBase(m, ano).base * 0.02;
-          bonusAcumulado += c.tipo === 'Advogada' ? b : 0;
-        }
-        const bonus = c.tipo === 'Advogada' ? doisPct : 0;
-        const total = Number(c.fixo || 0) + Number(c.variavel || 0) + bonus;
-        const novoId = proventos.length ? Math.max(...proventos.map(p => p.id)) + 1 : 1;
-        proventos.push({ id: novoId, mes, ano, colaboradorId: c.id, nome: c.nome, tipo: c.tipo, fixo: c.fixo, variavel: c.variavel, base, bonus, bonusAcumulado, total });
-        criados++;
-      });
-      setProventos(proventos);
-      renderizarProventos();
-      if (typeof registrarAuditoria === 'function' && criados) registrarAuditoria('Cálculo', 'Proventos de ' + mes + '/' + ano + ' gerados');
-    }
+  function abrirModalColaborador() {
+    document.getElementById('form-colaborador').reset();
+    document.getElementById('col-id').value = '';
+    document.getElementById('modal-colaborador').classList.add('active');
+  }
 
-    function salvarProventoIndividual(proventoId) {
-      const proventos = getProventos();
-      const p = proventos.find(x => x.id == proventoId);
-      if (!p) return;
-      const novoVar = Number(document.getElementById('var-' + proventoId).value || 0);
-      p.variavel = novoVar;
-      p.total = Number(p.fixo || 0) + novoVar + Number(p.bonus || 0);
-      setProventos(proventos);
-      renderizarProventos();
-      if (typeof registrarAuditoria === 'function') registrarAuditoria('Edição', 'Provento de ' + p.nome + ' atualizado para ' + p.mes + '/' + p.ano);
-    }
+  function fecharModalColaborador() {
+    document.getElementById('modal-colaborador').classList.remove('active');
+  }
 
-    function excluirProvento(id) {
-      if (!confirm('Deseja excluir este provento?')) return;
-      const proventos = getProventos().filter(p => p.id != id);
-      setProventos(proventos);
-      renderizarProventos();
-      if (typeof registrarAuditoria === 'function') registrarAuditoria('Exclusão', 'Provento ' + id + ' excluído');
-    }
+  function editarColaborador(id) {
+    const c = colaboradores.find(x => x.id === id);
+    if (!c) return;
+    document.getElementById('col-id').value = c.id;
+    document.getElementById('col-nome').value = c.nome;
+    document.getElementById('col-cpf').value = c.cpf;
+    document.getElementById('col-tipo').value = c.tipo;
+    document.getElementById('col-fixo').value = c.fixo;
+    document.getElementById('col-admissao').value = c.admissao ? c.admissao.split('T')[0] : '';
+    document.getElementById('col-status').value = c.status;
+    document.getElementById('modal-colaborador').classList.add('active');
+  }
 
-    function calcularBonusAnual() {
-      const ano = Number(document.getElementById('bonusAno').value);
-      const advogadas = getColaboradores().filter(c => c.tipo === 'Advogada');
-      let honorariosAnual = 0, sucumbenciaAnual = 0, baseAnual = 0, totalDois = 0;
-      for (let m = 1; m <= 12; m++) {
-        const { honorarios, sucumbencia, base } = calcularBase(m, ano);
-        honorariosAnual += honorarios;
-        sucumbenciaAnual += sucumbencia;
-        baseAnual += base;
-        totalDois += base * 0.02;
-      }
-      document.getElementById('bonusHonorarios').textContent = formatarMoeda(honorariosAnual);
-      document.getElementById('bonusSucumbencia').textContent = formatarMoeda(sucumbenciaAnual);
-      document.getElementById('bonusBase').textContent = formatarMoeda(baseAnual);
-      document.getElementById('bonusDoisPct').textContent = formatarMoeda(totalDois);
-      const thead = document.getElementById('cabecalhoBonus');
-      const tbody = document.getElementById('tabelaBonus');
-      thead.innerHTML = '<tr><th>Advogada</th>' + MESES.map(m => '<th>' + m + '</th>').join('') + '<th>Total Acumulado</th></tr>';
-      tbody.innerHTML = '';
-      advogadas.forEach(a => {
-        let total = 0;
-        let tds = '';
-        for (let m = 1; m <= 12; m++) {
-          const v = calcularBase(m, ano).base * 0.02;
-          total += v;
-          tds += '<td>' + formatarMoeda(v) + '</td>';
-        }
-        const tr = document.createElement('tr');
-        tr.innerHTML = '<td>' + a.nome + '</td>' + tds + '<td><strong>' + formatarMoeda(total) + '</strong></td>';
-        tbody.appendChild(tr);
-      });
-    }
-
-    window.onload = function() {
-      if (typeof verificarAutenticacao === 'function') verificarAutenticacao();
-      preencherSelectsMes();
-      preencherSelectsAno();
-      renderizarColaboradores();
-      calcularMensal();
-      renderizarProventos();
-      calcularBonusAnual();
+  async function salvarColaborador(event) {
+    event.preventDefault();
+    const obj = {
+      id: document.getElementById('col-id').value,
+      nome: document.getElementById('col-nome').value,
+      cpf: document.getElementById('col-cpf').value,
+      tipo: document.getElementById('col-tipo').value,
+      fixo: parseFloat(document.getElementById('col-fixo').value || 0),
+      admissao: document.getElementById('col-admissao').value,
+      status: document.getElementById('col-status').value
     };
-  </script>
+    await window.db.colaboradores_salvar(obj);
+    fecharModalColaborador();
+    await carregarColaboradores();
+  }
+
+  async function excluirColaborador(id) {
+    if (!confirm('Deseja excluir este colaborador?')) return;
+    await window.db.colaboradores_excluir(id);
+    await carregarColaboradores();
+  }
+
+  function preencherFiltros() {
+    const mes = document.getElementById('filtro-mes');
+    const ano = document.getElementById('filtro-ano');
+    mes.innerHTML = '';
+    for (let i = 1; i <= 12; i++) {
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = i.toString().padStart(2, '0');
+      mes.appendChild(opt);
+    }
+    const hoje = new Date();
+    mes.value = hoje.getMonth() + 1;
+    ano.innerHTML = '';
+    for (let i = hoje.getFullYear() - 5; i <= hoje.getFullYear() + 2; i++) {
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = i;
+      ano.appendChild(opt);
+    }
+    ano.value = hoje.getFullYear();
+  }
+
+  async function carregarProventos() {
+    const mes = parseInt(document.getElementById('filtro-mes').value);
+    const ano = parseInt(document.getElementById('filtro-ano').value);
+    proventos = await window.db.proventos_listar_por_mes(mes, ano);
+    renderizarProventos();
+  }
+
+  function filtrarProventos() {
+    carregarProventos();
+  }
+
+  function renderizarProventos() {
+    const tbody = document.getElementById('tabela-proventos');
+    tbody.innerHTML = '';
+    let total = 0, fixo = 0, variavel = 0, qtd = 0;
+
+    if (!proventos.length) {
+      tbody.innerHTML = '<tr><td colspan="9" class="empty">Nenhum provento encontrado para o período.</td></tr>';
+    } else {
+      proventos.forEach(p => {
+        qtd++;
+        total += parseFloat(p.total || 0);
+        fixo += parseFloat(p.fixo || 0);
+        variavel += parseFloat(p.variavel || 0);
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${p.nome}</td>
+          <td><span class="badge badge-${p.tipo.toLowerCase()}">${p.tipo}</span></td>
+          <td>${formatarMoeda(p.fixo)}</td>
+          <td>${formatarMoeda(p.variavel)}</td>
+          <td>${formatarMoeda(p.base)}</td>
+          <td>${formatarMoeda(p.bonus)}</td>
+          <td>${formatarMoeda(p.bonus_acumulado)}</td>
+          <td>${formatarMoeda(p.total)}</td>
+          <td class="acoes">
+            <button class="btn" onclick="editarProvento('${p.id}')">Editar</button>
+            <button class="btn btn-danger" onclick="excluirProvento('${p.id}')">Excluir</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('prov-total').textContent = formatarMoeda(total);
+    document.getElementById('prov-fixo').textContent = formatarMoeda(fixo);
+    document.getElementById('prov-variavel').textContent = formatarMoeda(variavel);
+    document.getElementById('prov-qtd').textContent = qtd;
+  }
+
+  async function carregarSelectColaboradores() {
+    const select = document.getElementById('prov-colaborador');
+    select.innerHTML = '<option value="">Selecione</option>';
+    colaboradores = await window.db.colaboradores_listar();
+    colaboradores.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = c.nome;
+      opt.dataset.nome = c.nome;
+      select.appendChild(opt);
+    });
+  }
+
+  function preencherNomeColaborador() {
+    const select = document.getElementById('prov-colaborador');
+    const option = select.options[select.selectedIndex];
+    document.getElementById('prov-nome').value = option.dataset.nome || '';
+  }
+
+  function calcularTotalProvento() {
+    const fixo = parseFloat(document.getElementById('prov-fixo').value || 0);
+    const variavel = parseFloat(document.getElementById('prov-variavel').value || 0);
+    const base = parseFloat(document.getElementById('prov-base').value || 0);
+    const bonus = parseFloat(document.getElementById('prov-bonus').value || 0);
+    const bonusAcumulado = parseFloat(document.getElementById('prov-bonus-acumulado').value || 0);
+    document.getElementById('prov-total').value = (fixo + variavel + base + bonus + bonusAcumulado).toFixed(2);
+  }
+
+  async function abrirModalProvento() {
+    document.getElementById('form-provento').reset();
+    document.getElementById('prov-id').value = '';
+    await carregarSelectColaboradores();
+    const hoje = new Date();
+    document.getElementById('prov-mes').value = hoje.getMonth() + 1;
+    document.getElementById('prov-ano').value = hoje.getFullYear();
+    document.getElementById('prov-total').value = '0.00';
+    document.getElementById('modal-provento').classList.add('active');
+  }
+
+  function fecharModalProvento() {
+    document.getElementById('modal-provento').classList.remove('active');
+  }
+
+  function editarProvento(id) {
+    const p = proventos.find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('prov-id').value = p.id;
+    document.getElementById('prov-mes').value = p.mes;
+    document.getElementById('prov-ano').value = p.ano;
+    document.getElementById('prov-nome').value = p.nome;
+    document.getElementById('prov-tipo').value = p.tipo;
+    document.getElementById('prov-fixo').value = p.fixo;
+    document.getElementById('prov-variavel').value = p.variavel;
+    document.getElementById('prov-base').value = p.base;
+    document.getElementById('prov-bonus').value = p.bonus;
+    document.getElementById('prov-bonus-acumulado').value = p.bonus_acumulado;
+    document.getElementById('prov-total').value = p.total;
+    document.getElementById('modal-provento').classList.add('active');
+  }
+
+  async function salvarProvento(event) {
+    event.preventDefault();
+    const obj = {
+      id: document.getElementById('prov-id').value,
+      mes: parseInt(document.getElementById('prov-mes').value),
+      ano: parseInt(document.getElementById('prov-ano').value),
+      colaborador_id: document.getElementById('prov-colaborador').value,
+      nome: document.getElementById('prov-nome').value,
+      tipo: document.getElementById('prov-tipo').value,
+      fixo: parseFloat(document.getElementById('prov-fixo').value || 0),
+      variavel: parseFloat(document.getElementById('prov-variavel').value || 0),
+      base: parseFloat(document.getElementById('prov-base').value || 0),
+      bonus: parseFloat(document.getElementById('prov-bonus').value || 0),
+      bonus_acumulado: parseFloat(document.getElementById('prov-bonus-acumulado').value || 0),
+      total: parseFloat(document.getElementById('prov-total').value || 0)
+    };
+    await window.db.proventos_salvar(obj);
+    fecharModalProvento();
+    await carregarProventos();
+  }
+
+  async function excluirProvento(id) {
+    if (!confirm('Deseja excluir este provento?')) return;
+    await window.db.proventos_excluir(id);
+    await carregarProventos();
+  }
+
+  window.addEventListener('load', async () => {
+    if (window.verificarAutenticacao) await window.verificarAutenticacao();
+    preencherFiltros();
+    await carregarColaboradores();
+    await carregarProventos();
+  });
+</script>
+
 </body>
 </html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Controle do Escritório - Cadastros</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    :root { --cor-primaria: #0a58ca; }
+    body { background-color: #f0f2f5; min-height: 100vh; }
+    .navbar { background-color: var(--cor-primaria) !important; }
+    .navbar .nav-link, .navbar .navbar-brand { color: #fff !important; }
+    .navbar .nav-link:hover { opacity: 0.85; }
+    .btn-primary { background-color: var(--cor-primaria); border-color: var(--cor-primaria); }
+    .btn-primary:hover { background-color: #084298; border-color: #084298; }
+    .nav-pills .nav-link.active { background-color: var(--cor-primaria); }
+    .nav-pills .nav-link { color: var(--cor-primaria); }
+    .card { border: none; border-radius: 0.75rem; }
+    .card h4 { color: var(--cor-primaria); }
+    .table th { color: #0a58ca; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="home.html">🏢 Controle do Escritório</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="menuPrincipal">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="home.html">Início</a></li>
+          <li class="nav-item"><a class="nav-link active" href="cadastros.html">Cadastros</a></li>
+          <li class="nav-item"><a class="nav-link" href="processos.html">Processos</a></li>
+          <li class="nav-item"><a class="nav-link" href="financeiro.html">Financeiro</a></li>
+          <li class="nav-item"><a class="nav-link" href="documentos.html">Documentos</a></li>
+          <li class="nav-item"><a class="nav-link" href="relatorios.html">Relatórios</a></li>
+          <li class="nav-item"><a class="nav-link" href="usuarios.html">Usuários</a></li>
+          <li class="nav-item"><a class="nav-link" href="configuracoes.html">Configurações</a></li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="#" onclick="window.auth.logout(); return false;"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="m-0">📋 Cadastros</h2>
+      <a href="home.html" class="btn btn-outline-primary">← Voltar</a>
+    </div>
+
+    <ul class="nav nav-pills mb-4" id="abasCadastros" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="aba-unidades" data-bs-toggle="pill" data-bs-target="#painel-unidades" type="button" role="tab">🏢 Unidades</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="aba-clientes" data-bs-toggle="pill" data-bs-target="#painel-clientes" type="button" role="tab">👤 Clientes</button>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane fade show active" id="painel-unidades" role="tabpanel">
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-md-3"><div class="card shadow-sm p-3"><h6 class="text-muted">Total</h6><h4 id="uni-total">0</h4></div></div>
+          <div class="col-6 col-md-3"><div class="card shadow-sm p-3"><h6 class="text-muted">Ativas</h6><h4 id="uni-ativas">0</h4></div></div>
+          <div class="col-6 col-md-3"><div class="card shadow-sm p-3"><h6 class="text-muted">Inativas</h6><h4 id="uni-inativas">0</h4></div></div>
+          <div class="col-6 col-md-3"><div class="card shadow-sm p-3"><h6 class="text-muted">Colaboradores</h6><h4 id="uni-colaboradores">0</h4></div></div>
+        </div>
+        <div class="d-flex justify-content-end mb-3">
+          <button class="btn btn-primary" onclick="abrirModalUnidade()"><i class="bi bi-plus-lg"></i> Nova Unidade</button>
+        </div>
+        <div class="card shadow-sm">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr><th>Nome</th><th>Endereço</th><th>Responsável</th><th>Telefone</th><th>Status</th><th>Ações</th></tr>
+              </thead>
+              <tbody id="tabela-unidades"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane fade" id="painel-clientes" role="tabpanel">
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-md-3"><div class="card shadow-sm p-3"><h6 class="text-muted">Total</h6><h4 id="cli-total">0</h4></div></div>
+          <div class="col-6 col-md-3"><div class="card shadow-sm p-3"><h6 class="text-muted">Ativos</h6><h4 id="cli-ativos">0</h4></div></div>
+          <div class="col-6 col-md-3"><div class="card shadow-sm p-3"><h6 class="text-muted">Inativos</h6><h4 id="cli-inativos">0</h4></div></div>
+          <div class="col-6 col-md-3"><div class="card shadow-sm p-3"><h6 class="text-muted">Total Recebido</h6><h4 id="cli-recebido">R$ 0,00</h4></div></div>
+        </div>
+        <div class="d-flex justify-content-end mb-3">
+          <button class="btn btn-primary" onclick="abrirModalCliente()"><i class="bi bi-plus-lg"></i> Novo Cliente</button>
+        </div>
+        <div class="card shadow-sm">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr><th>Nome</th><th>Email</th><th>Telefone</th><th>Tipo</th><th>Status</th><th>Ações</th></tr>
+              </thead>
+              <tbody id="tabela-clientes"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalUnidade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color:#0a58ca; color:#fff;">
+          <h5 class="modal-title" id="tituloModalUnidade">Nova Unidade</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formUnidade">
+            <input type="hidden" id="uni-id" />
+            <div class="row g-3">
+              <div class="col-md-6"><label class="form-label">Nome</label><input type="text" class="form-control" id="uni-nome" required /></div>
+              <div class="col-md-6"><label class="form-label">Responsável</label><input type="text" class="form-control" id="uni-responsavel" /></div>
+              <div class="col-md-8"><label class="form-label">Endereço</label><input type="text" class="form-control" id="uni-endereco" /></div>
+              <div class="col-md-4"><label class="form-label">Telefone</label><input type="text" class="form-control" id="uni-telefone" /></div>
+              <div class="col-md-6"><label class="form-label">Status</label>
+                <select class="form-select" id="uni-status">
+                  <option value="Ativa">Ativa</option>
+                  <option value="Inativa">Inativa</option>
+                </select>
+              </div>
+              <div class="col-12"><label class="form-label">Observação</label><textarea class="form-control" id="uni-observacao" rows="3"></textarea></div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="salvarUnidade()">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalCliente" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color:#0a58ca; color:#fff;">
+          <h5 class="modal-title" id="tituloModalCliente">Novo Cliente</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formCliente">
+            <input type="hidden" id="cli-id" />
+            <div class="row g-3">
+              <div class="col-md-8"><label class="form-label">Nome</label><input type="text" class="form-control" id="cli-nome" required /></div>
+              <div class="col-md-4"><label class="form-label">Tipo</label>
+                <select class="form-select" id="cli-tipo">
+                  <option value="PF">Pessoa Física (PF)</option>
+                  <option value="PJ">Pessoa Jurídica (PJ)</option>
+                </select>
+              </div>
+              <div class="col-md-6"><label class="form-label">Email</label><input type="email" class="form-control" id="cli-email" /></div>
+              <div class="col-md-6"><label class="form-label">Telefone</label><input type="text" class="form-control" id="cli-telefone" /></div>
+              <div class="col-md-6"><label class="form-label">Documento</label><input type="text" class="form-control" id="cli-documento" /></div>
+              <div class="col-md-6"><label class="form-label">Status</label>
+                <select class="form-select" id="cli-status">
+                  <option value="Ativo">Ativo</option>
+                  <option value="Inativo">Inativo</option>
+                </select>
+              </div>
+              <div class="col-12"><label class="form-label">Endereço</label><textarea class="form-control" id="cli-endereco" rows="2"></textarea></div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="salvarCliente()">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="db.js"></script>
+  <script src="auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const modalUnidade = new bootstrap.Modal(document.getElementById('modalUnidade'));
+    const modalCliente = new bootstrap.Modal(document.getElementById('modalCliente'));
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.verificarAutenticacao) window.verificarAutenticacao();
+      await carregarUnidades();
+      await carregarClientes();
+    });
+
+    function tratarErro(funcao, erro) {
+      console.error(`Erro em ${funcao}:`, erro);
+      alert(`Erro ao executar ${funcao}. Verifique o console.`);
+    }
+
+    async function carregarUnidades() {
+      try {
+        if (!window.db || !window.db.unidades_listar) throw new Error('Função unidades_listar não encontrada');
+        const lista = await window.db.unidades_listar() || [];
+        const tbody = document.getElementById('tabela-unidades');
+        tbody.innerHTML = '';
+        let ativas = 0, inativas = 0, colaboradores = 0;
+        lista.forEach(u => {
+          if (u.status === 'Ativa') ativas++; else inativas++;
+          colaboradores += Number(u.colaboradores || 0);
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${u.nome || ''}</td>
+            <td>${u.endereco || ''}</td>
+            <td>${u.responsavel || ''}</td>
+            <td>${u.telefone || ''}</td>
+            <td><span class="badge ${u.status === 'Ativa' ? 'bg-success' : 'bg-secondary'}">${u.status || 'Ativa'}</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary me-1" onclick="editarUnidade('${u.id}')"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-sm btn-outline-danger" onclick="excluirUnidade('${u.id}', '${u.nome}')"><i class="bi bi-trash"></i></button>
+            </td>`;
+          tbody.appendChild(tr);
+        });
+        document.getElementById('uni-total').innerText = lista.length;
+        document.getElementById('uni-ativas').innerText = ativas;
+        document.getElementById('uni-inativas').innerText = inativas;
+        document.getElementById('uni-colaboradores').innerText = colaboradores;
+      } catch (e) { tratarErro('carregarUnidades', e); }
+    }
+
+    function abrirModalUnidade() {
+      document.getElementById('formUnidade').reset();
+      document.getElementById('uni-id').value = '';
+      document.getElementById('tituloModalUnidade').innerText = 'Nova Unidade';
+      modalUnidade.show();
+    }
+
+    async function editarUnidade(id) {
+      try {
+        if (!window.db || !window.db.unidades_listar) throw new Error('Função unidades_listar não encontrada');
+        const lista = await window.db.unidades_listar();
+        const u = lista.find(x => String(x.id) === String(id));
+        if (!u) return;
+        document.getElementById('uni-id').value = u.id;
+        document.getElementById('uni-nome').value = u.nome || '';
+        document.getElementById('uni-endereco').value = u.endereco || '';
+        document.getElementById('uni-responsavel').value = u.responsavel || '';
+        document.getElementById('uni-telefone').value = u.telefone || '';
+        document.getElementById('uni-status').value = u.status || 'Ativa';
+        document.getElementById('uni-observacao').value = u.observacao || '';
+        document.getElementById('tituloModalUnidade').innerText = 'Editar Unidade';
+        modalUnidade.show();
+      } catch (e) { tratarErro('editarUnidade', e); }
+    }
+
+    async function salvarUnidade() {
+      try {
+        if (!window.db || !window.db.unidades_salvar) throw new Error('Função unidades_salvar não encontrada');
+        const payload = {
+          id: document.getElementById('uni-id').value || null,
+          nome: document.getElementById('uni-nome').value,
+          endereco: document.getElementById('uni-endereco').value,
+          responsavel: document.getElementById('uni-responsavel').value,
+          telefone: document.getElementById('uni-telefone').value,
+          status: document.getElementById('uni-status').value,
+          observacao: document.getElementById('uni-observacao').value
+        };
+        await window.db.unidades_salvar(payload);
+        modalUnidade.hide();
+        await carregarUnidades();
+      } catch (e) { tratarErro('salvarUnidade', e); }
+    }
+
+    async function excluirUnidade(id, nome) {
+      if (!confirm(`Deseja excluir a unidade "${nome}"?`)) return;
+      try {
+        if (!window.db || !window.db.unidades_excluir) throw new Error('Função unidades_excluir não encontrada');
+        await window.db.unidades_excluir(id);
+        await carregarUnidades();
+      } catch (e) { tratarErro('excluirUnidade', e); }
+    }
+
+    async function carregarClientes() {
+      try {
+        if (!window.db || !window.db.clientes_listar) throw new Error('Função clientes_listar não encontrada');
+        const lista = await window.db.clientes_listar() || [];
+        const tbody = document.getElementById('tabela-clientes');
+        tbody.innerHTML = '';
+        let ativos = 0, inativos = 0, recebido = 0;
+        lista.forEach(c => {
+          if (c.status === 'Ativo') ativos++; else inativos++;
+          recebido += Number(c.total_recebido || 0);
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${c.nome || ''}</td>
+            <td>${c.email || ''}</td>
+            <td>${c.telefone || ''}</td>
+            <td>${c.tipo || 'PF'}</td>
+            <td><span class="badge ${c.status === 'Ativo' ? 'bg-success' : 'bg-secondary'}">${c.status || 'Ativo'}</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary me-1" onclick="editarCliente('${c.id}')"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-sm btn-outline-danger" onclick="excluirCliente('${c.id}', '${c.nome}')"><i class="bi bi-trash"></i></button>
+            </td>`;
+          tbody.appendChild(tr);
+        });
+        document.getElementById('cli-total').innerText = lista.length;
+        document.getElementById('cli-ativos').innerText = ativos;
+        document.getElementById('cli-inativos').innerText = inativos;
+        document.getElementById('cli-recebido').innerText = 'R$ ' + recebido.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      } catch (e) { tratarErro('carregarClientes', e); }
+    }
+
+    function abrirModalCliente() {
+      document.getElementById('formCliente').reset();
+      document.getElementById('cli-id').value = '';
+      document.getElementById('tituloModalCliente').innerText = 'Novo Cliente';
+      modalCliente.show();
+    }
+
+    async function editarCliente(id) {
+      try {
+        if (!window.db || !window.db.clientes_listar) throw new Error('Função clientes_listar não encontrada');
+        const lista = await window.db.clientes_listar();
+        const c = lista.find(x => String(x.id) === String(id));
+        if (!c) return;
+        document.getElementById('cli-id').value = c.id;
+        document.getElementById('cli-nome').value = c.nome || '';
+        document.getElementById('cli-email').value = c.email || '';
+        document.getElementById('cli-telefone').value = c.telefone || '';
+        document.getElementById('cli-tipo').value = c.tipo || 'PF';
+        document.getElementById('cli-documento').value = c.documento || '';
+        document.getElementById('cli-endereco').value = c.endereco || '';
+        document.getElementById('cli-status').value = c.status || 'Ativo';
+        document.getElementById('tituloModalCliente').innerText = 'Editar Cliente';
+        modalCliente.show();
+      } catch (e) { tratarErro('editarCliente', e); }
+    }
+
+    async function salvarCliente() {
+      try {
+        if (!window.db || !window.db.clientes_salvar) throw new Error('Função clientes_salvar não encontrada');
+        const payload = {
+          id: document.getElementById('cli-id').value || null,
+          nome: document.getElementById('cli-nome').value,
+          email: document.getElementById('cli-email').value,
+          telefone: document.getElementById('cli-telefone').value,
+          tipo: document.getElementById('cli-tipo').value,
+          documento: document.getElementById('cli-documento').value,
+          endereco: document.getElementById('cli-endereco').value,
+          status: document.getElementById('cli-status').value
+        };
+        await window.db.clientes_salvar(payload);
+        modalCliente.hide();
+        await carregarClientes();
+      } catch (e) { tratarErro('salvarCliente', e); }
+    }
+
+    async function excluirCliente(id, nome) {
+      if (!confirm(`Deseja excluir o cliente "${nome}"?`)) return;
+      try {
+        if (!window.db || !window.db.clientes_excluir) throw new Error('Função clientes_excluir não encontrada');
+        await window.db.clientes_excluir(id);
+        await carregarClientes();
+      } catch (e) { tratarErro('excluirCliente', e); }
+    }
+  </script>
+</body>
+</html>

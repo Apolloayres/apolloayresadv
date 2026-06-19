@@ -3,215 +3,520 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard — Controle do Escritório</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <title>Dashboard - Controle do Escritório</title>
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background-color: #f0f2f5;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+      color: #333;
     }
     .navbar {
-      background-color: #0a58ca !important;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      background-color: #0a58ca;
+      color: white;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar-brand {
+      font-size: 1.25rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover {
+      color: white;
+      text-decoration: underline;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 25px 20px;
+    }
+    .back-button {
+      display: inline-block;
+      margin-bottom: 15px;
+      color: #0a58ca;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    .back-button:hover { text-decoration: underline; }
+    h1 {
+      color: #0a58ca;
+      margin-bottom: 25px;
+      font-size: 1.8rem;
+    }
+    .grid4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
     }
     .card {
-      border-radius: 12px;
-      border: none;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    }
-    .stats-card {
-      background-color: #ffffff;
-      border-radius: 12px;
+      background: white;
+      border-radius: 10px;
       padding: 20px;
-      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border-left: 5px solid #0a58ca;
     }
-    .stats-number {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #0d6efd;
-      margin-bottom: 4px;
-    }
-    .stats-label {
-      color: #6c757d;
+    .card-label {
       font-size: 0.85rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
     }
-    .chart-container {
+    .card-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #0a58ca;
+    }
+    .card-value.negativo { color: #dc3545; }
+    .card-value.positivo { color: #198754; }
+    .charts-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+    .chart-box {
+      background: white;
+      border-radius: 10px;
       padding: 20px;
-      background-color: #ffffff;
-      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
-    .footer {
-      background-color: #ffffff;
-      padding: 20px 0;
-      margin-top: 40px;
+    .chart-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #0a58ca;
+      margin-bottom: 15px;
+    }
+    .table-section {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .table-section h2 {
+      color: #0a58ca;
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: left;
+      padding: 12px 10px;
+      border-bottom: 1px solid #e9ecef;
+      font-size: 0.95rem;
+    }
+    th {
+      background-color: #0a58ca;
+      color: white;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+    }
+    tr:last-child td { border-bottom: none; }
+    .tipo-receita { color: #198754; font-weight: 600; }
+    .tipo-despesa { color: #dc3545; font-weight: 600; }
+    .valor { font-weight: 700; }
+    .status-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .status-pago { background: #d1e7dd; color: #0f5132; }
+    .status-pendente { background: #fff3cd; color: #664d03; }
+    .status-atrasado { background: #f8d7da; color: #842029; }
+    .status-realizado { background: #d1e7dd; color: #0f5132; }
+    .empty {
       text-align: center;
-      color: #6c757d;
-      font-size: 0.9rem;
-      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+      color: #666;
+      padding: 25px;
+      font-style: italic;
+    }
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #0a58ca;
+      font-weight: 500;
+    }
+    .error {
+      background: #f8d7da;
+      color: #842029;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 768px) {
+      .navbar { flex-direction: column; height: auto; padding: 10px; }
+      .nav-links { gap: 12px; flex-wrap: wrap; justify-content: center; }
+      .grid4 { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- BARRA SUPERIOR -->
-  <nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand fw-bold" href="home.html">
-        <i class="fa-solid fa-landmark me-2"></i>Controle do Escritório
-      </a>
-      <div class="d-flex gap-2">
-        <a href="home.html" class="btn btn-outline-light btn-sm">
-          <i class="fa-solid fa-arrow-left me-1"></i>Voltar
-        </a>
-        <button class="btn btn-outline-light btn-sm" onclick="sair()">
-          <i class="fa-solid fa-right-from-bracket me-1"></i>Sair
-        </button>
-      </div>
-    </div>
+  <nav class="navbar">
+    <div class="navbar-brand">🏢 Controle do Escritório</div>
+    <ul class="nav-links">
+      <li><a href="home.html">Início</a></li>
+      <li><a href="receitas.html">Receitas</a></li>
+      <li><a href="despesas.html">Despesas</a></li>
+      <li><a href="clientes.html">Clientes</a></li>
+      <li><a href="fornecedores.html">Fornecedores</a></li>
+      <li><a href="processos.html">Processos</a></li>
+      <li><a href="tarefas.html">Tarefas</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="logout.html">Sair</a></li>
+    </ul>
   </nav>
 
-  <!-- CORPO -->
-  <div class="container py-4">
+  <div class="container">
+    <a href="home.html" class="back-button">← Voltar</a>
+    <h1>📊 Dashboard</h1>
 
-    <!-- TÍTULO -->
-    <div class="mb-4">
-      <h2 class="fw-bold text-dark mb-1">📊 Dashboard Financeiro</h2>
-      <p class="text-muted mb-0">Visão geral do escritório</p>
-    </div>
+    <div id="mensagem" class="loading">Carregando dashboard...</div>
 
-    <!-- CARDS DE ESTATÍSTICAS -->
-    <div class="row g-4 mb-4">
-      <div class="col-lg-3 col-md-6">
-        <div class="card stats-card h-100">
-          <div class="card-body">
-            <div class="stats-number">R$ 0,00</div>
-            <div class="stats-label">💰 Receitas do Mês</div>
-          </div>
-        </div>
+    <div class="grid4">
+      <div class="card">
+        <div class="card-label">Total Receitas</div>
+        <div class="card-value" id="totalReceitas">R$ 0,00</div>
       </div>
-      <div class="col-lg-3 col-md-6">
-        <div class="card stats-card h-100">
-          <div class="card-body">
-            <div class="stats-number">R$ 0,00</div>
-            <div class="stats-label">📈 Despesas do Mês</div>
-          </div>
-        </div>
+      <div class="card">
+        <div class="card-label">Total Despesas</div>
+        <div class="card-value" id="totalDespesas">R$ 0,00</div>
       </div>
-      <div class="col-lg-3 col-md-6">
-        <div class="card stats-card h-100">
-          <div class="card-body">
-            <div class="stats-number">R$ 0,00</div>
-            <div class="stats-label">💵 Saldo do Mês</div>
-          </div>
-        </div>
+      <div class="card">
+        <div class="card-label">Saldo</div>
+        <div class="card-value" id="saldo">R$ 0,00</div>
       </div>
-      <div class="col-lg-3 col-md-6">
-        <div class="card stats-card h-100">
-          <div class="card-body">
-            <div class="stats-number">0</div>
-            <div class="stats-label">👥 Clientes Ativos</div>
-          </div>
-        </div>
+      <div class="card">
+        <div class="card-label">Pendências</div>
+        <div class="card-value" id="pendencias">0</div>
       </div>
     </div>
 
-    <!-- GRÁFICOS -->
-    <div class="row g-4 mb-4">
-      <div class="col-lg-6">
-        <div class="card chart-container h-100">
-          <h5 class="card-title mb-3 text-dark">Receitas por Categoria</h5>
-          <canvas id="pieChart"></canvas>
-        </div>
+    <div class="charts-row">
+      <div class="chart-box">
+        <div class="chart-title">Receitas vs Despesas (últimos 6 meses)</div>
+        <canvas id="graficoBarras"></canvas>
       </div>
-      <div class="col-lg-6">
-        <div class="card chart-container h-100">
-          <h5 class="card-title mb-3 text-dark">Receitas x Despesas por Mês</h5>
-          <canvas id="barChart"></canvas>
-        </div>
+      <div class="chart-box">
+        <div class="chart-title">Distribuição de Despesas por Categoria</div>
+        <canvas id="graficoPizza"></canvas>
       </div>
     </div>
 
-    <!-- TABELA DE ÚLTIMOS REGISTROS -->
-    <div class="card mb-4">
-      <div class="card-body">
-        <h5 class="card-title mb-3 text-dark">📋 Últimos Registros</h5>
-        <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>Data</th>
-                <th>Tipo</th>
-                <th>Descrição</th>
-                <th>Valor</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="5" class="text-center text-muted py-4">Nenhum registro encontrado</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+    <div class="table-section">
+      <h2>Últimas 10 Movimentações</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Tipo</th>
+            <th>Descrição</th>
+            <th>Categoria</th>
+            <th>Status</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaMovimentacoes">
+          <tr><td colspan="6" class="empty">Nenhuma movimentação encontrada.</td></tr>
+        </tbody>
+      </table>
     </div>
-
-    <!-- BOTÃO DE AÇÃO -->
-    <div class="text-center mt-4">
-      <a href="novo-registro.html" class="btn btn-primary btn-lg">
-        <i class="fa-solid fa-plus me-2"></i>Novo Registro
-      </a>
-    </div>
-
   </div>
 
-  <!-- RODAPÉ -->
-  <footer class="footer">
-    <div class="container">
-      <span>© 2025 Controle do Escritório - Todos os direitos reservados</span>
-    </div>
-  </footer>
-
+  <script src="db.js"></script>
+  <script src="auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script>
-    if (localStorage.getItem('logado') !== 'true') {
-      window.location.href = 'index.html';
-    }
-    function sair() {
-      localStorage.clear();
-      window.location.href = 'index.html';
-    }
-    const ctxPie = document.getElementById('pieChart').getContext('2d');
-    new Chart(ctxPie, {
-      type: 'pie',
-      data: {
-        labels: ['Honorários', 'Custas', 'Outros'],
-        datasets: [{
-          data: [45, 25, 30],
-          backgroundColor: ['#0d6efd', '#0a58ca', '#6ea8fe'],
-          borderColor: '#ffffff',
-          borderWidth: 2
-        }]
-      },
-      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-    });
-    const ctxBar = document.getElementById('barChart').getContext('2d');
-    new Chart(ctxBar, {
-      type: 'bar',
-      data: {
-        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-        datasets: [
-          { label: 'Receitas', data: [12000, 15000, 11000, 18000, 16000, 20000], backgroundColor: '#0d6efd', borderRadius: 4 },
-          { label: 'Despesas', data: [8000, 9000, 7500, 10000, 9500, 11000], backgroundColor: '#dc3545', borderRadius: 4 }
-        ]
-      },
-      options: {
-        responsive: true,
-        scales: { y: { beginAtZero: true } },
-        plugins: { legend: { position: 'bottom' } }
-      }
-    });
+    (function() {
+      'use strict';
+
+      const formatoMoeda = (valor) => {
+        return 'R$ ' + Number(valor || 0).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      };
+
+      const normalizarData = (data) => {
+        if (!data) return '';
+        return data.toString().trim();
+      };
+
+      const obterMesAtual = () => {
+        const hoje = new Date();
+        const ano = hoje.getFullYear();
+        const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+        return `${ano}-${mes}`;
+      };
+
+      const obterUltimosMeses = (qtd) => {
+        const meses = [];
+        const hoje = new Date();
+        for (let i = qtd - 1; i >= 0; i--) {
+          const d = new Date(hoje.getFullYear(), hoje.getMonth() - i, 1);
+          const ano = d.getFullYear();
+          const mes = String(d.getMonth() + 1).padStart(2, '0');
+          meses.push(`${ano}-${mes}`);
+        }
+        return meses;
+      };
+
+      const formatarMesLabel = (mesAno) => {
+        const [ano, mes] = mesAno.split('-');
+        return `${mes}/${ano}`;
+      };
+
+      const calcularPendentes = (lista) => {
+        let total = 0;
+        lista.forEach(item => {
+          const status = (item.status || '').toString().toLowerCase().trim();
+          if (status === 'pendente' || status === 'atrasado') {
+            total += 1;
+          }
+        });
+        return total;
+      };
+
+      const somarPorMes = (lista, meses) => {
+        const valores = meses.map(mes => {
+          return lista.reduce((acc, item) => {
+            const data = normalizarData(item.data || item.data_vencimento || item.data_recebimento || item.created_at || '');
+            if (data.substring(0, 7) === mes) {
+              return acc + Number(item.valor || 0);
+            }
+            return acc;
+          }, 0);
+        });
+        return valores;
+      };
+
+      const agruparDespesasPorCategoria = (lista, mesAtual) => {
+        const agrupado = {};
+        lista.forEach(item => {
+          const data = normalizarData(item.data || item.data_vencimento || item.data_pagamento || item.created_at || '');
+          if (data.substring(0, 7) === mesAtual) {
+            const categoria = item.categoria || 'Sem Categoria';
+            agrupado[categoria] = (agrupado[categoria] || 0) + Number(item.valor || 0);
+          }
+        });
+        return {
+          labels: Object.keys(agrupado),
+          valores: Object.values(agrupado)
+        };
+      };
+
+      const carregarDashboard = async () => {
+        const mensagem = document.getElementById('mensagem');
+        try {
+          if (typeof window.verificarAutenticacao === 'function') {
+            window.verificarAutenticacao();
+          }
+
+          if (!window.db || typeof window.db.receitas_listar !== 'function' || typeof window.db.despesas_listar !== 'function') {
+            throw new Error('Módulo de banco de dados (db.js) não carregado corretamente.');
+          }
+
+          const mesAtual = obterMesAtual();
+          const receitas = await window.db.receitas_listar() || [];
+          const despesas = await window.db.despesas_listar() || [];
+
+          const totalReceitas = receitas.reduce((acc, item) => {
+            const data = normalizarData(item.data || item.data_recebimento || item.created_at || '');
+            return data.substring(0, 7) === mesAtual ? acc + Number(item.valor || 0) : acc;
+          }, 0);
+
+          const totalDespesas = despesas.reduce((acc, item) => {
+            const data = normalizarData(item.data || item.data_vencimento || item.data_pagamento || item.created_at || '');
+            return data.substring(0, 7) === mesAtual ? acc + Number(item.valor || 0) : acc;
+          }, 0);
+
+          const saldo = totalReceitas - totalDespesas;
+          const pendentes = calcularPendentes(receitas) + calcularPendentes(despesas);
+
+          document.getElementById('totalReceitas').textContent = formatoMoeda(totalReceitas);
+          document.getElementById('totalDespesas').textContent = formatoMoeda(totalDespesas);
+          const saldoEl = document.getElementById('saldo');
+          saldoEl.textContent = formatoMoeda(saldo);
+          saldoEl.className = 'card-value ' + (saldo >= 0 ? 'positivo' : 'negativo');
+          document.getElementById('pendencias').textContent = pendentes;
+
+          const ultimosMeses = obterUltimosMeses(6);
+          const receitasMeses = somarPorMes(receitas, ultimosMeses);
+          const despesasMeses = somarPorMes(despesas, ultimosMeses);
+          const labelsMeses = ultimosMeses.map(formatarMesLabel);
+
+          const ctxBarras = document.getElementById('graficoBarras').getContext('2d');
+          new Chart(ctxBarras, {
+            type: 'bar',
+            data: {
+              labels: labelsMeses,
+              datasets: [
+                {
+                  label: 'Receitas',
+                  data: receitasMeses,
+                  backgroundColor: '#198754',
+                  borderColor: '#198754',
+                  borderWidth: 1,
+                  barPercentage: 0.3
+                },
+                {
+                  label: 'Despesas',
+                  data: despesasMeses,
+                  backgroundColor: '#dc3545',
+                  borderColor: '#dc3545',
+                  borderWidth: 1,
+                  barPercentage: 0.3
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: { position: 'top' },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return context.dataset.label + ': ' + formatoMoeda(context.raw);
+                    }
+                  }
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    callback: function(value) {
+                      return 'R$ ' + Number(value).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    }
+                  }
+                }
+              }
+            }
+          });
+
+          const categorias = agruparDespesasPorCategoria(despesas, mesAtual);
+          const coresPizza = [
+            '#0a58ca', '#198754', '#dc3545', '#fd7e14', '#6f42c1',
+            '#20c997', '#0dcaf0', '#6610f2', '#d63384', '#adb5bd'
+          ];
+
+          const ctxPizza = document.getElementById('graficoPizza').getContext('2d');
+          new Chart(ctxPizza, {
+            type: 'pie',
+            data: {
+              labels: categorias.labels,
+              datasets: [{
+                data: categorias.valores,
+                backgroundColor: categorias.labels.map((_, i) => coresPizza[i % coresPizza.length]),
+                borderColor: '#ffffff',
+                borderWidth: 2
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: { position: 'right' },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const label = context.label || '';
+                      const value = formatoMoeda(context.raw);
+                      const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                      const percentual = total > 0 ? ((context.raw / total) * 100).toFixed(1) : 0;
+                      return `${label}: ${value} (${percentual}%)`;
+                    }
+                  }
+                }
+              }
+            }
+          });
+
+          const receitasMov = receitas.map(item => ({
+            tipo: 'Receita',
+            data: normalizarData(item.data || item.data_recebimento || item.created_at || ''),
+            descricao: item.descricao || item.cliente || 'Receita sem descrição',
+            categoria: item.categoria || '-',
+            status: item.status || 'realizado',
+            valor: Number(item.valor || 0)
+          }));
+
+          const despesasMov = despesas.map(item => ({
+            tipo: 'Despesa',
+            data: normalizarData(item.data || item.data_vencimento || item.data_pagamento || item.created_at || ''),
+            descricao: item.descricao || item.fornecedor || 'Despesa sem descrição',
+            categoria: item.categoria || '-',
+            status: item.status || 'pago',
+            valor: Number(item.valor || 0)
+          }));
+
+          const movimentacoes = [...receitasMov, ...despesasMov]
+            .sort((a, b) => new Date(b.data) - new Date(a.data))
+            .slice(0, 10);
+
+          const tbody = document.getElementById('tabelaMovimentacoes');
+          tbody.innerHTML = '';
+
+          if (movimentacoes.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="empty">Nenhuma movimentação encontrada.</td></tr>';
+          } else {
+            movimentacoes.forEach(mov => {
+              const statusClass = (mov.status || '').toString().toLowerCase().trim();
+              const statusBadge = statusClass === 'pago' || statusClass === 'realizado' ? 'status-pago' :
+                                  statusClass === 'pendente' ? 'status-pendente' :
+                                  statusClass === 'atrasado' ? 'status-atrasado' : 'status-pago';
+              const tipoClass = mov.tipo === 'Receita' ? 'tipo-receita' : 'tipo-despesa';
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td>${mov.data ? new Date(mov.data).toLocaleDateString('pt-BR') : '-'}</td>
+                <td class="${tipoClass}">${mov.tipo}</td>
+                <td>${mov.descricao}</td>
+                <td>${mov.categoria}</td>
+                <td><span class="status-badge ${statusBadge}">${mov.status}</span></td>
+                <td class="valor">${formatoMoeda(mov.valor)}</td>
+              `;
+              tbody.appendChild(tr);
+            });
+          }
+
+          mensagem.style.display = 'none';
+        } catch (erro) {
+          console.error('Erro ao carregar dashboard:', erro);
+          mensagem.className = 'error';
+          mensagem.textContent = 'Erro ao carregar dashboard: ' + (erro.message || 'Erro desconhecido');
+        }
+      };
+
+      window.addEventListener('load', carregarDashboard);
+    })();
   </script>
 </body>
 </html>

@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle do Escritório - Patrimônio</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { background-color: #f0f2f5; color: #333; }
+    .navbar { background-color: #0a58ca; color: #fff; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .navbar-brand { font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
+    .navbar-links { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .navbar a { color: #fff; text-decoration: none; padding: 6px 10px; border-radius: 4px; font-size: 14px; }
+    .navbar a:hover { background-color: rgba(255,255,255,0.15); }
+    .container { max-width: 1300px; margin: 0 auto; padding: 20px; }
+    .header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+    .btn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; text-decoration: none; display: inline-block; }
+    .btn-voltar { background-color: #6c757d; color: #fff; }
+    .btn-voltar:hover { background-color: #5a6268; }
+    .btn-primary { background-color: #0a58ca; color: #fff; }
+    .btn-primary:hover { background-color: #084298; }
+    .btn-danger { background-color: #dc3545; color: #fff; }
+    .btn-danger:hover { background-color: #b02a37; }
+    .btn-success { background-color: #198754; color: #fff; }
+    .btn-success:hover { background-color: #146c43; }
+    .abas { display: flex; gap: 5px; margin-bottom: 20px; border-bottom: 2px solid #dee2e6; }
+    .aba { padding: 12px 20px; cursor: pointer; border: none; background: #e9ecef; color: #495057; font-size: 14px; border-radius: 4px 4px 0 0; }
+    .aba.active { background-color: #0a58ca; color: #fff; }
+    .aba:hover:not(.active) { background-color: #dee2e6; }
+    .conteudo-aba { display: none; }
+    .conteudo-aba.active { display: block; }
+    .grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+    .card { background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .card-label { font-size: 12px; color: #6c757d; text-transform: uppercase; margin-bottom: 5px; }
+    .card-value { font-size: 22px; font-weight: bold; color: #0a58ca; }
+    .tabela-container { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 700px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #dee2e6; font-size: 14px; }
+    th { background-color: #e9ecef; color: #495057; font-weight: 600; }
+    tr:hover { background-color: #f8f9fa; }
+    .acoes { display: flex; gap: 5px; }
+    .acoes .btn { padding: 5px 10px; font-size: 12px; }
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: #fff; border-radius: 8px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+    .modal-header { background-color: #0a58ca; color: #fff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .modal-title { font-size: 18px; font-weight: bold; }
+    .modal-close { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
+    .modal-body { padding: 20px; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-size: 14px; font-weight: 600; color: #495057; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 8px 12px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px; }
+    .form-group textarea { min-height: 80px; resize: vertical; }
+    .modal-footer { padding: 15px 20px; border-top: 1px solid #dee2e6; display: flex; justify-content: flex-end; gap: 10px; }
+    .status-ativo { color: #198754; font-weight: 600; }
+    .status-inativo { color: #dc3545; font-weight: 600; }
+    .status-alugado { color: #0a58ca; font-weight: 600; }
+    .status-vago { color: #fd7e14; font-weight: 600; }
+    .empty { text-align: center; padding: 40px; color: #6c757d; }
+    @media (max-width: 768px) {
+      .grid4 { grid-template-columns: repeat(2, 1fr); }
+      .navbar { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 480px) {
+      .grid4 { grid-template-columns: 1fr; }
+      .abas { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="home.html" class="navbar-brand">🏢 Controle do Escritório</a>
+    <div class="navbar-links">
+      <a href="home.html">Início</a>
+      <a href="clientes.html">Clientes</a>
+      <a href="processos.html">Processos</a>
+      <a href="financeiro.html">Financeiro</a>
+      <a href="patrimonio.html">Patrimônio</a>
+      <a href="documentos.html">Documentos</a>
+      <a href="tarefas.html">Tarefas</a>
+      <a href="relatorios.html">Relatórios</a>
+      <a href="usuarios.html">Usuários</a>
+      <a href="#" onclick="logout()">Sair</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="header">
+      <a href="home.html" class="btn btn-voltar">← Voltar</a>
+      <h1>🏦 Patrimônio</h1>
+    </div>
+
+    <div class="abas">
+      <button class="aba active" data-aba="imoveis" onclick="abrirAba('imoveis')">Imóveis</button>
+      <button class="aba" data-aba="contas" onclick="abrirAba('contas')">Contas Bancárias</button>
+      <button class="aba" data-aba="aplicacoes" onclick="abrirAba('aplicacoes')">Aplicações Financeiras</button>
+    </div>
+
+    <!-- ABA IMÓVEIS -->
+    <div id="aba-imoveis" class="conteudo-aba active">
+      <div class="grid4">
+        <div class="card">
+          <div class="card-label">Total de Imóveis</div>
+          <div class="card-value" id="imo-total">0</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Alugados/Usados</div>
+          <div class="card-value" id="imo-alugados">0</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Vagos</div>
+          <div class="card-value" id="imo-vagos">0</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Valor Total</div>
+          <div class="card-value" id="imo-valor-total">R$ 0,00</div>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="margin-bottom: 15px;" onclick="abrirModalImovel()">+ Novo Imóvel</button>
+      <div class="tabela-container">
+        <table id="tabela-imoveis">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Endereço</th>
+              <th>Tipo</th>
+              <th>Status</th>
+              <th>Valor</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ABA CONTAS -->
+    <div id="aba-contas" class="conteudo-aba">
+      <div class="grid4">
+        <div class="card">
+          <div class="card-label">Saldo Total</div>
+          <div class="card-value" id="conta-saldo-total">R$ 0,00</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Contas Ativas</div>
+          <div class="card-value" id="conta-ativas">0</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Média de Saldo</div>
+          <div class="card-value" id="conta-media">R$ 0,00</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Maior Saldo</div>
+          <div class="card-value" id="conta-maior">R$ 0,00</div>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="margin-bottom: 15px;" onclick="abrirModalConta()">+ Nova Conta</button>
+      <div class="tabela-container">
+        <table id="tabela-contas">
+          <thead>
+            <tr>
+              <th>Banco</th>
+              <th>Tipo</th>
+              <th>Agência</th>
+              <th>Conta</th>
+              <th>Titular</th>
+              <th>Saldo</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ABA APLICAÇÕES -->
+    <div id="aba-aplicacoes" class="conteudo-aba">
+      <div class="grid4">
+        <div class="card">
+          <div class="card-label">Total Aplicado</div>
+          <div class="card-value" id="apl-total-aplicado">R$ 0,00</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Saldo Atual</div>
+          <div class="card-value" id="apl-saldo-atual">R$ 0,00</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Rentabilidade Média</div>
+          <div class="card-value" id="apl-rent-media">0,00%</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Ativas</div>
+          <div class="card-value" id="apl-ativas">0</div>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="margin-bottom: 15px;" onclick="abrirModalAplicacao()">+ Nova Aplicação</button>
+      <div class="tabela-container">
+        <table id="tabela-aplicacoes">
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Instituição</th>
+              <th>Valor Aplicado</th>
+              <th>Saldo Atual</th>
+              <th>Rentabilidade</th>
+              <th>Vencimento</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Imóvel -->
+  <div id="modal-imovel" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title" id="titulo-imovel">Novo Imóvel</span>
+        <button class="modal-close" onclick="fecharModal('modal-imovel')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="imovel-id">
+        <div class="form-group">
+          <label for="imovel-nome">Nome</label>
+          <input type="text" id="imovel-nome" required>
+        </div>
+        <div class="form-group">
+          <label for="imovel-endereco">Endereço</label>
+          <input type="text" id="imovel-endereco" required>
+        </div>
+        <div class="form-group">
+          <label for="imovel-tipo">Tipo</label>
+          <select id="imovel-tipo">
+            <option value="Residencial">Residencial</option>
+            <option value="Comercial">Comercial</option>
+            <option value="Terreno">Terreno</option>
+            <option value="Galpão">Galpão</option>
+            <option value="Sala">Sala</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="imovel-status">Status</label>
+          <select id="imovel-status">
+            <option value="Vago">Vago</option>
+            <option value="Alugado">Alugado</option>
+            <option value="Usado pelo escritório">Usado pelo escritório</option>
+            <option value="Inativo">Inativo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="imovel-valor">Valor</label>
+          <input type="text" id="imovel-valor" oninput="mascaraMoeda(this)" placeholder="R$ 0,00">
+        </div>
+        <div class="form-group">
+          <label for="imovel-observacao">Observação</label>
+          <textarea id="imovel-observacao"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-voltar" onclick="fecharModal('modal-imovel')">Cancelar</button>
+        <button class="btn btn-success" onclick="salvarImovel()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Conta -->
+  <div id="modal-conta" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title" id="titulo-conta">Nova Conta</span>
+        <button class="modal-close" onclick="fecharModal('modal-conta')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="conta-id">
+        <div class="form-group">
+          <label for="conta-banco">Banco</label>
+          <input type="text" id="conta-banco" required>
+        </div>
+        <div class="form-group">
+          <label for="conta-tipo">Tipo</label>
+          <select id="conta-tipo">
+            <option value="Corrente">Corrente</option>
+            <option value="Poupança">Poupança</option>
+            <option value="Investimento">Investimento</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="conta-agencia">Agência</label>
+          <input type="text" id="conta-agencia">
+        </div>
+        <div class="form-group">
+          <label for="conta-numero">Conta</label>
+          <input type="text" id="conta-numero">
+        </div>
+        <div class="form-group">
+          <label for="conta-titular">Titular</label>
+          <input type="text" id="conta-titular" required>
+        </div>
+        <div class="form-group">
+          <label for="conta-saldo">Saldo</label>
+          <input type="text" id="conta-saldo" oninput="mascaraMoeda(this)" placeholder="R$ 0,00">
+        </div>
+        <div class="form-group">
+          <label for="conta-status">Status</label>
+          <select id="conta-status">
+            <option value="Ativa">Ativa</option>
+            <option value="Inativa">Inativa</option>
+            <option value="Encerrada">Encerrada</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-voltar" onclick="fecharModal('modal-conta')">Cancelar</button>
+        <button class="btn btn-success" onclick="salvarConta()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Aplicação -->
+  <div id="modal-aplicacao" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title" id="titulo-aplicacao">Nova Aplicação</span>
+        <button class="modal-close" onclick="fecharModal('modal-aplicacao')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="aplicacao-id">
+        <div class="form-group">
+          <label for="aplicacao-tipo">Tipo</label>
+          <select id="aplicacao-tipo">
+            <option value="CDB">CDB</option>
+            <option value="LCI">LCI</option>
+            <option value="LCA">LCA</option>
+            <option value="Tesouro">Tesouro</option>
+            <option value="Fundo">Fundo</option>
+            <option value="Poupança">Poupança</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="aplicacao-instituicao">Instituição</label>
+          <input type="text" id="aplicacao-instituicao" required>
+        </div>
+        <div class="form-group">
+          <label for="aplicacao-valor">Valor Aplicado</label>
+          <input type="text" id="aplicacao-valor" oninput="mascaraMoeda(this)" placeholder="R$ 0,00">
+        </div>
+        <div class="form-group">
+          <label for="aplicacao-saldo">Saldo Atual</label>
+          <input type="text" id="aplicacao-saldo" oninput="mascaraMoeda(this)" placeholder="R$ 0,00">
+        </div>
+        <div class="form-group">
+          <label for="aplicacao-rentabilidade">Rentabilidade (%)</label>
+          <input type="number" step="0.01" id="aplicacao-rentabilidade" placeholder="0,00">
+        </div>
+        <div class="form-group">
+          <label for="aplicacao-vencimento">Vencimento</label>
+          <input type="date" id="aplicacao-vencimento">
+        </div>
+        <div class="form-group">
+          <label for="aplicacao-status">Status</label>
+          <select id="aplicacao-status">
+            <option value="Ativa">Ativa</option>
+            <option value="Resgatada">Resgatada</option>
+            <option value="Vencida">Vencida</option>
+            <option value="Cancelada">Cancelada</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-voltar" onclick="fecharModal('modal-aplicacao')">Cancelar</button>
+        <button class="btn btn-success" onclick="salvarAplicacao()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="db.js"></script>
+  <script src="auth.js"></script>
+  <script>
+
+    function formatarMoeda(valor) {
+      return 'R$ ' + parseFloat(valor || 0).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    function mascaraMoeda(input) {
+      var v = input.value.replace(/\D/g, '');
+      if (v.length === 0) { input.value = ''; input.dataset.valor = '0'; return; }
+      var inteiro = v.slice(0, -2);
+      var centavos = v.slice(-2).padStart(2, '0');
+      if (!inteiro || inteiro === '') inteiro = '0';
+      inteiro = inteiro.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      input.value = 'R$ ' + inteiro + ',' + centavos;
+      input.dataset.valor = (parseInt(v) / 100).toFixed(2);
+    }
+
+    function getValorMoeda(input) { return parseFloat(input.dataset.valor) || 0; }
+
+    function setValorMoeda(input, valor) {
+      input.dataset.valor = parseFloat(valor || 0).toFixed(2);
+      input.value = formatarMoeda(valor);
+    }
+
+    function abrirAba(aba) {
+      document.querySelectorAll('.aba').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.conteudo-aba').forEach(el => el.classList.remove('active'));
+      document.querySelector('.aba[data-aba="' + aba + '"]').classList.add('active');
+      document.getElementById('aba-' + aba).classList.add('active');
+      if (aba === 'imoveis') carregarImoveis();
+      if (aba === 'contas') carregarContas();
+      if (aba === 'aplicacoes') carregarAplicacoes();
+    }
+
+    function fecharModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    function abrirModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+
+    // IMÓVEIS
+    let listaImoveis = [];
+
+    async function carregarImoveis() {
+      try {
+        listaImoveis = await window.db.imoveis_listar() || [];
+        renderImoveis();
+      } catch (e) {
+        alert('Erro ao carregar imóveis: ' + e.message);
+      }
+    }
+
+    function renderImoveis() {
+      const tbody = document.querySelector('#tabela-imoveis tbody');
+      tbody.innerHTML = '';
+      let total = 0, alugados = 0, vagos = 0, valorTotal = 0;
+      listaImoveis.forEach(item => {
+        total++;
+        valorTotal += parseFloat(item.valor || 0);
+        if (item.status === 'Vago') vagos++;
+        else if (item.status === 'Alugado' || item.status === 'Usado pelo escritório') alugados++;
+        let classeStatus = 'status-inativo';
+        if (item.status === 'Alugado' || item.status === 'Usado pelo escritório') classeStatus = 'status-alugado';
+        if (item.status === 'Vago') classeStatus = 'status-vago';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.nome || ''}</td>
+          <td>${item.endereco || ''}</td>
+          <td>${item.tipo || ''}</td>
+          <td class="${classeStatus}">${item.status || ''}</td>
+          <td>${formatarMoeda(item.valor)}</td>
+          <td class="acoes">
+            <button class="btn btn-primary" onclick="editarImovel('${item.id}')">Editar</button>
+            <button class="btn btn-danger" onclick="excluirImovel('${item.id}')">Excluir</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      document.getElementById('imo-total').textContent = total;
+      document.getElementById('imo-alugados').textContent = alugados;
+      document.getElementById('imo-vagos').textContent = vagos;
+      document.getElementById('imo-valor-total').textContent = formatarMoeda(valorTotal);
+      if (listaImoveis.length === 0) tbody.innerHTML = '<tr><td colspan="6" class="empty">Nenhum imóvel cadastrado.</td></tr>';
+    }
+
+    function abrirModalImovel() {
+      document.getElementById('imovel-id').value = '';
+      document.getElementById('imovel-nome').value = '';
+      document.getElementById('imovel-endereco').value = '';
+      document.getElementById('imovel-tipo').value = 'Residencial';
+      document.getElementById('imovel-status').value = 'Vago';
+      document.getElementById('imovel-valor').value = '';
+      document.getElementById('imovel-valor').dataset.valor = '0';
+      document.getElementById('imovel-observacao').value = '';
+      document.getElementById('titulo-imovel').textContent = 'Novo Imóvel';
+      abrirModal('modal-imovel');
+    }
+
+    function editarImovel(id) {
+      const item = listaImoveis.find(i => i.id == id || i.id === id);
+      if (!item) return;
+      document.getElementById('imovel-id').value = item.id;
+      document.getElementById('imovel-nome').value = item.nome || '';
+      document.getElementById('imovel-endereco').value = item.endereco || '';
+      document.getElementById('imovel-tipo').value = item.tipo || 'Residencial';
+      document.getElementById('imovel-status').value = item.status || 'Vago';
+      setValorMoeda(document.getElementById('imovel-valor'), item.valor);
+      document.getElementById('imovel-observacao').value = item.observacao || '';
+      document.getElementById('titulo-imovel').textContent = 'Editar Imóvel';
+      abrirModal('modal-imovel');
+    }
+
+    async function salvarImovel() {
+      const id = document.getElementById('imovel-id').value;
+      const dados = {
+        nome: document.getElementById('imovel-nome').value,
+        endereco: document.getElementById('imovel-endereco').value,
+        tipo: document.getElementById('imovel-tipo').value,
+        status: document.getElementById('imovel-status').value,
+        valor: getValorMoeda(document.getElementById('imovel-valor')),
+        observacao: document.getElementById('imovel-observacao').value
+      };
+      if (id) dados.id = id;
+      try {
+        await window.db.imoveis_salvar(dados);
+        fecharModal('modal-imovel');
+        carregarImoveis();
+      } catch (e) {
+        alert('Erro ao salvar imóvel: ' + e.message);
+      }
+    }
+
+    async function excluirImovel(id) {
+      if (!confirm('Deseja realmente excluir este imóvel?')) return;
+      try {
+        await window.db.imoveis_excluir(id);
+        carregarImoveis();
+      } catch (e) {
+        alert('Erro ao excluir imóvel: ' + e.message);
+      }
+    }
+
+    // CONTAS
+    let listaContas = [];
+
+    async function carregarContas() {
+      try {
+        listaContas = await window.db.contas_listar() || [];
+        renderContas();
+      } catch (e) {
+        alert('Erro ao carregar contas: ' + e.message);
+      }
+    }
+
+    function renderContas() {
+      const tbody = document.querySelector('#tabela-contas tbody');
+      tbody.innerHTML = '';
+      let saldoTotal = 0, ativas = 0, maior = 0, count = 0;
+      listaContas.forEach(item => {
+        const saldo = parseFloat(item.saldo || 0);
+        saldoTotal += saldo;
+        count++;
+        if (item.status === 'Ativa') ativas++;
+        if (saldo > maior) maior = saldo;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.banco || ''}</td>
+          <td>${item.tipo || ''}</td>
+          <td>${item.agencia || ''}</td>
+          <td>${item.conta_numero || item.conta || ''}</td>
+          <td>${item.titular || ''}</td>
+          <td>${formatarMoeda(saldo)}</td>
+          <td class="${item.status === 'Ativa' ? 'status-ativo' : 'status-inativo'}">${item.status || ''}</td>
+          <td class="acoes">
+            <button class="btn btn-primary" onclick="editarConta('${item.id}')">Editar</button>
+            <button class="btn btn-danger" onclick="excluirConta('${item.id}')">Excluir</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      document.getElementById('conta-saldo-total').textContent = formatarMoeda(saldoTotal);
+      document.getElementById('conta-ativas').textContent = ativas;
+      document.getElementById('conta-media').textContent = formatarMoeda(count ? (saldoTotal / count) : 0);
+      document.getElementById('conta-maior').textContent = formatarMoeda(maior);
+      if (listaContas.length === 0) tbody.innerHTML = '<tr><td colspan="8" class="empty">Nenhuma conta cadastrada.</td></tr>';
+    }
+
+    function abrirModalConta() {
+      document.getElementById('conta-id').value = '';
+      document.getElementById('conta-banco').value = '';
+      document.getElementById('conta-tipo').value = 'Corrente';
+      document.getElementById('conta-agencia').value = '';
+      document.getElementById('conta-numero').value = '';
+      document.getElementById('conta-titular').value = '';
+      document.getElementById('conta-saldo').value = '';
+      document.getElementById('conta-saldo').dataset.valor = '0';
+      document.getElementById('conta-status').value = 'Ativa';
+      document.getElementById('titulo-conta').textContent = 'Nova Conta';
+      abrirModal('modal-conta');
+    }
+
+    function editarConta(id) {
+      const item = listaContas.find(i => i.id == id || i.id === id);
+      if (!item) return;
+      document.getElementById('conta-id').value = item.id;
+      document.getElementById('conta-banco').value = item.banco || '';
+      document.getElementById('conta-tipo').value = item.tipo || 'Corrente';
+      document.getElementById('conta-agencia').value = item.agencia || '';
+      document.getElementById('conta-numero').value = item.conta_numero || item.conta || '';
+      document.getElementById('conta-titular').value = item.titular || '';
+      setValorMoeda(document.getElementById('conta-saldo'), item.saldo);
+      document.getElementById('conta-status').value = item.status || 'Ativa';
+      document.getElementById('titulo-conta').textContent = 'Editar Conta';
+      abrirModal('modal-conta');
+    }
+
+    async function salvarConta() {
+      const id = document.getElementById('conta-id').value;
+      const dados = {
+        banco: document.getElementById('conta-banco').value,
+        tipo: document.getElementById('conta-tipo').value,
+        agencia: document.getElementById('conta-agencia').value,
+        conta_numero: document.getElementById('conta-numero').value,
+        titular: document.getElementById('conta-titular').value,
+        saldo: getValorMoeda(document.getElementById('conta-saldo')),
+        status: document.getElementById('conta-status').value
+      };
+      if (id) dados.id = id;
+      try {
+        await window.db.contas_salvar(dados);
+        fecharModal('modal-conta');
+        carregarContas();
+      } catch (e) {
+        alert('Erro ao salvar conta: ' + e.message);
+      }
+    }
+
+    async function excluirConta(id) {
+      if (!confirm('Deseja realmente excluir esta conta?')) return;
+      try {
+        await window.db.contas_excluir(id);
+        carregarContas();
+      } catch (e) {
+        alert('Erro ao excluir conta: ' + e.message);
+      }
+    }
+
+    // APLICAÇÕES
+    let listaAplicacoes = [];
+
+    async function carregarAplicacoes() {
+      try {
+        listaAplicacoes = await window.db.aplicacoes_listar() || [];
+        renderAplicacoes();
+      } catch (e) {
+        alert('Erro ao carregar aplicações: ' + e.message);
+      }
+    }
+
+    function renderAplicacoes() {
+      const tbody = document.querySelector('#tabela-aplicacoes tbody');
+      tbody.innerHTML = '';
+      let totalAplicado = 0, saldoAtual = 0, rentTotal = 0, ativas = 0, count = 0;
+      listaAplicacoes.forEach(item => {
+        const valor = parseFloat(item.valor || 0);
+        const saldo = parseFloat(item.saldo || 0);
+        const rent = parseFloat(item.rentabilidade || 0);
+        totalAplicado += valor;
+        saldoAtual += saldo;
+        rentTotal += rent;
+        count++;
+        if (item.status === 'Ativa') ativas++;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.tipo || ''}</td>
+          <td>${item.instituicao || ''}</td>
+          <td>${formatarMoeda(valor)}</td>
+          <td>${formatarMoeda(saldo)}</td>
+          <td>${rent.toFixed(2).replace('.', ',')}%</td>
+          <td>${item.vencimento ? new Date(item.vencimento).toLocaleDateString('pt-BR') : ''}</td>
+          <td class="${item.status === 'Ativa' ? 'status-ativo' : 'status-inativo'}">${item.status || ''}</td>
+          <td class="acoes">
+            <button class="btn btn-primary" onclick="editarAplicacao('${item.id}')">Editar</button>
+            <button class="btn btn-danger" onclick="excluirAplicacao('${item.id}')">Excluir</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      document.getElementById('apl-total-aplicado').textContent = formatarMoeda(totalAplicado);
+      document.getElementById('apl-saldo-atual').textContent = formatarMoeda(saldoAtual);
+      document.getElementById('apl-rent-media').textContent = (count ? (rentTotal / count) : 0).toFixed(2).replace('.', ',') + '%';
+      document.getElementById('apl-ativas').textContent = ativas;
+      if (listaAplicacoes.length === 0) tbody.innerHTML = '<tr><td colspan="8" class="empty">Nenhuma aplicação cadastrada.</td></tr>';
+    }
+
+    function abrirModalAplicacao() {
+      document.getElementById('aplicacao-id').value = '';
+      document.getElementById('aplicacao-tipo').value = 'CDB';
+      document.getElementById('aplicacao-instituicao').value = '';
+      document.getElementById('aplicacao-valor').value = '';
+      document.getElementById('aplicacao-valor').dataset.valor = '0';
+      document.getElementById('aplicacao-saldo').value = '';
+      document.getElementById('aplicacao-saldo').dataset.valor = '0';
+      document.getElementById('aplicacao-rentabilidade').value = '';
+      document.getElementById('aplicacao-vencimento').value = '';
+      document.getElementById('aplicacao-status').value = 'Ativa';
+      document.getElementById('titulo-aplicacao').textContent = 'Nova Aplicação';
+      abrirModal('modal-aplicacao');
+    }
+
+    function editarAplicacao(id) {
+      const item = listaAplicacoes.find(i => i.id == id || i.id === id);
+      if (!item) return;
+      document.getElementById('aplicacao-id').value = item.id;
+      document.getElementById('aplicacao-tipo').value = item.tipo || 'CDB';
+      document.getElementById('aplicacao-instituicao').value = item.instituicao || '';
+      setValorMoeda(document.getElementById('aplicacao-valor'), item.valor);
+      setValorMoeda(document.getElementById('aplicacao-saldo'), item.saldo);
+      document.getElementById('aplicacao-rentabilidade').value = item.rentabilidade || '';
+      document.getElementById('aplicacao-vencimento').value = item.vencimento ? item.vencimento.slice(0, 10) : '';
+      document.getElementById('aplicacao-status').value = item.status || 'Ativa';
+      document.getElementById('titulo-aplicacao').textContent = 'Editar Aplicação';
+      abrirModal('modal-aplicacao');
+    }
+
+    async function salvarAplicacao() {
+      const id = document.getElementById('aplicacao-id').value;
+      const dados = {
+        tipo: document.getElementById('aplicacao-tipo').value,
+        instituicao: document.getElementById('aplicacao-instituicao').value,
+        valor: getValorMoeda(document.getElementById('aplicacao-valor')),
+        saldo: getValorMoeda(document.getElementById('aplicacao-saldo')),
+        rentabilidade: parseFloat(document.getElementById('aplicacao-rentabilidade').value) || 0,
+        vencimento: document.getElementById('aplicacao-vencimento').value,
+        status: document.getElementById('aplicacao-status').value
+      };
+      if (id) dados.id = id;
+      try {
+        await window.db.aplicacoes_salvar(dados);
+        fecharModal('modal-aplicacao');
+        carregarAplicacoes();
+      } catch (e) {
+        alert('Erro ao salvar aplicação: ' + e.message);
+      }
+    }
+
+    async function excluirAplicacao(id) {
+      if (!confirm('Deseja realmente excluir esta aplicação?')) return;
+      try {
+        await window.db.aplicacoes_excluir(id);
+        carregarAplicacoes();
+      } catch (e) {
+        alert('Erro ao excluir aplicação: ' + e.message);
+      }
+    }
+
+    function logout() {
+      if (typeof window.logout === 'function') window.logout();
+    }
+
+    document.addEventListener('DOMContentLoaded', async function() {
+      if (typeof window.verificarAutenticacao === 'function') {
+        window.verificarAutenticacao();
+      }
+      await carregarImoveis();
+    });
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatórios Gerenciais - Controle do Escritório</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; color: #333; }
+    .navbar { background-color: #0a58ca; color: #fff; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    .navbar .brand { font-weight: 700; font-size: 1.2rem; }
+    .navbar ul { list-style: none; display: flex; gap: 16px; flex-wrap: wrap; }
+    .navbar a { color: #fff; text-decoration: none; font-size: 0.95rem; }
+    .navbar a:hover { text-decoration: underline; }
+    .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+    .page-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .btn-back { background: #fff; color: #0a58ca; border: 1px solid #0a58ca; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; cursor: pointer; }
+    .btn-back:hover { background: #0a58ca; color: #fff; }
+    h1 { font-size: 1.5rem; color: #0a58ca; }
+    .tabs { display: flex; gap: 6px; border-bottom: 2px solid #0a58ca; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab { padding: 12px 18px; cursor: pointer; background: #fff; border: 1px solid #0a58ca; color: #0a58ca; border-bottom: none; border-radius: 8px 8px 0 0; font-weight: 600; }
+    .tab.active { background: #0a58ca; color: #fff; }
+    .tab-content { display: none; background: #fff; padding: 20px; border-radius: 0 8px 8px 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .tab-content.active { display: block; }
+    .filters { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+    .filters label { font-weight: 600; color: #0a58ca; }
+    .filters select { padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; }
+    .grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px; }
+    .card { background: #fff; border: 1px solid #dbeafe; border-radius: 8px; padding: 16px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .card h3 { font-size: 0.9rem; color: #555; margin-bottom: 8px; }
+    .card .value { font-size: 1.6rem; font-weight: 700; color: #0a58ca; }
+    .card .value.neg { color: #dc3545; }
+    .card .value.pos { color: #198754; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.95rem; }
+    th, td { padding: 10px 12px; border: 1px solid #dee2e6; text-align: left; }
+    th { background: #0a58ca; color: #fff; }
+    tr:nth-child(even) { background: #f8f9fa; }
+    .total-row { font-weight: 700; background: #e2e8f0; }
+    .chart-container { position: relative; height: 320px; margin: 20px 0; }
+    .section-title { margin: 20px 0 10px; color: #0a58ca; font-size: 1.15rem; border-bottom: 2px solid #dbeafe; padding-bottom: 6px; }
+    .empty { color: #777; font-style: italic; text-align: center; padding: 20px; }
+    .footer-note { background: #e2e8f0; padding: 12px; border-radius: 6px; margin-top: 12px; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="brand">Controle do Escritório</div>
+    <ul>
+      <li><a href="home.html">Início</a></li>
+      <li><a href="clientes.html">Clientes</a></li>
+      <li><a href="processos.html">Processos</a></li>
+      <li><a href="receitas.html">Receitas</a></li>
+      <li><a href="despesas.html">Despesas</a></li>
+      <li><a href="contas.html">Contas</a></li>
+      <li><a href="aplicacoes.html">Aplicações</a></li>
+      <li><a href="imoveis.html">Imóveis</a></li>
+      <li><a href="proventos.html">Proventos</a></li>
+      <li><a href="colaboradores.html">Colaboradores</a></li>
+      <li><a href="relatorios-gerenciais.html">Relatórios</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <a href="home.html" class="btn-back">← Voltar</a>
+      <h1>📊 Relatórios Gerenciais</h1>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="financeiro">Financeiro</div>
+      <div class="tab" data-tab="geral">Geral</div>
+      <div class="tab" data-tab="graficos">Gráficos</div>
+      <div class="tab" data-tab="aplicacoes-anual">Aplicações Anual</div>
+      <div class="tab" data-tab="prestacao">Prestação de Contas</div>
+    </div>
+
+    <!-- ABA 1 FINANCEIRO -->
+    <div id="financeiro" class="tab-content active">
+      <div class="filters">
+        <label for="fin-mes">Mês:</label>
+        <select id="fin-mes"></select>
+        <label for="fin-ano">Ano:</label>
+        <select id="fin-ano"></select>
+      </div>
+      <div class="grid4">
+        <div class="card"><h3>Total Receitas</h3><div class="value pos" id="fin-receitas">R$ 0,00</div></div>
+        <div class="card"><h3>Total Despesas</h3><div class="value neg" id="fin-despesas">R$ 0,00</div></div>
+        <div class="card"><h3>Saldo</h3><div class="value" id="fin-saldo">R$ 0,00</div></div>
+        <div class="card"><h3>Pendências</h3><div class="value neg" id="fin-pendencias">R$ 0,00</div></div>
+      </div>
+      <div class="chart-container"><canvas id="chartFinPizza"></canvas></div>
+      <h3 class="section-title">Últimas 10 Movimentações</h3>
+      <div id="fin-movimentacoes"><div class="empty">Carregando...</div></div>
+    </div>
+
+    <!-- ABA 2 GERAL -->
+    <div id="geral" class="tab-content">
+      <h3 class="section-title">Resumo Geral dos Módulos</h3>
+      <div id="geral-resumo"><div class="empty">Carregando...</div></div>
+    </div>
+
+    <!-- ABA 3 GRÁFICOS -->
+    <div id="graficos" class="tab-content">
+      <h3 class="section-title">Tendência Mensal Receitas vs Despesas (últimos 12 meses)</h3>
+      <div class="chart-container"><canvas id="chartTendencia"></canvas></div>
+      <h3 class="section-title">Distribuição de Despesas por Categoria (mês atual)</h3>
+      <div class="chart-container"><canvas id="chartDespesasCategoria"></canvas></div>
+    </div>
+
+    <!-- ABA 4 APLICAÇÕES ANUAL -->
+    <div id="aplicacoes-anual" class="tab-content">
+      <div class="filters">
+        <label for="app-ano">Ano:</label>
+        <select id="app-ano"></select>
+      </div>
+      <div class="grid4">
+        <div class="card"><h3>Total Aplicado no Ano</h3><div class="value pos" id="app-total-aplicado">R$ 0,00</div></div>
+        <div class="card"><h3>Total Resgatado</h3><div class="value neg" id="app-total-resgatado">R$ 0,00</div></div>
+        <div class="card"><h3>Saldo Final</h3><div class="value" id="app-saldo-final">R$ 0,00</div></div>
+        <div class="card"><h3>Rentabilidade Média</h3><div class="value" id="app-rent-media">0,00%</div></div>
+      </div>
+      <h3 class="section-title">Evolução Mensal dos Saldos</h3>
+      <div class="chart-container"><canvas id="chartAppLinha"></canvas></div>
+      <h3 class="section-title">Demonstrativo Mensal</h3>
+      <div id="app-tabela"><div class="empty">Carregando...</div></div>
+      <div class="footer-note" id="app-saldo-acumulado">Saldo acumulado para o ano seguinte: R$ 0,00</div>
+    </div>
+
+    <!-- ABA 5 PRESTAÇÃO DE CONTAS -->
+    <div id="prestacao" class="tab-content">
+      <div class="filters">
+        <label for="pre-mes">Mês:</label>
+        <select id="pre-mes"></select>
+        <label for="pre-ano">Ano:</label>
+        <select id="pre-ano"></select>
+      </div>
+      <div class="grid4">
+        <div class="card"><h3>Receitas</h3><div class="value pos" id="pre-receitas">R$ 0,00</div></div>
+        <div class="card"><h3>Despesas</h3><div class="value neg" id="pre-despesas">R$ 0,00</div></div>
+        <div class="card"><h3>Saldo</h3><div class="value" id="pre-saldo">R$ 0,00</div></div>
+        <div class="card"><h3>Proventos</h3><div class="value pos" id="pre-proventos">R$ 0,00</div></div>
+      </div>
+      <h3 class="section-title">Receitas</h3>
+      <div id="pre-tabela-receitas"><div class="empty">Carregando...</div></div>
+      <h3 class="section-title">Despesas</h3>
+      <div id="pre-tabela-despesas"><div class="empty">Carregando...</div></div>
+      <h3 class="section-title">Proventos</h3>
+      <div id="pre-tabela-proventos"><div class="empty">Carregando...</div></div>
+    </div>
+  </div>
+
+  <script src="db.js"></script>
+  <script src="auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script>
+    const fmtMoney = v => 'R$ ' + Number(v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const fmtPct = v => Number(v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+    const parseDate = d => d ? new Date(d) : null;
+    const dateToMesAno = d => ({ mes: d.getMonth() + 1, ano: d.getFullYear() });
+    const monthName = (i) => ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'][i];
+
+    let chartInstances = {};
+
+    function fillMonthSelect(id) {
+      const sel = document.getElementById(id);
+      for (let i = 1; i <= 12; i++) {
+        const opt = document.createElement('option');
+        opt.value = i; opt.text = monthName(i-1);
+        sel.appendChild(opt);
+      }
+      sel.value = new Date().getMonth() + 1;
+    }
+
+    function fillYearSelect(id, start=2020) {
+      const sel = document.getElementById(id);
+      const anoAtual = new Date().getFullYear();
+      for (let a = anoAtual; a >= start; a--) {
+        const opt = document.createElement('option');
+        opt.value = a; opt.text = a;
+        sel.appendChild(opt);
+      }
+      sel.value = anoAtual;
+    }
+
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    function getPeriodo(idMes, idAno) {
+      return { mes: parseInt(document.getElementById(idMes).value), ano: parseInt(document.getElementById(idAno).value) };
+    }
+
+    async function carregarFinanceiro() {
+      const { mes, ano } = getPeriodo('fin-mes', 'fin-ano');
+      const receitas = await window.db.receitas_listar();
+      const despesas = await window.db.despesas_listar();
+
+      const recMes = receitas.filter(r => { const d = parseDate(r.data || r.created_at); return d && d.getMonth()+1 === mes && d.getFullYear() === ano; });
+      const desMes = despesas.filter(x => { const d = parseDate(x.data || x.created_at); return d && d.getMonth()+1 === mes && d.getFullYear() === ano; });
+
+      const totalRec = recMes.reduce((a, r) => a + Number(r.valor || 0), 0);
+      const totalDes = desMes.reduce((a, x) => a + Number(x.valor || 0), 0);
+      const saldo = totalRec - totalDes;
+      const pendencias = [...recMes, ...desMes].filter(x => x.status && x.status.toLowerCase() === 'pendente').reduce((a, x) => a + Number(x.valor || 0), 0);
+
+      document.getElementById('fin-receitas').textContent = fmtMoney(totalRec);
+      document.getElementById('fin-despesas').textContent = fmtMoney(totalDes);
+      document.getElementById('fin-saldo').textContent = fmtMoney(saldo);
+      document.getElementById('fin-saldo').className = 'value ' + (saldo >= 0 ? 'pos' : 'neg');
+      document.getElementById('fin-pendencias').textContent = fmtMoney(pendencias);
+
+      const ctx = document.getElementById('chartFinPizza').getContext('2d');
+      if (chartInstances.finPizza) chartInstances.finPizza.destroy();
+      chartInstances.finPizza = new Chart(ctx, {
+        type: 'pie',
+        data: { labels: ['Receitas', 'Despesas'], datasets: [{ data: [totalRec, totalDes], backgroundColor: ['#198754', '#dc3545'] }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: `Receitas vs Despesas - ${monthName(mes-1)}/${ano}` } } }
+      });
+
+      const mov = [...recMes.map(r => ({ tipo: 'Receita', descricao: r.descricao || r.cliente || '-', data: r.data || r.created_at, valor: r.valor, status: r.status || '-' })),
+                   ...desMes.map(x => ({ tipo: 'Despesa', descricao: x.descricao || x.categoria || '-', data: x.data || x.created_at, valor: x.valor, status: x.status || '-' }))]
+                   .sort((a, b) => new Date(b.data) - new Date(a.data)).slice(0, 10);
+
+      const tabela = document.createElement('table');
+      tabela.innerHTML = '<thead><tr><th>Tipo</th><th>Descrição</th><th>Data</th><th>Valor</th><th>Status</th></tr></thead><tbody>' +
+        mov.map(m => `<tr><td>${m.tipo}</td><td>${m.descricao}</td><td>${new Date(m.data).toLocaleDateString('pt-BR')}</td><td style="color:${m.tipo==='Receita'?'#198754':'#dc3545'}">${fmtMoney(m.valor)}</td><td>${m.status}</td></tr>`).join('') +
+        '</tbody>';
+      const container = document.getElementById('fin-movimentacoes');
+      container.innerHTML = '';
+      container.appendChild(mov.length ? tabela : document.createTextNode('Nenhuma movimentação no período.'));
+    }
+
+    async function carregarGeral() {
+      const receitas = await window.db.receitas_listar();
+      const despesas = await window.db.despesas_listar();
+      const contas = await window.db.contas_listar();
+      const aplicacoes = await window.db.aplicacoes_listar();
+      const imoveis = await window.db.imoveis_listar();
+      const proventos = await window.db.proventos_listar();
+
+      const total = (arr, campo='valor') => arr.reduce((a, i) => a + Number(i[campo] || 0), 0);
+      const totalSaldo = (arr) => arr.reduce((a, i) => a + Number(i.saldo || 0), 0);
+      const totalValor = (arr) => arr.reduce((a, i) => a + Number(i.valor || 0), 0);
+      const totalAplic = aplicacoes.reduce((a, i) => a + Number(i.saldo || i.valor || 0), 0);
+
+      const dados = [
+        { modulo: 'Receitas', registros: receitas.length, financeiro: total(receitas, 'valor') },
+        { modulo: 'Despesas', registros: despesas.length, financeiro: total(despesas, 'valor') },
+        { modulo: 'Contas', registros: contas.length, financeiro: totalSaldo(contas) },
+        { modulo: 'Aplicações', registros: aplicacoes.length, financeiro: totalAplic },
+        { modulo: 'Imóveis', registros: imoveis.length, financeiro: totalValor(imoveis) },
+        { modulo: 'Proventos', registros: proventos.length, financeiro: total(proventos, 'valor') }
+      ];
+
+      const tabela = document.createElement('table');
+      tabela.innerHTML = '<thead><tr><th>Módulo</th><th>Registros</th><th>Total Financeiro</th></tr></thead><tbody>' +
+        dados.map(d => `<tr><td>${d.modulo}</td><td>${d.registros}</td><td>${fmtMoney(d.financeiro)}</td></tr>`).join('') +
+        `<tr class="total-row"><td>TOTAL</td><td>${dados.reduce((a,d)=>a+d.registros,0)}</td><td>${fmtMoney(dados.reduce((a,d)=>a+d.financeiro,0))}</td></tr></tbody>`;
+      const container = document.getElementById('geral-resumo');
+      container.innerHTML = '';
+      container.appendChild(tabela);
+    }
+
+    async function carregarGraficos() {
+      const receitas = await window.db.receitas_listar();
+      const despesas = await window.db.despesas_listar();
+
+      const hoje = new Date();
+      const labels = [];
+      const recs = [], dess = [];
+      for (let i = 11; i >= 0; i--) {
+        const d = new Date(hoje.getFullYear(), hoje.getMonth() - i, 1);
+        labels.push(`${monthName(d.getMonth()).substring(0,3)}/${d.getFullYear()}`);
+        const rec = receitas.filter(r => { const dr = parseDate(r.data || r.created_at); return dr && dr.getMonth() === d.getMonth() && dr.getFullYear() === d.getFullYear(); }).reduce((a, r) => a + Number(r.valor || 0), 0);
+        const des = despesas.filter(x => { const dx = parseDate(x.data || x.created_at); return dx && dx.getMonth() === d.getMonth() && dx.getFullYear() === d.getFullYear(); }).reduce((a, x) => a + Number(x.valor || 0), 0);
+        recs.push(rec); dess.push(des);
+      }
+
+      const ctx1 = document.getElementById('chartTendencia').getContext('2d');
+      if (chartInstances.tendencia) chartInstances.tendencia.destroy();
+      chartInstances.tendencia = new Chart(ctx1, {
+        type: 'line',
+        data: { labels, datasets: [{ label: 'Receitas', data: recs, borderColor: '#198754', fill: false }, { label: 'Despesas', data: dess, borderColor: '#dc3545', fill: false }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Tendência Mensal' } } }
+      });
+
+      const mesAtual = hoje.getMonth() + 1;
+      const anoAtual = hoje.getFullYear();
+      const desMesAtual = despesas.filter(x => { const d = parseDate(x.data || x.created_at); return d && d.getMonth()+1 === mesAtual && d.getFullYear() === anoAtual; });
+      const categorias = {};
+      desMesAtual.forEach(x => { const cat = x.categoria || 'Sem categoria'; categorias[cat] = (categorias[cat] || 0) + Number(x.valor || 0); });
+
+      const ctx2 = document.getElementById('chartDespesasCategoria').getContext('2d');
+      if (chartInstances.despesasCat) chartInstances.despesasCat.destroy();
+      chartInstances.despesasCat = new Chart(ctx2, {
+        type: 'bar',
+        data: { labels: Object.keys(categorias), datasets: [{ label: 'Despesas', data: Object.values(categorias), backgroundColor: '#0a58ca' }] },
+        options: { responsive: true, maintainAspectRatio: false, barPercentage: 0.3, plugins: { title: { display: true, text: `Despesas por Categoria - ${monthName(hoje.getMonth())}/${anoAtual}` } } }
+      });
+    }
+
+    async function carregarAplicacoesAnual() {
+      const ano = parseInt(document.getElementById('app-ano').value);
+      const anoAnt = ano - 1;
+      const apps = await window.db.aplicacoes_listar();
+
+      const filtrarAno = (a) => { const d = parseDate(a.data || a.created_at); return d && d.getFullYear() === a; };
+      const appsAno = apps.filter(a => filtrarAno(a, ano));
+      const appsAnoAnt = apps.filter(a => { const d = parseDate(a.data || a.created_at); return d && d.getFullYear() === anoAnt; });
+
+      let saldoInicial = appsAnoAnt.reduce((a, i) => a + Number(i.saldo || 0), 0);
+      let saldoAcumulado = saldoInicial;
+
+      const meses = [];
+      let totalAplicado = 0, totalResgatado = 0, totalRent = 0, rentCount = 0;
+
+      for (let m = 0; m < 12; m++) {
+        const appsMes = appsAno.filter(a => { const d = parseDate(a.data || a.created_at); return d && d.getMonth() === m; });
+        const aplicado = appsMes.filter(a => (a.tipo || '').toLowerCase() === 'aplicacao' || (a.tipo || '').toLowerCase() === 'aplicação').reduce((a, i) => a + Number(i.valor || 0), 0);
+        const resgatado = appsMes.filter(a => (a.tipo || '').toLowerCase() === 'resgate').reduce((a, i) => a + Number(i.valor || 0), 0);
+        saldoAcumulado = saldoAcumulado + aplicado - resgatado;
+        const rent = appsMes.reduce((a, i) => a + Number(i.rentabilidade || 0), 0);
+        if (appsMes.length) { totalRent += rent; rentCount += appsMes.length; }
+        totalAplicado += aplicado; totalResgatado += resgatado;
+        meses.push({ mes: monthName(m), aplicado, resgatado, saldo: saldoAcumulado, rent });
+      }
+
+      document.getElementById('app-total-aplicado').textContent = fmtMoney(totalAplicado);
+      document.getElementById('app-total-resgatado').textContent = fmtMoney(totalResgatado);
+      document.getElementById('app-saldo-final').textContent = fmtMoney(saldoAcumulado);
+      document.getElementById('app-saldo-final').className = 'value ' + (saldoAcumulado >= 0 ? 'pos' : 'neg');
+      document.getElementById('app-rent-media').textContent = fmtPct(rentCount ? totalRent / rentCount : 0);
+      document.getElementById('app-saldo-acumulado').textContent = `Saldo acumulado para o ano seguinte: ${fmtMoney(saldoAcumulado)}`;
+
+      const ctx = document.getElementById('chartAppLinha').getContext('2d');
+      if (chartInstances.appLinha) chartInstances.appLinha.destroy();
+      chartInstances.appLinha = new Chart(ctx, {
+        type: 'line',
+        data: { labels: meses.map(m => m.mes.substring(0,3)), datasets: [{ label: 'Saldo', data: meses.map(m => m.saldo), borderColor: '#0a58ca', fill: true, backgroundColor: 'rgba(10,88,202,0.1)' }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: `Evolução dos Saldos - ${ano}` } } }
+      });
+
+      const tabela = document.createElement('table');
+      tabela.innerHTML = '<thead><tr><th>Mês</th><th>Valor Aplicado</th><th>Resgate</th><th>Saldo</th><th>Rentabilidade %</th></tr></thead><tbody>' +
+        meses.map(m => `<tr><td>${m.mes}</td><td>${fmtMoney(m.aplicado)}</td><td>${fmtMoney(m.resgatado)}</td><td>${fmtMoney(m.saldo)}</td><td>${fmtPct(m.rent)}</td></tr>`).join('') +
+        `<tr class="total-row"><td>TOTAL</td><td>${fmtMoney(totalAplicado)}</td><td>${fmtMoney(totalResgatado)}</td><td>${fmtMoney(saldoAcumulado)}</td><td>${fmtPct(rentCount ? totalRent / rentCount : 0)}</td></tr></tbody>`;
+      const container = document.getElementById('app-tabela');
+      container.innerHTML = '';
+      container.appendChild(tabela);
+    }
+
+    async function carregarPrestacao() {
+      const { mes, ano } = getPeriodo('pre-mes', 'pre-ano');
+      const receitas = await window.db.receitas_listar();
+      const despesas = await window.db.despesas_listar();
+      const proventos = await window.db.proventos_listar_por_mes(mes, ano);
+
+      const recMes = receitas.filter(r => { const d = parseDate(r.data || r.created_at); return d && d.getMonth()+1 === mes && d.getFullYear() === ano; });
+      const desMes = despesas.filter(x => { const d = parseDate(x.data || x.created_at); return d && d.getMonth()+1 === mes && d.getFullYear() === ano; });
+
+      const totalRec = recMes.reduce((a, r) => a + Number(r.valor || 0), 0);
+      const totalDes = desMes.reduce((a, x) => a + Number(x.valor || 0), 0);
+      const totalProv = Array.isArray(proventos) ? proventos.reduce((a, p) => a + Number(p.valor || 0), 0) : 0;
+      const saldo = totalRec - totalDes;
+
+      document.getElementById('pre-receitas').textContent = fmtMoney(totalRec);
+      document.getElementById('pre-despesas').textContent = fmtMoney(totalDes);
+      document.getElementById('pre-saldo').textContent = fmtMoney(saldo);
+      document.getElementById('pre-saldo').className = 'value ' + (saldo >= 0 ? 'pos' : 'neg');
+      document.getElementById('pre-proventos').textContent = fmtMoney(totalProv);
+
+      function buildTable(lista, colunas, totalCampo='valor') {
+        if (!lista.length) return '<div class="empty">Nenhum registro no período.</div>';
+        const ths = colunas.map(c => `<th>${c.label}</th>`).join('');
+        const rows = lista.map(item => '<tr>' + colunas.map(c => {
+          let v = item[c.field] || '-';
+          if (c.money) v = fmtMoney(v);
+          if (c.date) v = v ? new Date(v).toLocaleDateString('pt-BR') : '-';
+          return `<td>${v}</td>`;
+        }).join('') + '</tr>').join('');
+        const total = lista.reduce((a, i) => a + Number(i[totalCampo] || 0), 0);
+        return `<table><thead><tr>${ths}</tr></thead><tbody>${rows}<tr class="total-row"><td colspan="${colunas.length - 1}"><strong>TOTAL</strong></td><td><strong>${fmtMoney(total)}</strong></td></tr></tbody></table>`;
+      }
+
+      document.getElementById('pre-tabela-receitas').innerHTML = buildTable(recMes, [
+        { label: 'Data', field: 'data', date: true }, { label: 'Cliente', field: 'cliente' }, { label: 'Descrição', field: 'descricao' }, { label: 'Valor', field: 'valor', money: true }
+      ]);
+      document.getElementById('pre-tabela-despesas').innerHTML = buildTable(desMes, [
+        { label: 'Data', field: 'data', date: true }, { label: 'Categoria', field: 'categoria' }, { label: 'Descrição', field: 'descricao' }, { label: 'Valor', field: 'valor', money: true }
+      ]);
+      document.getElementById('pre-tabela-proventos').innerHTML = buildTable(Array.isArray(proventos) ? proventos : [], [
+        { label: 'Data', field: 'data', date: true }, { label: 'Colaborador', field: 'colaborador' }, { label: 'Descrição', field: 'descricao' }, { label: 'Valor', field: 'valor', money: true }
+      ]);
+    }
+
+    async function carregarTudo() {
+      fillMonthSelect('fin-mes'); fillYearSelect('fin-ano');
+      fillMonthSelect('pre-mes'); fillYearSelect('pre-ano');
+      fillYearSelect('app-ano');
+
+      await carregarFinanceiro();
+      await carregarGeral();
+      await carregarGraficos();
+      await carregarAplicacoesAnual();
+      await carregarPrestacao();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.verificarAutenticacao) window.verificarAutenticacao();
+      if (window.db) carregarTudo();
+      else window.addEventListener('db-ready', carregarTudo);
+
+      document.getElementById('fin-mes').addEventListener('change', carregarFinanceiro);
+      document.getElementById('fin-ano').addEventListener('change', carregarFinanceiro);
+      document.getElementById('pre-mes').addEventListener('change', carregarPrestacao);
+      document.getElementById('pre-ano').addEventListener('change', carregarPrestacao);
+      document.getElementById('app-ano').addEventListener('change', carregarAplicacoesAnual);
+    });
+  </script>
+</body>
+</html>
