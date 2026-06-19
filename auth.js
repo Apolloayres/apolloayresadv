@@ -1,179 +1,133 @@
-// auth.js — Sistema Controle do Escritório
-// Requer db.js carregado antes (window.db)
-// Responsável por autenticação, sessão e gerenciamento de usuários via Supabase
+const ADMIN_EMAIL = 'admin@escritorio.com';
+const ADMIN_SENHA = '#Felipe01*';
 
-(function () {
-  'use strict';
-
-  const CHAVE_LOGADO = 'logado';
-  const CHAVE_NOME = 'usuarioNome';
-  const CHAVE_EMAIL = 'usuarioEmail';
-  const CHAVE_PERFIL = 'usuarioPerfil';
-
-  const ADMIN_LOCAL = {
-    email: 'admin@escritorio.com',
-    senha: '#Felipe01*',
-    nome: 'Administrador',
-    perfil: 'Administrador',
-  };
-
-  /**
-   * Verifica se existe sessão ativa. Se não, redireciona para index.html.
-   */
-  function verificarAutenticacao() {
-    const logado = localStorage.getItem(CHAVE_LOGADO) === 'true';
-    if (!logado) {
-      window.location.href = 'index.html';
+function verificarAutenticacao() {
+    const usuarioLogado = localStorage.getItem('usuarioLogado');
+    if (!usuarioLogado) {
+        window.location.href = 'index.html';
     }
-  }
+}
 
-  /**
-   * Realiza login assíncrono via Supabase ou fallback de admin local.
-   * @param {string} email
-   * @param {string} senha
-   * @returns {Promise<boolean>}
-   */
-  async function fazerLogin(email, senha) {
-    if (!email || !senha) {
-      return false;
-    }
-
-    const emailLower = email.toLowerCase().trim();
-
-    // Admin local (fallback caso Supabase esteja offline)
-    if (emailLower === ADMIN_LOCAL.email && senha === ADMIN_LOCAL.senha) {
-      localStorage.setItem(CHAVE_LOGADO, 'true');
-      localStorage.setItem(CHAVE_NOME, ADMIN_LOCAL.nome);
-      localStorage.setItem(CHAVE_EMAIL, ADMIN_LOCAL.email);
-      localStorage.setItem(CHAVE_PERFIL, ADMIN_LOCAL.perfil);
-      window.location.href = 'home.html';
-      return true;
-    }
-
-    // Login via Supabase
-    try {
-      if (typeof window.db === 'undefined' || !window.db.usuario_login) {
-        console.error('window.db.usuario_login não está disponível. Verifique se db.js foi carregado antes de auth.js.');
-        return false;
-      }
-
-      const usuario = await window.db.usuario_login(emailLower, senha);
-
-      if (usuario && usuario.status === 'Ativo') {
-        localStorage.setItem(CHAVE_LOGADO, 'true');
-        localStorage.setItem(CHAVE_NOME, usuario.nome || 'Usuário');
-        localStorage.setItem(CHAVE_EMAIL, usuario.email);
-        localStorage.setItem(CHAVE_PERFIL, usuario.perfil || 'Usuário');
+function verificarAdmin() {
+    const usuario = getUsuarioLogado();
+    if (!usuario || usuario.perfil !== 'Administrador') {
+        alert('Acesso restrito a administradores.');
         window.location.href = 'home.html';
-        return true;
-      }
-
-      return false;
-    } catch (erro) {
-      console.error('Erro no login:', erro);
-      return false;
     }
-  }
+}
 
-  /**
-   * Encerra a sessão do usuário e redireciona para index.html.
-   */
-  function logout() {
-    localStorage.removeItem(CHAVE_LOGADO);
-    localStorage.removeItem(CHAVE_NOME);
-    localStorage.removeItem(CHAVE_EMAIL);
-    localStorage.removeItem(CHAVE_PERFIL);
+async function fazerLogin(email, senha) {
+    if (email === ADMIN_EMAIL && senha === ADMIN_SENHA) {
+        const usuario = {
+            nome: 'Administrador',
+            email: ADMIN_EMAIL,
+            perfil: 'Administrador',
+            status: 'Ativo'
+        };
+        localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+        window.location.href = 'home.html';
+        return { sucesso: true, mensagem: 'Login realizado com sucesso.' };
+    }
+
+    try {
+        const usuario = await window.db.usuarios_buscar(email);
+
+        if (!usuario) {
+            return { sucesso: false, mensagem: 'Usuário não encontrado.' };
+        }
+
+        if (usuario.senha !== senha) {
+            return { sucesso: false, mensagem: 'Senha incorreta.' };
+        }
+
+        if (usuario.status !== 'Ativo') {
+            return { sucesso: false, mensagem: 'Usuário inativo.' };
+        }
+
+        localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+        window.location.href = 'home.html';
+        return { sucesso: true, mensagem: 'Login realizado com sucesso.' };
+    } catch (erro) {
+        return { sucesso: false, mensagem: 'Erro ao realizar login: ' + erro.message };
+    }
+}
+
+function logout() {
+    localStorage.removeItem('usuarioLogado');
     window.location.href = 'index.html';
-  }
+}
 
-  /**
-   * Retorna os dados da sessão atual.
-   * @returns {Object|null}
-   */
-  function getUsuarioLogado() {
-    const logado = localStorage.getItem(CHAVE_LOGADO) === 'true';
-    if (!logado) {
-      return null;
-    }
-
-    return {
-      logado: true,
-      nome: localStorage.getItem(CHAVE_NOME),
-      email: localStorage.getItem(CHAVE_EMAIL),
-      perfil: localStorage.getItem(CHAVE_PERFIL),
-    };
-  }
-
-  /**
-   * Carrega a lista de todos os usuários via Supabase.
-   * @returns {Promise<Array>}
-   */
-  async function carregarUsuarios() {
-    try {
-      if (typeof window.db === 'undefined' || !window.db.usuarios_listar) {
-        console.error('window.db.usuarios_listar não está disponível. Verifique se db.js foi carregado antes de auth.js.');
-        return [];
-      }
-
-      return await window.db.usuarios_listar();
-    } catch (erro) {
-      console.error('Erro ao carregar usuários:', erro);
-      return [];
-    }
-  }
-
-  /**
-   * Salva (insere ou atualiza) um usuário via Supabase.
-   * @param {Object} usuario
-   * @returns {Promise<Object|null>}
-   */
-  async function salvarUsuario(usuario) {
-    try {
-      if (typeof window.db === 'undefined' || !window.db.usuarios_salvar) {
-        console.error('window.db.usuarios_salvar não está disponível. Verifique se db.js foi carregado antes de auth.js.');
+function getUsuarioLogado() {
+    const usuarioLogado = localStorage.getItem('usuarioLogado');
+    if (!usuarioLogado) {
         return null;
-      }
-
-      if (!usuario) {
-        return null;
-      }
-
-      return await window.db.usuarios_salvar(usuario);
-    } catch (erro) {
-      console.error('Erro ao salvar usuário:', erro);
-      return null;
     }
-  }
-
-  /**
-   * Exclui um usuário pelo ID via Supabase.
-   * @param {number|string} id
-   * @returns {Promise<boolean>}
-   */
-  async function excluirUsuario(id) {
     try {
-      if (typeof window.db === 'undefined' || !window.db.usuarios_excluir) {
-        console.error('window.db.usuarios_excluir não está disponível. Verifique se db.js foi carregado antes de auth.js.');
-        return false;
-      }
-
-      if (!id) {
-        return false;
-      }
-
-      return await window.db.usuarios_excluir(id);
-    } catch (erro) {
-      console.error('Erro ao excluir usuário:', erro);
-      return false;
+        const usuario = JSON.parse(usuarioLogado);
+        return {
+            nome: usuario.nome || null,
+            email: usuario.email || null,
+            perfil: usuario.perfil || null
+        };
+    } catch {
+        return null;
     }
-  }
+}
 
-  // Expor as funções no escopo global para uso em login.html e demais páginas
-  window.verificarAutenticacao = verificarAutenticacao;
-  window.fazerLogin = fazerLogin;
-  window.logout = logout;
-  window.getUsuarioLogado = getUsuarioLogado;
-  window.carregarUsuarios = carregarUsuarios;
-  window.salvarUsuario = salvarUsuario;
-  window.excluirUsuario = excluirUsuario;
-})();
+async function carregarUsuarios() {
+    return window.db.usuarios_listar();
+}
+
+async function salvarUsuario(usuario) {
+    if (!usuario.senha || usuario.senha.trim() === '') {
+        throw new Error('A senha é obrigatória.');
+    }
+    return window.db.usuarios_salvar(usuario);
+}
+
+async function excluirUsuario(id) {
+    return window.db.usuarios_excluir(id);
+}
+
+async function trocarSenha(email, senhaAtual, novaSenha) {
+    if (email === ADMIN_EMAIL) {
+        return { success: false, message: 'Não é permitido alterar a senha do administrador local por este sistema.' };
+    }
+
+    try {
+        const usuario = await window.db.usuarios_buscar(email);
+
+        if (!usuario) {
+            return { success: false, message: 'Usuário não encontrado.' };
+        }
+
+        if (usuario.senha !== senhaAtual) {
+            return { success: false, message: 'Senha atual incorreta.' };
+        }
+
+        const usuarioAtualizado = { ...usuario, senha: novaSenha };
+        await window.db.usuarios_salvar(usuarioAtualizado);
+
+        return { success: true, message: 'Senha alterada com sucesso!' };
+    } catch (erro) {
+        return { success: false, message: 'Erro ao alterar senha: ' + erro.message };
+    }
+}
+
+function getBadgePerfil(perfil) {
+    if (perfil === 'Administrador') {
+        return 'badge-admin';
+    }
+    return 'badge-usuario';
+}
+
+window.verificarAutenticacao = verificarAutenticacao;
+window.verificarAdmin = verificarAdmin;
+window.fazerLogin = fazerLogin;
+window.logout = logout;
+window.getUsuarioLogado = getUsuarioLogado;
+window.carregarUsuarios = carregarUsuarios;
+window.salvarUsuario = salvarUsuario;
+window.excluirUsuario = excluirUsuario;
+window.trocarSenha = trocarSenha;
+window.getBadgePerfil = getBadgePerfil;
