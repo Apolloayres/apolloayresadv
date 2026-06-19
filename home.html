@@ -3,392 +3,279 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home - Controle do Escritório</title>
+  <title>Controle do Escritório - Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
   <style>
-    body {
-      background: #f0f2f5;
-      font-family: 'Segoe UI', sans-serif;
-      color: #333;
-      margin: 0;
-    }
-    .navbar {
-      background: #0a58ca;
-      padding: 12px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: white;
-    }
-    .navbar .brand {
-      font-weight: 700;
-      font-size: 1.2rem;
-    }
-    .navbar .user-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .btn-nav {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-    .btn-outline {
-      background: transparent;
-      border: 2px solid rgba(255, 255, 255, 0.5);
-      color: white;
-    }
-    .btn-outline:hover {
-      border-color: white;
-      background: rgba(255, 255, 255, 0.1);
-    }
-    .container {
-      max-width: 1200px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
-    .welcome {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-    .welcome h2 {
-      font-size: 1.5rem;
-      margin-bottom: 4px;
-    }
-    .welcome p {
-      color: #6c757d;
-      font-size: 0.95rem;
-    }
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 14px;
-    }
-    .modulo-card {
-      background: white;
-      border-radius: 12px;
-      padding: 18px 14px;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-      cursor: pointer;
-      transition: all 0.2s;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-    .modulo-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-    }
-    .modulo-card .icon {
-      font-size: 1.8rem;
-      margin-bottom: 8px;
-    }
-    .modulo-card .nome {
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-    .badge {
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      font-weight: 600;
-    }
-    .badge-admin {
-      background: #cce5ff;
-      color: #004085;
-    }
-    .badge-usuario {
-      background: #d4edda;
-      color: #155724;
-    }
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .modal.ativo {
-      display: flex;
-    }
-    .modal-content {
-      background: white;
-      border-radius: 14px;
-      padding: 24px;
-      max-width: 440px;
-      width: 90%;
-    }
-    .modal-content h3 {
-      color: #0a58ca;
-      margin-bottom: 16px;
-    }
-    .form-group {
-      margin-bottom: 16px;
-    }
-    .form-group label {
-      display: block;
-      font-weight: 500;
-      color: #475569;
-      margin-bottom: 6px;
-      font-size: 0.9rem;
-    }
-    .form-group input {
-      width: 100%;
-      padding: 10px 12px;
-      border: 2px solid #e2e8f0;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      box-sizing: border-box;
-    }
-    .form-group input:focus {
-      border-color: #0d6efd;
-      outline: none;
-    }
-    .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    .btn {
-      padding: 10px 18px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 500;
-    }
-    .btn-primary {
-      background: #0d6efd;
-      color: white;
-    }
-    .btn-secondary {
-      background: #6c757d;
-      color: white;
-    }
-    .sucesso, .erro {
-      padding: 10px;
-      border-radius: 8px;
-      text-align: center;
-      display: none;
-      margin-bottom: 12px;
-    }
-    .sucesso {
-      background: #d4edda;
-      color: #155724;
-    }
-    .erro {
-      background: #f8d7da;
-      color: #721c24;
-    }
+    :root { --cor-primaria: #0a58ca; --cor-fundo: #f0f6ff; }
+    body { background-color: var(--cor-fundo); min-height: 100vh; }
+    .navbar-custom { background-color: var(--cor-primaria) !important; }
+    .navbar-custom .navbar-brand,
+    .navbar-custom .nav-link,
+    .navbar-custom .btn-link { color: #fff !important; }
+    .navbar-custom .nav-link:hover,
+    .navbar-custom .btn-link:hover { color: #d0e0ff !important; }
+    .card-modulo { cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; border: 0; border-radius: 12px; }
+    .card-modulo:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(10,88,202,0.18); }
+    .card-modulo .icon { font-size: 2.5rem; color: var(--cor-primaria); }
+    .resumo-card { border: 0; border-radius: 12px; color: #fff; }
+    .resumo-receitas { background: #198754; }
+    .resumo-despesas { background: #dc3545; }
+    .resumo-saldo { background: #0a58ca; }
+    .resumo-pendencias { background: #fd7e14; }
+    .usuario-badge { font-size: 0.75rem; }
   </style>
 </head>
 <body>
-
-  <nav class="navbar">
-    <div class="brand">Controle do Escritório</div>
-    <div class="user-info">
-      <span>Olá, <span id="userName">Usuário</span></span>
-      <span id="userBadge" class="badge badge-usuario">Perfil</span>
-      <button class="btn-nav btn-outline" onclick="abrirModal()">🔑 Alterar Senha</button>
-      <button class="btn-nav btn-outline" onclick="window.logout()">Sair</button>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="home.html"><i class="bi bi-building"></i> Controle do Escritório</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
+        <span class="navbar-toggler-icon" style="filter:invert(1);"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="menuNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="home.html"><i class="bi bi-house"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="clientes.html"><i class="bi bi-people"></i> Clientes</a></li>
+          <li class="nav-item"><a class="nav-link" href="processos.html"><i class="bi bi-folder"></i> Processos</a></li>
+          <li class="nav-item"><a class="nav-link" href="receitas.html"><i class="bi bi-graph-up-arrow"></i> Receitas</a></li>
+          <li class="nav-item"><a class="nav-link" href="despesas.html"><i class="bi bi-graph-down-arrow"></i> Despesas</a></li>
+          <li class="nav-item"><a class="nav-link" href="relatorios.html"><i class="bi bi-file-earmark-bar-graph"></i> Relatórios</a></li>
+          <li class="nav-item d-none" id="nav-usuarios"><a class="nav-link" href="usuarios.html"><i class="bi bi-person-gear"></i> Usuários</a></li>
+        </ul>
+        <div class="d-flex align-items-center gap-3 text-white">
+          <div class="text-end">
+            <div class="fw-semibold" id="saudacao-nome">Usuário</div>
+            <span class="badge bg-light text-primary usuario-badge" id="saudacao-perfil">Perfil</span>
+          </div>
+          <button class="btn btn-link text-white text-decoration-none p-0" onclick="abrirModalSenha()"><i class="bi bi-key"></i> Alterar Senha</button>
+          <button class="btn btn-outline-light btn-sm" onclick="window.logout()"><i class="bi bi-box-arrow-right"></i> Sair</button>
+        </div>
+      </div>
     </div>
   </nav>
 
-  <div class="container">
-    <div class="welcome">
-      <h2>Bem-vindo ao Controle do Escritório</h2>
-      <p>Sistema de gestão financeira e administrativa</p>
+  <div class="container py-4">
+    <!-- Saudação -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="text-primary m-0"><i class="bi bi-speedometer2"></i> Painel Principal</h2>
+      <span class="text-muted" id="data-atual"></span>
     </div>
 
-    <div class="cards-grid">
-      <a href="dashboard.html" class="modulo-card">
-        <div class="icon">📊</div>
-        <div class="nome">Dashboard</div>
-      </a>
-      <a href="clientes.html" class="modulo-card">
-        <div class="icon">👥</div>
-        <div class="nome">Clientes</div>
-      </a>
-      <a href="receitas.html" class="modulo-card">
-        <div class="icon">💰</div>
-        <div class="nome">Receitas</div>
-      </a>
-      <a href="marketing.html" class="modulo-card">
-        <div class="icon">📢</div>
-        <div class="nome">Marketing</div>
-      </a>
-      <a href="financeiro.html" class="modulo-card">
-        <div class="icon">💳</div>
-        <div class="nome">Financeiro</div>
-      </a>
-      <a href="imoveis.html" class="modulo-card">
-        <div class="icon">🏠</div>
-        <div class="nome">Imóveis</div>
-      </a>
-      <a href="aplicacoes.html" class="modulo-card">
-        <div class="icon">📈</div>
-        <div class="nome">Aplicações</div>
-      </a>
-      <a href="contas.html" class="modulo-card">
-        <div class="icon">🏦</div>
-        <div class="nome">Contas</div>
-      </a>
-      <a href="unidades.html" class="modulo-card">
-        <div class="icon">🏢</div>
-        <div class="nome">Unidades</div>
-      </a>
-      <a href="proventos.html" class="modulo-card">
-        <div class="icon">📋</div>
-        <div class="nome">Proventos</div>
-      </a>
-      <a href="prestacao-contas.html" class="modulo-card">
-        <div class="icon">📑</div>
-        <div class="nome">Prestação de Contas</div>
-      </a>
-      <a href="relatorio-prestacao-contas.html" class="modulo-card">
-        <div class="icon">📄</div>
-        <div class="nome">Rel. Prestação</div>
-      </a>
-      <a href="relatorios.html" class="modulo-card">
-        <div class="icon">📊</div>
-        <div class="nome">Relatórios</div>
-      </a>
-      <a href="usuarios.html" id="cardUsuarios" class="modulo-card" style="display: none;">
-        <div class="icon">👥</div>
-        <div class="nome">Usuários</div>
-      </a>
+    <!-- Resumo Financeiro -->
+    <h5 class="text-primary mb-3">Resumo Financeiro do Mês</h5>
+    <div class="row g-3 mb-4">
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="card resumo-card resumo-receitas h-100">
+          <div class="card-body text-center">
+            <i class="bi bi-cash-coin fs-2"></i>
+            <h6 class="mt-2">Receitas</h6>
+            <h4 id="resumo-receitas">R$ 0,00</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="card resumo-card resumo-despesas h-100">
+          <div class="card-body text-center">
+            <i class="bi bi-credit-card fs-2"></i>
+            <h6 class="mt-2">Despesas</h6>
+            <h4 id="resumo-despesas">R$ 0,00</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="card resumo-card resumo-saldo h-100">
+          <div class="card-body text-center">
+            <i class="bi bi-wallet2 fs-2"></i>
+            <h6 class="mt-2">Saldo</h6>
+            <h4 id="resumo-saldo">R$ 0,00</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="card resumo-card resumo-pendencias h-100">
+          <div class="card-body text-center">
+            <i class="bi bi-exclamation-triangle fs-2"></i>
+            <h6 class="mt-2">Pendências</h6>
+            <h4 id="resumo-pendencias">R$ 0,00</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grade de Módulos -->
+    <h5 class="text-primary mb-3">Módulos do Sistema</h5>
+    <div class="row g-3">
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="card card-modulo h-100 text-center p-3" onclick="location.href='clientes.html'">
+          <div class="card-body d-flex flex-column align-items-center justify-content-center">
+            <i class="bi bi-people icon mb-2"></i>
+            <h5 class="card-title text-primary">Clientes</h5>
+            <p class="card-text text-muted small">Cadastro e gestão de clientes</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="card card-modulo h-100 text-center p-3" onclick="location.href='processos.html'">
+          <div class="card-body d-flex flex-column align-items-center justify-content-center">
+            <i class="bi bi-folder icon mb-2"></i>
+            <h5 class="card-title text-primary">Processos</h5>
+            <p class="card-text text-muted small">Controle de processos e prazos</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="card card-modulo h-100 text-center p-3" onclick="location.href='receitas.html'">
+          <div class="card-body d-flex flex-column align-items-center justify-content-center">
+            <i class="bi bi-graph-up-arrow icon mb-2"></i>
+            <h5 class="card-title text-primary">Receitas</h5>
+            <p class="card-text text-muted small">Lançamento de receitas</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="card card-modulo h-100 text-center p-3" onclick="location.href='despesas.html'">
+          <div class="card-body d-flex flex-column align-items-center justify-content-center">
+            <i class="bi bi-graph-down-arrow icon mb-2"></i>
+            <h5 class="card-title text-primary">Despesas</h5>
+            <p class="card-text text-muted small">Lançamento de despesas</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="card card-modulo h-100 text-center p-3" onclick="location.href='relatorios.html'">
+          <div class="card-body d-flex flex-column align-items-center justify-content-center">
+            <i class="bi bi-file-earmark-bar-graph icon mb-2"></i>
+            <h5 class="card-title text-primary">Relatórios</h5>
+            <p class="card-text text-muted small">Relatórios e análises</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3 d-none" id="card-usuarios">
+        <div class="card card-modulo h-100 text-center p-3" onclick="location.href='usuarios.html'">
+          <div class="card-body d-flex flex-column align-items-center justify-content-center">
+            <i class="bi bi-person-gear icon mb-2"></i>
+            <h5 class="card-title text-primary">Usuários</h5>
+            <p class="card-text text-muted small">Gestão de usuários</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div id="modalAlterarSenha" class="modal">
-    <div class="modal-content">
-      <h3>🔑 Alterar Senha</h3>
-      <div id="msgSucesso" class="sucesso"></div>
-      <div id="msgErro" class="erro"></div>
-      <div class="form-group">
-        <label for="altEmail">E-mail</label>
-        <input type="email" id="altEmail" readonly>
-      </div>
-      <div class="form-group">
-        <label for="altSenhaAtual">Senha Atual</label>
-        <input type="password" id="altSenhaAtual" placeholder="Digite sua senha atual">
-      </div>
-      <div class="form-group">
-        <label for="altNovaSenha">Nova Senha</label>
-        <input type="password" id="altNovaSenha" placeholder="Digite a nova senha">
-      </div>
-      <div class="form-group">
-        <label for="altConfirmar">Confirmar Nova Senha</label>
-        <input type="password" id="altConfirmar" placeholder="Confirme a nova senha">
-      </div>
-      <div class="modal-actions">
-        <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
-        <button class="btn btn-primary" onclick="alterarSenha()">Salvar</button>
+  <!-- Modal Alterar Senha -->
+  <div class="modal fade" id="modalSenha" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title"><i class="bi bi-key"></i> Alterar Senha</h5>
+          <button type="button" class="btn-close btn-close-white" onclick="fecharModal()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formSenha" onsubmit="event.preventDefault(); alterarSenha();">
+            <div class="mb-3">
+              <label for="altEmail" class="form-label">E-mail</label>
+              <input type="email" class="form-control" id="altEmail" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="altSenhaAtual" class="form-label">Senha Atual</label>
+              <input type="password" class="form-control" id="altSenhaAtual" required>
+            </div>
+            <div class="mb-3">
+              <label for="altNovaSenha" class="form-label">Nova Senha</label>
+              <input type="password" class="form-control" id="altNovaSenha" required minlength="6">
+            </div>
+            <div class="mb-3">
+              <label for="altConfirmar" class="form-label">Confirmar Nova Senha</label>
+              <input type="password" class="form-control" id="altConfirmar" required minlength="6">
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Salvar Nova Senha</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 
   <script src="db.js"></script>
   <script src="auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    var modalSenha;
+
     document.addEventListener('DOMContentLoaded', function() {
+      modalSenha = new bootstrap.Modal(document.getElementById('modalSenha'));
       window.verificarAutenticacao();
       var usuario = window.getUsuarioLogado();
       if (usuario) {
-        document.getElementById('userName').textContent = usuario.nome;
-        var badge = document.getElementById('userBadge');
-        badge.textContent = usuario.perfil;
-        badge.className = 'badge ' + window.getBadgePerfil(usuario.perfil);
+        document.getElementById('saudacao-nome').textContent = 'Olá, ' + (usuario.nome || usuario.email || 'Usuário');
+        document.getElementById('saudacao-perfil').textContent = usuario.perfil || 'Usuário';
         document.getElementById('altEmail').value = usuario.email || '';
-        if (usuario.perfil === 'Administrador') {
-          document.getElementById('cardUsuarios').style.display = 'block';
+        if (usuario.perfil === 'Admin') {
+          document.getElementById('nav-usuarios').classList.remove('d-none');
+          document.getElementById('card-usuarios').classList.remove('d-none');
         }
       }
+      var hoje = new Date();
+      var meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+      document.getElementById('data-atual').textContent = meses[hoje.getMonth()] + ' de ' + hoje.getFullYear();
+      carregarResumo();
     });
 
-    function abrirModal() {
-      document.getElementById('modalAlterarSenha').classList.add('ativo');
+    async function carregarResumo() {
+      try {
+        var receitas = await window.db.receitas_listar();
+        var despesas = await window.db.despesas_listar();
+        var hoje = new Date();
+        var mesAtual = (hoje.getMonth() + 1).toString().padStart(2, '0');
+        var anoAtual = hoje.getFullYear().toString();
+        var totalRec = 0, totalDesp = 0, pend = 0;
+        receitas.forEach(function(r) {
+          if (r.data && r.data.substring(0, 7) === anoAtual + '-' + mesAtual) {
+            totalRec += parseFloat(r.valor) || 0;
+            if (r.status === 'Pendente' || r.status === 'Atrasado') pend += parseFloat(r.valor) || 0;
+          }
+        });
+        despesas.forEach(function(d) {
+          if (d.data && d.data.substring(0, 7) === anoAtual + '-' + mesAtual) {
+            totalDesp += parseFloat(d.valor) || 0;
+            if (d.status === 'Pendente' || d.status === 'Atrasado') pend += parseFloat(d.valor) || 0;
+          }
+        });
+        document.getElementById('resumo-receitas').textContent = 'R$ ' + totalRec.toFixed(2).replace('.', ',');
+        document.getElementById('resumo-despesas').textContent = 'R$ ' + totalDesp.toFixed(2).replace('.', ',');
+        var saldo = totalRec - totalDesp;
+        document.getElementById('resumo-saldo').textContent = 'R$ ' + saldo.toFixed(2).replace('.', ',');
+        document.getElementById('resumo-pendencias').textContent = 'R$ ' + pend.toFixed(2).replace('.', ',');
+      } catch(e) { console.error(e); }
+    }
+
+    function abrirModalSenha() {
+      document.getElementById('formSenha').reset();
       var usuario = window.getUsuarioLogado();
-      if (usuario && usuario.email) {
-        document.getElementById('altEmail').value = usuario.email;
-      }
+      document.getElementById('altEmail').value = usuario ? (usuario.email || '') : '';
+      modalSenha.show();
     }
 
     function fecharModal() {
-      document.getElementById('modalAlterarSenha').classList.remove('ativo');
-      limparMensagens();
-    }
-
-    function limparMensagens() {
-      document.getElementById('msgSucesso').style.display = 'none';
-      document.getElementById('msgSucesso').textContent = '';
-      document.getElementById('msgErro').style.display = 'none';
-      document.getElementById('msgErro').textContent = '';
-    }
-
-    function mostrarSucesso(texto) {
-      var el = document.getElementById('msgSucesso');
-      el.textContent = texto;
-      el.style.display = 'block';
-      document.getElementById('msgErro').style.display = 'none';
-    }
-
-    function mostrarErro(texto) {
-      var el = document.getElementById('msgErro');
-      el.textContent = texto;
-      el.style.display = 'block';
-      document.getElementById('msgSucesso').style.display = 'none';
+      modalSenha.hide();
+      document.getElementById('formSenha').reset();
     }
 
     async function alterarSenha() {
-      const email = document.getElementById('altEmail').value;
-      const senhaAtual = document.getElementById('altSenhaAtual').value;
-      const novaSenha = document.getElementById('altNovaSenha').value;
-      const confirmar = document.getElementById('altConfirmar').value;
-
-      limparMensagens();
-
-      if (!email || !senhaAtual || !novaSenha || !confirmar) {
-        mostrarErro('Preencha todos os campos.');
-        return;
-      }
-
-      if (novaSenha !== confirmar) {
-        mostrarErro('A nova senha e a confirmação não conferem.');
-        return;
-      }
-
-      if (novaSenha.length < 6) {
-        mostrarErro('A nova senha deve ter no mínimo 6 caracteres.');
-        return;
-      }
-
-      try {
-        const resultado = await window.trocarSenha(email, senhaAtual, novaSenha);
-        if (resultado && resultado.sucesso) {
-          mostrarSucesso('Senha alterada com sucesso!');
-          document.getElementById('altSenhaAtual').value = '';
-          document.getElementById('altNovaSenha').value = '';
-          document.getElementById('altConfirmar').value = '';
-        } else {
-          mostrarErro((resultado && resultado.mensagem) || 'Erro ao alterar senha.');
-        }
-      } catch (erro) {
-        mostrarErro('Erro ao alterar senha: ' + (erro.message || 'Erro desconhecido.'));
-      }
+      var email = document.getElementById('altEmail').value;
+      var senhaAtual = document.getElementById('altSenhaAtual').value;
+      var novaSenha = document.getElementById('altNovaSenha').value;
+      var confirmar = document.getElementById('altConfirmar').value;
+      if (!senhaAtual || !novaSenha || !confirmar) { alert('Preencha todos.'); return; }
+      if (novaSenha !== confirmar) { alert('Não conferem.'); return; }
+      if (novaSenha.length < 6) { alert('Mínimo 6 caracteres.'); return; }
+      var r = await window.trocarSenha(email, senhaAtual, novaSenha);
+      if (r.success) { alert('Senha alterada!'); fecharModal(); }
+      else { alert(r.message || 'Erro'); }
     }
-
-    document.getElementById('modalAlterarSenha').addEventListener('click', function(e) {
-      if (e.target === this) {
-        fecharModal();
-      }
-    });
   </script>
 </body>
 </html>

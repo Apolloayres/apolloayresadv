@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Despesas - Controle do Escritório</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f5f7fa; color: #333; }
+    .navbar { background: #1e3a5f; color: #fff; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    .brand { font-size: 1.3rem; font-weight: bold; }
+    .nav-links { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+    .nav-links a { color: #fff; text-decoration: none; font-size: 0.9rem; padding: 4px 8px; border-radius: 4px; transition: background 0.2s; }
+    .nav-links a:hover { background: #2c5282; }
+    .container { max-width: 1400px; margin: 24px auto; padding: 0 20px; }
+    .header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+    h1 { font-size: 1.6rem; color: #1e3a5f; }
+    .btn { padding: 10px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.95rem; transition: opacity 0.2s; }
+    .btn:hover { opacity: 0.9; }
+    .btn-primary { background: #1e3a5f; color: #fff; }
+    .btn-success { background: #28a745; color: #fff; }
+    .btn-danger { background: #dc3545; color: #fff; }
+    .btn-secondary { background: #6c757d; color: #fff; }
+    .grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .card { background: #fff; padding: 18px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+    .card h3 { font-size: 0.9rem; color: #666; margin-bottom: 8px; text-transform: uppercase; }
+    .card .valor { font-size: 1.5rem; font-weight: bold; color: #1e3a5f; }
+    .card.pago .valor { color: #28a745; }
+    .card.pendente .valor { color: #f0ad4e; }
+    .card.atrasado .valor { color: #dc3545; }
+    .chart-container { background: #fff; padding: 18px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); margin-bottom: 24px; height: 320px; position: relative; }
+    .filtros { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .filtros input, .filtros select { padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.95rem; }
+    .filtros input { flex: 1; min-width: 200px; }
+    .table-responsive { overflow-x: auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 0.93rem; }
+    th { background: #1e3a5f; color: #fff; font-weight: 600; }
+    tr:hover { background: #f8f9fa; }
+    .status { padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; }
+    .status-pago { background: #d4edda; color: #155724; }
+    .status-pendente { background: #fff3cd; color: #856404; }
+    .status-atrasado { background: #f8d7da; color: #721c24; }
+    .acoes { display: flex; gap: 8px; }
+    .acoes button { padding: 6px 10px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: #fff; border-radius: 8px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+    .modal-header { background: #1e3a5f; color: #fff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h2 { font-size: 1.2rem; }
+    .modal-close { background: none; border: none; color: #fff; font-size: 1.4rem; cursor: pointer; }
+    .modal-body { padding: 20px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.9rem; }
+    .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.95rem; }
+    .modal-footer { padding: 16px 20px; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #eee; }
+    .hidden { display: none; }
+    @media (max-width: 768px) {
+      .nav-links { gap: 8px; }
+      .nav-links a { font-size: 0.8rem; padding: 3px 6px; }
+    }
+  </style>
+</head>
+<body>
+
+<<nav class="navbar">
+  <div class="brand">🏛️ Controle do Escritório</div>
+  <div class="nav-links">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="clientes.html">Clientes</a>
+    <a href="receitas.html">Receitas</a>
+    <a href="despesas.html">Despesas</a>
+    <a href="marketing.html">Marketing</a>
+    <a href="financeiro.html">Financeiro</a>
+    <a href="imoveis.html">Imóveis</a>
+    <a href="aplicacoes.html">Aplicações</a>
+    <a href="contas.html">Contas</a>
+    <a href="unidades.html">Unidades</a>
+    <a href="proventos.html">Proventos</a>
+    <a href="prestacao-contas.html">Prestação</a>
+    <a href="relatorio-prestacao-contas.html">Rel. Prestação</a>
+    <a href="relatorios.html">Relatórios</a>
+    <a href="usuarios.html">Usuários</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="header">
+    <a href="home.html"><button class="btn btn-secondary">← Voltar</button></a>
+    <h1>📉 Despesas</h1>
+  </div>
+
+  <div class="grid4">
+    <div class="card">
+      <h3>Total (Mês)</h3>
+      <div class="valor" id="cardTotal">R$ 0,00</div>
+    </div>
+    <div class="card pago">
+      <h3>Pago</h3>
+      <div class="valor" id="cardPago">R$ 0,00</div>
+    </div>
+    <div class="card pendente">
+      <h3>Pendente</h3>
+      <div class="valor" id="cardPendente">R$ 0,00</div>
+    </div>
+    <div class="card atrasado">
+      <h3>Atrasado</h3>
+      <div class="valor" id="cardAtrasado">R$ 0,00</div>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="graficoCategorias"></canvas>
+  </div>
+
+  <div class="filtros">
+    <input type="text" id="busca" placeholder="Buscar descrição, fornecedor ou categoria..." />
+    <select id="filtroStatus">
+      <option value="">Todos os status</option>
+      <option value="Pago">Pago</option>
+      <option value="Pendente">Pendente</option>
+      <option value="Atrasado">Atrasado</option>
+    </select>
+    <button class="btn btn-success" id="btnNova" onclick="abrirModal()">+ Nova Despesa</button>
+  </div>
+
+  <div class="table-responsive">
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Descrição</th>
+          <th>Fornecedor</th>
+          <th>Categoria</th>
+          <th>Valor</th>
+          <th>Vencimento</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaDespesas"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTitulo">Nova Despesa</h2>
+      <button class="modal-close" onclick="fecharModal()">&times;</button>
+    </div>
+    <form id="formDespesa">
+      <div class="modal-body">
+        <input type="hidden" id="despesaId" />
+        <div class="form-group">
+          <label for="data">Data</label>
+          <input type="date" id="data" required />
+        </div>
+        <div class="form-group">
+          <label for="descricao">Descrição</label>
+          <input type="text" id="descricao" required />
+        </div>
+        <div class="form-group">
+          <label for="fornecedor">Fornecedor</label>
+          <input type="text" id="fornecedor" required />
+        </div>
+        <div class="form-group">
+          <label for="categoria">Categoria</label>
+          <input type="text" id="categoria" list="listaCategorias" required />
+          <datalist id="listaCategorias"></datalist>
+        </div>
+        <div class="form-group">
+          <label for="valor">Valor</label>
+          <input type="number" id="valor" step="0.01" min="0" required />
+        </div>
+        <div class="form-group">
+          <label for="vencimento">Vencimento</label>
+          <input type="date" id="vencimento" required />
+        </div>
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status" required>
+            <option value="Pendente">Pendente</option>
+            <option value="Pago">Pago</option>
+            <option value="Atrasado">Atrasado</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<script>
+  let todasDespesas = [];
+  let graficoCategorias = null;
+
+  function formatarMoeda(valor) {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor || 0);
+  }
+
+  function mesAtual() {
+    return new Date().toISOString().substring(0, 7);
+  }
+
+  function statusPorData(despesa) {
+    if (despesa.status === 'Pago') return 'Pago';
+    const hoje = new Date().toISOString().substring(0, 10);
+    if (despesa.vencimento && despesa.vencimento < hoje) return 'Atrasado';
+    return 'Pendente';
+  }
+
+  function atualizarCards() {
+    const mes = mesAtual();
+    const doMes = todasDespesas.filter(d => d.data && d.data.substring(0, 7) === mes);
+    const total = doMes.reduce((s, d) => s + (parseFloat(d.valor) || 0), 0);
+    const pago = doMes.filter(d => statusPorData(d) === 'Pago').reduce((s, d) => s + (parseFloat(d.valor) || 0), 0);
+    const pendente = doMes.filter(d => statusPorData(d) === 'Pendente').reduce((s, d) => s + (parseFloat(d.valor) || 0), 0);
+    const atrasado = doMes.filter(d => statusPorData(d) === 'Atrasado').reduce((s, d) => s + (parseFloat(d.valor) || 0), 0);
+
+    document.getElementById('cardTotal').textContent = formatarMoeda(total);
+    document.getElementById('cardPago').textContent = formatarMoeda(pago);
+    document.getElementById('cardPendente').textContent = formatarMoeda(pendente);
+    document.getElementById('cardAtrasado').textContent = formatarMoeda(atrasado);
+  }
+
+  function atualizarGrafico() {
+    const mes = mesAtual();
+    const doMes = todasDespesas.filter(d => d.data && d.data.substring(0, 7) === mes);
+    const totais = {};
+    doMes.forEach(d => {
+      const cat = d.categoria || 'Sem categoria';
+      totais[cat] = (totais[cat] || 0) + (parseFloat(d.valor) || 0);
+    });
+
+    const ctx = document.getElementById('graficoCategorias').getContext('2d');
+    const labels = Object.keys(totais);
+    const data = Object.values(totais);
+
+    if (graficoCategorias) {
+      graficoCategorias.data.labels = labels;
+      graficoCategorias.data.datasets[0].data = data;
+      graficoCategorias.update();
+    } else {
+      graficoCategorias = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Despesas por Categoria',
+            data: data,
+            backgroundColor: '#1e3a5f',
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, ticks: { callback: v => formatarMoeda(v) } },
+            x: { grid: { display: false } }
+          },
+          barPercentage: 0.3
+        }
+      });
+    }
+  }
+
+  function despesasFiltradas() {
+    const busca = (document.getElementById('busca').value || '').toLowerCase();
+    const filtroStatus = document.getElementById('filtroStatus').value;
+
+    return todasDespesas.filter(d => {
+      const texto = [d.descricao, d.fornecedor, d.categoria].join(' ').toLowerCase();
+      const okBusca = !busca || texto.includes(busca);
+      const status = statusPorData(d);
+      const okStatus = !filtroStatus || status === filtroStatus;
+      return okBusca && okStatus;
+    }).sort((a, b) => (b.data || '').localeCompare(a.data || ''));
+  }
+
+  function renderizarTabela() {
+    const tbody = document.getElementById('tabelaDespesas');
+    tbody.innerHTML = '';
+    const itens = despesasFiltradas();
+
+    if (itens.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 24px;">Nenhuma despesa encontrada.</td></tr>';
+      return;
+    }
+
+    itens.forEach(d => {
+      const status = statusPorData(d);
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${d.data ? new Date(d.data + 'T00:00:00').toLocaleDateString('pt-BR') : '-'}</td>
+        <td>${d.descricao || '-'}</td>
+        <td>${d.fornecedor || '-'}</td>
+        <td>${d.categoria || '-'}</td>
+        <td>${formatarMoeda(d.valor)}</td>
+        <td>${d.vencimento ? new Date(d.vencimento + 'T00:00:00').toLocaleDateString('pt-BR') : '-'}</td>
+        <td><span class="status status-${status.toLowerCase()}">${status}</span></td>
+        <td class="acoes">
+          <button class="btn-primary" onclick="editarDespesa('${d.id}')">Editar</button>
+          <button class="btn-danger" onclick="excluirDespesa('${d.id}')">Excluir</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function atualizarDatalistCategorias() {
+    const categorias = [...new Set(todasDespesas.map(d => d.categoria).filter(Boolean))];
+    const datalist = document.getElementById('listaCategorias');
+    datalist.innerHTML = categorias.map(c => `<option value="${c}">`).join('');
+  }
+
+  function abrirModal(despesa = null) {
+    document.getElementById('modalTitulo').textContent = despesa ? 'Editar Despesa' : 'Nova Despesa';
+    document.getElementById('despesaId').value = despesa ? despesa.id : '';
+    document.getElementById('data').value = despesa ? despesa.data : '';
+    document.getElementById('descricao').value = despesa ? despesa.descricao : '';
+    document.getElementById('fornecedor').value = despesa ? despesa.fornecedor : '';
+    document.getElementById('categoria').value = despesa ? despesa.categoria : '';
+    document.getElementById('valor').value = despesa ? despesa.valor : '';
+    document.getElementById('vencimento').value = despesa ? despesa.vencimento : '';
+    document.getElementById('status').value = despesa ? despesa.status : 'Pendente';
+    document.getElementById('modalOverlay').classList.add('active');
+  }
+
+  function fecharModal() {
+    document.getElementById('modalOverlay').classList.remove('active');
+    document.getElementById('formDespesa').reset();
+    document.getElementById('despesaId').value = '';
+  }
+
+  async function salvarDespesa(e) {
+    e.preventDefault();
+    const id = document.getElementById('despesaId').value;
+    const despesa = {
+      id: id || undefined,
+      data: document.getElementById('data').value,
+      descricao: document.getElementById('descricao').value.trim(),
+      fornecedor: document.getElementById('fornecedor').value.trim(),
+      categoria: document.getElementById('categoria').value.trim(),
+      valor: parseFloat(document.getElementById('valor').value) || 0,
+      vencimento: document.getElementById('vencimento').value,
+      status: document.getElementById('status').value
+    };
+
+    await window.db.despesas_salvar(despesa);
+    fecharModal();
+    await carregarDespesas();
+  }
+
+  async function editarDespesa(id) {
+    const despesa = todasDespesas.find(d => String(d.id) === String(id));
+    if (despesa) abrirModal(despesa);
+  }
+
+  async function excluirDespesa(id) {
+    if (!confirm('Deseja realmente excluir esta despesa?')) return;
+    await window.db.despesas_excluir(id);
+    await carregarDespesas();
+  }
+
+  async function carregarDespesas() {
+    todasDespesas = await window.db.despesas_listar() || [];
+    atualizarDatalistCategorias();
+    atualizarCards();
+    atualizarGrafico();
+    renderizarTabela();
+  }
+
+  document.addEventListener('DOMContentLoaded', async function() {
+    window.verificarAutenticacao();
+    await carregarDespesas();
+    document.getElementById('busca').addEventListener('input', renderizarTabela);
+    document.getElementById('filtroStatus').addEventListener('change', renderizarTabela);
+    document.getElementById('formDespesa').addEventListener('submit', salvarDespesa);
+  });
+</script>
+
+</body>
+</html>
