@@ -1,368 +1,953 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Controle do Escritório - Cadastros</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <style>
-    :root { --cor-primaria: #0a58ca; }
-    body { background-color: #f0f2f5; min-height: 100vh; }
-    .navbar { background-color: var(--cor-primaria) !important; }
-    .navbar .nav-link, .navbar .navbar-brand { color: #fff !important; }
-    .navbar .nav-link:hover { opacity: 0.85; }
-    .btn-primary { background-color: var(--cor-primaria); border-color: var(--cor-primaria); }
-    .btn-primary:hover { background-color: #084298; border-color: #084298; }
-    .nav-pills .nav-link.active { background-color: var(--cor-primaria); }
-    .nav-pills .nav-link { color: var(--cor-primaria); }
-    .card { border: none; border-radius: 0.75rem; }
-    .card h4 { color: var(--cor-primaria); }
-    .table th { color: #0a58ca; }
+    :root {
+      --primary: #2c3e50;
+      --secondary: #3498db;
+      --success: #27ae60;
+      --danger: #e74c3c;
+      --warning: #f39c12;
+      --light: #f8f9fa;
+      --dark: #1a252f;
+    }
+    body { background: var(--light); color: var(--dark); min-height: 100vh; }
+    .navbar { background: var(--primary); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .navbar-brand { font-weight: 700; color: #fff !important; }
+    .nav-link { color: rgba(255,255,255,0.85) !important; }
+    .nav-link:hover, .nav-link.active { color: #fff !important; }
+    .card-resumo { border: none; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: transform 0.2s; }
+    .card-resumo:hover { transform: translateY(-2px); }
+    .card-resumo .icon { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+    .bg-soft-primary { background: rgba(52,152,219,0.12); color: var(--secondary); }
+    .bg-soft-success { background: rgba(39,174,96,0.12); color: var(--success); }
+    .bg-soft-danger { background: rgba(231,76,60,0.12); color: var(--danger); }
+    .bg-soft-warning { background: rgba(243,156,18,0.12); color: var(--warning); }
+    .tab-bar { border-bottom: 2px solid #dee2e6; margin-bottom: 20px; }
+    .tab-button { background: none; border: none; border-bottom: 3px solid transparent; padding: 12px 20px; color: #6c757d; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .tab-button.active { color: var(--secondary); border-bottom-color: var(--secondary); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .table-actions { white-space: nowrap; }
+    .btn-table { padding: 4px 10px; font-size: 0.85rem; margin: 0 2px; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1050; opacity: 0; transition: opacity 0.25s; }
+    .modal-overlay.active { display: flex; opacity: 1; }
+    .modal-box { background: #fff; border-radius: 14px; width: 100%; max-width: 700px; max-height: 92vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.25); transform: translateY(-20px); transition: transform 0.25s; }
+    .modal-overlay.active .modal-box { transform: translateY(0); }
+    .modal-header { padding: 18px 24px; border-bottom: 1px solid #e9ecef; display: flex; align-items: center; justify-content: space-between; }
+    .modal-body { padding: 24px; }
+    .modal-footer { padding: 16px 24px; border-top: 1px solid #e9ecef; display: flex; gap: 10px; justify-content: flex-end; }
+    .form-label { font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
+    .form-control, .form-select { font-size: 0.95rem; }
+    .badge-status { font-size: 0.8rem; padding: 5px 10px; border-radius: 20px; font-weight: 600; }
+    .badge-ativo { background: rgba(39,174,96,0.12); color: var(--success); }
+    .badge-inativo { background: rgba(231,76,60,0.12); color: var(--danger); }
+    .empty-state { text-align: center; padding: 40px; color: #6c757d; }
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="home.html">🏢 Controle do Escritório</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="menuPrincipal">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="home.html">Início</a></li>
-          <li class="nav-item"><a class="nav-link active" href="cadastros.html">Cadastros</a></li>
-          <li class="nav-item"><a class="nav-link" href="processos.html">Processos</a></li>
-          <li class="nav-item"><a class="nav-link" href="financeiro.html">Financeiro</a></li>
-          <li class="nav-item"><a class="nav-link" href="documentos.html">Documentos</a></li>
-          <li class="nav-item"><a class="nav-link" href="relatorios.html">Relatórios</a></li>
-          <li class="nav-item"><a class="nav-link" href="usuarios.html">Usuários</a></li>
-          <li class="nav-item"><a class="nav-link" href="configuracoes.html">Configurações</a></li>
-        </ul>
-        <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link" href="#" onclick="window.auth.logout(); return false;"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
-        </ul>
-      </div>
+
+<<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="home.html"><i class="bi bi-building me-2"></i>Controle do Escritório</a>
+    <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="home.html">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link active" href="cadastros.html">Cadastros</a></li>
+        <li class="nav-item"><a class="nav-link" href="financeiro.html">Financeiro</a></li>
+        <li class="nav-item"><a class="nav-link" href="relatorios.html">Relatórios</a></li>
+      </ul>
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2 class="m-0">📋 Cadastros</h2>
-      <a href="home.html" class="btn btn-outline-primary">← Voltar</a>
-    </div>
+<div class="container py-4">
 
-    <ul class="nav nav-pills mb-4" id="abasCadastros" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="aba-unidades" data-bs-toggle="pill" data-bs-target="#painel-unidades" type="button" role="tab">🏢 Unidades</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="aba-clientes" data-bs-toggle="pill" data-bs-target="#painel-clientes" type="button" role="tab">👤 Clientes</button>
-      </li>
-    </ul>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="m-0 fw-bold"><i class="bi bi-folder-plus me-2 text-primary"></i>Cadastros</h2>
+    <span class="text-muted">Gerencie unidades, clientes e colaboradores</span>
+  </div>
 
-    <div class="tab-content">
-      <div class="tab-pane fade show active" id="painel-unidades" role="tabpanel">
-        <div class="row g-3 mb-4">
-          <div class="col-6 col-md-3"><div class="card shadow-sm p-3"><h6 class="text-muted">Total</h6><h4 id="uni-total">0</h4></div></div>
-          <div class="col-6 col-md-3"><div class="card shadow-sm p-3"><h6 class="text-muted">Ativas</h6><h4 id="uni-ativas">0</h4></div></div>
-          <div class="col-6 col-md-3"><div class="card shadow-sm p-3"><h6 class="text-muted">Inativas</h6><h4 id="uni-inativas">0</h4></div></div>
-          <div class="col-6 col-md-3"><div class="card shadow-sm p-3"><h6 class="text-muted">Colaboradores</h6><h4 id="uni-colaboradores">0</h4></div></div>
-        </div>
-        <div class="d-flex justify-content-end mb-3">
-          <button class="btn btn-primary" onclick="abrirModalUnidade()"><i class="bi bi-plus-lg"></i> Nova Unidade</button>
-        </div>
-        <div class="card shadow-sm">
-          <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="table-light">
-                <tr><th>Nome</th><th>Endereço</th><th>Responsável</th><th>Telefone</th><th>Status</th><th>Ações</th></tr>
-              </thead>
-              <tbody id="tabela-unidades"></tbody>
-            </table>
+  <div class="tab-bar">
+    <button class="tab-button active" data-tab="tab-unidades" onclick="ativarTab('tab-unidades')">
+      <i class="bi bi-building me-1"></i> Unidades
+    </button>
+    <button class="tab-button" data-tab="tab-clientes" onclick="ativarTab('tab-clientes')">
+      <i class="bi bi-people me-1"></i> Clientes
+    </button>
+    <button class="tab-button" data-tab="tab-colaboradores" onclick="ativarTab('tab-colaboradores')">
+      <i class="bi bi-person-badge me-1"></i> Colaboradores
+    </button>
+  </div>
+
+  <!-- UNIDADES -->
+  <div id="tab-unidades" class="tab-content active">
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-md-3">
+        <div class="card card-resumo p-3">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <div class="text-muted small">Total</div>
+              <div class="h4 m-0 fw-bold" id="uni-total">0</div>
+            </div>
+            <div class="icon bg-soft-primary"><i class="bi bi-building"></i></div>
           </div>
         </div>
       </div>
-
-      <div class="tab-pane fade" id="painel-clientes" role="tabpanel">
-        <div class="row g-3 mb-4">
-          <div class="col-6 col-md-3"><div class="card shadow-sm p-3"><h6 class="text-muted">Total</h6><h4 id="cli-total">0</h4></div></div>
-          <div class="col-6 col-md-3"><div class="card shadow-sm p-3"><h6 class="text-muted">Ativos</h6><h4 id="cli-ativos">0</h4></div></div>
-          <div class="col-6 col-md-3"><div class="card shadow-sm p-3"><h6 class="text-muted">Inativos</h6><h4 id="cli-inativos">0</h4></div></div>
-          <div class="col-6 col-md-3"><div class="card shadow-sm p-3"><h6 class="text-muted">Total Recebido</h6><h4 id="cli-recebido">R$ 0,00</h4></div></div>
+      <div class="col-6 col-md-3">
+        <div class="card card-resumo p-3">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <div class="text-muted small">Ativas</div>
+              <div class="h4 m-0 fw-bold" id="uni-ativas">0</div>
+            </div>
+            <div class="icon bg-soft-success"><i class="bi bi-check-circle"></i></div>
+          </div>
         </div>
-        <div class="d-flex justify-content-end mb-3">
-          <button class="btn btn-primary" onclick="abrirModalCliente()"><i class="bi bi-plus-lg"></i> Novo Cliente</button>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card card-resumo p-3">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <div class="text-muted small">Inativas</div>
+              <div class="h4 m-0 fw-bold" id="uni-inativas">0</div>
+            </div>
+            <div class="icon bg-soft-danger"><i class="bi bi-x-circle"></i></div>
+          </div>
         </div>
-        <div class="card shadow-sm">
-          <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="table-light">
-                <tr><th>Nome</th><th>Email</th><th>Telefone</th><th>Tipo</th><th>Status</th><th>Ações</th></tr>
-              </thead>
-              <tbody id="tabela-clientes"></tbody>
-            </table>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card card-resumo p-3">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <div class="text-muted small">Colaboradores</div>
+              <div class="h4 m-0 fw-bold" id="uni-colaboradores">0</div>
+            </div>
+            <div class="icon bg-soft-warning"><i class="bi bi-person-badge"></i></div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="modal fade" id="modalUnidade" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header" style="background-color:#0a58ca; color:#fff;">
-          <h5 class="modal-title" id="tituloModalUnidade">Nova Unidade</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="m-0 fw-bold">Unidades</h5>
+          <button class="btn btn-primary btn-sm" onclick="abrirModalUnidade()">
+            <i class="bi bi-plus-lg me-1"></i> Nova Unidade
+          </button>
         </div>
-        <div class="modal-body">
-          <form id="formUnidade">
-            <input type="hidden" id="uni-id" />
-            <div class="row g-3">
-              <div class="col-md-6"><label class="form-label">Nome</label><input type="text" class="form-control" id="uni-nome" required /></div>
-              <div class="col-md-6"><label class="form-label">Responsável</label><input type="text" class="form-control" id="uni-responsavel" /></div>
-              <div class="col-md-8"><label class="form-label">Endereço</label><input type="text" class="form-control" id="uni-endereco" /></div>
-              <div class="col-md-4"><label class="form-label">Telefone</label><input type="text" class="form-control" id="uni-telefone" /></div>
-              <div class="col-md-6"><label class="form-label">Status</label>
-                <select class="form-select" id="uni-status">
-                  <option value="Ativa">Ativa</option>
-                  <option value="Inativa">Inativa</option>
-                </select>
-              </div>
-              <div class="col-12"><label class="form-label">Observação</label><textarea class="form-control" id="uni-observacao" rows="3"></textarea></div>
-            </div>
-          </form>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Nome</th>
+                <th>Endereço</th>
+                <th>Responsável</th>
+                <th>Telefone</th>
+                <th>Status</th>
+                <th class="text-end">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tabela-unidades"></tbody>
+          </table>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" onclick="salvarUnidade()">Salvar</button>
+        <div id="empty-unidades" class="empty-state" style="display:none;">
+          <i class="bi bi-building fs-1"></i>
+          <p class="mt-2">Nenhuma unidade cadastrada.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modal fade" id="modalCliente" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header" style="background-color:#0a58ca; color:#fff;">
-          <h5 class="modal-title" id="tituloModalCliente">Novo Cliente</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-        </div>
-        <div class="modal-body">
-          <form id="formCliente">
-            <input type="hidden" id="cli-id" />
-            <div class="row g-3">
-              <div class="col-md-8"><label class="form-label">Nome</label><input type="text" class="form-control" id="cli-nome" required /></div>
-              <div class="col-md-4"><label class="form-label">Tipo</label>
-                <select class="form-select" id="cli-tipo">
-                  <option value="PF">Pessoa Física (PF)</option>
-                  <option value="PJ">Pessoa Jurídica (PJ)</option>
-                </select>
-              </div>
-              <div class="col-md-6"><label class="form-label">Email</label><input type="email" class="form-control" id="cli-email" /></div>
-              <div class="col-md-6"><label class="form-label">Telefone</label><input type="text" class="form-control" id="cli-telefone" /></div>
-              <div class="col-md-6"><label class="form-label">Documento</label><input type="text" class="form-control" id="cli-documento" /></div>
-              <div class="col-md-6"><label class="form-label">Status</label>
-                <select class="form-select" id="cli-status">
-                  <option value="Ativo">Ativo</option>
-                  <option value="Inativo">Inativo</option>
-                </select>
-              </div>
-              <div class="col-12"><label class="form-label">Endereço</label><textarea class="form-control" id="cli-endereco" rows="2"></textarea></div>
+  <!-- CLIENTES -->
+  <div id="tab-clientes" class="tab-content">
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-md-3">
+        <div class="card card-resumo p-3">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <div class="text-muted small">Total</div>
+              <div class="h4 m-0 fw-bold" id="cli-total">0</div>
             </div>
-          </form>
+            <div class="icon bg-soft-primary"><i class="bi bi-people"></i></div>
+          </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" onclick="salvarCliente()">Salvar</button>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card card-resumo p-3">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <div class="text-muted small">Ativos</div>
+              <div class="h4 m-0 fw-bold" id="cli-ativos">0</div>
+            </div>
+            <div class="icon bg-soft-success"><i class="bi bi-check-circle"></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card card-resumo p-3">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <div class="text-muted small">Inativos</div>
+              <div class="h4 m-0 fw-bold" id="cli-inativos">0</div>
+            </div>
+            <div class="icon bg-soft-danger"><i class="bi bi-x-circle"></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card card-resumo p-3">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <div class="text-muted small">Recebido</div>
+              <div class="h4 m-0 fw-bold" id="cli-recebido">R$ 0,00</div>
+            </div>
+            <div class="icon bg-soft-warning"><i class="bi bi-currency-dollar"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="m-0 fw-bold">Clientes</h5>
+          <button class="btn btn-primary btn-sm" onclick="abrirModalCliente()">
+            <i class="bi bi-plus-lg me-1"></i> Novo Cliente
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Tipo</th>
+                <th>Status</th>
+                <th class="text-end">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tabela-clientes"></tbody>
+          </table>
+        </div>
+        <div id="empty-clientes" class="empty-state" style="display:none;">
+          <i class="bi bi-people fs-1"></i>
+          <p class="mt-2">Nenhum cliente cadastrado.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <script src="db.js"></script>
-  <script src="auth.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    const modalUnidade = new bootstrap.Modal(document.getElementById('modalUnidade'));
-    const modalCliente = new bootstrap.Modal(document.getElementById('modalCliente'));
+  <!-- COLABORADORES -->
+  <div id="tab-colaboradores" class="tab-content">
+    <div class="row g-3 mb-4">
+      <div class="col-4">
+        <div class="card card-resumo p-3">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <div class="text-muted small">Total</div>
+              <div class="h4 m-0 fw-bold" id="colab-total">0</div>
+            </div>
+            <div class="icon bg-soft-primary"><i class="bi bi-person-badge"></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card card-resumo p-3">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <div class="text-muted small">Ativos</div>
+              <div class="h4 m-0 fw-bold" id="colab-ativos">0</div>
+            </div>
+            <div class="icon bg-soft-success"><i class="bi bi-check-circle"></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card card-resumo p-3">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <div class="text-muted small">Inativos</div>
+              <div class="h4 m-0 fw-bold" id="colab-inativos">0</div>
+            </div>
+            <div class="icon bg-soft-danger"><i class="bi bi-x-circle"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      if (window.verificarAutenticacao) window.verificarAutenticacao();
-      await carregarUnidades();
-      await carregarClientes();
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="m-0 fw-bold">Colaboradores</h5>
+          <button class="btn btn-primary btn-sm" onclick="abrirModalColaborador()">
+            <i class="bi bi-plus-lg me-1"></i> Novo Colaborador
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Nome</th>
+                <th>Cargo</th>
+                <th>Unidade</th>
+                <th>Telefone</th>
+                <th>Status</th>
+                <th class="text-end">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tabela-colaboradores"></tbody>
+          </table>
+        </div>
+        <div id="empty-colaboradores" class="empty-state" style="display:none;">
+          <i class="bi bi-person-badge fs-1"></i>
+          <p class="mt-2">Nenhum colaborador cadastrado.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal Unidade -->
+<div class="modal-overlay" id="modal-unidade">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h5 class="m-0 fw-bold" id="titulo-unidade">Nova Unidade</h5>
+      <button class="btn btn-sm btn-light" onclick="fecharModal('modal-unidade')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="form-unidade">
+        <input type="hidden" id="uni-id">
+        <div class="mb-3">
+          <label class="form-label">Nome</label>
+          <input type="text" class="form-control" id="uni-nome" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Endereço</label>
+          <input type="text" class="form-control" id="uni-endereco">
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Responsável</label>
+            <input type="text" class="form-control" id="uni-responsavel">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Telefone</label>
+            <input type="text" class="form-control" id="uni-telefone">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Status</label>
+            <select class="form-select" id="uni-status">
+              <option value="Ativa">Ativa</option>
+              <option value="Inativa">Inativa</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Observação</label>
+          <textarea class="form-control" id="uni-observacao" rows="2"></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" onclick="limparForm('form-unidade')">Limpar</button>
+      <button type="button" class="btn btn-secondary" onclick="fecharModal('modal-unidade')">Cancelar</button>
+      <button type="button" class="btn btn-primary" onclick="salvarUnidade()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Cliente -->
+<div class="modal-overlay" id="modal-cliente">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h5 class="m-0 fw-bold" id="titulo-cliente">Novo Cliente</h5>
+      <button class="btn btn-sm btn-light" onclick="fecharModal('modal-cliente')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="form-cliente">
+        <input type="hidden" id="cli-id">
+        <div class="mb-3">
+          <label class="form-label">Nome</label>
+          <input type="text" class="form-control" id="cli-nome" required>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Tipo</label>
+            <select class="form-select" id="cli-tipo">
+              <option value="Pessoa Física">Pessoa Física</option>
+              <option value="Pessoa Jurídica">Pessoa Jurídica</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Status</label>
+            <select class="form-select" id="cli-status">
+              <option value="Ativo">Ativo</option>
+              <option value="Inativo">Inativo</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" id="cli-email">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Telefone</label>
+            <input type="text" class="form-control" id="cli-telefone">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Documento</label>
+            <input type="text" class="form-control" id="cli-documento">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">CPF</label>
+            <input type="text" class="form-control" id="cli-cpf">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Unidade</label>
+          <select class="form-select" id="cli-unidade">
+            <option value="">Selecione uma unidade</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Endereço</label>
+          <input type="text" class="form-control" id="cli-endereco">
+        </div>
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Banco</label>
+            <input type="text" class="form-control" id="cli-banco">
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Agência</label>
+            <input type="text" class="form-control" id="cli-agencia">
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Conta Corrente</label>
+            <input type="text" class="form-control" id="cli-conta">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">PIX</label>
+          <input type="text" class="form-control" id="cli-pix">
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" onclick="limparForm('form-cliente')">Limpar</button>
+      <button type="button" class="btn btn-secondary" onclick="fecharModal('modal-cliente')">Cancelar</button>
+      <button type="button" class="btn btn-primary" onclick="salvarCliente()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Colaborador -->
+<div class="modal-overlay" id="modal-colaborador">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h5 class="m-0 fw-bold" id="titulo-colaborador">Novo Colaborador</h5>
+      <button class="btn btn-sm btn-light" onclick="fecharModal('modal-colaborador')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="form-colaborador">
+        <input type="hidden" id="colab-id">
+        <div class="mb-3">
+          <label class="form-label">Nome</label>
+          <input type="text" class="form-control" id="colab-nome" required>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Cargo</label>
+            <input type="text" class="form-control" id="colab-cargo">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Unidade</label>
+            <select class="form-select" id="colab-unidade">
+              <option value="">Selecione uma unidade</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" id="colab-email">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Telefone</label>
+            <input type="text" class="form-control" id="colab-telefone">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Status</label>
+            <select class="form-select" id="colab-status">
+              <option value="Ativo">Ativo</option>
+              <option value="Inativo">Inativo</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Salário</label>
+            <input type="number" step="0.01" class="form-control" id="colab-salario">
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" onclick="limparForm('form-colaborador')">Limpar</button>
+      <button type="button" class="btn btn-secondary" onclick="fecharModal('modal-colaborador')">Cancelar</button>
+      <button type="button" class="btn btn-primary" onclick="salvarColaborador()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+let cacheUnidades = [];
+let cacheClientes = [];
+let cacheColaboradores = [];
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await carregarTudo();
+});
+
+async function carregarTudo() {
+  await carregarUnidades();
+  await carregarClientes();
+  await carregarColaboradores();
+}
+
+function ativarTab(id) {
+  document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.tab-button[data-tab="${id}"]`).classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+function abrirModal(id) {
+  document.getElementById(id).classList.add('active');
+}
+
+function fecharModal(id) {
+  document.getElementById(id).classList.remove('active');
+}
+
+function limparForm(formId) {
+  const form = document.getElementById(formId);
+  form.reset();
+  const idField = form.querySelector('input[type="hidden"]');
+  if (idField) idField.value = '';
+}
+
+function formatarStatus(status) {
+  const ativo = status && status.toLowerCase().includes('ativ');
+  return `<span class="badge-status ${ativo ? 'badge-ativo' : 'badge-inativo'}">${status || 'Ativo'}</span>`;
+}
+
+function formatarMoeda(valor) {
+  const num = Number(valor) || 0;
+  return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+// UNIDADES
+
+async function carregarUnidades() {
+  try {
+    cacheUnidades = await window.db.unidades_listar() || [];
+    atualizarResumoUnidades();
+    renderizarTabelaUnidades();
+  } catch (e) {
+    console.error('Erro ao carregar unidades:', e);
+    cacheUnidades = [];
+  }
+}
+
+function atualizarResumoUnidades() {
+  const total = cacheUnidades.length;
+  const ativas = cacheUnidades.filter(u => u.status === 'Ativa').length;
+  const inativas = cacheUnidades.filter(u => u.status === 'Inativa').length;
+  document.getElementById('uni-total').textContent = total;
+  document.getElementById('uni-ativas').textContent = ativas;
+  document.getElementById('uni-inativas').textContent = inativas;
+  document.getElementById('uni-colaboradores').textContent = cacheColaboradores.length;
+}
+
+function renderizarTabelaUnidades() {
+  const tbody = document.getElementById('tabela-unidades');
+  const empty = document.getElementById('empty-unidades');
+  tbody.innerHTML = '';
+  if (cacheUnidades.length === 0) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  cacheUnidades.forEach(u => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${u.nome || ''}</td>
+      <td>${u.endereco || ''}</td>
+      <td>${u.responsavel || ''}</td>
+      <td>${u.telefone || ''}</td>
+      <td>${formatarStatus(u.status)}</td>
+      <td class="text-end table-actions">
+        <button class="btn btn-sm btn-outline-primary btn-table" onclick="editarUnidade(${u.id})"><i class="bi bi-pencil"></i></button>
+        <button class="btn btn-sm btn-outline-danger btn-table" onclick="excluirUnidade(${u.id})"><i class="bi bi-trash"></i></button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function abrirModalUnidade(id) {
+  limparForm('form-unidade');
+  document.getElementById('titulo-unidade').textContent = id ? 'Editar Unidade' : 'Nova Unidade';
+  if (id) {
+    const u = cacheUnidades.find(x => x.id === id);
+    if (u) preencherUnidade(u);
+  }
+  abrirModal('modal-unidade');
+}
+
+function preencherUnidade(u) {
+  document.getElementById('uni-id').value = u.id || '';
+  document.getElementById('uni-nome').value = u.nome || '';
+  document.getElementById('uni-endereco').value = u.endereco || '';
+  document.getElementById('uni-responsavel').value = u.responsavel || '';
+  document.getElementById('uni-telefone').value = u.telefone || '';
+  document.getElementById('uni-status').value = u.status || 'Ativa';
+  document.getElementById('uni-observacao').value = u.observacao || '';
+}
+
+async function editarUnidade(id) {
+  await carregarUnidades();
+  abrirModalUnidade(id);
+}
+
+async function salvarUnidade() {
+  const payload = {
+    id: document.getElementById('uni-id').value || null,
+    nome: document.getElementById('uni-nome').value.trim(),
+    endereco: document.getElementById('uni-endereco').value.trim(),
+    responsavel: document.getElementById('uni-responsavel').value.trim(),
+    telefone: document.getElementById('uni-telefone').value.trim(),
+    status: document.getElementById('uni-status').value,
+    observacao: document.getElementById('uni-observacao').value.trim()
+  };
+  if (!payload.nome) {
+    alert('Informe o nome da unidade.');
+    return;
+  }
+  try {
+    await window.db.unidades_salvar(payload);
+    fecharModal('modal-unidade');
+    await carregarUnidades();
+  } catch (e) {
+    console.error('Erro ao salvar unidade:', e);
+    alert('Erro ao salvar unidade.');
+  }
+}
+
+async function excluirUnidade(id) {
+  if (!confirm('Deseja realmente excluir esta unidade?')) return;
+  try {
+    await window.db.unidades_excluir(id);
+    await carregarUnidades();
+  } catch (e) {
+    console.error('Erro ao excluir unidade:', e);
+    alert('Erro ao excluir unidade.');
+  }
+}
+
+// CLIENTES
+
+async function carregarClientes() {
+  try {
+    cacheClientes = await window.db.clientes_listar() || [];
+    atualizarResumoClientes();
+    renderizarTabelaClientes();
+  } catch (e) {
+    console.error('Erro ao carregar clientes:', e);
+    cacheClientes = [];
+  }
+}
+
+function atualizarResumoClientes() {
+  const total = cacheClientes.length;
+  const ativos = cacheClientes.filter(c => c.status === 'Ativo').length;
+  const inativos = cacheClientes.filter(c => c.status === 'Inativo').length;
+  document.getElementById('cli-total').textContent = total;
+  document.getElementById('cli-ativos').textContent = ativos;
+  document.getElementById('cli-inativos').textContent = inativos;
+  document.getElementById('cli-recebido').textContent = formatarMoeda(0);
+}
+
+function renderizarTabelaClientes() {
+  const tbody = document.getElementById('tabela-clientes');
+  const empty = document.getElementById('empty-clientes');
+  tbody.innerHTML = '';
+  if (cacheClientes.length === 0) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  cacheClientes.forEach(c => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${c.nome || ''}</td>
+      <td>${c.email || ''}</td>
+      <td>${c.telefone || ''}</td>
+      <td>${c.tipo || ''}</td>
+      <td>${formatarStatus(c.status)}</td>
+      <td class="text-end table-actions">
+        <button class="btn btn-sm btn-outline-primary btn-table" onclick="editarClientePorId(${c.id})"><i class="bi bi-pencil"></i></button>
+        <button class="btn btn-sm btn-outline-danger btn-table" onclick="excluirCliente(${c.id})"><i class="bi bi-trash"></i></button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+async function abrirModalCliente() {
+  limparForm('form-cliente');
+  document.getElementById('titulo-cliente').textContent = 'Novo Cliente';
+  await carregarSelectUnidadesCliente();
+  abrirModal('modal-cliente');
+}
+
+async function carregarSelectUnidadesCliente() {
+  const select = document.getElementById('cli-unidade');
+  select.innerHTML = '<option value="">Selecione uma unidade</option>';
+  try {
+    const unidades = await window.db.unidades_listar() || [];
+    const ativas = unidades.filter(u => u.status === 'Ativa');
+    ativas.forEach(u => {
+      const opt = document.createElement('option');
+      opt.value = u.nome;
+      opt.textContent = u.nome;
+      select.appendChild(opt);
     });
+  } catch (e) {
+    console.error('Erro ao carregar unidades no select:', e);
+  }
+}
 
-    function tratarErro(funcao, erro) {
-      console.error(`Erro em ${funcao}:`, erro);
-      alert(`Erro ao executar ${funcao}. Verifique o console.`);
-    }
+async function editarClientePorId(id) {
+  await carregarClientes();
+  await carregarSelectUnidadesCliente();
+  const cliente = cacheClientes.find(c => c.id === id);
+  if (cliente) editarCliente(cliente);
+}
 
-    async function carregarUnidades() {
-      try {
-        if (!window.db || !window.db.unidades_listar) throw new Error('Função unidades_listar não encontrada');
-        const lista = await window.db.unidades_listar() || [];
-        const tbody = document.getElementById('tabela-unidades');
-        tbody.innerHTML = '';
-        let ativas = 0, inativas = 0, colaboradores = 0;
-        lista.forEach(u => {
-          if (u.status === 'Ativa') ativas++; else inativas++;
-          colaboradores += Number(u.colaboradores || 0);
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${u.nome || ''}</td>
-            <td>${u.endereco || ''}</td>
-            <td>${u.responsavel || ''}</td>
-            <td>${u.telefone || ''}</td>
-            <td><span class="badge ${u.status === 'Ativa' ? 'bg-success' : 'bg-secondary'}">${u.status || 'Ativa'}</span></td>
-            <td>
-              <button class="btn btn-sm btn-outline-primary me-1" onclick="editarUnidade('${u.id}')"><i class="bi bi-pencil"></i></button>
-              <button class="btn btn-sm btn-outline-danger" onclick="excluirUnidade('${u.id}', '${u.nome}')"><i class="bi bi-trash"></i></button>
-            </td>`;
-          tbody.appendChild(tr);
-        });
-        document.getElementById('uni-total').innerText = lista.length;
-        document.getElementById('uni-ativas').innerText = ativas;
-        document.getElementById('uni-inativas').innerText = inativas;
-        document.getElementById('uni-colaboradores').innerText = colaboradores;
-      } catch (e) { tratarErro('carregarUnidades', e); }
-    }
+function editarCliente(cliente) {
+  document.getElementById('titulo-cliente').textContent = 'Editar Cliente';
+  document.getElementById('cli-id').value = cliente.id || '';
+  document.getElementById('cli-nome').value = cliente.nome || '';
+  document.getElementById('cli-tipo').value = cliente.tipo || 'Pessoa Física';
+  document.getElementById('cli-status').value = cliente.status || 'Ativo';
+  document.getElementById('cli-email').value = cliente.email || '';
+  document.getElementById('cli-telefone').value = cliente.telefone || '';
+  document.getElementById('cli-documento').value = cliente.documento || '';
+  document.getElementById('cli-cpf').value = cliente.cpf || '';
+  document.getElementById('cli-unidade').value = cliente.unidade || '';
+  document.getElementById('cli-endereco').value = cliente.endereco || '';
+  document.getElementById('cli-banco').value = cliente.banco || '';
+  document.getElementById('cli-agencia').value = cliente.agencia || '';
+  document.getElementById('cli-conta').value = cliente.conta || '';
+  document.getElementById('cli-pix').value = cliente.pix || '';
+  abrirModal('modal-cliente');
+}
 
-    function abrirModalUnidade() {
-      document.getElementById('formUnidade').reset();
-      document.getElementById('uni-id').value = '';
-      document.getElementById('tituloModalUnidade').innerText = 'Nova Unidade';
-      modalUnidade.show();
-    }
+async function salvarCliente() {
+  const payload = {
+    id: document.getElementById('cli-id').value || null,
+    nome: document.getElementById('cli-nome').value.trim(),
+    email: document.getElementById('cli-email').value.trim(),
+    telefone: document.getElementById('cli-telefone').value.trim(),
+    tipo: document.getElementById('cli-tipo').value,
+    documento: document.getElementById('cli-documento').value.trim(),
+    endereco: document.getElementById('cli-endereco').value.trim(),
+    status: document.getElementById('cli-status').value,
+    unidade: document.getElementById('cli-unidade').value,
+    cpf: document.getElementById('cli-cpf').value.trim(),
+    banco: document.getElementById('cli-banco').value.trim(),
+    agencia: document.getElementById('cli-agencia').value.trim(),
+    conta: document.getElementById('cli-conta').value.trim(),
+    pix: document.getElementById('cli-pix').value.trim()
+  };
+  if (!payload.nome) {
+    alert('Informe o nome do cliente.');
+    return;
+  }
+  try {
+    await window.db.clientes_salvar(payload);
+    fecharModal('modal-cliente');
+    await carregarClientes();
+  } catch (e) {
+    console.error('Erro ao salvar cliente:', e);
+    alert('Erro ao salvar cliente.');
+  }
+}
 
-    async function editarUnidade(id) {
-      try {
-        if (!window.db || !window.db.unidades_listar) throw new Error('Função unidades_listar não encontrada');
-        const lista = await window.db.unidades_listar();
-        const u = lista.find(x => String(x.id) === String(id));
-        if (!u) return;
-        document.getElementById('uni-id').value = u.id;
-        document.getElementById('uni-nome').value = u.nome || '';
-        document.getElementById('uni-endereco').value = u.endereco || '';
-        document.getElementById('uni-responsavel').value = u.responsavel || '';
-        document.getElementById('uni-telefone').value = u.telefone || '';
-        document.getElementById('uni-status').value = u.status || 'Ativa';
-        document.getElementById('uni-observacao').value = u.observacao || '';
-        document.getElementById('tituloModalUnidade').innerText = 'Editar Unidade';
-        modalUnidade.show();
-      } catch (e) { tratarErro('editarUnidade', e); }
-    }
+async function excluirCliente(id) {
+  if (!confirm('Deseja realmente excluir este cliente?')) return;
+  try {
+    await window.db.clientes_excluir(id);
+    await carregarClientes();
+  } catch (e) {
+    console.error('Erro ao excluir cliente:', e);
+    alert('Erro ao excluir cliente.');
+  }
+}
 
-    async function salvarUnidade() {
-      try {
-        if (!window.db || !window.db.unidades_salvar) throw new Error('Função unidades_salvar não encontrada');
-        const payload = {
-          id: document.getElementById('uni-id').value || null,
-          nome: document.getElementById('uni-nome').value,
-          endereco: document.getElementById('uni-endereco').value,
-          responsavel: document.getElementById('uni-responsavel').value,
-          telefone: document.getElementById('uni-telefone').value,
-          status: document.getElementById('uni-status').value,
-          observacao: document.getElementById('uni-observacao').value
-        };
-        await window.db.unidades_salvar(payload);
-        modalUnidade.hide();
-        await carregarUnidades();
-      } catch (e) { tratarErro('salvarUnidade', e); }
-    }
+// COLABORADORES
 
-    async function excluirUnidade(id, nome) {
-      if (!confirm(`Deseja excluir a unidade "${nome}"?`)) return;
-      try {
-        if (!window.db || !window.db.unidades_excluir) throw new Error('Função unidades_excluir não encontrada');
-        await window.db.unidades_excluir(id);
-        await carregarUnidades();
-      } catch (e) { tratarErro('excluirUnidade', e); }
-    }
+async function carregarColaboradores() {
+  try {
+    cacheColaboradores = await window.db.colaboradores_listar() || [];
+    atualizarResumoColaboradores();
+    atualizarResumoUnidades();
+    renderizarTabelaColaboradores();
+  } catch (e) {
+    console.error('Erro ao carregar colaboradores:', e);
+    cacheColaboradores = [];
+  }
+}
 
-    async function carregarClientes() {
-      try {
-        if (!window.db || !window.db.clientes_listar) throw new Error('Função clientes_listar não encontrada');
-        const lista = await window.db.clientes_listar() || [];
-        const tbody = document.getElementById('tabela-clientes');
-        tbody.innerHTML = '';
-        let ativos = 0, inativos = 0, recebido = 0;
-        lista.forEach(c => {
-          if (c.status === 'Ativo') ativos++; else inativos++;
-          recebido += Number(c.total_recebido || 0);
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${c.nome || ''}</td>
-            <td>${c.email || ''}</td>
-            <td>${c.telefone || ''}</td>
-            <td>${c.tipo || 'PF'}</td>
-            <td><span class="badge ${c.status === 'Ativo' ? 'bg-success' : 'bg-secondary'}">${c.status || 'Ativo'}</span></td>
-            <td>
-              <button class="btn btn-sm btn-outline-primary me-1" onclick="editarCliente('${c.id}')"><i class="bi bi-pencil"></i></button>
-              <button class="btn btn-sm btn-outline-danger" onclick="excluirCliente('${c.id}', '${c.nome}')"><i class="bi bi-trash"></i></button>
-            </td>`;
-          tbody.appendChild(tr);
-        });
-        document.getElementById('cli-total').innerText = lista.length;
-        document.getElementById('cli-ativos').innerText = ativos;
-        document.getElementById('cli-inativos').innerText = inativos;
-        document.getElementById('cli-recebido').innerText = 'R$ ' + recebido.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      } catch (e) { tratarErro('carregarClientes', e); }
-    }
+function atualizarResumoColaboradores() {
+  const total = cacheColaboradores.length;
+  const ativos = cacheColaboradores.filter(c => c.status === 'Ativo').length;
+  const inativos = cacheColaboradores.filter(c => c.status === 'Inativo').length;
+  document.getElementById('colab-total').textContent = total;
+  document.getElementById('colab-ativos').textContent = ativos;
+  document.getElementById('colab-inativos').textContent = inativos;
+}
 
-    function abrirModalCliente() {
-      document.getElementById('formCliente').reset();
-      document.getElementById('cli-id').value = '';
-      document.getElementById('tituloModalCliente').innerText = 'Novo Cliente';
-      modalCliente.show();
-    }
+function renderizarTabelaColaboradores() {
+  const tbody = document.getElementById('tabela-colaboradores');
+  const empty = document.getElementById('empty-colaboradores');
+  tbody.innerHTML = '';
+  if (cacheColaboradores.length === 0) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  cacheColaboradores.forEach(c => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${c.nome || ''}</td>
+      <td>${c.cargo || ''}</td>
+      <td>${c.unidade || ''}</td>
+      <td>${c.telefone || ''}</td>
+      <td>${formatarStatus(c.status)}</td>
+      <td class="text-end table-actions">
+        <button class="btn btn-sm btn-outline-primary btn-table" onclick="editarColaborador(${c.id})"><i class="bi bi-pencil"></i></button>
+        <button class="btn btn-sm btn-outline-danger btn-table" onclick="excluirColaborador(${c.id})"><i class="bi bi-trash"></i></button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
 
-    async function editarCliente(id) {
-      try {
-        if (!window.db || !window.db.clientes_listar) throw new Error('Função clientes_listar não encontrada');
-        const lista = await window.db.clientes_listar();
-        const c = lista.find(x => String(x.id) === String(id));
-        if (!c) return;
-        document.getElementById('cli-id').value = c.id;
-        document.getElementById('cli-nome').value = c.nome || '';
-        document.getElementById('cli-email').value = c.email || '';
-        document.getElementById('cli-telefone').value = c.telefone || '';
-        document.getElementById('cli-tipo').value = c.tipo || 'PF';
-        document.getElementById('cli-documento').value = c.documento || '';
-        document.getElementById('cli-endereco').value = c.endereco || '';
-        document.getElementById('cli-status').value = c.status || 'Ativo';
-        document.getElementById('tituloModalCliente').innerText = 'Editar Cliente';
-        modalCliente.show();
-      } catch (e) { tratarErro('editarCliente', e); }
-    }
+async function carregarSelectUnidadesColaborador() {
+  const select = document.getElementById('colab-unidade');
+  select.innerHTML = '<option value="">Selecione uma unidade</option>';
+  try {
+    const unidades = await window.db.unidades_listar() || [];
+    const ativas = unidades.filter(u => u.status === 'Ativa');
+    ativas.forEach(u => {
+      const opt = document.createElement('option');
+      opt.value = u.nome;
+      opt.textContent = u.nome;
+      select.appendChild(opt);
+    });
+  } catch (e) {
+    console.error('Erro ao carregar unidades no select:', e);
+  }
+}
 
-    async function salvarCliente() {
-      try {
-        if (!window.db || !window.db.clientes_salvar) throw new Error('Função clientes_salvar não encontrada');
-        const payload = {
-          id: document.getElementById('cli-id').value || null,
-          nome: document.getElementById('cli-nome').value,
-          email: document.getElementById('cli-email').value,
-          telefone: document.getElementById('cli-telefone').value,
-          tipo: document.getElementById('cli-tipo').value,
-          documento: document.getElementById('cli-documento').value,
-          endereco: document.getElementById('cli-endereco').value,
-          status: document.getElementById('cli-status').value
-        };
-        await window.db.clientes_salvar(payload);
-        modalCliente.hide();
-        await carregarClientes();
-      } catch (e) { tratarErro('salvarCliente', e); }
-    }
+async function abrirModalColaborador(id) {
+  limparForm('form-colaborador');
+  document.getElementById('titulo-colaborador').textContent = id ? 'Editar Colaborador' : 'Novo Colaborador';
+  await carregarSelectUnidadesColaborador();
+  if (id) {
+    const c = cacheColaboradores.find(x => x.id === id);
+    if (c) preencherColaborador(c);
+  }
+  abrirModal('modal-colaborador');
+}
 
-    async function excluirCliente(id, nome) {
-      if (!confirm(`Deseja excluir o cliente "${nome}"?`)) return;
-      try {
-        if (!window.db || !window.db.clientes_excluir) throw new Error('Função clientes_excluir não encontrada');
-        await window.db.clientes_excluir(id);
-        await carregarClientes();
-      } catch (e) { tratarErro('excluirCliente', e); }
-    }
-  </script>
+function preencherColaborador(c) {
+  document.getElementById('colab-id').value = c.id || '';
+  document.getElementById('colab-nome').value = c.nome || '';
+  document.getElementById('colab-cargo').value = c.cargo || '';
+  document.getElementById('colab-unidade').value = c.unidade || '';
+  document.getElementById('colab-email').value = c.email || '';
+  document.getElementById('colab-telefone').value = c.telefone || '';
+  document.getElementById('colab-status').value = c.status || 'Ativo';
+  document.getElementById('colab-salario').value = c.salario || '';
+}
+
+async function editarColaborador(id) {
+  await carregarColaboradores();
+  abrirModalColaborador(id);
+}
+
+async function salvarColaborador() {
+  const payload = {
+    id: document.getElementById('colab-id').value || null,
+    nome: document.getElementById('colab-nome').value.trim(),
+    cargo: document.getElementById('colab-cargo').value.trim(),
+    unidade: document.getElementById('colab-unidade').value,
+    email: document.getElementById('colab-email').value.trim(),
+    telefone: document.getElementById('colab-telefone').value.trim(),
+    status: document.getElementById('colab-status').value,
+    salario: parseFloat(document.getElementById('colab-salario').value) || 0
+  };
+  if (!payload.nome) {
+    alert('Informe o nome do colaborador.');
+    return;
+  }
+  try {
+    await window.db.colaboradores_salvar(payload);
+    fecharModal('modal-colaborador');
+    await carregarColaboradores();
+  } catch (e) {
+    console.error('Erro ao salvar colaborador:', e);
+    alert('Erro ao salvar colaborador.');
+  }
+}
+
+async function excluirColaborador(id) {
+  if (!confirm('Deseja realmente excluir este colaborador?')) return;
+  try {
+    await window.db.colaboradores_excluir(id);
+    await carregarColaboradores();
+  } catch (e) {
+    console.error('Erro ao excluir colaborador:', e);
+    alert('Erro ao excluir colaborador.');
+  }
+}
+
+</script>
+
 </body>
 </html>

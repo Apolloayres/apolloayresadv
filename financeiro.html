@@ -1,590 +1,658 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Financeiro</title>
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; color: #333; }
-.navbar { background: #0a58ca; color: #fff; padding: 12px 20px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-.navbar .brand { font-weight: 700; font-size: 18px; }
-.navbar a { color: #fff; text-decoration: none; font-size: 14px; opacity: 0.9; }
-.navbar a:hover { opacity: 1; text-decoration: underline; }
-.container { max-width: 1400px; margin: 20px auto; padding: 0 20px; }
-.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
-.header h1 { font-size: 24px; color: #0a58ca; }
-.btn { padding: 8px 14px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; text-decoration: none; display: inline-block; }
-.btn-voltar { background: #6c757d; color: #fff; }
-.btn-voltar:hover { background: #5a6268; }
-.btn-primary { background: #0a58ca; color: #fff; }
-.btn-primary:hover { background: #084298; }
-.btn-danger { background: #dc3545; color: #fff; }
-.btn-danger:hover { background: #b02a37; }
-.btn-sm { padding: 5px 10px; font-size: 12px; }
-.tabs { display: flex; gap: 6px; border-bottom: 2px solid #0a58ca; margin-bottom: 20px; }
-.tab { padding: 12px 24px; cursor: pointer; background: #e9ecef; border: none; border-radius: 6px 6px 0 0; font-weight: 600; color: #555; }
-.tab.active { background: #0a58ca; color: #fff; }
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-.grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
-.card { background: #fff; border-radius: 8px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-.card h3 { font-size: 13px; color: #666; text-transform: uppercase; margin-bottom: 8px; }
-.card .valor { font-size: 22px; font-weight: 700; color: #0a58ca; }
-.card .valor.positivo { color: #198754; }
-.card .valor.negativo { color: #dc3545; }
-.card .valor.alerta { color: #fd7e14; }
-.filtros { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
-.filtros input, .filtros select { padding: 8px 12px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px; min-width: 160px; }
-.table-responsive { overflow-x: auto; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #dee2e6; }
-th { background: #0a58ca; color: #fff; font-weight: 600; }
-tr:hover { background: #f8f9fa; }
-.status { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; display: inline-block; }
-.status.recebido, .status.pago { background: #d1e7dd; color: #0f5132; }
-.status.pendente { background: #fff3cd; color: #856404; }
-.status.atrasado { background: #f8d7da; color: #842029; }
-.chart-container { background: #fff; padding: 18px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 24px; height: 320px; position: relative; }
-.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
-.modal-overlay.active { display: flex; }
-.modal { background: #fff; border-radius: 8px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; padding: 24px; }
-.modal h2 { margin-bottom: 18px; color: #0a58ca; }
-.form-group { margin-bottom: 14px; }
-.form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; }
-.form-group input, .form-group select { width: 100%; padding: 9px 12px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px; }
-.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-.btn-cancelar { background: #6c757d; color: #fff; }
-.btn-cancelar:hover { background: #5a6268; }
-.periodo-select { display: flex; gap: 10px; align-items: center; }
-.periodo-select select { padding: 8px 12px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px; }
-.loading { text-align: center; padding: 40px; color: #666; }
-@media (max-width: 768px) {
-  .grid4 { grid-template-columns: 1fr 1fr; }
-  .tabs { flex-wrap: wrap; }
-  .tab { flex: 1; min-width: 100px; padding: 10px; font-size: 13px; }
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Controle do Escritório - Financeiro</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f5f7fa; color: #333; }
+    .navbar { background: #0a58ca; padding: 0 1rem; }
+    .navbar ul { display: flex; list-style: none; align-items: center; flex-wrap: wrap; }
+    .navbar li { margin: 0; }
+    .navbar a { display: block; color: #fff; text-decoration: none; padding: 1rem 1.2rem; font-weight: 500; transition: background 0.2s; }
+    .navbar a:hover, .navbar a.active { background: rgba(255,255,255,0.2); }
+    .container { max-width: 1200px; margin: 1.5rem auto; padding: 0 1rem; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    h1 { font-size: 1.5rem; color: #0a58ca; }
+    .tabs { display: flex; border-bottom: 2px solid #ddd; margin-bottom: 1rem; }
+    .tab { padding: 0.8rem 1.5rem; cursor: pointer; background: #fff; border: 1px solid #ddd; border-bottom: none; margin-right: 0.5rem; border-radius: 6px 6px 0 0; }
+    .tab.active { background: #0a58ca; color: #fff; border-color: #0a58ca; }
+    .content { display: none; }
+    .content.active { display: block; }
+    .btn { padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; }
+    .btn-primary { background: #0a58ca; color: #fff; }
+    .btn-primary:hover { background: #084298; }
+    .btn-secondary { background: #6c757d; color: #fff; }
+    .btn-secondary:hover { background: #5a6268; }
+    .btn-danger { background: #dc3545; color: #fff; }
+    .btn-danger:hover { background: #c82333; }
+    .btn-warning { background: #ffc107; color: #000; }
+    .btn-sm { padding: 0.3rem 0.6rem; font-size: 0.85rem; }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .search-box { display: flex; gap: 0.5rem; }
+    input, select { padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #0a58ca; color: #fff; }
+    tr:hover { background: #f8f9fa; }
+    .status { padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
+    .status-pago { background: #d1e7dd; color: #0f5132; }
+    .status-pendente { background: #fff3cd; color: #856404; }
+    .status-atrasado { background: #f8d7da; color: #721c24; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+    .card { background: #fff; padding: 1rem; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .card h3 { font-size: 0.9rem; color: #666; margin-bottom: 0.5rem; }
+    .card .value { font-size: 1.4rem; font-weight: bold; color: #0a58ca; }
+    .chart-container { background: #fff; padding: 1rem; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 1rem; height: 300px; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal { background: #fff; border-radius: 8px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+    .modal-header { padding: 1rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+    .modal-body { padding: 1rem; }
+    .modal-footer { padding: 1rem; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 0.5rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group label { margin-bottom: 0.3rem; font-weight: 600; font-size: 0.9rem; }
+    .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; }
+    .close-btn:hover { color: #000; }
+    .empty-state { text-align: center; padding: 2rem; color: #666; }
+    .badge { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.75rem; }
+  </style>
 </head>
 <body>
+  <nav class="navbar">
+    <ul>
+      <li><a href="home.html">Home</a></li>
+      <li><a href="cadastros.html">Cadastros</a></li>
+      <li><a href="financeiro.html" class="active">Financeiro</a></li>
+      <li><a href="fluxo-caixa.html">Fluxo de Caixa</a></li>
+      <li><a href="marketing.html">Marketing</a></li>
+      <li><a href="patrimonio.html">Patrimônio</a></li>
+      <li><a href="proventos.html">Proventos</a></li>
+      <li><a href="relatorios-gerenciais.html">Rel. Gerenciais</a></li>
+      <li><a href="usuarios.html">Usuários</a></li>
+    </ul>
+  </nav>
 
-<<nav class="navbar">
-  <div class="brand">💳 Sistema</div>
-  <a href="home.html">Home</a>
-  <a href="dashboard.html">Dashboard</a>
-  <a href="cadastros.html">Cadastros</a>
-  <a href="financeiro.html">Financeiro</a>
-  <a href="marketing.html">Marketing</a>
-  <a href="patrimonio.html">Patrimônio</a>
-  <a href="proventos.html">Proventos</a>
-  <a href="relatorios.html">Rel. Gerenciais</a>
-  <a href="usuarios.html">Usuários</a>
-</nav>
-
-<div class="container">
-  <div class="header">
-    <h1>💳 Financeiro</h1>
-    <a href="home.html" class="btn btn-voltar">← Voltar</a>
-  </div>
-
-  <div class="tabs">
-    <button class="tab active" data-tab="resumo">Resumo</button>
-    <button class="tab" data-tab="receitas">Receitas</button>
-    <button class="tab" data-tab="despesas">Despesas</button>
-  </div>
-
-  <div id="resumo" class="tab-content active">
-    <div class="periodo-select" style="margin-bottom:16px;">
-      <label>Mês:</label>
-      <select id="resumoMes"></select>
-      <label>Ano:</label>
-      <select id="resumoAno"></select>
+  <div class="container">
+    <div class="header">
+      <h1>Financeiro</h1>
     </div>
 
-    <div class="grid4">
-      <div class="card"><h3>Total Receitas</h3><div id="resReceitas" class="valor positivo">R$ 0,00</div></div>
-      <div class="card"><h3>Total Despesas</h3><div id="resDespesas" class="valor negativo">R$ 0,00</div></div>
-      <div class="card"><h3>Saldo</h3><div id="resSaldo" class="valor">R$ 0,00</div></div>
-      <div class="card"><h3>Pendências</h3><div id="resPendencias" class="valor alerta">0</div></div>
+    <div class="tabs">
+      <div class="tab active" data-tab="resumo">Resumo</div>
+      <div class="tab" data-tab="receitas">Receitas</div>
+      <div class="tab" data-tab="despesas">Despesas</div>
     </div>
 
-    <div class="chart-container">
-      <canvas id="chartResumo"></canvas>
+    <div id="content-resumo" class="content active">
+      <div class="cards">
+        <div class="card">
+          <h3>Receitas Totais</h3>
+          <div class="value" id="totalReceitas">R$ 0,00</div>
+        </div>
+        <div class="card">
+          <h3>Despesas Totais</h3>
+          <div class="value" id="totalDespesas">R$ 0,00</div>
+        </div>
+        <div class="card">
+          <h3>Saldo</h3>
+          <div class="value" id="saldo">R$ 0,00</div>
+        </div>
+        <div class="card">
+          <h3>Pendências</h3>
+          <div class="value" id="pendencias">0</div>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas id="financeiroChart"></canvas>
+      </div>
     </div>
 
-    <div class="table-responsive">
-      <table>
+    <div id="content-receitas" class="content">
+      <div class="toolbar">
+        <div class="search-box">
+          <input type="text" id="searchReceitas" placeholder="Buscar receita..." />
+          <select id="filterStatusReceitas">
+            <option value="">Todos os status</option>
+            <option value="Pago">Pago</option>
+            <option value="Pendente">Pendente</option>
+            <option value="Atrasado">Atrasado</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('receita')">Nova Receita</button>
+      </div>
+      <table id="tableReceitas">
         <thead>
-          <tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th>Status</th></tr>
+          <tr>
+            <th>Data</th>
+            <th>Descrição</th>
+            <th>Cliente</th>
+            <th>Categoria</th>
+            <th>Valor</th>
+            <th>Vencimento</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
         </thead>
-        <tbody id="tabelaResumo"></tbody>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div id="content-despesas" class="content">
+      <div class="toolbar">
+        <div class="search-box">
+          <input type="text" id="searchDespesas" placeholder="Buscar despesa..." />
+          <select id="filterStatusDespesas">
+            <option value="">Todos os status</option>
+            <option value="Pago">Pago</option>
+            <option value="Pendente">Pendente</option>
+            <option value="Atrasado">Atrasado</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('despesa')">Nova Despesa</button>
+      </div>
+      <table id="tableDespesas">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Descrição</th>
+            <th>Fornecedor</th>
+            <th>Categoria</th>
+            <th>Nº Inscrição Imóvel</th>
+            <th>Valor</th>
+            <th>Vencimento</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
       </table>
     </div>
   </div>
 
-  <div id="receitas" class="tab-content">
-    <div class="grid4">
-      <div class="card"><h3>Total do Mês</h3><div id="recTotal" class="valor">R$ 0,00</div></div>
-      <div class="card"><h3>Recebido</h3><div id="recRecebido" class="valor positivo">R$ 0,00</div></div>
-      <div class="card"><h3>Pendente</h3><div id="recPendente" class="valor alerta">R$ 0,00</div></div>
-      <div class="card"><h3>Atrasado</h3><div id="recAtrasado" class="valor negativo">R$ 0,00</div></div>
-    </div>
-
-    <div class="chart-container">
-      <canvas id="chartReceitas"></canvas>
-    </div>
-
-    <div class="filtros">
-      <input type="text" id="buscaReceita" placeholder="Buscar descrição, cliente...">
-      <select id="filtroStatusReceita">
-        <option value="">Todos os status</option>
-        <option value="Recebido">Recebido</option>
-        <option value="Pendente">Pendente</option>
-        <option value="Atrasado">Atrasado</option>
-      </select>
-      <button class="btn btn-primary" onclick="abrirModalReceita()">+ Nova Receita</button>
-    </div>
-
-    <div class="table-responsive">
-      <table>
-        <thead>
-          <tr><th>Data</th><th>Descrição</th><th>Cliente</th><th>Categoria</th><th>Valor</th><th>Vencimento</th><th>Status</th><th>Ações</th></tr>
-        </thead>
-        <tbody id="tabelaReceitas"></tbody>
-      </table>
+  <div id="modalReceita" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="titleReceita">Nova Receita</h2>
+        <button class="close-btn" onclick="closeModal('receita')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="recId" />
+        <div class="form-row">
+          <div class="form-group">
+            <label>Data</label>
+            <input type="date" id="recData" />
+          </div>
+          <div class="form-group">
+            <label>Descrição</label>
+            <input type="text" id="recDescricao" placeholder="Descrição da receita" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Cliente</label>
+            <input type="text" id="recCliente" placeholder="Nome do cliente" />
+          </div>
+          <div class="form-group">
+            <label>Categoria</label>
+            <select id="recCategoria">
+              <option value="">Selecione</option>
+              <option value="Serviços">Serviços</option>
+              <option value="Vendas">Vendas</option>
+              <option value="Consultoria">Consultoria</option>
+              <option value="Outros">Outros</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Valor</label>
+            <input type="text" id="recValor" class="valor-moeda" placeholder="R$ 0,00" />
+          </div>
+          <div class="form-group">
+            <label>Vencimento</label>
+            <input type="date" id="recVencimento" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Status</label>
+            <select id="recStatus">
+              <option value="Pendente">Pendente</option>
+              <option value="Pago">Pago</option>
+              <option value="Atrasado">Atrasado</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="limparForm('receita')">Limpar</button>
+        <button class="btn btn-primary" onclick="salvarReceita()">Salvar</button>
+      </div>
     </div>
   </div>
 
-  <div id="despesas" class="tab-content">
-    <div class="grid4">
-      <div class="card"><h3>Total do Mês</h3><div id="desTotal" class="valor">R$ 0,00</div></div>
-      <div class="card"><h3>Pago</h3><div id="desPago" class="valor positivo">R$ 0,00</div></div>
-      <div class="card"><h3>Pendente</h3><div id="desPendente" class="valor alerta">R$ 0,00</div></div>
-      <div class="card"><h3>Atrasado</h3><div id="desAtrasado" class="valor negativo">R$ 0,00</div></div>
-    </div>
-
-    <div class="chart-container">
-      <canvas id="chartDespesas"></canvas>
-    </div>
-
-    <div class="filtros">
-      <input type="text" id="buscaDespesa" placeholder="Buscar descrição, fornecedor...">
-      <select id="filtroStatusDespesa">
-        <option value="">Todos os status</option>
-        <option value="Pago">Pago</option>
-        <option value="Pendente">Pendente</option>
-        <option value="Atrasado">Atrasado</option>
-      </select>
-      <button class="btn btn-primary" onclick="abrirModalDespesa()">+ Nova Despesa</button>
-    </div>
-
-    <div class="table-responsive">
-      <table>
-        <thead>
-          <tr><th>Data</th><th>Descrição</th><th>Fornecedor</th><th>Categoria</th><th>Valor</th><th>Vencimento</th><th>Status</th><th>Ações</th></tr>
-        </thead>
-        <tbody id="tabelaDespesas"></tbody>
-      </table>
+  <div id="modalDespesa" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="titleDespesa">Nova Despesa</h2>
+        <button class="close-btn" onclick="closeModal('despesa')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="desId" />
+        <div class="form-row">
+          <div class="form-group">
+            <label>Data</label>
+            <input type="date" id="desData" />
+          </div>
+          <div class="form-group">
+            <label>Descrição</label>
+            <input type="text" id="desDescricao" placeholder="Descrição da despesa" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Fornecedor</label>
+            <input type="text" id="desFornecedor" placeholder="Nome do fornecedor" />
+          </div>
+          <div class="form-group">
+            <label>Categoria</label>
+            <select id="desCategoria">
+              <option value="">Selecione</option>
+              <option value="Aluguel">Aluguel</option>
+              <option value="IPTU">IPTU</option>
+              <option value="Serviços">Serviços</option>
+              <option value="Impostos">Impostos</option>
+              <option value="Salários">Salários</option>
+              <option value="Outros">Outros</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Valor</label>
+            <input type="text" id="desValor" class="valor-moeda" placeholder="R$ 0,00" />
+          </div>
+          <div class="form-group">
+            <label>Nº Inscrição Imóvel (IPTU)</label>
+            <input type="text" id="desInscricaoImovel" placeholder="Nº inscrição imóvel" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Vencimento</label>
+            <input type="date" id="desVencimento" />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="desStatus">
+              <option value="Pendente">Pendente</option>
+              <option value="Pago">Pago</option>
+              <option value="Atrasado">Atrasado</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="limparForm('despesa')">Limpar</button>
+        <button class="btn btn-primary" onclick="salvarDespesa()">Salvar</button>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="modal-overlay" id="modalReceita">
-  <div class="modal">
-    <h2 id="tituloReceita">Nova Receita</h2>
-    <form id="formReceita" onsubmit="return false;">
-      <input type="hidden" id="recId">
-      <div class="form-group"><label>Data</label><input type="date" id="recData" required></div>
-      <div class="form-group"><label>Descrição</label><input type="text" id="recDescricao" required></div>
-      <div class="form-group"><label>Cliente</label><input type="text" id="recCliente" required></div>
-      <div class="form-group"><label>Categoria</label>
-        <select id="recCategoria" required>
-          <option value="">Selecione</option>
-          <option>Honorários</option>
-          <option>Sucumbência</option>
-          <option>Aluguel</option>
-          <option>Venda</option>
-          <option>Serviço</option>
-          <option>Outros</option>
-        </select>
-      </div>
-      <div class="form-group"><label>Valor</label><input type="text" id="recValor" required oninput="mascaraMoeda(this)"></div>
-      <div class="form-group"><label>Vencimento</label><input type="date" id="recVencimento" required></div>
-      <div class="form-group"><label>Status</label>
-        <select id="recStatus" required>
-          <option>Recebido</option>
-          <option>Pendente</option>
-          <option>Atrasado</option>
-        </select>
-      </div>
-    </form>
-    <div class="modal-actions">
-      <button class="btn btn-cancelar" onclick="fecharModalReceita()">Cancelar</button>
-      <button class="btn btn-primary" onclick="salvarReceita()">Salvar</button>
-    </div>
-  </div>
-</div>
+  <script>
+    let receitas = [];
+    let despesas = [];
+    let chart = null;
 
-<div class="modal-overlay" id="modalDespesa">
-  <div class="modal">
-    <h2 id="tituloDespesa">Nova Despesa</h2>
-    <form id="formDespesa" onsubmit="return false;">
-      <input type="hidden" id="desId">
-      <div class="form-group"><label>Data</label><input type="date" id="desData" required></div>
-      <div class="form-group"><label>Descrição</label><input type="text" id="desDescricao" required></div>
-      <div class="form-group"><label>Fornecedor</label><input type="text" id="desFornecedor" required></div>
-      <div class="form-group"><label>Categoria</label>
-        <select id="desCategoria" required>
-          <option value="">Selecione</option>
-          <option>Salário Administrativo</option>
-          <option>Aluguel</option>
-          <option>Salários</option>
-          <option>Marketing</option>
-          <option>Impostos</option>
-          <option>Água-Luz-Telefone</option>
-          <option>Material</option>
-          <option>TI-Software</option>
-          <option>Transporte</option>
-          <option>Outros</option>
-        </select>
-      </div>
-      <div class="form-group"><label>Valor</label><input type="text" id="desValor" required oninput="mascaraMoeda(this)"></div>
-      <div class="form-group"><label>Vencimento</label><input type="date" id="desVencimento" required></div>
-      <div class="form-group"><label>Status</label>
-        <select id="desStatus" required>
-          <option>Pago</option>
-          <option>Pendente</option>
-          <option>Atrasado</option>
-        </select>
-      </div>
-    </form>
-    <div class="modal-actions">
-      <button class="btn btn-cancelar" onclick="fecharModalDespesa()">Cancelar</button>
-      <button class="btn btn-primary" onclick="salvarDespesa()">Salvar</button>
-    </div>
-  </div>
-</div>
+    document.addEventListener('DOMContentLoaded', () => {
+      setupTabs();
+      setupMoeda();
+      loadData();
+      setupFilters();
+    });
 
-<script src="db.js"></script>
-<script src="auth.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script>
-let receitas = [];
-let despesas = [];
-let chartResumoInst = null;
-let chartReceitasInst = null;
-let chartDespesasInst = null;
-
-const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-
-function mascaraMoeda(input) {
-  var v = input.value.replace(/\D/g, '');
-  if (v.length === 0) { input.value = ''; input.dataset.valor = '0'; return; }
-  var inteiro = v.slice(0, -2);
-  var centavos = v.slice(-2).padStart(2, '0');
-  if (!inteiro || inteiro === '') inteiro = '0';
-  inteiro = inteiro.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  input.value = 'R$ ' + inteiro + ',' + centavos;
-  input.dataset.valor = (parseInt(v) / 100).toFixed(2);
-}
-function getValorMoeda(input) { return parseFloat(input.dataset.valor) || 0; }
-function setValorMoeda(input, valor) { input.dataset.valor = parseFloat(valor||0).toFixed(2); input.value = 'R$ ' + parseFloat(valor||0).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
-function formatarMoeda(valor) { return 'R$ ' + parseFloat(valor||0).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
-
-function parseDataBR(data) { if (!data) return null; return new Date(data + 'T00:00:00'); }
-function mesmoMes(dataStr, mes, ano) { const d = parseDataBR(dataStr); return d && d.getMonth() === mes && d.getFullYear() === ano; }
-function addMonths(date, months) { const d = new Date(date); d.setMonth(d.getMonth() + months); return d; }
-
-function inicializarPeriodo() {
-  const hoje = new Date();
-  const mesSelect = document.getElementById('resumoMes');
-  const anoSelect = document.getElementById('resumoAno');
-  MESES.forEach((m, i) => { const opt = document.createElement('option'); opt.value = i; opt.text = m; mesSelect.appendChild(opt); });
-  const anoAtual = hoje.getFullYear();
-  for (let a = anoAtual - 4; a <= anoAtual + 1; a++) { const opt = document.createElement('option'); opt.value = a; opt.text = a; anoSelect.appendChild(opt); }
-  mesSelect.value = hoje.getMonth();
-  anoSelect.value = anoAtual;
-  mesSelect.addEventListener('change', atualizarTudo);
-  anoSelect.addEventListener('change', atualizarTudo);
-}
-
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById(tab.dataset.tab).classList.add('active');
-    atualizarTudo();
-  });
-});
-
-document.getElementById('buscaReceita').addEventListener('input', () => setTimeout(renderReceitas, 300));
-document.getElementById('filtroStatusReceita').addEventListener('change', renderReceitas);
-document.getElementById('buscaDespesa').addEventListener('input', () => setTimeout(renderDespesas, 300));
-document.getElementById('filtroStatusDespesa').addEventListener('change', renderDespesas);
-
-function abrirModal(id) { document.getElementById(id).classList.add('active'); }
-function fecharModal(id) { document.getElementById(id).classList.remove('active'); }
-function abrirModalReceita(id) {
-  document.getElementById('formReceita').reset();
-  document.getElementById('recId').value = id || '';
-  document.getElementById('tituloReceita').textContent = id ? 'Editar Receita' : 'Nova Receita';
-  if (!id) { document.getElementById('recData').valueAsDate = new Date(); document.getElementById('recStatus').value = 'Pendente'; }
-  if (id) {
-    const r = receitas.find(x => x.id === id);
-    document.getElementById('recData').value = r.data ? r.data.split('T')[0] : '';
-    document.getElementById('recDescricao').value = r.descricao || '';
-    document.getElementById('recCliente').value = r.cliente || '';
-    document.getElementById('recCategoria').value = r.categoria || '';
-    setValorMoeda(document.getElementById('recValor'), r.valor);
-    document.getElementById('recVencimento').value = r.vencimento ? r.vencimento.split('T')[0] : '';
-    document.getElementById('recStatus').value = r.status || 'Pendente';
-  }
-  abrirModal('modalReceita');
-}
-function fecharModalReceita() { fecharModal('modalReceita'); }
-function abrirModalDespesa(id) {
-  document.getElementById('formDespesa').reset();
-  document.getElementById('desId').value = id || '';
-  document.getElementById('tituloDespesa').textContent = id ? 'Editar Despesa' : 'Nova Despesa';
-  if (!id) { document.getElementById('desData').valueAsDate = new Date(); document.getElementById('desStatus').value = 'Pendente'; }
-  if (id) {
-    const d = despesas.find(x => x.id === id);
-    document.getElementById('desData').value = d.data ? d.data.split('T')[0] : '';
-    document.getElementById('desDescricao').value = d.descricao || '';
-    document.getElementById('desFornecedor').value = d.fornecedor || '';
-    document.getElementById('desCategoria').value = d.categoria || '';
-    setValorMoeda(document.getElementById('desValor'), d.valor);
-    document.getElementById('desVencimento').value = d.vencimento ? d.vencimento.split('T')[0] : '';
-    document.getElementById('desStatus').value = d.status || 'Pendente';
-  }
-  abrirModal('modalDespesa');
-}
-function fecharModalDespesa() { fecharModal('modalDespesa'); }
-
-async function carregarDados() {
-  if (window.verificarAutenticacao) await window.verificarAutenticacao();
-  receitas = await window.db.receitas_listar() || [];
-  despesas = await window.db.despesas_listar() || [];
-  atualizarTudo();
-}
-
-function atualizarTudo() {
-  const mes = parseInt(document.getElementById('resumoMes').value);
-  const ano = parseInt(document.getElementById('resumoAno').value);
-  renderResumo(mes, ano);
-  renderReceitas();
-  renderDespesas();
-}
-
-function renderResumo(mes, ano) {
-  const recMes = receitas.filter(r => mesmoMes(r.data, mes, ano));
-  const desMes = despesas.filter(d => mesmoMes(d.data, mes, ano));
-  const totalRec = recMes.reduce((s, r) => s + (parseFloat(r.valor) || 0), 0);
-  const totalDes = desMes.reduce((s, d) => s + (parseFloat(d.valor) || 0), 0);
-  const pendencias = [...receitas, ...despesas].filter(x => (x.status === 'Pendente' || x.status === 'Atrasado') && mesmoMes(x.data, mes, ano)).length;
-  document.getElementById('resReceitas').textContent = formatarMoeda(totalRec);
-  document.getElementById('resDespesas').textContent = formatarMoeda(totalDes);
-  const saldo = totalRec - totalDes;
-  const elSaldo = document.getElementById('resSaldo');
-  elSaldo.textContent = formatarMoeda(saldo);
-  elSaldo.className = 'valor ' + (saldo >= 0 ? 'positivo' : 'negativo');
-  document.getElementById('resPendencias').textContent = pendencias;
-
-  const ctx = document.getElementById('chartResumo').getContext('2d');
-  const labels = [];
-  const recs = [];
-  const dess = [];
-  for (let i = 5; i >= 0; i--) {
-    const d = addMonths(new Date(ano, mes, 1), -i);
-    labels.push(MESES[d.getMonth()] + '/' + d.getFullYear());
-    recs.push(receitas.filter(r => mesmoMes(r.data, d.getMonth(), d.getFullYear())).reduce((s, r) => s + (parseFloat(r.valor) || 0), 0));
-    dess.push(despesas.filter(d => mesmoMes(d.data, d.getMonth(), d.getFullYear())).reduce((s, x) => s + (parseFloat(x.valor) || 0), 0));
-  }
-  if (chartResumoInst) chartResumoInst.destroy();
-  chartResumoInst = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [
-        { label: 'Receitas', data: recs, backgroundColor: '#198754', borderRadius: 4 },
-        { label: 'Despesas', data: dess, backgroundColor: '#dc3545', borderRadius: 4 }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { position: 'top' }, title: { display: true, text: 'Receitas vs Despesas (últimos 6 meses)' } },
-      scales: { y: { beginAtZero: true } },
-      barPercentage: 0.3
+    function setupTabs() {
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+      });
     }
-  });
 
-  const movimentacoes = [...receitas.map(r => ({...r, tipo: 'Receita'})), ...despesas.map(d => ({...d, tipo: 'Despesa'}))]
-    .sort((a, b) => new Date(b.data || 0) - new Date(a.data || 0)).slice(0, 10);
-  const tbody = document.getElementById('tabelaResumo');
-  tbody.innerHTML = movimentacoes.map(m => `
-    <tr>
-      <td>${m.data ? new Date(m.data).toLocaleDateString('pt-BR') : '-'}</td>
-      <td>${m.tipo}</td>
-      <td>${m.descricao || '-'}</td>
-      <td>${m.categoria || '-'}</td>
-      <td>${formatarMoeda(m.valor)}</td>
-      <td><span class="status ${(m.status || '').toLowerCase()}">${m.status || '-'}</span></td>
-    </tr>
-  `).join('');
-}
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabName));
+      document.querySelectorAll('.content').forEach(content => {
+        const target = content.id === 'content-' + tabName;
+        content.classList.toggle('active', target);
+      });
+      if (tabName === 'resumo') updateChart();
+    }
 
-function renderReceitas() {
-  const busca = document.getElementById('buscaReceita').value.toLowerCase();
-  const status = document.getElementById('filtroStatusReceita').value;
-  const hoje = new Date();
-  const mes = hoje.getMonth();
-  const ano = hoje.getFullYear();
-  const lista = receitas.filter(r => {
-    const matchBusca = !busca || (r.descricao || '').toLowerCase().includes(busca) || (r.cliente || '').toLowerCase().includes(busca) || (r.categoria || '').toLowerCase().includes(busca);
-    const matchStatus = !status || r.status === status;
-    return matchBusca && matchStatus;
-  });
-  const totalMes = receitas.filter(r => mesmoMes(r.data, mes, ano)).reduce((s, r) => s + (parseFloat(r.valor) || 0), 0);
-  const recebido = receitas.filter(r => r.status === 'Recebido').reduce((s, r) => s + (parseFloat(r.valor) || 0), 0);
-  const pendente = receitas.filter(r => r.status === 'Pendente').reduce((s, r) => s + (parseFloat(r.valor) || 0), 0);
-  const atrasado = receitas.filter(r => r.status === 'Atrasado').reduce((s, r) => s + (parseFloat(r.valor) || 0), 0);
-  document.getElementById('recTotal').textContent = formatarMoeda(totalMes);
-  document.getElementById('recRecebido').textContent = formatarMoeda(recebido);
-  document.getElementById('recPendente').textContent = formatarMoeda(pendente);
-  document.getElementById('recAtrasado').textContent = formatarMoeda(atrasado);
+    function setupMoeda() {
+      document.querySelectorAll('.valor-moeda').forEach(input => {
+        input.addEventListener('input', () => setValorMoeda(input));
+        input.addEventListener('blur', () => setValorMoeda(input));
+      });
+    }
 
-  const ctx = document.getElementById('chartReceitas').getContext('2d');
-  const cats = {};
-  receitas.filter(r => mesmoMes(r.data, mes, ano)).forEach(r => { cats[r.categoria || 'Outros'] = (cats[r.categoria || 'Outros'] || 0) + (parseFloat(r.valor) || 0); });
-  if (chartReceitasInst) chartReceitasInst.destroy();
-  chartReceitasInst = new Chart(ctx, {
-    type: 'bar',
-    data: { labels: Object.keys(cats), datasets: [{ label: 'Receitas por Categoria', data: Object.values(cats), backgroundColor: '#0a58ca', borderRadius: 4 }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Receitas por Categoria' } }, scales: { y: { beginAtZero: true } }, barPercentage: 0.3 }
-  });
+    function setValorMoeda(input) {
+      let valor = input.value.replace(/[^\d]/g, '');
+      valor = (parseInt(valor || '0', 10) / 100).toFixed(2);
+      input.dataset.raw = valor;
+      input.value = formatarMoeda(valor);
+    }
 
-  const tbody = document.getElementById('tabelaReceitas');
-  tbody.innerHTML = lista.map(r => `
-    <tr>
-      <td>${r.data ? new Date(r.data).toLocaleDateString('pt-BR') : '-'}</td>
-      <td>${r.descricao || '-'}</td>
-      <td>${r.cliente || '-'}</td>
-      <td>${r.categoria || '-'}</td>
-      <td>${formatarMoeda(r.valor)}</td>
-      <td>${r.vencimento ? new Date(r.vencimento).toLocaleDateString('pt-BR') : '-'}</td>
-      <td><span class="status ${(r.status || '').toLowerCase()}">${r.status || '-'}</span></td>
-      <td>
-        <button class="btn btn-primary btn-sm" onclick="abrirModalReceita('${r.id}')">Editar</button>
-        <button class="btn btn-danger btn-sm" onclick="excluirReceita('${r.id}')">Excluir</button>
-      </td>
-    </tr>
-  `).join('');
-}
+    function getValorMoeda(input) {
+      return input.dataset.raw ? parseFloat(input.dataset.raw) : 0;
+    }
 
-function renderDespesas() {
-  const busca = document.getElementById('buscaDespesa').value.toLowerCase();
-  const status = document.getElementById('filtroStatusDespesa').value;
-  const hoje = new Date();
-  const mes = hoje.getMonth();
-  const ano = hoje.getFullYear();
-  const lista = despesas.filter(d => {
-    const matchBusca = !busca || (d.descricao || '').toLowerCase().includes(busca) || (d.fornecedor || '').toLowerCase().includes(busca) || (d.categoria || '').toLowerCase().includes(busca);
-    const matchStatus = !status || d.status === status;
-    return matchBusca && matchStatus;
-  });
-  const totalMes = despesas.filter(d => mesmoMes(d.data, mes, ano)).reduce((s, d) => s + (parseFloat(d.valor) || 0), 0);
-  const pago = despesas.filter(d => d.status === 'Pago').reduce((s, d) => s + (parseFloat(d.valor) || 0), 0);
-  const pendente = despesas.filter(d => d.status === 'Pendente').reduce((s, d) => s + (parseFloat(d.valor) || 0), 0);
-  const atrasado = despesas.filter(d => d.status === 'Atrasado').reduce((s, d) => s + (parseFloat(d.valor) || 0), 0);
-  document.getElementById('desTotal').textContent = formatarMoeda(totalMes);
-  document.getElementById('desPago').textContent = formatarMoeda(pago);
-  document.getElementById('desPendente').textContent = formatarMoeda(pendente);
-  document.getElementById('desAtrasado').textContent = formatarMoeda(atrasado);
+    function formatarMoeda(valor) {
+      return 'R$ ' + parseFloat(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
 
-  const ctx = document.getElementById('chartDespesas').getContext('2d');
-  const cats = {};
-  despesas.filter(d => mesmoMes(d.data, mes, ano)).forEach(d => { cats[d.categoria || 'Outros'] = (cats[d.categoria || 'Outros'] || 0) + (parseFloat(d.valor) || 0); });
-  if (chartDespesasInst) chartDespesasInst.destroy();
-  chartDespesasInst = new Chart(ctx, {
-    type: 'bar',
-    data: { labels: Object.keys(cats), datasets: [{ label: 'Despesas por Categoria', data: Object.values(cats), backgroundColor: '#dc3545', borderRadius: 4 }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Despesas por Categoria' } }, scales: { y: { beginAtZero: true } }, barPercentage: 0.3 }
-  });
+    function formatarData(data) {
+      if (!data) return '-';
+      const d = new Date(data + 'T00:00:00');
+      return d.toLocaleDateString('pt-BR');
+    }
 
-  const tbody = document.getElementById('tabelaDespesas');
-  tbody.innerHTML = lista.map(d => `
-    <tr>
-      <td>${d.data ? new Date(d.data).toLocaleDateString('pt-BR') : '-'}</td>
-      <td>${d.descricao || '-'}</td>
-      <td>${d.fornecedor || '-'}</td>
-      <td>${d.categoria || '-'}</td>
-      <td>${formatarMoeda(d.valor)}</td>
-      <td>${d.vencimento ? new Date(d.vencimento).toLocaleDateString('pt-BR') : '-'}</td>
-      <td><span class="status ${(d.status || '').toLowerCase()}">${d.status || '-'}</span></td>
-      <td>
-        <button class="btn btn-primary btn-sm" onclick="abrirModalDespesa('${d.id}')">Editar</button>
-        <button class="btn btn-danger btn-sm" onclick="excluirDespesa('${d.id}')">Excluir</button>
-      </td>
-    </tr>
-  `).join('');
-}
+    function getStatusClass(status) {
+      switch (status) {
+        case 'Pago': return 'status-pago';
+        case 'Pendente': return 'status-pendente';
+        case 'Atrasado': return 'status-atrasado';
+        default: return 'status-pendente';
+      }
+    }
 
-async function salvarReceita() {
-  const id = document.getElementById('recId').value;
-  const payload = {
-    id: id || undefined,
-    data: document.getElementById('recData').value,
-    descricao: document.getElementById('recDescricao').value,
-    cliente: document.getElementById('recCliente').value,
-    categoria: document.getElementById('recCategoria').value,
-    valor: getValorMoeda(document.getElementById('recValor')),
-    vencimento: document.getElementById('recVencimento').value,
-    status: document.getElementById('recStatus').value
-  };
-  await window.db.receitas_salvar(payload);
-  fecharModalReceita();
-  receitas = await window.db.receitas_listar() || [];
-  atualizarTudo();
-}
+    async function loadData() {
+      try {
+        receitas = await window.db.receitas_listar() || [];
+        despesas = await window.db.despesas_listar() || [];
+      } catch (e) {
+        console.error('Erro ao carregar dados:', e);
+        receitas = [];
+        despesas = [];
+      }
+      renderResumo();
+      renderReceitas();
+      renderDespesas();
+      updateChart();
+    }
 
-async function excluirReceita(id) {
-  if (!confirm('Deseja realmente excluir esta receita?')) return;
-  await window.db.receitas_excluir(id);
-  receitas = await window.db.receitas_listar() || [];
-  atualizarTudo();
-}
+    function renderResumo() {
+      const totalRec = receitas.reduce((acc, r) => acc + (parseFloat(r.valor) || 0), 0);
+      const totalDes = despesas.reduce((acc, d) => acc + (parseFloat(d.valor) || 0), 0);
+      const saldo = totalRec - totalDes;
+      const pendencias = receitas.filter(r => r.status !== 'Pago').length + despesas.filter(d => d.status !== 'Pago').length;
 
-async function salvarDespesa() {
-  const id = document.getElementById('desId').value;
-  const payload = {
-    id: id || undefined,
-    data: document.getElementById('desData').value,
-    descricao: document.getElementById('desDescricao').value,
-    fornecedor: document.getElementById('desFornecedor').value,
-    categoria: document.getElementById('desCategoria').value,
-    valor: getValorMoeda(document.getElementById('desValor')),
-    vencimento: document.getElementById('desVencimento').value,
-    status: document.getElementById('desStatus').value
-  };
-  await window.db.despesas_salvar(payload);
-  fecharModalDespesa();
-  despesas = await window.db.despesas_listar() || [];
-  atualizarTudo();
-}
+      document.getElementById('totalReceitas').textContent = formatarMoeda(totalRec);
+      document.getElementById('totalDespesas').textContent = formatarMoeda(totalDes);
+      document.getElementById('saldo').textContent = formatarMoeda(saldo);
+      document.getElementById('pendencias').textContent = pendencias;
+    }
 
-async function excluirDespesa(id) {
-  if (!confirm('Deseja realmente excluir esta despesa?')) return;
-  await window.db.despesas_excluir(id);
-  despesas = await window.db.despesas_listar() || [];
-  atualizarTudo();
-}
+    function getFilteredReceitas() {
+      const search = document.getElementById('searchReceitas').value.toLowerCase();
+      const status = document.getElementById('filterStatusReceitas').value;
+      return receitas.filter(r => {
+        const matchesSearch = !search ||
+          (r.descricao || '').toLowerCase().includes(search) ||
+          (r.cliente || '').toLowerCase().includes(search) ||
+          (r.categoria || '').toLowerCase().includes(search);
+        const matchesStatus = !status || r.status === status;
+        return matchesSearch && matchesStatus;
+      });
+    }
 
-window.addEventListener('load', async () => {
-  inicializarPeriodo();
-  await carregarDados();
-});
-</script>
+    function getFilteredDespesas() {
+      const search = document.getElementById('searchDespesas').value.toLowerCase();
+      const status = document.getElementById('filterStatusDespesas').value;
+      return despesas.filter(d => {
+        const matchesSearch = !search ||
+          (d.descricao || '').toLowerCase().includes(search) ||
+          (d.fornecedor || '').toLowerCase().includes(search) ||
+          (d.categoria || '').toLowerCase().includes(search) ||
+          (d.inscricao_imovel || '').toLowerCase().includes(search);
+        const matchesStatus = !status || d.status === status;
+        return matchesSearch && matchesStatus;
+      });
+    }
 
+    function renderReceitas() {
+      const tbody = document.querySelector('#tableReceitas tbody');
+      const lista = getFilteredReceitas();
+      if (lista.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Nenhuma receita encontrada</td></tr>';
+        return;
+      }
+      tbody.innerHTML = lista.map(r => `
+        <tr>
+          <td>${formatarData(r.data)}</td>
+          <td>${r.descricao || '-'}</td>
+          <td>${r.cliente || '-'}</td>
+          <td>${r.categoria || '-'}</td>
+          <td>${formatarMoeda(r.valor)}</td>
+          <td>${formatarData(r.vencimento)}</td>
+          <td><span class="status ${getStatusClass(r.status)}">${r.status || 'Pendente'}</span></td>
+          <td>
+            <button class="btn btn-warning btn-sm" onclick="editarReceita('${r.id}')">Editar</button>
+            <button class="btn btn-danger btn-sm" onclick="excluirReceita('${r.id}')">Excluir</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderDespesas() {
+      const tbody = document.querySelector('#tableDespesas tbody');
+      const lista = getFilteredDespesas();
+      if (lista.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="empty-state">Nenhuma despesa encontrada</td></tr>';
+        return;
+      }
+      tbody.innerHTML = lista.map(d => `
+        <tr>
+          <td>${formatarData(d.data)}</td>
+          <td>${d.descricao || '-'}</td>
+          <td>${d.fornecedor || '-'}</td>
+          <td>${d.categoria || '-'}</td>
+          <td>${d.inscricao_imovel || '-'}</td>
+          <td>${formatarMoeda(d.valor)}</td>
+          <td>${formatarData(d.vencimento)}</td>
+          <td><span class="status ${getStatusClass(d.status)}">${d.status || 'Pendente'}</span></td>
+          <td>
+            <button class="btn btn-warning btn-sm" onclick="editarDespesa('${d.id}')">Editar</button>
+            <button class="btn btn-danger btn-sm" onclick="excluirDespesa('${d.id}')">Excluir</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function setupFilters() {
+      document.getElementById('searchReceitas').addEventListener('input', renderReceitas);
+      document.getElementById('filterStatusReceitas').addEventListener('change', renderReceitas);
+      document.getElementById('searchDespesas').addEventListener('input', renderDespesas);
+      document.getElementById('filterStatusDespesas').addEventListener('change', renderDespesas);
+    }
+
+    function updateChart() {
+      const ctx = document.getElementById('financeiroChart').getContext('2d');
+      const totalRec = receitas.reduce((acc, r) => acc + (parseFloat(r.valor) || 0), 0);
+      const totalDes = despesas.reduce((acc, d) => acc + (parseFloat(d.valor) || 0), 0);
+
+      if (chart) chart.destroy();
+      chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Receitas', 'Despesas', 'Saldo'],
+          datasets: [{
+            label: 'Valores (R$)',
+            data: [totalRec, totalDes, totalRec - totalDes],
+            backgroundColor: ['#198754', '#dc3545', '#0a58ca'],
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            title: { display: true, text: 'Resumo Financeiro' }
+          },
+          scales: {
+            y: { beginAtZero: true, ticks: { callback: value => 'R$ ' + value.toLocaleString('pt-BR') } }
+          }
+        }
+      });
+    }
+
+    function openModal(tipo) {
+      limparForm(tipo);
+      document.getElementById('title' + tipo.charAt(0).toUpperCase() + tipo.slice(1)).textContent = 'Nova ' + tipo.charAt(0).toUpperCase() + tipo.slice(1);
+      document.getElementById('modal' + tipo.charAt(0).toUpperCase() + tipo.slice(1)).classList.add('active');
+    }
+
+    function closeModal(tipo) {
+      document.getElementById('modal' + tipo.charAt(0).toUpperCase() + tipo.slice(1)).classList.remove('active');
+    }
+
+    function limparForm(tipo) {
+      const prefix = tipo === 'receita' ? 'rec' : 'des';
+      document.getElementById(prefix + 'Id').value = '';
+      document.getElementById(prefix + 'Data').value = '';
+      document.getElementById(prefix + 'Descricao').value = '';
+      if (tipo === 'receita') {
+        document.getElementById('recCliente').value = '';
+      } else {
+        document.getElementById('desFornecedor').value = '';
+        document.getElementById('desInscricaoImovel').value = '';
+      }
+      document.getElementById(prefix + 'Categoria').value = '';
+      const valorInput = document.getElementById(prefix + 'Valor');
+      valorInput.value = '';
+      valorInput.dataset.raw = '0';
+      document.getElementById(prefix + 'Vencimento').value = '';
+      document.getElementById(prefix + 'Status').value = 'Pendente';
+    }
+
+    async function salvarReceita() {
+      const id = document.getElementById('recId').value || undefined;
+      const data = document.getElementById('recData').value;
+      const descricao = document.getElementById('recDescricao').value;
+      const cliente = document.getElementById('recCliente').value;
+      const categoria = document.getElementById('recCategoria').value;
+      const valor = getValorMoeda(document.getElementById('recValor'));
+      const vencimento = document.getElementById('recVencimento').value;
+      const status = document.getElementById('recStatus').value;
+
+      if (!descricao || !valor) {
+        alert('Preencha descrição e valor.');
+        return;
+      }
+
+      try {
+        await window.db.receitas_salvar({ id, data, descricao, cliente, categoria, valor, vencimento, status });
+        closeModal('receita');
+        await loadData();
+      } catch (e) {
+        console.error('Erro ao salvar receita:', e);
+        alert('Erro ao salvar receita.');
+      }
+    }
+
+    async function salvarDespesa() {
+      const id = document.getElementById('desId').value || undefined;
+      const data = document.getElementById('desData').value;
+      const descricao = document.getElementById('desDescricao').value;
+      const fornecedor = document.getElementById('desFornecedor').value;
+      const categoria = document.getElementById('desCategoria').value;
+      const valor = getValorMoeda(document.getElementById('desValor'));
+      const vencimento = document.getElementById('desVencimento').value;
+      const status = document.getElementById('desStatus').value;
+      const inscricao_imovel = document.getElementById('desInscricaoImovel').value;
+
+      if (!descricao || !valor) {
+        alert('Preencha descrição e valor.');
+        return;
+      }
+
+      try {
+        await window.db.despesas_salvar({ id, data, descricao, fornecedor, categoria, valor, vencimento, status, inscricao_imovel });
+        closeModal('despesa');
+        await loadData();
+      } catch (e) {
+        console.error('Erro ao salvar despesa:', e);
+        alert('Erro ao salvar despesa.');
+      }
+    }
+
+    async function editarReceita(id) {
+      const r = receitas.find(item => item.id === id);
+      if (!r) return;
+      document.getElementById('recId').value = r.id;
+      document.getElementById('recData').value = r.data || '';
+      document.getElementById('recDescricao').value = r.descricao || '';
+      document.getElementById('recCliente').value = r.cliente || '';
+      document.getElementById('recCategoria').value = r.categoria || '';
+      const valorInput = document.getElementById('recValor');
+      valorInput.dataset.raw = r.valor || '0';
+      valorInput.value = formatarMoeda(r.valor || 0);
+      document.getElementById('recVencimento').value = r.vencimento || '';
+      document.getElementById('recStatus').value = r.status || 'Pendente';
+      document.getElementById('titleReceita').textContent = 'Editar Receita';
+      document.getElementById('modalReceita').classList.add('active');
+    }
+
+    async function editarDespesa(id) {
+      const d = despesas.find(item => item.id === id);
+      if (!d) return;
+      document.getElementById('desId').value = d.id;
+      document.getElementById('desData').value = d.data || '';
+      document.getElementById('desDescricao').value = d.descricao || '';
+      document.getElementById('desFornecedor').value = d.fornecedor || '';
+      document.getElementById('desCategoria').value = d.categoria || '';
+      const valorInput = document.getElementById('desValor');
+      valorInput.dataset.raw = d.valor || '0';
+      valorInput.value = formatarMoeda(d.valor || 0);
+      document.getElementById('desVencimento').value = d.vencimento || '';
+      document.getElementById('desStatus').value = d.status || 'Pendente';
+      document.getElementById('desInscricaoImovel').value = d.inscricao_imovel || '';
+      document.getElementById('titleDespesa').textContent = 'Editar Despesa';
+      document.getElementById('modalDespesa').classList.add('active');
+    }
+
+    async function excluirReceita(id) {
+      if (!confirm('Deseja excluir esta receita?')) return;
+      try {
+        await window.db.receitas_excluir(id);
+        await loadData();
+      } catch (e) {
+        console.error('Erro ao excluir receita:', e);
+        alert('Erro ao excluir receita.');
+      }
+    }
+
+    async function excluirDespesa(id) {
+      if (!confirm('Deseja excluir esta despesa?')) return;
+      try {
+        await window.db.despesas_excluir(id);
+        await loadData();
+      } catch (e) {
+        console.error('Erro ao excluir despesa:', e);
+        alert('Erro ao excluir despesa.');
+      }
+    }
+
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay) {
+          const tipo = overlay.id === 'modalReceita' ? 'receita' : 'despesa';
+          closeModal(tipo);
+        }
+      });
+    });
+  </script>
 </body>
 </html>

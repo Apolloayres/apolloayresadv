@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Relatórios - Controle do Escritório</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:Arial,sans-serif; background:#f0f2f5; color:#333; }
+    .navbar { background:#0a58ca; padding:12px 20px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+    .navbar a { color:#fff; text-decoration:none; padding:8px 12px; border-radius:4px; font-size:14px; }
+    .navbar a:hover { background:rgba(255,255,255,0.2); }
+    .container { max-width:1200px; margin:20px auto; padding:0 20px; }
+    .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+    .header h1 { font-size:24px; color:#0a58ca; }
+    .btn { padding:8px 16px; border:none; border-radius:4px; cursor:pointer; font-size:14px; text-decoration:none; display:inline-block; }
+    .btn-voltar { background:#6c757d; color:#fff; }
+    .btn-voltar:hover { background:#5a6268; }
+    .btn-primary { background:#0a58ca; color:#fff; }
+    .btn-primary:hover { background:#084298; }
+    .btn-sm { padding:5px 10px; font-size:12px; }
+    .tabs { display:flex; gap:6px; border-bottom:2px solid #0a58ca; margin-bottom:20px; flex-wrap:wrap; }
+    .tab { padding:10px 20px; cursor:pointer; background:#e9ecef; border:none; border-radius:6px 6px 0 0; font-weight:600; color:#555; font-size:14px; }
+    .tab.active { background:#0a58ca; color:#fff; }
+    .tab-content { display:none; }
+    .tab-content.active { display:block; }
+    .filtros { display:flex; gap:10px; align-items:center; margin-bottom:20px; flex-wrap:wrap; }
+    .filtros label { font-weight:bold; }
+    .filtros select { padding:6px 10px; border:1px solid #ccc; border-radius:4px; font-size:14px; }
+    .grid4 { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:15px; margin-bottom:24px; }
+    .card { background:#fff; padding:18px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); text-align:center; border-left:4px solid #0a58ca; }
+    .card h3 { font-size:13px; color:#666; text-transform:uppercase; margin-bottom:8px; }
+    .card p { font-size:20px; font-weight:bold; }
+    .card .verde { color:#198754; }
+    .card .vermelho { color:#dc3545; }
+    .secao { background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); margin-bottom:20px; }
+    .secao h2 { font-size:18px; color:#0a58ca; margin-bottom:15px; padding-bottom:8px; border-bottom:2px solid #e9ecef; }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    th, td { padding:8px 10px; text-align:left; border-bottom:1px solid #e9ecef; }
+    th { background:#f1f5ff; color:#0a58ca; font-weight:bold; }
+    tbody tr:hover { background:#f8f9ff; }
+    .linha-total { font-weight:bold; background:#e9f0fc; }
+    .linha-total td { border-top:2px solid #0a58ca; }
+    .numero { text-align:right; }
+    .sem-dados { text-align:center; color:#999; padding:30px; }
+    @media print { .navbar,.filtros,.tabs { display:none!important; } }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="home.html">Home</a>
+  <a href="cadastros.html">Cadastros</a>
+  <a href="financeiro.html">Financeiro</a>
+  <a href="fluxo-caixa.html">Fluxo de Caixa</a>
+  <a href="marketing.html">Marketing</a>
+  <a href="patrimonio.html">Patrimônio</a>
+  <a href="proventos.html">Proventos</a>
+  <a href="relatorios-gerenciais.html">Rel. Gerenciais</a>
+  <a href="usuarios.html">Usuários</a>
+</nav>
+<div class="container">
+  <div class="header">
+    <h1>📊 Relatórios</h1>
+    <div>
+      <button class="btn btn-primary btn-sm" onclick="window.print()">🖨️ Imprimir</button>
+      <a href="home.html" class="btn btn-voltar btn-sm">← Voltar</a>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="resumo">Resumo Geral</div>
+    <div class="tab" data-tab="financeiro">Financeiro</div>
+    <div class="tab" data-tab="graficos">Gráficos</div>
+    <div class="tab" data-tab="patrimonio">Patrimônio</div>
+  </div>
+
+  <!-- RESUMO GERAL -->
+  <div id="resumo" class="tab-content active">
+    <div class="grid4" id="cardsResumo"></div>
+    <div class="secao">
+      <h2>Consolidado por Módulo</h2>
+      <div id="tabelaResumo"><p class="sem-dados">Carregando...</p></div>
+    </div>
+  </div>
+
+  <!-- FINANCEIRO -->
+  <div id="financeiro" class="tab-content">
+    <div class="filtros">
+      <label for="filtroMes">Mês:</label>
+      <select id="filtroMes">
+        <option value="">Todos</option>
+        <option value="1">Janeiro</option><option value="2">Fevereiro</option><option value="3">Março</option>
+        <option value="4">Abril</option><option value="5">Maio</option><option value="6">Junho</option>
+        <option value="7">Julho</option><option value="8">Agosto</option><option value="9">Setembro</option>
+        <option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
+      </select>
+      <label for="filtroAno">Ano:</label>
+      <select id="filtroAno"></select>
+      <button class="btn btn-primary btn-sm" onclick="carregarFinanceiro()">Filtrar</button>
+    </div>
+    <div class="grid4" id="cardsFinanceiro"></div>
+    <div class="secao">
+      <h2>Movimentações do Período</h2>
+      <div id="tabelaFinanceiro"><p class="sem-dados">Carregando...</p></div>
+    </div>
+  </div>
+
+  <!-- GRÁFICOS -->
+  <div id="graficos" class="tab-content">
+    <div class="secao">
+      <h2>Tendência Mensal - Receitas vs Despesas</h2>
+      <div style="height:300px;"><canvas id="chartTendencia"></canvas></div>
+    </div>
+    <div class="secao">
+      <h2>Despesas por Categoria</h2>
+      <div style="height:300px;max-width:500px;margin:0 auto;"><canvas id="chartPizza"></canvas></div>
+    </div>
+  </div>
+
+  <!-- PATRIMÔNIO -->
+  <div id="patrimonio" class="tab-content">
+    <div class="grid4" id="cardsPatrimonio"></div>
+    <div class="secao">
+      <h2>Tabela Patrimonial</h2>
+      <div id="tabelaPatrimonio"><p class="sem-dados">Carregando...</p></div>
+    </div>
+  </div>
+</div>
+
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+function fmtMoney(v){return'R$ '+Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2})}
+function parseData(d){if(!d)return null;let dt=new Date(d);return isNaN(dt.getTime())?null:dt}
+function dentroPeriodo(data,mes,ano){if(!data)return false;if(mes&&data.getMonth()+1!==Number(mes))return false;if(ano&&data.getFullYear()!==Number(ano))return false;return true}
+function somaCampo(lista,campo='valor'){return lista.reduce((a,i)=>a+(Number(i[campo])||0),0)}
+function buildTable(lista,cols,totalCampo){
+  if(!lista||!lista.length)return'<p class="sem-dados">Nenhum registro.</p>';
+  const ths=cols.map(c=>`<th${c.align?' class="'+c.align+'"':''}>${c.label}</th>`).join('');
+  let total=0;
+  const rows=lista.map(item=>{
+    let cells=cols.map(c=>{
+      let v=item[c.field]||'-';
+      if(c.money){v=fmtMoney(v);total+=Number(item[c.field])||0;}
+      if(c.date)v=parseData(v)?new Date(v).toLocaleDateString('pt-BR'):'-';
+      return`<td${c.align?' class="'+c.align+'"':''}>${v}</td>`;
+    }).join('');
+    return'<tr>'+cells+'</tr>';
+  }).join('');
+  return'<table><thead><tr>'+ths+'</tr></thead><tbody>'+rows+'<tr class="linha-total"><td colspan="'+(cols.length-1)+'">TOTAL</td><td class="numero">'+fmtMoney(total)+'</td></tr></tbody></table>';
+}
+
+// TABS
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',function(){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById(this.dataset.tab).classList.add('active');
+  });
+});
+
+async function carregarResumoGeral(){
+  try{
+    const receitas=await window.db.receitas_listar()||[];
+    const despesas=await window.db.despesas_listar()||[];
+    const proventos=await window.db.proventos_listar()||[];
+    const contas=await window.db.contas_listar()||[];
+    const aplicacoes=await window.db.aplicacoes_listar()||[];
+    const imoveis=await window.db.imoveis_listar()||[];
+    const unidades=await window.db.unidades_listar()||[];
+    const clientes=await window.db.clientes_listar()||[];
+    const modulos=[
+      {nome:'Receitas',reg:somaCampo(receitas),qtd:receitas.length},
+      {nome:'Despesas',reg:somaCampo(despesas),qtd:despesas.length},
+      {nome:'Proventos',reg:somaCampo(proventos),qtd:proventos.length},
+      {nome:'Contas',reg:somaCampo(contas,'saldo'),qtd:contas.length},
+      {nome:'Aplicações',reg:somaCampo(aplicacoes,'saldo'),qtd:aplicacoes.length},
+      {nome:'Imóveis',reg:somaCampo(imoveis,'valor'),qtd:imoveis.length},
+      {nome:'Unidades',reg:0,qtd:unidades.length},
+      {nome:'Clientes',reg:0,qtd:clientes.length}
+    ];
+    const totalReg=modulos.reduce((a,m)=>a+m.qtd,0);
+    const totalVal=modulos.reduce((a,m)=>a+m.reg,0);
+    document.getElementById('cardsResumo').innerHTML=
+      '<div class="card"><h3>Total Registros</h3><p>'+totalReg+'</p></div>'+
+      '<div class="card"><h3>Total Financeiro</h3><p>'+fmtMoney(totalVal)+'</p></div>'+
+      '<div class="card"><h3>Receitas</h3><p style="color:#198754">'+fmtMoney(somaCampo(receitas))+'</p></div>'+
+      '<div class="card"><h3>Despesas</h3><p style="color:#dc3545">'+fmtMoney(somaCampo(despesas))+'</p></div>';
+    document.getElementById('tabelaResumo').innerHTML=buildTable(modulos,[{label:'Módulo',field:'nome'},{label:'Registros',field:'qtd',align:'numero'},{label:'Valor Total',field:'reg',money:true,align:'numero'}]);
+  }catch(e){console.error(e);}
+}
+
+async function carregarFinanceiro(){
+  try{
+    const mes=document.getElementById('filtroMes').value;
+    const ano=document.getElementById('filtroAno').value;
+    const receitas=await window.db.receitas_listar()||[];
+    const despesas=await window.db.despesas_listar()||[];
+    const rF=receitas.filter(r=>dentroPeriodo(parseData(r.data),mes,ano));
+    const dF=despesas.filter(d=>dentroPeriodo(parseData(d.data),mes,ano));
+    const tR=somaCampo(rF),tD=somaCampo(dF),saldo=tR-tD;
+    document.getElementById('cardsFinanceiro').innerHTML=
+      '<div class="card"><h3>Receitas</h3><p style="color:#198754">'+fmtMoney(tR)+'</p></div>'+
+      '<div class="card"><h3>Despesas</h3><p style="color:#dc3545">'+fmtMoney(tD)+'</p></div>'+
+      '<div class="card"><h3>Saldo</h3><p style="color:'+(saldo>=0?'#198754':'#dc3545')+'">'+fmtMoney(saldo)+'</p></div>'+
+      '<div class="card"><h3>Movimentações</h3><p>'+(rF.length+dF.length)+'</p></div>';
+    const movs=[...rF.map(r=>({...r,tipo:'Receita'})),...dF.map(d=>({...d,tipo:'Despesa'}))]
+      .sort((a,b)=>new Date(a.data||0)-new Date(b.data||0));
+    document.getElementById('tabelaFinanceiro').innerHTML=buildTable(movs,[
+      {label:'Data',field:'data',date:true},{label:'Tipo',field:'tipo'},{label:'Categoria',field:'categoria'},{label:'Descrição',field:'descricao'},{label:'Valor',field:'valor',money:true,align:'numero'}
+    ]);
+  }catch(e){console.error(e);}
+}
+
+async function carregarGraficos(){
+  try{
+    const receitas=await window.db.receitas_listar()||[];
+    const despesas=await window.db.despesas_listar()||[];
+    const hoje=new Date(),labels=[],recs=[],dess=[];
+    for(let i=11;i>=0;i--){
+      const d=new Date(hoje.getFullYear(),hoje.getMonth()-i,1);
+      labels.push(d.toLocaleString('pt-BR',{month:'short',year:'numeric'}));
+      recs.push(receitas.filter(r=>{const dt=parseData(r.data);return dt&&dt.getFullYear()===d.getFullYear()&&dt.getMonth()===d.getMonth()}).reduce((a,r)=>a+(Number(r.valor)||0),0));
+      dess.push(despesas.filter(x=>{const dt=parseData(x.data);return dt&&dt.getFullYear()===d.getFullYear()&&dt.getMonth()===d.getMonth()}).reduce((a,x)=>a+(Number(x.valor)||0),0));
+    }
+    if(window.chartTend)window.chartTend.destroy();
+    window.chartTend=new Chart(document.getElementById('chartTendencia'),{
+      type:'line',
+      data:{labels,datasets:[
+        {label:'Receitas',data:recs,borderColor:'#198754',tension:0.3,fill:false},
+        {label:'Despesas',data:dess,borderColor:'#dc3545',tension:0.3,fill:false}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,ticks:{callback:v=>fmtMoney(v)}}}}
+    });
+    const cats={};
+    despesas.forEach(d=>{const c=d.categoria||'Sem categoria';cats[c]=(cats[c]||0)+(Number(d.valor)||0);});
+    if(window.chartPz)window.chartPz.destroy();
+    window.chartPz=new Chart(document.getElementById('chartPizza'),{
+      type:'pie',
+      data:{labels:Object.keys(cats),datasets:[{data:Object.values(cats)}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{tooltip:{callbacks:{label:ctx=>ctx.label+': '+fmtMoney(ctx.raw)}}}}
+    });
+  }catch(e){console.error(e);}
+}
+
+async function carregarPatrimonio(){
+  try{
+    const contas=await window.db.contas_listar()||[];
+    const aplic=await window.db.aplicacoes_listar()||[];
+    const imoveis=await window.db.imoveis_listar()||[];
+    const tC=somaCampo(contas,'saldo'),tA=somaCampo(aplic,'saldo'),tI=somaCampo(imoveis,'valor');
+    document.getElementById('cardsPatrimonio').innerHTML=
+      '<div class="card"><h3>Contas</h3><p>'+fmtMoney(tC)+'</p></div>'+
+      '<div class="card"><h3>Aplicações</h3><p>'+fmtMoney(tA)+'</p></div>'+
+      '<div class="card"><h3>Imóveis</h3><p>'+fmtMoney(tI)+'</p></div>'+
+      '<div class="card"><h3>Patrimônio Total</h3><p style="color:#0a58ca">'+fmtMoney(tC+tA+tI)+'</p></div>';
+    document.getElementById('tabelaPatrimonio').innerHTML=buildTable([
+      {nome:'Contas',reg:contas.length,val:tC},
+      {nome:'Aplicações',reg:aplic.length,val:tA},
+      {nome:'Imóveis',reg:imoveis.length,val:tI}
+    ],[{label:'Tipo',field:'nome'},{label:'Registros',field:'reg',align:'numero'},{label:'Valor Total',field:'val',money:true,align:'numero'}]);
+  }catch(e){console.error(e);}
+}
+
+document.addEventListener('DOMContentLoaded',async()=>{
+  if(window.verificarAutenticacao)window.verificarAutenticacao();
+  const sel=document.getElementById('filtroAno');
+  const a=new Date().getFullYear();
+  for(let i=a-4;i<=a+1;i++){const o=document.createElement('option');o.value=i;o.textContent=i;if(i===a)o.selected=true;sel.appendChild(o);}
+  await carregarResumoGeral();
+  await carregarFinanceiro();
+  await carregarGraficos();
+  await carregarPatrimonio();
+});
+</script>
+</body>
+</html>
