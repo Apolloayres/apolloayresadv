@@ -1,203 +1,268 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Controle do Escritório</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Controle do Escritório</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+            padding: 20px;
+        }
 
-    .card {
-      background: #ffffff;
-      padding: 40px 32px;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-    }
+        .card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 40px 32px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.5s ease-in-out;
+        }
 
-    .card h1 {
-      margin: 0 0 8px 0;
-      font-size: 26px;
-      color: #1e3a8a;
-    }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    .card p {
-      margin: 0 0 28px 0;
-      color: #64748b;
-      font-size: 15px;
-    }
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
 
-    .input-group {
-      position: relative;
-      margin-bottom: 18px;
-      text-align: left;
-    }
+        .header h1 {
+            font-size: 1.6rem;
+            color: #1e293b;
+            margin-bottom: 6px;
+        }
 
-    .input-group label {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 14px;
-      color: #334155;
-      font-weight: 500;
-    }
+        .header p {
+            font-size: 0.95rem;
+            color: #64748b;
+        }
 
-    .input-wrapper {
-      position: relative;
-    }
+        .form-group {
+            margin-bottom: 18px;
+        }
 
-    .input-wrapper input {
-      width: 100%;
-      padding: 12px 12px 12px 40px;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 15px;
-      color: #1e293b;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            color: #334155;
+            font-weight: 600;
+        }
 
-    .input-wrapper input:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-    }
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
 
-    .input-icon {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #94a3b8;
-      font-size: 18px;
-    }
+        .input-wrapper .icon {
+            position: absolute;
+            left: 12px;
+            font-size: 1rem;
+            color: #64748b;
+            pointer-events: none;
+        }
 
-    .btn-entrar {
-      width: 100%;
-      padding: 14px;
-      background: #2563eb;
-      color: #ffffff;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      margin-top: 10px;
-    }
+        .input-wrapper input {
+            width: 100%;
+            padding: 12px 42px 12px 38px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            color: #1e293b;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
 
-    .btn-entrar:hover:not(:disabled) {
-      background: #1d4ed8;
-    }
+        .input-wrapper input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
 
-    .btn-entrar:active:not(:disabled) {
-      transform: scale(0.98);
-    }
+        .input-wrapper .toggle-senha {
+            position: absolute;
+            right: 12px;
+            font-size: 1rem;
+            color: #64748b;
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
 
-    .btn-entrar:disabled {
-      background: #93c5fd;
-      cursor: not-allowed;
-    }
+        .input-wrapper .toggle-senha:hover {
+            color: #2563eb;
+            transform: scale(1.1);
+        }
 
-    .erro-login {
-      display: none;
-      margin-top: 16px;
-      padding: 12px;
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      border-radius: 8px;
-      color: #b91c1c;
-      font-size: 14px;
-      text-align: left;
-    }
+        .btn-entrar {
+            width: 100%;
+            padding: 13px;
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.1s ease;
+            margin-top: 8px;
+        }
 
-    .loading-msg {
-      display: none;
-      margin-top: 16px;
-      color: #3b82f6;
-      font-size: 14px;
-      font-weight: 500;
-    }
-  </style>
+        .btn-entrar:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-entrar:active {
+            transform: scale(0.99);
+        }
+
+        .btn-entrar:disabled {
+            background: #93c5fd;
+            cursor: not-allowed;
+        }
+
+        .mensagem {
+            margin-top: 14px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            text-align: center;
+            display: none;
+        }
+
+        .mensagem.erro {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .mensagem.loading {
+            display: block;
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 32px 24px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="card">
+        <div class="header">
+            <h1>Controle do Escritório</h1>
+            <p>Acesse sua conta</p>
+        </div>
 
-  <div class="card">
-    <h1>Controle do Escritório</h1>
-    <p>Acesse sua conta</p>
+        <form id="form-login" onsubmit="event.preventDefault(); logar();">
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <div class="input-wrapper">
+                    <span class="icon">✉️</span>
+                    <input type="email" id="email" placeholder="seu@email.com" required autocomplete="email">
+                </div>
+            </div>
 
-    <div class="input-group">
-      <label for="email">E-mail</label>
-      <div class="input-wrapper">
-        <span class="input-icon">✉️</span>
-        <input type="email" id="email" placeholder="seu@email.com" autocomplete="email">
-      </div>
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <div class="input-wrapper">
+                    <span class="icon">🔒</span>
+                    <input type="password" id="senha" placeholder="Digite sua senha" required autocomplete="current-password">
+                    <span class="toggle-senha" id="btn-toggle-senha" onclick="toggleSenha()" title="Mostrar senha">👁️</span>
+                </div>
+            </div>
+
+            <button type="submit" id="btn-entrar" class="btn-entrar">Entrar</button>
+        </form>
+
+        <div id="mensagem" class="mensagem"></div>
     </div>
 
-    <div class="input-group">
-      <label for="senha">Senha</label>
-      <div class="input-wrapper">
-        <span class="input-icon">🔒</span>
-        <input type="password" id="senha" placeholder="Digite sua senha" autocomplete="current-password">
-      </div>
-    </div>
+    <script src="db.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        async function logar() {
+            const email = document.getElementById('email').value.trim();
+            const senha = document.getElementById('senha').value;
+            const btn = document.getElementById('btn-entrar');
+            const mensagem = document.getElementById('mensagem');
 
-    <button class="btn-entrar" onclick="logar()">Entrar</button>
+            if (!email || !senha) {
+                mostrarErro('Por favor, preencha o e-mail e a senha.');
+                return;
+            }
 
-    <div id="loadingMsg" class="loading-msg">Entrando...</div>
+            btn.disabled = true;
+            btn.textContent = 'Entrando...';
+            mensagem.className = 'mensagem loading';
+            mensagem.textContent = 'Entrando...';
 
-    <div id="erroLogin" class="erro-login">
-      <span id="erroMsg"></span>
-    </div>
-  </div>
+            try {
+                if (typeof window.fazerLogin !== 'function') {
+                    throw new Error('Serviço de autenticação não disponível.');
+                }
 
-  <script src="db.js"></script>
-  <script src="auth.js"></script>
-  <script>
-    async function logar() {
-      const email = document.getElementById('email').value.trim();
-      const senha = document.getElementById('senha').value;
-      const erroDiv = document.getElementById('erroLogin');
-      const erroMsg = document.getElementById('erroMsg');
-      const loading = document.getElementById('loadingMsg');
-      const btn = document.querySelector('.btn-entrar');
+                const resultado = await window.fazerLogin(email, senha);
 
-      erroDiv.style.display = 'none';
+                if (resultado && resultado.sucesso) {
+                    window.location.href = 'dashboard.html';
+                } else {
+                    throw new Error((resultado && resultado.mensagem) || 'E-mail ou senha incorretos.');
+                }
+            } catch (error) {
+                btn.disabled = false;
+                btn.textContent = 'Entrar';
+                mostrarErro(error.message || 'Erro ao tentar entrar. Tente novamente.');
+            }
+        }
 
-      if (!email || !senha) {
-        erroMsg.textContent = 'Preencha todos os campos';
-        erroDiv.style.display = 'block';
-        return;
-      }
+        function mostrarErro(texto) {
+            const mensagem = document.getElementById('mensagem');
+            mensagem.className = 'mensagem erro';
+            mensagem.textContent = texto;
+        }
 
-      loading.style.display = 'block';
-      btn.disabled = true;
+        function toggleSenha() {
+            const input = document.getElementById('senha');
+            const btn = document.getElementById('btn-toggle-senha');
 
-      const resultado = await window.fazerLogin(email, senha);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🙈';
+                btn.title = 'Ocultar senha';
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁️';
+                btn.title = 'Mostrar senha';
+            }
 
-      loading.style.display = 'none';
-      btn.disabled = false;
-
-      if (!resultado.sucesso) {
-        erroMsg.textContent = resultado.mensagem;
-        erroDiv.style.display = 'block';
-      }
-      // Se sucesso, a própria função já redireciona
-    }
-  </script>
-
+            input.focus();
+        }
+    </script>
 </body>
 </html>
