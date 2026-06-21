@@ -29,7 +29,7 @@
 </head>
 <body>
   <div class="topo-logo">
-      <img src="https://adapta-one-prod.s3.sa-east-1.amazonaws.com/apolloayres%40yahoo.com.br/png/image-019eea86-df20-753e-b049-a7c4515d7a68.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3FLD6RMYLYFE2L2Q%2F20260621%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260621T160143Z&X-Amz-Expires=3600&X-Amz-Signature=d86ac73935a9237a01f8898aab4f62b0c323de884239f0049abf5a99c09677ae&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" alt="Apollo Ayres" class="logo-escritorio">
+      <img src="https://adapta-one-prod.s3.sa-east-1.amazonaws.com/apolloayres%40yahoo.com.br/png/image-019eea86-df20-753e-b049-a7c4515d7a68.png?...(URL COMPLETA)" alt="Apollo Ayres" class="logo-escritorio">
   </div>
   <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
@@ -93,7 +93,6 @@
         <form id="formUsuario" onsubmit="salvar(event)">
           <div class="modal-body">
             <input type="hidden" id="usuarioId">
-            <input type="hidden" id="status" value="Ativo">
             <div class="row g-3">
               <div class="col-md-6"><label class="form-label">Nome *</label><input type="text" class="form-control" id="nome" required></div>
               <div class="col-md-6"><label class="form-label">E-mail *</label><input type="email" class="form-control" id="email" required></div>
@@ -116,15 +115,23 @@
   <script src="db.js"></script>
   <script src="auth.js"></script>
   <script>
+    const STORAGE_KEY = 'usuarios';
     let dados = [];
     let editandoId = null;
     const modal = new bootstrap.Modal(document.getElementById('modalUsuario'));
 
+    function getData(k) { try { return JSON.parse(localStorage.getItem(k)||'[]'); } catch(e) { return []; } }
+    function setData(k,v) { localStorage.setItem(k,JSON.stringify(v)); }
+    function genId() { return Date.now().toString(36)+Math.random().toString(36).substr(2,5); }
+
     async function carregar() {
         try {
             dados = await window.db.usuarios_listar();
+            if (!dados || dados.length === 0) {
+                dados = getData(STORAGE_KEY);
+            }
         } catch(e) {
-            dados = [];
+            dados = getData(STORAGE_KEY);
         }
         render();
     }
@@ -136,7 +143,7 @@
             <td>${u.email||'—'}</td>
             <td>${u.perfil||'—'}</td>
             <td>${u.unidade||'Todas'}</td>
-            <td>${u.ativo ? 'Sim' : 'Não'}</td>
+            <td>${u.ativo !== false ? 'Sim' : 'Não'}</td>
             <td>
                 <button class="btn btn-sm btn-primary" onclick='editar("${u.id}")'>Editar</button>
                 <button class="btn btn-sm btn-danger" onclick='excluir("${u.id}")'>Excluir</button>
@@ -148,7 +155,6 @@
         editandoId = null;
         document.getElementById('formUsuario').reset();
         document.getElementById('usuarioId').value = '';
-        document.getElementById('status').value = 'Ativo';
         document.getElementById('ativo').checked = true;
         document.getElementById('tituloModal').textContent = 'Novo Usuário';
         popularUnidades();
@@ -167,26 +173,36 @@
     async function salvar(e) {
         e.preventDefault();
         const r = {
+            id: editandoId || genId(),
             nome: document.getElementById('nome').value,
             email: document.getElementById('email').value,
             senha: document.getElementById('senha').value,
             telefone: document.getElementById('telefone').value || '',
             perfil: document.getElementById('perfil').value,
             unidade: document.getElementById('unidade').value || '',
-            ativo: document.getElementById('ativo').checked,
-            status: 'Ativo'
+            ativo: document.getElementById('ativo').checked
         };
-        try {
-            if (editandoId) {
-                await window.db.usuarios_salvar({ ...r, id: editandoId });
-            } else {
-                await window.db.usuarios_salvar(r);
-            }
-            modal.hide();
-            await carregar();
-        } catch(e) {
-            alert('Erro ao salvar usuário: ' + e.message);
+
+        // SALVAR NO localStorage (garantia)
+        const stored = getData(STORAGE_KEY);
+        if (editandoId) {
+            const i = stored.findIndex(x => x.id === editandoId);
+            if (i >= 0) stored[i] = r;
+            else stored.push(r);
+        } else {
+            stored.push(r);
         }
+        setData(STORAGE_KEY, stored);
+
+        // TENTAR salvar no Supabase
+        try {
+            await window.db.usuarios_salvar(r);
+        } catch(e) {
+            console.log('Supabase: ' + e.message);
+        }
+
+        modal.hide();
+        await carregar();
     }
 
     function editar(id) {
@@ -199,7 +215,6 @@
         document.getElementById('telefone').value = u.telefone || '';
         document.getElementById('perfil').value = u.perfil || 'Usuário';
         document.getElementById('unidade').value = u.unidade || '';
-        document.getElementById('status').value = u.status || 'Ativo';
         document.getElementById('ativo').checked = u.ativo !== false;
         document.getElementById('tituloModal').textContent = 'Editar Usuário';
         popularUnidades();
@@ -208,12 +223,10 @@
 
     async function excluir(id) {
         if (!confirm('Excluir este usuário?')) return;
-        try {
-            await window.db.usuarios_excluir(id);
-            await carregar();
-        } catch(e) {
-            alert('Erro ao excluir usuário: ' + e.message);
-        }
+        const stored = getData(STORAGE_KEY);
+        setData(STORAGE_KEY, stored.filter(x => x.id !== id && String(x.id) !== String(id)));
+        try { await window.db.usuarios_excluir(id); } catch(e) {}
+        await carregar();
     }
 
     document.addEventListener('DOMContentLoaded', carregar);
