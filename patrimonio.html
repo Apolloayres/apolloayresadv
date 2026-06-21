@@ -3,471 +3,909 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Patrimônio - Controle do Escritório</title>
+  <title>Controle do Escritório - Patrimônio</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; background-color: #f0f2f5; color: #333; }
-    .navbar { background-color: #0a58ca; padding: 0 20px; }
-    .navbar ul { list-style: none; display: flex; flex-wrap: wrap; }
-    .navbar li { margin: 0; }
-    .navbar a { display: block; color: #fff; text-decoration: none; padding: 15px 18px; font-size: 14px; transition: background 0.2s; }
-    .navbar a:hover, .navbar a.active { background-color: rgba(255,255,255,0.2); }
-    .container { max-width: 1200px; margin: 25px auto; padding: 0 20px; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
-    .header h1 { color: #0a58ca; font-size: 24px; }
-    .tabs { display: flex; border-bottom: 2px solid #ddd; margin-bottom: 20px; }
-    .tab { padding: 12px 24px; cursor: pointer; background: #fff; border: 1px solid #ddd; border-bottom: none; margin-right: 4px; font-weight: 600; color: #555; }
-    .tab.active { background: #0a58ca; color: #fff; border-color: #0a58ca; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-    .card { background: #fff; padding: 18px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); }
-    .card h3 { font-size: 13px; color: #777; margin-bottom: 8px; text-transform: uppercase; }
-    .card p { font-size: 22px; font-weight: 700; color: #0a58ca; }
-    .toolbar { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
-    .btn { padding: 9px 16px; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; font-weight: 600; transition: opacity 0.2s; }
-    .btn:hover { opacity: 0.85; }
-    .btn-primary { background: #0a58ca; color: #fff; }
-    .btn-secondary { background: #6c757d; color: #fff; }
-    .btn-danger { background: #dc3545; color: #fff; }
-    .btn-success { background: #198754; color: #fff; }
-    .table-container { background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
-    th { background: #f8f9fa; font-weight: 700; color: #555; }
-    tr:hover { background: #f8f9fa; }
-    .actions { display: flex; gap: 6px; }
-    .actions button { padding: 5px 10px; font-size: 12px; }
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
-    .modal-overlay.active { display: flex; }
-    .modal { background: #fff; border-radius: 8px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-    .modal-header { background: #0a58ca; color: #fff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
-    .modal-header h2 { font-size: 18px; }
-    .modal-close { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
-    .modal-body { padding: 20px; }
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; color: #555; }
-    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 9px 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; font-family: inherit; }
-    .form-group textarea { resize: vertical; min-height: 70px; }
-    .modal-footer { padding: 15px 20px; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 10px; }
-    .empty { text-align: center; padding: 40px; color: #777; }
-    .badge { padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
-    .badge-ativo { background: #d1f2eb; color: #0f5132; }
-    .badge-inativo { background: #f8d7da; color: #842029; }
-    @media (max-width: 768px) { .navbar ul { flex-direction: column; } .header { flex-direction: column; align-items: flex-start; } }
+    :root {
+      --primary: #0a58ca;
+      --primary-light: #4f8cff;
+      --primary-soft: #e8f0fe;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --white: #ffffff;
+      --border: #d1d5db;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f3f6fb;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: var(--primary);
+      color: var(--white);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow);
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .navbar-links a {
+      color: var(--white);
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.95rem;
+      opacity: 0.9;
+      transition: opacity 0.2s;
+    }
+
+    .navbar-links a:hover {
+      opacity: 1;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .page-title {
+      font-size: 1.75rem;
+      color: var(--primary);
+    }
+
+    /* Botões */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      text-decoration: none;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background-color: #0845a0;
+    }
+
+    .btn-back {
+      background-color: var(--primary-soft);
+      color: var(--primary);
+      border: 1px solid var(--primary-light);
+      font-weight: 600;
+    }
+
+    .btn-back:hover {
+      background-color: #dce8ff;
+    }
+
+    .btn-edit {
+      background-color: #f59e0b;
+      color: var(--white);
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+    }
+
+    .btn-edit:hover {
+      background-color: #d97706;
+    }
+
+    .btn-delete {
+      background-color: var(--danger);
+      color: var(--white);
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+    }
+
+    .btn-delete:hover {
+      background-color: #b91c1c;
+    }
+
+    .btn-save {
+      background-color: var(--success);
+      color: var(--white);
+    }
+
+    .btn-save:hover {
+      background-color: #15803d;
+    }
+
+    .btn-cancel {
+      background-color: #e5e7eb;
+      color: var(--text);
+    }
+
+    .btn-cancel:hover {
+      background-color: #d1d5db;
+    }
+
+    /* Abas */
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+
+    .tab {
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: var(--muted);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .tab:hover {
+      color: var(--primary);
+    }
+
+    .tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      color: var(--primary);
+    }
+
+    /* Tabela */
+    .table-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background-color: var(--primary-soft);
+    }
+
+    th, td {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    th {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #f1f5f9;
+      transition: background 0.2s;
+    }
+
+    tbody tr:hover {
+      background-color: #f8fafc;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      background-color: var(--primary);
+      color: var(--white);
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-weight: 500;
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.6rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(79, 140, 255, 0.15);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+
+    /* Responsivo */
+    @media (max-width: 768px) {
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .tabs {
+        overflow-x: auto;
+      }
+
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      thead {
+        display: none;
+      }
+
+      tbody tr {
+        margin-bottom: 1rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 0.75rem;
+      }
+
+      td {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.6rem 0;
+        border-bottom: 1px solid #f1f5f9;
+      }
+
+      td:last-child {
+        border-bottom: none;
+      }
+
+      td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--primary);
+      }
+
+      .actions {
+        justify-content: flex-end;
+      }
+    }
   </style>
 </head>
 <body>
 
-<<nav class="navbar">
-  <ul>
-    <li><a href="home.html">Home</a></li>
-    <li><a href="cadastros.html">Cadastros</a></li>
-    <li><a href="financeiro.html">Financeiro</a></li>
-    <li><a href="fluxo_caixa.html">Fluxo de Caixa</a></li>
-    <li><a href="marketing.html">Marketing</a></li>
-    <li><a href="patrimonio.html" class="active">Patrimônio</a></li>
-    <li><a href="proventos.html">Proventos</a></li>
-    <li><a href="rel_gerenciais.html">Rel. Gerenciais</a></li>
-    <li><a href="usuarios.html">Usuários</a></li>
-  </ul>
-</nav>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-brand">💼 Controle do Escritório</div>
+    <div class="navbar-links">
+      <a href="home.html">Início</a>
+      <a href="patrimonio.html">Patrimônio</a>
+    </div>
+  </nav>
 
-<div class="container">
-  <div class="header">
-    <h1>Patrimônio</h1>
+  <div class="container">
+    <!-- Cabeçalho da página -->
+    <div class="page-header">
+      <h1 class="page-title">🏦 Patrimônio</h1>
+      <a href="home.html" class="btn btn-back">← Voltar</a>
+    </div>
+
+    <!-- Abas -->
+    <div class="tabs">
+      <button class="tab active" data-tab="imoveis">🏠 Imóveis</button>
+      <button class="tab" data-tab="contas">🏦 Contas</button>
+      <button class="tab" data-tab="aplicacoes">📈 Aplicações</button>
+    </div>
+
+    <!-- Aba Imóveis -->
+    <div id="imoveis" class="tab-content active">
+      <div class="section-header">
+        <h2 class="section-title">🏠 Imóveis</h2>
+        <button class="btn btn-primary" onclick="abrirModal('imovel')">+ Novo</button>
+      </div>
+      <div class="table-card">
+        <table id="tabela-imoveis">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Endereço</th>
+              <th>Valor</th>
+              <th>Tipo</th>
+              <th>Observação</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Aba Contas -->
+    <div id="contas" class="tab-content">
+      <div class="section-header">
+        <h2 class="section-title">🏦 Contas</h2>
+        <button class="btn btn-primary" onclick="abrirModal('conta')">+ Novo</button>
+      </div>
+      <div class="table-card">
+        <table id="tabela-contas">
+          <thead>
+            <tr>
+              <th>Banco</th>
+              <th>Tipo</th>
+              <th>Saldo</th>
+              <th>Agência</th>
+              <th>Conta</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Aba Aplicações -->
+    <div id="aplicacoes" class="tab-content">
+      <div class="section-header">
+        <h2 class="section-title">📈 Aplicações</h2>
+        <button class="btn btn-primary" onclick="abrirModal('aplicacao')">+ Novo</button>
+      </div>
+      <div class="table-card">
+        <table id="tabela-aplicacoes">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Tipo</th>
+              <th>Valor Aplicado</th>
+              <th>Data Aplicação</th>
+              <th>Data Vencimento</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
-  <div class="tabs">
-    <div class="tab active" data-tab="imoveis" onclick="selecionarAba('imoveis')">Imóveis</div>
-    <div class="tab" data-tab="contas" onclick="selecionarAba('contas')">Contas</div>
-    <div class="tab" data-tab="aplicacoes" onclick="selecionarAba('aplicacoes')">Aplicações</div>
-  </div>
-
-  <!-- ABA IMÓVEIS -->
-  <div id="imoveis" class="tab-content active">
-    <div class="cards">
-      <div class="card"><h3>Total de Imóveis</h3><p id="card-imoveis-total">0</p></div>
-      <div class="card"><h3>Valor Total</h3><p id="card-imoveis-valor">R$ 0,00</p></div>
-      <div class="card"><h3>Ativos</h3><p id="card-imoveis-ativos">0</p></div>
-    </div>
-    <div class="toolbar">
-      <button class="btn btn-primary" onclick="abrirModal('imoveis')">+ Novo Imóvel</button>
-      <button class="btn btn-secondary" onclick="limparAba('imoveis')">Limpar</button>
-    </div>
-    <div class="table-container">
-      <table id="tabela-imoveis">
-        <thead><tr><th>Nome</th><th>Endereço</th><th>Tipo</th><th>Status</th><th>Valor</th><th>Ações</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ABA CONTAS -->
-  <div id="contas" class="tab-content">
-    <div class="cards">
-      <div class="card"><h3>Total de Contas</h3><p id="card-contas-total">0</p></div>
-      <div class="card"><h3>Saldo Total</h3><p id="card-contas-saldo">R$ 0,00</p></div>
-      <div class="card"><h3>Ativas</h3><p id="card-contas-ativas">0</p></div>
-    </div>
-    <div class="toolbar">
-      <button class="btn btn-primary" onclick="abrirModal('contas')">+ Nova Conta</button>
-      <button class="btn btn-secondary" onclick="limparAba('contas')">Limpar</button>
-    </div>
-    <div class="table-container">
-      <table id="tabela-contas">
-        <thead><tr><th>Nome</th><th>Banco</th><th>Agência</th><th>Conta</th><th>Tipo</th><th>Saldo</th><th>Status</th><th>Ações</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ABA APLICAÇÕES -->
-  <div id="aplicacoes" class="tab-content">
-    <div class="cards">
-      <div class="card"><h3>Total de Aplicações</h3><p id="card-aplicacoes-total">0</p></div>
-      <div class="card"><h3>Valor Total</h3><p id="card-aplicacoes-valor">R$ 0,00</p></div>
-      <div class="card"><h3>Saldo Total</h3><p id="card-aplicacoes-saldo">R$ 0,00</p></div>
-    </div>
-    <div class="toolbar">
-      <button class="btn btn-primary" onclick="abrirModal('aplicacoes')">+ Nova Aplicação</button>
-      <button class="btn btn-secondary" onclick="limparAba('aplicacoes')">Limpar</button>
-    </div>
-    <div class="table-container">
-      <table id="tabela-aplicacoes">
-        <thead><tr><th>Tipo</th><th>Instituição</th><th>Valor</th><th>Saldo</th><th>Rentabilidade</th><th>Vencimento</th><th>Status</th><th>Ações</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL IMÓVEIS -->
-<div id="modal-imoveis" class="modal-overlay" onclick="fecharModalFora(event, 'imoveis')">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-header"><h2 id="titulo-modal-imoveis">Novo Imóvel</h2><button class="modal-close" onclick="fecharModal('imoveis')">&times;</button></div>
-    <div class="modal-body">
-      <form id="form-imoveis">
-        <input type="hidden" id="imoveis-id" value="">
-        <div class="form-group"><label for="imoveis-nome">Nome</label><input type="text" id="imoveis-nome" required></div>
-        <div class="form-group"><label for="imoveis-endereco">Endereço</label><input type="text" id="imoveis-endereco" required></div>
+  <!-- Modal Imóvel -->
+  <div id="modal-imovel" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title" id="titulo-imovel">🏠 Imóvel</span>
+        <button class="modal-close" onclick="fecharModal('imovel')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="imovel-id">
         <div class="form-group">
-          <label for="imoveis-tipo">Tipo</label>
-          <select id="imoveis-tipo" required>
+          <label for="imovel-nome">Nome</label>
+          <input type="text" id="imovel-nome" required>
+        </div>
+        <div class="form-group">
+          <label for="imovel-endereco">Endereço</label>
+          <input type="text" id="imovel-endereco" required>
+        </div>
+        <div class="form-group">
+          <label for="imovel-valor">Valor</label>
+          <input type="number" id="imovel-valor" step="0.01" required>
+        </div>
+        <div class="form-group">
+          <label for="imovel-tipo">Tipo</label>
+          <select id="imovel-tipo" required>
             <option value="Residencial">Residencial</option>
             <option value="Comercial">Comercial</option>
-            <option value="Rural">Rural</option>
-            <option value="Industrial">Industrial</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="imoveis-status">Status</label>
-          <select id="imoveis-status" required>
-            <option value="Ativo">Ativo</option>
-            <option value="Inativo">Inativo</option>
-            <option value="Alugado">Alugado</option>
-            <option value="Vendido">Vendido</option>
-          </select>
+          <label for="imovel-observacao">Observação</label>
+          <textarea id="imovel-observacao"></textarea>
         </div>
-        <div class="form-group"><label for="imoveis-valor">Valor</label><input type="text" id="imoveis-valor" class="moeda" required></div>
-        <div class="form-group"><label for="imoveis-observacao">Observação</label><textarea id="imoveis-observacao"></textarea></div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="limparFormulario('imoveis')">Limpar</button>
-      <button class="btn btn-secondary" onclick="fecharModal('imoveis')">Cancelar</button>
-      <button class="btn btn-success" onclick="salvar('imoveis')">Salvar</button>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-cancel" onclick="fecharModal('imovel')">Cancelar</button>
+        <button class="btn btn-save" onclick="salvarImovel()">Salvar</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- MODAL CONTAS -->
-<div id="modal-contas" class="modal-overlay" onclick="fecharModalFora(event, 'contas')">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-header"><h2 id="titulo-modal-contas">Nova Conta</h2><button class="modal-close" onclick="fecharModal('contas')">&times;</button></div>
-    <div class="modal-body">
-      <form id="form-contas">
-        <input type="hidden" id="contas-id" value="">
-        <div class="form-group"><label for="contas-nome">Nome</label><input type="text" id="contas-nome" required></div>
-        <div class="form-group"><label for="contas-banco">Banco</label><input type="text" id="contas-banco" required></div>
-        <div class="form-group"><label for="contas-agencia">Agência</label><input type="text" id="contas-agencia" required></div>
-        <div class="form-group"><label for="contas-conta">Conta</label><input type="text" id="contas-conta" required></div>
+  <!-- Modal Conta -->
+  <div id="modal-conta" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title" id="titulo-conta">🏦 Conta</span>
+        <button class="modal-close" onclick="fecharModal('conta')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="conta-id">
         <div class="form-group">
-          <label for="contas-tipo">Tipo</label>
-          <select id="contas-tipo" required>
+          <label for="conta-banco">Nome do banco</label>
+          <input type="text" id="conta-banco" required>
+        </div>
+        <div class="form-group">
+          <label for="conta-tipo">Tipo</label>
+          <select id="conta-tipo" required>
             <option value="Corrente">Corrente</option>
             <option value="Poupança">Poupança</option>
-            <option value="Investimento">Investimento</option>
-            <option value="Caixa">Caixa</option>
           </select>
         </div>
-        <div class="form-group"><label for="contas-saldo">Saldo</label><input type="text" id="contas-saldo" class="moeda" required></div>
         <div class="form-group">
-          <label for="contas-status">Status</label>
-          <select id="contas-status" required>
-            <option value="Ativa">Ativa</option>
-            <option value="Inativa">Inativa</option>
-          </select>
+          <label for="conta-saldo">Saldo</label>
+          <input type="number" id="conta-saldo" step="0.01" required>
         </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="limparFormulario('contas')">Limpar</button>
-      <button class="btn btn-secondary" onclick="fecharModal('contas')">Cancelar</button>
-      <button class="btn btn-success" onclick="salvar('contas')">Salvar</button>
+        <div class="form-group">
+          <label for="conta-agencia">Agência</label>
+          <input type="text" id="conta-agencia">
+        </div>
+        <div class="form-group">
+          <label for="conta-numero">Conta</label>
+          <input type="text" id="conta-numero">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-cancel" onclick="fecharModal('conta')">Cancelar</button>
+        <button class="btn btn-save" onclick="salvarConta()">Salvar</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- MODAL APLICAÇÕES -->
-<div id="modal-aplicacoes" class="modal-overlay" onclick="fecharModalFora(event, 'aplicacoes')">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-header"><h2 id="titulo-modal-aplicacoes">Nova Aplicação</h2><button class="modal-close" onclick="fecharModal('aplicacoes')">&times;</button></div>
-    <div class="modal-body">
-      <form id="form-aplicacoes">
-        <input type="hidden" id="aplicacoes-id" value="">
+  <!-- Modal Aplicação -->
+  <div id="modal-aplicacao" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title" id="titulo-aplicacao">📈 Aplicação</span>
+        <button class="modal-close" onclick="fecharModal('aplicacao')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="aplicacao-id">
         <div class="form-group">
-          <label for="aplicacoes-tipo">Tipo</label>
-          <select id="aplicacoes-tipo" required>
-            <option value="CDB">CDB</option>
-            <option value="LCI">LCI</option>
-            <option value="LCA">LCA</option>
-            <option value="Tesouro">Tesouro</option>
-            <option value="Fundo">Fundo</option>
-            <option value="Poupança">Poupança</option>
-            <option value="Outro">Outro</option>
-          </select>
+          <label for="aplicacao-nome">Nome</label>
+          <input type="text" id="aplicacao-nome" required>
         </div>
-        <div class="form-group"><label for="aplicacoes-instituicao">Instituição</label><input type="text" id="aplicacoes-instituicao" required></div>
-        <div class="form-group"><label for="aplicacoes-valor">Valor</label><input type="text" id="aplicacoes-valor" class="moeda" required></div>
-        <div class="form-group"><label for="aplicacoes-saldo">Saldo</label><input type="text" id="aplicacoes-saldo" class="moeda" required></div>
-        <div class="form-group"><label for="aplicacoes-rentabilidade">Rentabilidade (% a.a.)</label><input type="text" id="aplicacoes-rentabilidade" required></div>
-        <div class="form-group"><label for="aplicacoes-vencimento">Vencimento</label><input type="date" id="aplicacoes-vencimento" required></div>
         <div class="form-group">
-          <label for="aplicacoes-status">Status</label>
-          <select id="aplicacoes-status" required>
-            <option value="Ativa">Ativa</option>
-            <option value="Resgatada">Resgatada</option>
-            <option value="Vencida">Vencida</option>
-          </select>
+          <label for="aplicacao-tipo">Tipo</label>
+          <input type="text" id="aplicacao-tipo" placeholder="Ex: CDB, Tesouro, LCI" required>
         </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="limparFormulario('aplicacoes')">Limpar</button>
-      <button class="btn btn-secondary" onclick="fecharModal('aplicacoes')">Cancelar</button>
-      <button class="btn btn-success" onclick="salvar('aplicacoes')">Salvar</button>
+        <div class="form-group">
+          <label for="aplicacao-valor">Valor aplicado</label>
+          <input type="number" id="aplicacao-valor" step="0.01" required>
+        </div>
+        <div class="form-group">
+          <label for="aplicacao-data">Data aplicação</label>
+          <input type="date" id="aplicacao-data" required>
+        </div>
+        <div class="form-group">
+          <label for="aplicacao-vencimento">Data vencimento</label>
+          <input type="date" id="aplicacao-vencimento" required>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-cancel" onclick="fecharModal('aplicacao')">Cancelar</button>
+        <button class="btn btn-save" onclick="salvarAplicacao()">Salvar</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-  const mapaModulos = {
-    imoveis: {
-      listar: () => window.db.imoveis_listar(),
-      salvar: (d) => window.db.imoveis_salvar(d),
-      excluir: (id) => window.db.imoveis_excluir(id),
-      campos: ['id', 'nome', 'endereco', 'tipo', 'status', 'valor', 'observacao'],
-      titulo: { novo: 'Novo Imóvel', editar: 'Editar Imóvel' },
-      colunas: ['nome', 'endereco', 'tipo', 'status', 'valor']
-    },
-    contas: {
-      listar: () => window.db.contas_listar(),
-      salvar: (d) => window.db.contas_salvar(d),
-      excluir: (id) => window.db.contas_excluir(id),
-      campos: ['id', 'nome', 'banco', 'agencia', 'conta', 'tipo', 'saldo', 'status'],
-      titulo: { novo: 'Nova Conta', editar: 'Editar Conta' },
-      colunas: ['nome', 'banco', 'agencia', 'conta', 'tipo', 'saldo', 'status']
-    },
-    aplicacoes: {
-      listar: () => window.db.aplicacoes_listar(),
-      salvar: (d) => window.db.aplicacoes_salvar(d),
-      excluir: (id) => window.db.aplicacoes_excluir(id),
-      campos: ['id', 'tipo', 'instituicao', 'valor', 'saldo', 'rentabilidade', 'vencimento', 'status'],
-      titulo: { novo: 'Nova Aplicação', editar: 'Editar Aplicação' },
-      colunas: ['tipo', 'instituicao', 'valor', 'saldo', 'rentabilidade', 'vencimento', 'status']
-    }
-  };
+  <script>
+    // === Navegação de abas ===
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
 
-  let abaAtiva = 'imoveis';
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active'));
 
-  function selecionarAba(aba) {
-    abaAtiva = aba;
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelector(`.tab[data-tab="${aba}"]`).classList.add('active');
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    document.getElementById(aba).classList.add('active');
-    carregar(aba);
-  }
-
-  function formatarMoeda(valor) {
-    const num = parseFloat(valor) || 0;
-    return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-  }
-
-  function setValorMoeda(input, valor) {
-    input.value = formatarMoeda(valor).replace('R$\u00A0', '');
-  }
-
-  function getValorMoeda(input) {
-    const limpo = input.value.replace(/[^\d,]/g, '').replace(',', '.');
-    return parseFloat(limpo) || 0;
-  }
-
-  function aplicarMascaraMoeda(input) {
-    let valor = input.value.replace(/[^\d]/g, '');
-    const num = parseInt(valor || '0', 10) / 100;
-    input.value = num.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  }
-
-  document.querySelectorAll('.moeda').forEach(input => {
-    input.addEventListener('input', () => aplicarMascaraMoeda(input));
-  });
-
-  function abrirModal(modulo, item = null) {
-    const m = mapaModulos[modulo];
-    document.getElementById(`titulo-modal-${modulo}`).textContent = item ? m.titulo.editar : m.titulo.novo;
-    limparFormulario(modulo);
-    if (item) {
-      document.getElementById(`${modulo}-id`).value = item.id || '';
-      m.campos.forEach(campo => {
-        const input = document.getElementById(`${modulo}-${campo}`);
-        if (!input) return;
-        if (campo === 'id') return;
-        if (input.classList.contains('moeda')) {
-          setValorMoeda(input, item[campo]);
-        } else {
-          input.value = item[campo] ?? '';
-        }
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
       });
-    }
-    document.getElementById(`modal-${modulo}`).classList.add('active');
-  }
-
-  function fecharModal(modulo) {
-    document.getElementById(`modal-${modulo}`).classList.remove('active');
-  }
-
-  function fecharModalFora(event, modulo) {
-    if (event.target.id === `modal-${modulo}`) fecharModal(modulo);
-  }
-
-  function limparFormulario(modulo) {
-    const form = document.getElementById(`form-${modulo}`);
-    form.reset();
-    document.getElementById(`${modulo}-id`).value = '';
-  }
-
-  function limparAba(modulo) {
-    carregar(modulo);
-  }
-
-  async function carregar(modulo) {
-    try {
-      const lista = await mapaModulos[modulo].listar() || [];
-      renderizarTabela(modulo, lista);
-      atualizarCards(modulo, lista);
-    } catch (e) {
-      console.error('Erro ao carregar', modulo, e);
-      alert('Erro ao carregar dados de ' + modulo);
-    }
-  }
-
-  function renderizarTabela(modulo, lista) {
-    const tbody = document.querySelector(`#tabela-${modulo} tbody`);
-    tbody.innerHTML = '';
-    if (!lista.length) {
-      const cols = document.querySelectorAll(`#tabela-${modulo} thead th`).length;
-      tbody.innerHTML = `<tr><td colspan="${cols}" class="empty">Nenhum registro encontrado.</td></tr>`;
-      return;
-    }
-    lista.forEach(item => {
-      const tr = document.createElement('tr');
-      let html = '';
-      mapaModulos[modulo].colunas.forEach(campo => {
-        let valor = item[campo] ?? '';
-        if (campo === 'valor' || campo === 'saldo') valor = formatarMoeda(valor);
-        if (campo === 'status') {
-          const classe = String(valor).toLowerCase().includes('ativo') ? 'badge-ativo' : 'badge-inativo';
-          html += `<td><span class="badge ${classe}">${valor}</span></td>`;
-        } else {
-          html += `<td>${valor}</td>`;
-        }
-      });
-      html += `<td class="actions"><button class="btn btn-primary" onclick='editar("${modulo}", ${JSON.stringify(item).replace(/'/g, "&#39;")})'>Editar</button><button class="btn btn-danger" onclick="excluir('${modulo}', ${item.id})">Excluir</button></td>`;
-      tr.innerHTML = html;
-      tbody.appendChild(tr);
     });
-  }
 
-  function atualizarCards(modulo, lista) {
-    if (modulo === 'imoveis') {
-      const total = lista.length;
-      const valor = lista.reduce((s, i) => s + (parseFloat(i.valor) || 0), 0);
-      const ativos = lista.filter(i => String(i.status).toLowerCase() === 'ativo').length;
-      document.getElementById('card-imoveis-total').textContent = total;
-      document.getElementById('card-imoveis-valor').textContent = formatarMoeda(valor);
-      document.getElementById('card-imoveis-ativos').textContent = ativos;
+    // === Utilitários ===
+    function formatarMoeda(valor) {
+      if (valor === undefined || valor === null || valor === '') return '-';
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
     }
-    if (modulo === 'contas') {
-      const total = lista.length;
-      const saldo = lista.reduce((s, i) => s + (parseFloat(i.saldo) || 0), 0);
-      const ativas = lista.filter(i => String(i.status).toLowerCase() === 'ativa').length;
-      document.getElementById('card-contas-total').textContent = total;
-      document.getElementById('card-contas-saldo').textContent = formatarMoeda(saldo);
-      document.getElementById('card-contas-ativas').textContent = ativas;
-    }
-    if (modulo === 'aplicacoes') {
-      const total = lista.length;
-      const valor = lista.reduce((s, i) => s + (parseFloat(i.valor) || 0), 0);
-      const saldo = lista.reduce((s, i) => s + (parseFloat(i.saldo) || 0), 0);
-      document.getElementById('card-aplicacoes-total').textContent = total;
-      document.getElementById('card-aplicacoes-valor').textContent = formatarMoeda(valor);
-      document.getElementById('card-aplicacoes-saldo').textContent = formatarMoeda(saldo);
-    }
-  }
 
-  async function editar(modulo, item) {
-    abrirModal(modulo, item);
-  }
+    function formatarData(data) {
+      if (!data) return '-';
+      const d = new Date(data);
+      if (isNaN(d.getTime())) return data;
+      return d.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+    }
 
-  async function salvar(modulo) {
-    const m = mapaModulos[modulo];
-    const dados = { id: document.getElementById(`${modulo}-id`).value || '' };
-    for (const campo of m.campos) {
-      if (campo === 'id') continue;
-      const input = document.getElementById(`${modulo}-${campo}`);
-      if (input.classList.contains('moeda')) {
-        dados[campo] = getValorMoeda(input);
-      } else {
-        dados[campo] = input.value;
+    function limparTabela(idTabela) {
+      const tbody = document.querySelector(`#${idTabela} tbody`);
+      tbody.innerHTML = '';
+    }
+
+    function mostrarVazio(idTabela, mensagem) {
+      const tbody = document.querySelector(`#${idTabela} tbody`);
+      const colunas = document.querySelectorAll(`#${idTabela} thead th`).length;
+      tbody.innerHTML = `<tr><td colspan="${colunas}" class="empty-state">${mensagem}</td></tr>`;
+    }
+
+    // === Imóveis ===
+    async function carregarImoveis() {
+      limparTabela('tabela-imoveis');
+      const lista = await window.db.imoveis_listar();
+      const tbody = document.querySelector('#tabela-imoveis tbody');
+
+      if (!lista || lista.length === 0) {
+        mostrarVazio('tabela-imoveis', 'Nenhum imóvel cadastrado.');
+        return;
       }
-    }
-    try {
-      await m.salvar(dados);
-      fecharModal(modulo);
-      carregar(modulo);
-    } catch (e) {
-      console.error('Erro ao salvar', modulo, e);
-      alert('Erro ao salvar ' + modulo);
-    }
-  }
 
-  async function excluir(modulo, id) {
-    if (!confirm('Tem certeza que deseja excluir este registro?')) return;
-    try {
-      await mapaModulos[modulo].excluir(id);
-      carregar(modulo);
-    } catch (e) {
-      console.error('Erro ao excluir', modulo, e);
-      alert('Erro ao excluir ' + modulo);
+      lista.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td data-label="Nome">${item.nome || '-'}</td>
+          <td data-label="Endereço">${item.endereco || '-'}</td>
+          <td data-label="Valor">${formatarMoeda(item.valor)}</td>
+          <td data-label="Tipo">${item.tipo || '-'}</td>
+          <td data-label="Observação">${item.observacao || '-'}</td>
+          <td data-label="Ações" class="actions">
+            <button class="btn btn-edit" onclick="editarImovel(${item.id})">Editar</button>
+            <button class="btn btn-delete" onclick="excluirImovel(${item.id})">Excluir</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
-  }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    carregar('imoveis');
-  });
-</script>
+    function abrirModal(tipo, id = null) {
+      document.getElementById(`modal-${tipo}`).classList.add('active');
+      document.getElementById(`titulo-${tipo}`).textContent = id ? `${document.getElementById(`titulo-${tipo}`).textContent.split(' ')[0]} Editar ${tipo === 'imovel' ? 'Imóvel' : tipo === 'conta' ? 'Conta' : 'Aplicação'}` : `${document.getElementById(`titulo-${tipo}`).textContent.split(' ')[0]} Novo ${tipo === 'imovel' ? 'Imóvel' : tipo === 'conta' ? 'Conta' : 'Aplicação'}`;
+    }
 
+    function fecharModal(tipo) {
+      document.getElementById(`modal-${tipo}`).classList.remove('active');
+      document.getElementById(`${tipo}-id`).value = '';
+      const campos = document.querySelectorAll(`#modal-${tipo} input, #modal-${tipo} select, #modal-${tipo} textarea`);
+      campos.forEach(campo => {
+        if (campo.id !== `${tipo}-id`) {
+          campo.value = '';
+        }
+      });
+    }
+
+    async function salvarImovel() {
+      const id = document.getElementById('imovel-id').value;
+      const nome = document.getElementById('imovel-nome').value.trim();
+      const endereco = document.getElementById('imovel-endereco').value.trim();
+      const valor = parseFloat(document.getElementById('imovel-valor').value);
+      const tipo = document.getElementById('imovel-tipo').value;
+      const observacao = document.getElementById('imovel-observacao').value.trim();
+
+      if (!nome || !endereco || isNaN(valor)) {
+        alert('Preencha os campos obrigatórios: Nome, Endereço e Valor.');
+        return;
+      }
+
+      const obj = { nome, endereco, valor, tipo, observacao };
+      if (id) obj.id = parseInt(id);
+
+      await window.db.imoveis_salvar(obj);
+      fecharModal('imovel');
+      await carregarImoveis();
+    }
+
+    async function editarImovel(id) {
+      const lista = await window.db.imoveis_listar();
+      const item = lista.find(i => i.id === id);
+      if (!item) return;
+
+      document.getElementById('imovel-id').value = item.id;
+      document.getElementById('imovel-nome').value = item.nome || '';
+      document.getElementById('imovel-endereco').value = item.endereco || '';
+      document.getElementById('imovel-valor').value = item.valor || '';
+      document.getElementById('imovel-tipo').value = item.tipo || 'Residencial';
+      document.getElementById('imovel-observacao').value = item.observacao || '';
+      abrirModal('imovel', id);
+    }
+
+    async function excluirImovel(id) {
+      if (!confirm('Deseja realmente excluir este imóvel?')) return;
+      await window.db.imoveis_excluir(id);
+      await carregarImoveis();
+    }
+
+    // === Contas ===
+    async function carregarContas() {
+      limparTabela('tabela-contas');
+      const lista = await window.db.contas_listar();
+      const tbody = document.querySelector('#tabela-contas tbody');
+
+      if (!lista || lista.length === 0) {
+        mostrarVazio('tabela-contas', 'Nenhuma conta cadastrada.');
+        return;
+      }
+
+      lista.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td data-label="Banco">${item.banco || item.nome_banco || '-'}</td>
+          <td data-label="Tipo">${item.tipo || '-'}</td>
+          <td data-label="Saldo">${formatarMoeda(item.saldo)}</td>
+          <td data-label="Agência">${item.agencia || '-'}</td>
+          <td data-label="Conta">${item.conta || '-'}</td>
+          <td data-label="Ações" class="actions">
+            <button class="btn btn-edit" onclick="editarConta(${item.id})">Editar</button>
+            <button class="btn btn-delete" onclick="excluirConta(${item.id})">Excluir</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function salvarConta() {
+      const id = document.getElementById('conta-id').value;
+      const nome_banco = document.getElementById('conta-banco').value.trim();
+      const tipo = document.getElementById('conta-tipo').value;
+      const saldo = parseFloat(document.getElementById('conta-saldo').value);
+      const agencia = document.getElementById('conta-agencia').value.trim();
+      const conta = document.getElementById('conta-numero').value.trim();
+
+      if (!nome_banco || isNaN(saldo)) {
+        alert('Preencha os campos obrigatórios: Banco e Saldo.');
+        return;
+      }
+
+      const obj = { nome_banco, banco: nome_banco, tipo, saldo, agencia, conta };
+      if (id) obj.id = parseInt(id);
+
+      await window.db.contas_salvar(obj);
+      fecharModal('conta');
+      await carregarContas();
+    }
+
+    async function editarConta(id) {
+      const lista = await window.db.contas_listar();
+      const item = lista.find(i => i.id === id);
+      if (!item) return;
+
+      document.getElementById('conta-id').value = item.id;
+      document.getElementById('conta-banco').value = item.nome_banco || item.banco || '';
+      document.getElementById('conta-tipo').value = item.tipo || 'Corrente';
+      document.getElementById('conta-saldo').value = item.saldo || '';
+      document.getElementById('conta-agencia').value = item.agencia || '';
+      document.getElementById('conta-numero').value = item.conta || '';
+      abrirModal('conta', id);
+    }
+
+    async function excluirConta(id) {
+      if (!confirm('Deseja realmente excluir esta conta?')) return;
+      await window.db.contas_excluir(id);
+      await carregarContas();
+    }
+
+    // === Aplicações ===
+    async function carregarAplicacoes() {
+      limparTabela('tabela-aplicacoes');
+      const lista = await window.db.aplicacoes_listar();
+      const tbody = document.querySelector('#tabela-aplicacoes tbody');
+
+      if (!lista || lista.length === 0) {
+        mostrarVazio('tabela-aplicacoes', 'Nenhuma aplicação cadastrada.');
+        return;
+      }
+
+      lista.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td data-label="Nome">${item.nome || '-'}</td>
+          <td data-label="Tipo">${item.tipo || '-'}</td>
+          <td data-label="Valor Aplicado">${formatarMoeda(item.valor)}</td>
+          <td data-label="Data Aplicação">${formatarData(item.data_aplicacao || item.data)}</td>
+          <td data-label="Data Vencimento">${formatarData(item.data_vencimento || item.vencimento)}</td>
+          <td data-label="Ações" class="actions">
+            <button class="btn btn-edit" onclick="editarAplicacao(${item.id})">Editar</button>
+            <button class="btn btn-delete" onclick="excluirAplicacao(${item.id})">Excluir</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function salvarAplicacao() {
+      const id = document.getElementById('aplicacao-id').value;
+      const nome = document.getElementById('aplicacao-nome').value.trim();
+      const tipo = document.getElementById('aplicacao-tipo').value.trim();
+      const valor = parseFloat(document.getElementById('aplicacao-valor').value);
+      const data_aplicacao = document.getElementById('aplicacao-data').value;
+      const data_vencimento = document.getElementById('aplicacao-vencimento').value;
+
+      if (!nome || !tipo || isNaN(valor) || !data_aplicacao || !data_vencimento) {
+        alert('Preencha todos os campos obrigatórios.');
+        return;
+      }
+
+      const obj = { nome, tipo, valor, data_aplicacao, data_vencimento };
+      if (id) obj.id = parseInt(id);
+
+      await window.db.aplicacoes_salvar(obj);
+      fecharModal('aplicacao');
+      await carregarAplicacoes();
+    }
+
+    async function editarAplicacao(id) {
+      const lista = await window.db.aplicacoes_listar();
+      const item = lista.find(i => i.id === id);
+      if (!item) return;
+
+      document.getElementById('aplicacao-id').value = item.id;
+      document.getElementById('aplicacao-nome').value = item.nome || '';
+      document.getElementById('aplicacao-tipo').value = item.tipo || '';
+      document.getElementById('aplicacao-valor').value = item.valor || '';
+      document.getElementById('aplicacao-data').value = item.data_aplicacao || item.data || '';
+      document.getElementById('aplicacao-vencimento').value = item.data_vencimento || item.vencimento || '';
+      abrirModal('aplicacao', id);
+    }
+
+    async function excluirAplicacao(id) {
+      if (!confirm('Deseja realmente excluir esta aplicação?')) return;
+      await window.db.aplicacoes_excluir(id);
+      await carregarAplicacoes();
+    }
+
+    // === Inicialização ===
+    document.addEventListener('DOMContentLoaded', () => {
+      carregarImoveis();
+      carregarContas();
+      carregarAplicacoes();
+    });
+
+    // Fechar modal ao clicar fora
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          overlay.classList.remove('active');
+        }
+      });
+    });
+  </script>
 </body>
 </html>

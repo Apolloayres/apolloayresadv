@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Imóveis - Controle do Escritório</title>
+  <style>
+    :root {
+      --primary: #0a58ca;
+      --primary-dark: #084298;
+      --primary-light: #e8f1fe;
+      --accent: #2563eb;
+      --bg: #f5f8ff;
+      --surface: #ffffff;
+      --text: #1f2937;
+      --text-muted: #6b7280;
+      --border: #d1d5db;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --success: #16a34a;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --radius: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .navbar {
+      background: var(--primary);
+      color: #fff;
+      padding: 16px 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .page-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .page-title {
+      font-size: 1.75rem;
+      color: var(--primary-dark);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--radius);
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-back {
+      background: #fff;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-back:hover {
+      background: var(--primary-light);
+    }
+
+    .btn-new {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-new:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-edit {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .btn-edit:hover {
+      background: #dbe8ff;
+    }
+
+    .btn-delete {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .btn-delete:hover {
+      background: #fee2e2;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border-left: 5px solid var(--primary);
+    }
+
+    .card-label {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .card-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .table-container {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: var(--primary-light);
+    }
+
+    th, td {
+      padding: 14px 16px;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    th {
+      font-weight: 600;
+      color: var(--primary-dark);
+      border-bottom: 2px solid var(--border);
+    }
+
+    td {
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      background: var(--primary);
+      color: #fff;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      font-size: 1.25rem;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(10, 88, 202, 0.15);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .modal-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn-save {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-save:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-cancel {
+      background: #f3f4f6;
+      color: var(--text);
+    }
+
+    .btn-cancel:hover {
+      background: #e5e7eb;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 16px;
+      }
+
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      th, td {
+        padding: 12px;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <h1>Controle do Escritório</h1>
+    <span>🏠 Imóveis</span>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">🏠 Imóveis</h1>
+      <div>
+        <a href="home.html" class="btn btn-back">← Voltar</a>
+        <button class="btn btn-new" onclick="abrirModal()">+ Novo Imóvel</button>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">Total de imóveis</div>
+        <div class="card-value" id="totalImoveis">0</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Valor total do patrimônio</div>
+        <div class="card-value" id="valorTotalPatrimonio">R$ 0,00</div>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table id="tabelaImoveis">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Endereço</th>
+            <th>Valor</th>
+            <th>Tipo</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="empty-state" id="emptyState" style="display: none;">
+        Nenhum imóvel cadastrado.
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitulo">Novo Imóvel</h2>
+        <button class="modal-close" onclick="fecharModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="formImovel">
+          <input type="hidden" id="imovelId" />
+          <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" required />
+          </div>
+          <div class="form-group">
+            <label for="endereco">Endereço</label>
+            <input type="text" id="endereco" required />
+          </div>
+          <div class="form-group">
+            <label for="valor">Valor (R$)</label>
+            <input type="number" id="valor" min="0" step="0.01" required />
+          </div>
+          <div class="form-group">
+            <label for="tipo">Tipo</label>
+            <select id="tipo" required>
+              <option value="Comercial">Comercial</option>
+              <option value="Residencial">Residencial</option>
+              <option value="Terreno">Terreno</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="observacao">Observação</label>
+            <textarea id="observacao"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-cancel" onclick="fecharModal()">Cancelar</button>
+        <button class="btn btn-save" onclick="salvarImovel()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let imoveis = [];
+
+    function formatarMoeda(valor) {
+      const numero = parseFloat(valor) || 0;
+      return numero.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      });
+    }
+
+    async function carregarImoveis() {
+      try {
+        imoveis = await window.db.imoveis_listar();
+      } catch (e) {
+        imoveis = [];
+      }
+      atualizarTabela();
+      atualizarCards();
+    }
+
+    function atualizarCards() {
+      const total = imoveis.length;
+      const valorTotal = imoveis.reduce((soma, item) => soma + (parseFloat(item.valor) || 0), 0);
+      document.getElementById('totalImoveis').textContent = total;
+      document.getElementById('valorTotalPatrimonio').textContent = formatarMoeda(valorTotal);
+    }
+
+    function atualizarTabela() {
+      const tbody = document.querySelector('#tabelaImoveis tbody');
+      const emptyState = document.getElementById('emptyState');
+      tbody.innerHTML = '';
+
+      if (imoveis.length === 0) {
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+
+      imoveis.forEach(imovel => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${imovel.nome || ''}</td>
+          <td>${imovel.endereco || ''}</td>
+          <td>${formatarMoeda(imovel.valor)}</td>
+          <td>${imovel.tipo || ''}</td>
+          <td>
+            <div class="actions">
+              <button class="btn btn-edit" onclick="editarImovel(${imovel.id})">Editar</button>
+              <button class="btn btn-delete" onclick="excluirImovel(${imovel.id})">Excluir</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function abrirModal(id = null) {
+      document.getElementById('formImovel').reset();
+      document.getElementById('imovelId').value = '';
+      document.getElementById('modalTitulo').textContent = id ? 'Editar Imóvel' : 'Novo Imóvel';
+
+      if (id) {
+        const imovel = imoveis.find(i => i.id === id);
+        if (imovel) {
+          document.getElementById('imovelId').value = imovel.id;
+          document.getElementById('nome').value = imovel.nome || '';
+          document.getElementById('endereco').value = imovel.endereco || '';
+          document.getElementById('valor').value = imovel.valor || '';
+          document.getElementById('tipo').value = imovel.tipo || 'Residencial';
+          document.getElementById('observacao').value = imovel.observacao || '';
+        }
+      }
+
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function fecharModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+    }
+
+    async function salvarImovel() {
+      const id = document.getElementById('imovelId').value;
+      const nome = document.getElementById('nome').value.trim();
+      const endereco = document.getElementById('endereco').value.trim();
+      const valor = document.getElementById('valor').value;
+      const tipo = document.getElementById('tipo').value;
+      const observacao = document.getElementById('observacao').value.trim();
+
+      if (!nome || !endereco || !valor || !tipo) {
+        alert('Preencha todos os campos obrigatórios.');
+        return;
+      }
+
+      const obj = {
+        nome,
+        endereco,
+        valor: parseFloat(valor),
+        tipo,
+        observacao
+      };
+
+      if (id) {
+        obj.id = parseInt(id, 10);
+      }
+
+      try {
+        await window.db.imoveis_salvar(obj);
+        fecharModal();
+        await carregarImoveis();
+      } catch (e) {
+        alert('Erro ao salvar imóvel.');
+      }
+    }
+
+    async function editarImovel(id) {
+      abrirModal(id);
+    }
+
+    async function excluirImovel(id) {
+      if (!confirm('Deseja realmente excluir este imóvel?')) return;
+      try {
+        await window.db.imoveis_excluir(id);
+        await carregarImoveis();
+      } catch (e) {
+        alert('Erro ao excluir imóvel.');
+      }
+    }
+
+    document.getElementById('modalOverlay').addEventListener('click', function (e) {
+      if (e.target === this) fecharModal();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') fecharModal();
+    });
+
+    document.addEventListener('DOMContentLoaded', carregarImoveis);
+  </script>
+</body>
+</html>

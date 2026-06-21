@@ -3,656 +3,808 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Controle do Escritório - Financeiro</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Financeiro - Controle do Escritório</title>
+  <script src="db.js" defer></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; background: #f5f7fa; color: #333; }
-    .navbar { background: #0a58ca; padding: 0 1rem; }
-    .navbar ul { display: flex; list-style: none; align-items: center; flex-wrap: wrap; }
-    .navbar li { margin: 0; }
-    .navbar a { display: block; color: #fff; text-decoration: none; padding: 1rem 1.2rem; font-weight: 500; transition: background 0.2s; }
-    .navbar a:hover, .navbar a.active { background: rgba(255,255,255,0.2); }
-    .container { max-width: 1200px; margin: 1.5rem auto; padding: 0 1rem; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-    h1 { font-size: 1.5rem; color: #0a58ca; }
-    .tabs { display: flex; border-bottom: 2px solid #ddd; margin-bottom: 1rem; }
-    .tab { padding: 0.8rem 1.5rem; cursor: pointer; background: #fff; border: 1px solid #ddd; border-bottom: none; margin-right: 0.5rem; border-radius: 6px 6px 0 0; }
-    .tab.active { background: #0a58ca; color: #fff; border-color: #0a58ca; }
-    .content { display: none; }
-    .content.active { display: block; }
-    .btn { padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; }
-    .btn-primary { background: #0a58ca; color: #fff; }
-    .btn-primary:hover { background: #084298; }
-    .btn-secondary { background: #6c757d; color: #fff; }
-    .btn-secondary:hover { background: #5a6268; }
-    .btn-danger { background: #dc3545; color: #fff; }
-    .btn-danger:hover { background: #c82333; }
-    .btn-warning { background: #ffc107; color: #000; }
-    .btn-sm { padding: 0.3rem 0.6rem; font-size: 0.85rem; }
-    .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-    .search-box { display: flex; gap: 0.5rem; }
-    input, select { padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
-    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
-    th { background: #0a58ca; color: #fff; }
-    tr:hover { background: #f8f9fa; }
-    .status { padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
-    .status-pago { background: #d1e7dd; color: #0f5132; }
-    .status-pendente { background: #fff3cd; color: #856404; }
-    .status-atrasado { background: #f8d7da; color: #721c24; }
-    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
-    .card { background: #fff; padding: 1rem; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-    .card h3 { font-size: 0.9rem; color: #666; margin-bottom: 0.5rem; }
-    .card .value { font-size: 1.4rem; font-weight: bold; color: #0a58ca; }
-    .chart-container { background: #fff; padding: 1rem; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 1rem; height: 300px; }
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
-    .modal-overlay.active { opacity: 1; pointer-events: auto; }
-    .modal { background: #fff; border-radius: 8px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-    .modal-header { padding: 1rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-    .modal-body { padding: 1rem; }
-    .modal-footer { padding: 1rem; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 0.5rem; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
-    .form-group { display: flex; flex-direction: column; }
-    .form-group label { margin-bottom: 0.3rem; font-weight: 600; font-size: 0.9rem; }
-    .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; }
-    .close-btn:hover { color: #000; }
-    .empty-state { text-align: center; padding: 2rem; color: #666; }
-    .badge { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.75rem; }
+    :root {
+      --primary: #0a58ca;
+      --primary-dark: #084298;
+      --primary-light: #e7f1ff;
+      --danger: #dc3545;
+      --danger-dark: #b02a37;
+      --success: #198754;
+      --success-dark: #146c43;
+      --warning: #ffc107;
+      --warning-dark: #ffca2c;
+      --text: #212529;
+      --muted: #6c757d;
+      --border: #dee2e6;
+      --bg: #f8f9fa;
+      --white: #ffffff;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --radius: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .navbar {
+      background-color: var(--primary);
+      color: var(--white);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .navbar-brand {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .page-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: none;
+      border-radius: var(--radius);
+      padding: 0.6rem 1.1rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      box-shadow: 0 4px 10px rgba(10, 88, 202, 0.3);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--primary-light);
+    }
+
+    .btn-success {
+      background-color: var(--success);
+      color: var(--white);
+    }
+
+    .btn-success:hover {
+      background-color: var(--success-dark);
+    }
+
+    .btn-warning {
+      background-color: var(--warning);
+      color: var(--text);
+    }
+
+    .btn-warning:hover {
+      background-color: var(--warning-dark);
+    }
+
+    .btn-danger {
+      background-color: var(--danger);
+      color: var(--white);
+    }
+
+    .btn-danger:hover {
+      background-color: var(--danger-dark);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 3px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+
+    .tab {
+      padding: 0.8rem 1.4rem;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      margin-bottom: -3px;
+    }
+
+    .tab:hover {
+      color: var(--primary);
+    }
+
+    .tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .panel {
+      background-color: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .panel-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    thead {
+      background-color: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    th,
+    td {
+      padding: 0.85rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      font-weight: 700;
+    }
+
+    tbody tr:hover {
+      background-color: #f1f5ff;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .actions .btn {
+      padding: 0.4rem 0.7rem;
+      font-size: 0.85rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      color: var(--muted);
+    }
+
+    .empty-state-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background-color: var(--white);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: modalIn 0.25s ease;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-header {
+      background-color: var(--primary);
+      color: var(--white);
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--white);
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .modal-body {
+      padding: 1.25rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.6rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(10, 88, 202, 0.15);
+    }
+
+    .modal-footer {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .badge-success {
+      background-color: #d1e7dd;
+      color: #0f5132;
+    }
+
+    .badge-warning {
+      background-color: #fff3cd;
+      color: #664d03;
+    }
+
+    .valor-receita {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .valor-despesa {
+      color: var(--danger);
+      font-weight: 700;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 768px) {
+      .header-actions,
+      .panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      table {
+        font-size: 0.85rem;
+      }
+
+      th,
+      td {
+        padding: 0.65rem 0.5rem;
+      }
+
+      .actions {
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+    }
   </style>
 </head>
 <body>
   <nav class="navbar">
-    <ul>
-      <li><a href="home.html">Home</a></li>
-      <li><a href="cadastros.html">Cadastros</a></li>
-      <li><a href="financeiro.html" class="active">Financeiro</a></li>
-      <li><a href="fluxo-caixa.html">Fluxo de Caixa</a></li>
-      <li><a href="marketing.html">Marketing</a></li>
-      <li><a href="patrimonio.html">Patrimônio</a></li>
-      <li><a href="proventos.html">Proventos</a></li>
-      <li><a href="relatorios-gerenciais.html">Rel. Gerenciais</a></li>
-      <li><a href="usuarios.html">Usuários</a></li>
-    </ul>
+    <div class="navbar-brand">Controle do Escritório</div>
   </nav>
 
   <div class="container">
-    <div class="header">
-      <h1>Financeiro</h1>
+    <div class="header-actions">
+      <h1 class="page-title">💳 Financeiro</h1>
+      <a href="home.html" class="btn btn-outline">← Voltar</a>
     </div>
 
     <div class="tabs">
-      <div class="tab active" data-tab="resumo">Resumo</div>
-      <div class="tab" data-tab="receitas">Receitas</div>
-      <div class="tab" data-tab="despesas">Despesas</div>
+      <button class="tab active" data-tab="receitas">📥 Receitas</button>
+      <button class="tab" data-tab="despesas">📤 Despesas</button>
     </div>
 
-    <div id="content-resumo" class="content active">
-      <div class="cards">
-        <div class="card">
-          <h3>Receitas Totais</h3>
-          <div class="value" id="totalReceitas">R$ 0,00</div>
+    <div id="receitas" class="tab-content active">
+      <div class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Receitas</h2>
+          <button class="btn btn-success" onclick="abrirModalReceita()">+ Nova Receita</button>
         </div>
-        <div class="card">
-          <h3>Despesas Totais</h3>
-          <div class="value" id="totalDespesas">R$ 0,00</div>
-        </div>
-        <div class="card">
-          <h3>Saldo</h3>
-          <div class="value" id="saldo">R$ 0,00</div>
-        </div>
-        <div class="card">
-          <h3>Pendências</h3>
-          <div class="value" id="pendencias">0</div>
-        </div>
-      </div>
-      <div class="chart-container">
-        <canvas id="financeiroChart"></canvas>
+        <div id="loading-receitas" class="loading">Carregando receitas...</div>
+        <div id="tabela-receitas-container"></div>
       </div>
     </div>
 
-    <div id="content-receitas" class="content">
-      <div class="toolbar">
-        <div class="search-box">
-          <input type="text" id="searchReceitas" placeholder="Buscar receita..." />
-          <select id="filterStatusReceitas">
-            <option value="">Todos os status</option>
-            <option value="Pago">Pago</option>
-            <option value="Pendente">Pendente</option>
-            <option value="Atrasado">Atrasado</option>
-          </select>
+    <div id="despesas" class="tab-content">
+      <div class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Despesas</h2>
+          <button class="btn btn-danger" onclick="abrirModalDespesa()">+ Nova Despesa</button>
         </div>
-        <button class="btn btn-primary" onclick="openModal('receita')">Nova Receita</button>
+        <div id="loading-despesas" class="loading">Carregando despesas...</div>
+        <div id="tabela-despesas-container"></div>
       </div>
-      <table id="tableReceitas">
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Descrição</th>
-            <th>Cliente</th>
-            <th>Categoria</th>
-            <th>Valor</th>
-            <th>Vencimento</th>
-            <th>Status</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <div id="content-despesas" class="content">
-      <div class="toolbar">
-        <div class="search-box">
-          <input type="text" id="searchDespesas" placeholder="Buscar despesa..." />
-          <select id="filterStatusDespesas">
-            <option value="">Todos os status</option>
-            <option value="Pago">Pago</option>
-            <option value="Pendente">Pendente</option>
-            <option value="Atrasado">Atrasado</option>
-          </select>
-        </div>
-        <button class="btn btn-primary" onclick="openModal('despesa')">Nova Despesa</button>
-      </div>
-      <table id="tableDespesas">
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Descrição</th>
-            <th>Fornecedor</th>
-            <th>Categoria</th>
-            <th>Nº Inscrição Imóvel</th>
-            <th>Valor</th>
-            <th>Vencimento</th>
-            <th>Status</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
     </div>
   </div>
 
-  <div id="modalReceita" class="modal-overlay">
+  <div id="modal-receita" class="modal-overlay">
     <div class="modal">
       <div class="modal-header">
-        <h2 id="titleReceita">Nova Receita</h2>
-        <button class="close-btn" onclick="closeModal('receita')">&times;</button>
+        <span id="modal-receita-titulo" class="modal-title">Nova Receita</span>
+        <button class="modal-close" onclick="fecharModalReceita()">&times;</button>
       </div>
-      <div class="modal-body">
-        <input type="hidden" id="recId" />
-        <div class="form-row">
+      <form id="form-receita" onsubmit="salvarReceita(event)">
+        <div class="modal-body">
+          <input type="hidden" id="receita-id" />
           <div class="form-group">
-            <label>Data</label>
-            <input type="date" id="recData" />
+            <label for="receita-descricao">Descrição</label>
+            <input type="text" id="receita-descricao" class="form-control" required placeholder="Ex: Serviço prestado" />
           </div>
           <div class="form-group">
-            <label>Descrição</label>
-            <input type="text" id="recDescricao" placeholder="Descrição da receita" />
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Cliente</label>
-            <input type="text" id="recCliente" placeholder="Nome do cliente" />
+            <label for="receita-valor">Valor (R$)</label>
+            <input type="number" id="receita-valor" class="form-control" step="0.01" min="0.01" required placeholder="0,00" />
           </div>
           <div class="form-group">
-            <label>Categoria</label>
-            <select id="recCategoria">
-              <option value="">Selecione</option>
+            <label for="receita-data">Data</label>
+            <input type="date" id="receita-data" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label for="receita-categoria">Categoria</label>
+            <select id="receita-categoria" class="form-control" required>
+              <option value="">Selecione...</option>
               <option value="Serviços">Serviços</option>
               <option value="Vendas">Vendas</option>
               <option value="Consultoria">Consultoria</option>
               <option value="Outros">Outros</option>
             </select>
           </div>
-        </div>
-        <div class="form-row">
           <div class="form-group">
-            <label>Valor</label>
-            <input type="text" id="recValor" class="valor-moeda" placeholder="R$ 0,00" />
-          </div>
-          <div class="form-group">
-            <label>Vencimento</label>
-            <input type="date" id="recVencimento" />
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Status</label>
-            <select id="recStatus">
-              <option value="Pendente">Pendente</option>
-              <option value="Pago">Pago</option>
-              <option value="Atrasado">Atrasado</option>
+            <label for="receita-forma">Forma de pagamento</label>
+            <select id="receita-forma" class="form-control" required>
+              <option value="">Selecione...</option>
+              <option value="Dinheiro">Dinheiro</option>
+              <option value="Pix">Pix</option>
+              <option value="Cartão de crédito">Cartão de crédito</option>
+              <option value="Cartão de débito">Cartão de débito</option>
+              <option value="Boleto">Boleto</option>
+              <option value="Transferência">Transferência</option>
+              <option value="Outro">Outro</option>
             </select>
           </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="limparForm('receita')">Limpar</button>
-        <button class="btn btn-primary" onclick="salvarReceita()">Salvar</button>
-      </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="fecharModalReceita()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
     </div>
   </div>
 
-  <div id="modalDespesa" class="modal-overlay">
+  <div id="modal-despesa" class="modal-overlay">
     <div class="modal">
       <div class="modal-header">
-        <h2 id="titleDespesa">Nova Despesa</h2>
-        <button class="close-btn" onclick="closeModal('despesa')">&times;</button>
+        <span id="modal-despesa-titulo" class="modal-title">Nova Despesa</span>
+        <button class="modal-close" onclick="fecharModalDespesa()">&times;</button>
       </div>
-      <div class="modal-body">
-        <input type="hidden" id="desId" />
-        <div class="form-row">
+      <form id="form-despesa" onsubmit="salvarDespesa(event)">
+        <div class="modal-body">
+          <input type="hidden" id="despesa-id" />
           <div class="form-group">
-            <label>Data</label>
-            <input type="date" id="desData" />
+            <label for="despesa-descricao">Descrição</label>
+            <input type="text" id="despesa-descricao" class="form-control" required placeholder="Ex: Aluguel do escritório" />
           </div>
           <div class="form-group">
-            <label>Descrição</label>
-            <input type="text" id="desDescricao" placeholder="Descrição da despesa" />
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Fornecedor</label>
-            <input type="text" id="desFornecedor" placeholder="Nome do fornecedor" />
+            <label for="despesa-valor">Valor (R$)</label>
+            <input type="number" id="despesa-valor" class="form-control" step="0.01" min="0.01" required placeholder="0,00" />
           </div>
           <div class="form-group">
-            <label>Categoria</label>
-            <select id="desCategoria">
-              <option value="">Selecione</option>
+            <label for="despesa-data">Data</label>
+            <input type="date" id="despesa-data" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label for="despesa-categoria">Categoria</label>
+            <select id="despesa-categoria" class="form-control" required>
+              <option value="">Selecione...</option>
               <option value="Aluguel">Aluguel</option>
-              <option value="IPTU">IPTU</option>
-              <option value="Serviços">Serviços</option>
-              <option value="Impostos">Impostos</option>
               <option value="Salários">Salários</option>
+              <option value="Impostos">Impostos</option>
+              <option value="Fornecedores">Fornecedores</option>
+              <option value="Serviços">Serviços</option>
+              <option value="Marketing">Marketing</option>
               <option value="Outros">Outros</option>
             </select>
           </div>
-        </div>
-        <div class="form-row">
           <div class="form-group">
-            <label>Valor</label>
-            <input type="text" id="desValor" class="valor-moeda" placeholder="R$ 0,00" />
+            <label for="despesa-forma">Forma de pagamento</label>
+            <select id="despesa-forma" class="form-control" required>
+              <option value="">Selecione...</option>
+              <option value="Dinheiro">Dinheiro</option>
+              <option value="Pix">Pix</option>
+              <option value="Cartão de crédito">Cartão de crédito</option>
+              <option value="Cartão de débito">Cartão de débito</option>
+              <option value="Boleto">Boleto</option>
+              <option value="Transferência">Transferência</option>
+              <option value="Outro">Outro</option>
+            </select>
           </div>
           <div class="form-group">
-            <label>Nº Inscrição Imóvel (IPTU)</label>
-            <input type="text" id="desInscricaoImovel" placeholder="Nº inscrição imóvel" />
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Vencimento</label>
-            <input type="date" id="desVencimento" />
-          </div>
-          <div class="form-group">
-            <label>Status</label>
-            <select id="desStatus">
+            <label for="despesa-status">Status</label>
+            <select id="despesa-status" class="form-control" required>
+              <option value="">Selecione...</option>
+              <option value="Paga">Paga</option>
               <option value="Pendente">Pendente</option>
-              <option value="Pago">Pago</option>
-              <option value="Atrasado">Atrasado</option>
             </select>
           </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="limparForm('despesa')">Limpar</button>
-        <button class="btn btn-primary" onclick="salvarDespesa()">Salvar</button>
-      </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="fecharModalDespesa()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
     </div>
   </div>
 
   <script>
     let receitas = [];
     let despesas = [];
-    let chart = null;
 
     document.addEventListener('DOMContentLoaded', () => {
-      setupTabs();
-      setupMoeda();
-      loadData();
-      setupFilters();
+      configurarTabs();
+      carregarReceitas();
+      carregarDespesas();
     });
 
-    function setupTabs() {
-      document.querySelectorAll('.tab').forEach(tab => {
-        tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+    function configurarTabs() {
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const alvo = tab.dataset.tab;
+          document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+          document.getElementById(alvo).classList.add('active');
+        });
       });
     }
 
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabName));
-      document.querySelectorAll('.content').forEach(content => {
-        const target = content.id === 'content-' + tabName;
-        content.classList.toggle('active', target);
-      });
-      if (tabName === 'resumo') updateChart();
+    async function carregarReceitas() {
+      try {
+        document.getElementById('loading-receitas').style.display = 'block';
+        receitas = await window.db.receitas_listar();
+        document.getElementById('loading-receitas').style.display = 'none';
+        renderizarReceitas();
+      } catch (erro) {
+        document.getElementById('loading-receitas').style.display = 'none';
+        document.getElementById('tabela-receitas-container').innerHTML =
+          '<div class="empty-state">Erro ao carregar receitas.</div>';
+        console.error(erro);
+      }
     }
 
-    function setupMoeda() {
-      document.querySelectorAll('.valor-moeda').forEach(input => {
-        input.addEventListener('input', () => setValorMoeda(input));
-        input.addEventListener('blur', () => setValorMoeda(input));
-      });
+    async function carregarDespesas() {
+      try {
+        document.getElementById('loading-despesas').style.display = 'block';
+        despesas = await window.db.despesas_listar();
+        document.getElementById('loading-despesas').style.display = 'none';
+        renderizarDespesas();
+      } catch (erro) {
+        document.getElementById('loading-despesas').style.display = 'none';
+        document.getElementById('tabela-despesas-container').innerHTML =
+          '<div class="empty-state">Erro ao carregar despesas.</div>';
+        console.error(erro);
+      }
     }
 
-    function setValorMoeda(input) {
-      let valor = input.value.replace(/[^\d]/g, '');
-      valor = (parseInt(valor || '0', 10) / 100).toFixed(2);
-      input.dataset.raw = valor;
-      input.value = formatarMoeda(valor);
-    }
-
-    function getValorMoeda(input) {
-      return input.dataset.raw ? parseFloat(input.dataset.raw) : 0;
-    }
-
-    function formatarMoeda(valor) {
-      return 'R$ ' + parseFloat(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    function formatarValor(valor) {
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor || 0);
     }
 
     function formatarData(data) {
       if (!data) return '-';
-      const d = new Date(data + 'T00:00:00');
+      const d = new Date(data);
+      if (isNaN(d.getTime())) return data;
       return d.toLocaleDateString('pt-BR');
     }
 
-    function getStatusClass(status) {
-      switch (status) {
-        case 'Pago': return 'status-pago';
-        case 'Pendente': return 'status-pendente';
-        case 'Atrasado': return 'status-atrasado';
-        default: return 'status-pendente';
-      }
-    }
-
-    async function loadData() {
-      try {
-        receitas = await window.db.receitas_listar() || [];
-        despesas = await window.db.despesas_listar() || [];
-      } catch (e) {
-        console.error('Erro ao carregar dados:', e);
-        receitas = [];
-        despesas = [];
-      }
-      renderResumo();
-      renderReceitas();
-      renderDespesas();
-      updateChart();
-    }
-
-    function renderResumo() {
-      const totalRec = receitas.reduce((acc, r) => acc + (parseFloat(r.valor) || 0), 0);
-      const totalDes = despesas.reduce((acc, d) => acc + (parseFloat(d.valor) || 0), 0);
-      const saldo = totalRec - totalDes;
-      const pendencias = receitas.filter(r => r.status !== 'Pago').length + despesas.filter(d => d.status !== 'Pago').length;
-
-      document.getElementById('totalReceitas').textContent = formatarMoeda(totalRec);
-      document.getElementById('totalDespesas').textContent = formatarMoeda(totalDes);
-      document.getElementById('saldo').textContent = formatarMoeda(saldo);
-      document.getElementById('pendencias').textContent = pendencias;
-    }
-
-    function getFilteredReceitas() {
-      const search = document.getElementById('searchReceitas').value.toLowerCase();
-      const status = document.getElementById('filterStatusReceitas').value;
-      return receitas.filter(r => {
-        const matchesSearch = !search ||
-          (r.descricao || '').toLowerCase().includes(search) ||
-          (r.cliente || '').toLowerCase().includes(search) ||
-          (r.categoria || '').toLowerCase().includes(search);
-        const matchesStatus = !status || r.status === status;
-        return matchesSearch && matchesStatus;
-      });
-    }
-
-    function getFilteredDespesas() {
-      const search = document.getElementById('searchDespesas').value.toLowerCase();
-      const status = document.getElementById('filterStatusDespesas').value;
-      return despesas.filter(d => {
-        const matchesSearch = !search ||
-          (d.descricao || '').toLowerCase().includes(search) ||
-          (d.fornecedor || '').toLowerCase().includes(search) ||
-          (d.categoria || '').toLowerCase().includes(search) ||
-          (d.inscricao_imovel || '').toLowerCase().includes(search);
-        const matchesStatus = !status || d.status === status;
-        return matchesSearch && matchesStatus;
-      });
-    }
-
-    function renderReceitas() {
-      const tbody = document.querySelector('#tableReceitas tbody');
-      const lista = getFilteredReceitas();
-      if (lista.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Nenhuma receita encontrada</td></tr>';
+    function renderizarReceitas() {
+      const container = document.getElementById('tabela-receitas-container');
+      if (!receitas || receitas.length === 0) {
+        container.innerHTML =
+          '<div class="empty-state"><div class="empty-state-icon">📥</div><p>Nenhuma receita cadastrada.</p></div>';
         return;
       }
-      tbody.innerHTML = lista.map(r => `
-        <tr>
-          <td>${formatarData(r.data)}</td>
-          <td>${r.descricao || '-'}</td>
-          <td>${r.cliente || '-'}</td>
-          <td>${r.categoria || '-'}</td>
-          <td>${formatarMoeda(r.valor)}</td>
-          <td>${formatarData(r.vencimento)}</td>
-          <td><span class="status ${getStatusClass(r.status)}">${r.status || 'Pendente'}</span></td>
-          <td>
-            <button class="btn btn-warning btn-sm" onclick="editarReceita('${r.id}')">Editar</button>
-            <button class="btn btn-danger btn-sm" onclick="excluirReceita('${r.id}')">Excluir</button>
-          </td>
-        </tr>
-      `).join('');
+
+      let html = '<div class="table-responsive"><table><thead><tr>';
+      html += '<th>Descrição</th><th>Valor</th><th>Data</th><th>Categoria</th><th>Forma de pagamento</th><th>Ações</th>';
+      html += '</tr></thead><tbody>';
+
+      receitas.forEach(item => {
+        html += '<tr>';
+        html += `<td>${escapar(item.descricao || '')}</td>`;
+        html += `<td class="valor-receita">${formatarValor(item.valor)}</td>`;
+        html += `<td>${formatarData(item.data)}</td>`;
+        html += `<td>${escapar(item.categoria || '')}</td>`;
+        html += `<td>${escapar(item.forma_pagamento || '')}</td>`;
+        html += `<td class="actions">`;
+        html += `<button class="btn btn-warning" onclick="editarReceita('${item.id}')">Editar</button>`;
+        html += `<button class="btn btn-danger" onclick="excluirReceita('${item.id}')">Excluir</button>`;
+        html += `</td>`;
+        html += '</tr>';
+      });
+
+      html += '</tbody></table></div>';
+      container.innerHTML = html;
     }
 
-    function renderDespesas() {
-      const tbody = document.querySelector('#tableDespesas tbody');
-      const lista = getFilteredDespesas();
-      if (lista.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="empty-state">Nenhuma despesa encontrada</td></tr>';
+    function renderizarDespesas() {
+      const container = document.getElementById('tabela-despesas-container');
+      if (!despesas || despesas.length === 0) {
+        container.innerHTML =
+          '<div class="empty-state"><div class="empty-state-icon">📤</div><p>Nenhuma despesa cadastrada.</p></div>';
         return;
       }
-      tbody.innerHTML = lista.map(d => `
-        <tr>
-          <td>${formatarData(d.data)}</td>
-          <td>${d.descricao || '-'}</td>
-          <td>${d.fornecedor || '-'}</td>
-          <td>${d.categoria || '-'}</td>
-          <td>${d.inscricao_imovel || '-'}</td>
-          <td>${formatarMoeda(d.valor)}</td>
-          <td>${formatarData(d.vencimento)}</td>
-          <td><span class="status ${getStatusClass(d.status)}">${d.status || 'Pendente'}</span></td>
-          <td>
-            <button class="btn btn-warning btn-sm" onclick="editarDespesa('${d.id}')">Editar</button>
-            <button class="btn btn-danger btn-sm" onclick="excluirDespesa('${d.id}')">Excluir</button>
-          </td>
-        </tr>
-      `).join('');
+
+      let html = '<div class="table-responsive"><table><thead><tr>';
+      html += '<th>Descrição</th><th>Valor</th><th>Data</th><th>Categoria</th><th>Forma de pagamento</th><th>Status</th><th>Ações</th>';
+      html += '</tr></thead><tbody>';
+
+      despesas.forEach(item => {
+        const statusBadge = item.status === 'Paga'
+          ? '<span class="badge badge-success">Paga</span>'
+          : '<span class="badge badge-warning">Pendente</span>';
+
+        html += '<tr>';
+        html += `<td>${escapar(item.descricao || '')}</td>`;
+        html += `<td class="valor-despesa">${formatarValor(item.valor)}</td>`;
+        html += `<td>${formatarData(item.data)}</td>`;
+        html += `<td>${escapar(item.categoria || '')}</td>`;
+        html += `<td>${escapar(item.forma_pagamento || '')}</td>`;
+        html += `<td>${statusBadge}</td>`;
+        html += `<td class="actions">`;
+        html += `<button class="btn btn-warning" onclick="editarDespesa('${item.id}')">Editar</button>`;
+        html += `<button class="btn btn-danger" onclick="excluirDespesa('${item.id}')">Excluir</button>`;
+        html += `</td>`;
+        html += '</tr>';
+      });
+
+      html += '</tbody></table></div>';
+      container.innerHTML = html;
     }
 
-    function setupFilters() {
-      document.getElementById('searchReceitas').addEventListener('input', renderReceitas);
-      document.getElementById('filterStatusReceitas').addEventListener('change', renderReceitas);
-      document.getElementById('searchDespesas').addEventListener('input', renderDespesas);
-      document.getElementById('filterStatusDespesas').addEventListener('change', renderDespesas);
+    function escapar(texto) {
+      const div = document.createElement('div');
+      div.textContent = texto;
+      return div.innerHTML;
     }
 
-    function updateChart() {
-      const ctx = document.getElementById('financeiroChart').getContext('2d');
-      const totalRec = receitas.reduce((acc, r) => acc + (parseFloat(r.valor) || 0), 0);
-      const totalDes = despesas.reduce((acc, d) => acc + (parseFloat(d.valor) || 0), 0);
-
-      if (chart) chart.destroy();
-      chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Receitas', 'Despesas', 'Saldo'],
-          datasets: [{
-            label: 'Valores (R$)',
-            data: [totalRec, totalDes, totalRec - totalDes],
-            backgroundColor: ['#198754', '#dc3545', '#0a58ca'],
-            borderRadius: 6
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            title: { display: true, text: 'Resumo Financeiro' }
-          },
-          scales: {
-            y: { beginAtZero: true, ticks: { callback: value => 'R$ ' + value.toLocaleString('pt-BR') } }
-          }
+    function abrirModalReceita(id = null) {
+      document.getElementById('form-receita').reset();
+      document.getElementById('receita-id').value = id || '';
+      document.getElementById('modal-receita-titulo').textContent = id ? 'Editar Receita' : 'Nova Receita';
+      if (id) {
+        const item = receitas.find(r => r.id === id);
+        if (item) {
+          document.getElementById('receita-descricao').value = item.descricao || '';
+          document.getElementById('receita-valor').value = item.valor || '';
+          document.getElementById('receita-data').value = item.data ? item.data.substring(0, 10) : '';
+          document.getElementById('receita-categoria').value = item.categoria || '';
+          document.getElementById('receita-forma').value = item.forma_pagamento || '';
         }
-      });
-    }
-
-    function openModal(tipo) {
-      limparForm(tipo);
-      document.getElementById('title' + tipo.charAt(0).toUpperCase() + tipo.slice(1)).textContent = 'Nova ' + tipo.charAt(0).toUpperCase() + tipo.slice(1);
-      document.getElementById('modal' + tipo.charAt(0).toUpperCase() + tipo.slice(1)).classList.add('active');
-    }
-
-    function closeModal(tipo) {
-      document.getElementById('modal' + tipo.charAt(0).toUpperCase() + tipo.slice(1)).classList.remove('active');
-    }
-
-    function limparForm(tipo) {
-      const prefix = tipo === 'receita' ? 'rec' : 'des';
-      document.getElementById(prefix + 'Id').value = '';
-      document.getElementById(prefix + 'Data').value = '';
-      document.getElementById(prefix + 'Descricao').value = '';
-      if (tipo === 'receita') {
-        document.getElementById('recCliente').value = '';
-      } else {
-        document.getElementById('desFornecedor').value = '';
-        document.getElementById('desInscricaoImovel').value = '';
       }
-      document.getElementById(prefix + 'Categoria').value = '';
-      const valorInput = document.getElementById(prefix + 'Valor');
-      valorInput.value = '';
-      valorInput.dataset.raw = '0';
-      document.getElementById(prefix + 'Vencimento').value = '';
-      document.getElementById(prefix + 'Status').value = 'Pendente';
+      document.getElementById('modal-receita').classList.add('active');
     }
 
-    async function salvarReceita() {
-      const id = document.getElementById('recId').value || undefined;
-      const data = document.getElementById('recData').value;
-      const descricao = document.getElementById('recDescricao').value;
-      const cliente = document.getElementById('recCliente').value;
-      const categoria = document.getElementById('recCategoria').value;
-      const valor = getValorMoeda(document.getElementById('recValor'));
-      const vencimento = document.getElementById('recVencimento').value;
-      const status = document.getElementById('recStatus').value;
+    function fecharModalReceita() {
+      document.getElementById('modal-receita').classList.remove('active');
+    }
 
-      if (!descricao || !valor) {
-        alert('Preencha descrição e valor.');
-        return;
-      }
-
+    async function salvarReceita(event) {
+      event.preventDefault();
+      const id = document.getElementById('receita-id').value;
+      const obj = {
+        id: id || undefined,
+        descricao: document.getElementById('receita-descricao').value.trim(),
+        valor: parseFloat(document.getElementById('receita-valor').value),
+        data: document.getElementById('receita-data').value,
+        categoria: document.getElementById('receita-categoria').value,
+        forma_pagamento: document.getElementById('receita-forma').value
+      };
       try {
-        await window.db.receitas_salvar({ id, data, descricao, cliente, categoria, valor, vencimento, status });
-        closeModal('receita');
-        await loadData();
-      } catch (e) {
-        console.error('Erro ao salvar receita:', e);
+        await window.db.receitas_salvar(obj);
+        fecharModalReceita();
+        await carregarReceitas();
+      } catch (erro) {
+        console.error(erro);
         alert('Erro ao salvar receita.');
       }
     }
 
-    async function salvarDespesa() {
-      const id = document.getElementById('desId').value || undefined;
-      const data = document.getElementById('desData').value;
-      const descricao = document.getElementById('desDescricao').value;
-      const fornecedor = document.getElementById('desFornecedor').value;
-      const categoria = document.getElementById('desCategoria').value;
-      const valor = getValorMoeda(document.getElementById('desValor'));
-      const vencimento = document.getElementById('desVencimento').value;
-      const status = document.getElementById('desStatus').value;
-      const inscricao_imovel = document.getElementById('desInscricaoImovel').value;
-
-      if (!descricao || !valor) {
-        alert('Preencha descrição e valor.');
-        return;
-      }
-
-      try {
-        await window.db.despesas_salvar({ id, data, descricao, fornecedor, categoria, valor, vencimento, status, inscricao_imovel });
-        closeModal('despesa');
-        await loadData();
-      } catch (e) {
-        console.error('Erro ao salvar despesa:', e);
-        alert('Erro ao salvar despesa.');
-      }
-    }
-
-    async function editarReceita(id) {
-      const r = receitas.find(item => item.id === id);
-      if (!r) return;
-      document.getElementById('recId').value = r.id;
-      document.getElementById('recData').value = r.data || '';
-      document.getElementById('recDescricao').value = r.descricao || '';
-      document.getElementById('recCliente').value = r.cliente || '';
-      document.getElementById('recCategoria').value = r.categoria || '';
-      const valorInput = document.getElementById('recValor');
-      valorInput.dataset.raw = r.valor || '0';
-      valorInput.value = formatarMoeda(r.valor || 0);
-      document.getElementById('recVencimento').value = r.vencimento || '';
-      document.getElementById('recStatus').value = r.status || 'Pendente';
-      document.getElementById('titleReceita').textContent = 'Editar Receita';
-      document.getElementById('modalReceita').classList.add('active');
-    }
-
-    async function editarDespesa(id) {
-      const d = despesas.find(item => item.id === id);
-      if (!d) return;
-      document.getElementById('desId').value = d.id;
-      document.getElementById('desData').value = d.data || '';
-      document.getElementById('desDescricao').value = d.descricao || '';
-      document.getElementById('desFornecedor').value = d.fornecedor || '';
-      document.getElementById('desCategoria').value = d.categoria || '';
-      const valorInput = document.getElementById('desValor');
-      valorInput.dataset.raw = d.valor || '0';
-      valorInput.value = formatarMoeda(d.valor || 0);
-      document.getElementById('desVencimento').value = d.vencimento || '';
-      document.getElementById('desStatus').value = d.status || 'Pendente';
-      document.getElementById('desInscricaoImovel').value = d.inscricao_imovel || '';
-      document.getElementById('titleDespesa').textContent = 'Editar Despesa';
-      document.getElementById('modalDespesa').classList.add('active');
+    function editarReceita(id) {
+      abrirModalReceita(id);
     }
 
     async function excluirReceita(id) {
-      if (!confirm('Deseja excluir esta receita?')) return;
+      if (!confirm('Deseja realmente excluir esta receita?')) return;
       try {
         await window.db.receitas_excluir(id);
-        await loadData();
-      } catch (e) {
-        console.error('Erro ao excluir receita:', e);
+        await carregarReceitas();
+      } catch (erro) {
+        console.error(erro);
         alert('Erro ao excluir receita.');
       }
     }
 
-    async function excluirDespesa(id) {
-      if (!confirm('Deseja excluir esta despesa?')) return;
+    function abrirModalDespesa(id = null) {
+      document.getElementById('form-despesa').reset();
+      document.getElementById('despesa-id').value = id || '';
+      document.getElementById('modal-despesa-titulo').textContent = id ? 'Editar Despesa' : 'Nova Despesa';
+      if (id) {
+        const item = despesas.find(d => d.id === id);
+        if (item) {
+          document.getElementById('despesa-descricao').value = item.descricao || '';
+          document.getElementById('despesa-valor').value = item.valor || '';
+          document.getElementById('despesa-data').value = item.data ? item.data.substring(0, 10) : '';
+          document.getElementById('despesa-categoria').value = item.categoria || '';
+          document.getElementById('despesa-forma').value = item.forma_pagamento || '';
+          document.getElementById('despesa-status').value = item.status || '';
+        }
+      }
+      document.getElementById('modal-despesa').classList.add('active');
+    }
+
+    function fecharModalDespesa() {
+      document.getElementById('modal-despesa').classList.remove('active');
+    }
+
+    async function salvarDespesa(event) {
+      event.preventDefault();
+      const id = document.getElementById('despesa-id').value;
+      const obj = {
+        id: id || undefined,
+        descricao: document.getElementById('despesa-descricao').value.trim(),
+        valor: parseFloat(document.getElementById('despesa-valor').value),
+        data: document.getElementById('despesa-data').value,
+        categoria: document.getElementById('despesa-categoria').value,
+        forma_pagamento: document.getElementById('despesa-forma').value,
+        status: document.getElementById('despesa-status').value
+      };
       try {
-        await window.db.despesas_excluir(id);
-        await loadData();
-      } catch (e) {
-        console.error('Erro ao excluir despesa:', e);
-        alert('Erro ao excluir despesa.');
+        await window.db.despesas_salvar(obj);
+        fecharModalDespesa();
+        await carregarDespesas();
+      } catch (erro) {
+        console.error(erro);
+        alert('Erro ao salvar despesa.');
       }
     }
 
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-      overlay.addEventListener('click', e => {
-        if (e.target === overlay) {
-          const tipo = overlay.id === 'modalReceita' ? 'receita' : 'despesa';
-          closeModal(tipo);
-        }
-      });
-    });
+    function editarDespesa(id) {
+      abrirModalDespesa(id);
+    }
+
+    async function excluirDespesa(id) {
+      if (!confirm('Deseja realmente excluir esta despesa?')) return;
+      try {
+        await window.db.despesas_excluir(id);
+        await carregarDespesas();
+      } catch (erro) {
+        console.error(erro);
+        alert('Erro ao excluir despesa.');
+      }
+    }
   </script>
 </body>
 </html>

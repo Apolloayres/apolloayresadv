@@ -1,419 +1,340 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Controle do Escritório - Fluxo de Caixa</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fluxo de Caixa - Controle do Escritório</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; color: #333; }
-    .navbar { background-color: #0a58ca; padding: 0 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; }
-    .navbar .brand { color: #fff; font-weight: 700; padding: 1rem 0; font-size: 1.2rem; }
-    .navbar .links { display: flex; flex-wrap: wrap; }
-    .navbar .links a { color: #fff; text-decoration: none; padding: 1rem 0.8rem; display: inline-block; font-size: 0.95rem; transition: background .2s; }
-    .navbar .links a:hover, .navbar .links a.active { background-color: rgba(255,255,255,0.15); }
-    .container { max-width: 1280px; margin: 0 auto; padding: 1.5rem; }
-    h1, h2, h3 { margin-bottom: 1rem; color: #0a58ca; }
-    .controls { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-    .controls label { font-weight: 600; }
-    .controls select { padding: 0.45rem 0.7rem; border-radius: 0.35rem; border: 1px solid #cbd5e1; font-size: 1rem; }
-    .btn { background-color: #0a58ca; color: #fff; border: none; padding: 0.55rem 1rem; border-radius: 0.35rem; cursor: pointer; font-size: 1rem; transition: background .2s, transform .1s; }
-    .btn:hover { background-color: #0842a0; }
-    .btn:active { transform: translateY(1px); }
-    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-    .card { background: #fff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 1rem; text-align: center; }
-    .card .label { font-size: 0.85rem; color: #64748b; margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.03em; }
-    .card .value { font-size: 1.5rem; font-weight: 700; color: #0a58ca; }
-    .card .value.positive { color: #15803d; }
-    .card .value.negative { color: #b91c1c; }
-    .panel { background: #fff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 1.25rem; margin-bottom: 1.5rem; overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 720px; }
-    th, td { padding: 0.75rem; text-align: right; border-bottom: 1px solid #e2e8f0; }
-    th:first-child, td:first-child { text-align: left; }
-    thead th { background-color: #0a58ca; color: #fff; font-weight: 600; }
-    tbody tr:nth-child(even) { background-color: #f8fafc; }
-    tbody tr:hover { background-color: #eff6ff; }
-    .tabs { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-bottom: 1rem; }
-    .tab-btn { background: #e2e8f0; border: none; padding: 0.5rem 0.75rem; border-radius: 0.35rem; cursor: pointer; font-weight: 600; color: #334155; }
-    .tab-btn.active { background: #0a58ca; color: #fff; }
-    .tab-btn:hover:not(.active) { background: #cbd5e1; }
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
-    .dia-group { margin-bottom: 1rem; }
-    .dia-group h4 { color: #0a58ca; margin-bottom: 0.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.25rem; }
-    .mov-item { display: flex; justify-content: space-between; padding: 0.35rem 0; border-bottom: 1px dashed #e2e8f0; }
-    .mov-item .tipo-receita { color: #15803d; font-weight: 600; }
-    .mov-item .tipo-despesa { color: #b91c1c; font-weight: 600; }
-    .mov-item .tipo-provento { color: #7c3aed; font-weight: 600; }
-    .chart-wrap { position: relative; height: 360px; }
-    .empty { color: #64748b; font-style: italic; text-align: center; padding: 1rem; }
-    .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); display: none; align-items: center; justify-content: center; z-index: 1000; }
-    .modal-overlay.active { display: flex; }
-    .modal { background: #fff; border-radius: 0.5rem; max-width: 560px; width: 90%; max-height: 85vh; overflow-y: auto; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-    .modal h3 { margin-bottom: 1rem; }
-    .modal .close { float: right; background: #e2e8f0; border: none; width: 2rem; height: 2rem; border-radius: 50%; cursor: pointer; font-weight: 700; color: #334155; }
-    .modal .close:hover { background: #cbd5e1; }
-    @media (max-width: 768px) {
-      .navbar .links { width: 100%; justify-content: flex-start; }
-      .navbar .links a { padding: 0.7rem 0.6rem; font-size: 0.85rem; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f6ff;
+      color: #1a3a5c;
+      min-height: 100vh;
+    }
+    .navbar {
+      background: #0a58ca;
+      color: #fff;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+    .navbar-brand {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .title {
+      font-size: 1.6rem;
+      color: #0a58ca;
+    }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #0a58ca;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      text-decoration: none;
+    }
+    .btn-back:hover {
+      background: #0846a3;
+      transform: translateX(-2px);
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(10, 88, 202, 0.1);
+      border-left: 5px solid #0a58ca;
+    }
+    .card.receitas {
+      border-left-color: #198754;
+    }
+    .card.despesas {
+      border-left-color: #dc3545;
+    }
+    .card.saldo {
+      border-left-color: #0a58ca;
+    }
+    .card-label {
+      font-size: 0.85rem;
+      color: #6c88a8;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-value {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+    .receitas .card-value { color: #198754; }
+    .despesas .card-value { color: #dc3545; }
+    .saldo .card-value { color: #0a58ca; }
+    .filtro {
+      background: #fff;
+      border-radius: 8px;
+      padding: 16px 20px;
+      box-shadow: 0 2px 8px rgba(10, 88, 202, 0.1);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .filtro label {
+      font-weight: 600;
+      color: #0a58ca;
+    }
+    .filtro input[type="month"] {
+      border: 1px solid #b6d0f7;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.95rem;
+      color: #1a3a5c;
+      background: #f8fbff;
+      outline: none;
+    }
+    .filtro input[type="month"]:focus {
+      border-color: #0a58ca;
+    }
+    .table-wrapper {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(10, 88, 202, 0.1);
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    thead {
+      background: #0a58ca;
+      color: #fff;
+    }
+    th, td {
+      padding: 14px 16px;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+    tbody tr:nth-child(even) {
+      background: #f3f8ff;
+    }
+    tbody tr:hover {
+      background: #e6f0ff;
+    }
+    .tipo-receita {
+      color: #198754;
+      font-weight: 600;
+    }
+    .tipo-despesa {
+      color: #dc3545;
+      font-weight: 600;
+    }
+    .valor-receita { color: #198754; font-weight: 600; }
+    .valor-despesa { color: #dc3545; font-weight: 600; }
+    .valor-saldo { color: #0a58ca; font-weight: 700; }
+    .empty {
+      text-align: center;
+      padding: 28px;
+      color: #6c88a8;
+    }
+    @media (max-width: 600px) {
+      .header { flex-direction: column; align-items: flex-start; }
+      th, td { padding: 10px 12px; font-size: 0.88rem; }
     }
   </style>
 </head>
 <body>
   <nav class="navbar">
-    <div class="brand">Controle do Escritório</div>
-    <div class="links">
-      <a href="home.html">Home</a>
-      <a href="cadastros.html">Cadastros</a>
-      <a href="financeiro.html">Financeiro</a>
-      <a href="fluxo-caixa.html" class="active">Fluxo de Caixa</a>
-      <a href="marketing.html">Marketing</a>
-      <a href="patrimonio.html">Patrimônio</a>
-      <a href="proventos.html">Proventos</a>
-      <a href="relatorios-gerenciais.html">Rel. Gerenciais</a>
-      <a href="usuarios.html">Usuários</a>
-    </div>
+    <div class="navbar-brand">Controle do Escritório</div>
   </nav>
 
   <div class="container">
-    <h1>Fluxo de Caixa</h1>
-
-    <div class="controls">
-      <label for="anoSelect">Ano:</label>
-      <select id="anoSelect"></select>
-      <button id="btnCarregar" class="btn">Carregar Dados</button>
+    <div class="header">
+      <h1 class="title">📈 Fluxo de Caixa</h1>
+      <a href="home.html" class="btn-back">← Voltar</a>
     </div>
 
-    <div class="cards" id="cardsResumo">
-      <div class="card">
-        <div class="label">Saldo Caixa</div>
-        <div class="value" id="saldoCaixa">R$ 0,00</div>
+    <div class="cards">
+      <div class="card receitas">
+        <div class="card-label">Total Receitas</div>
+        <div class="card-value" id="totalReceitas">R$ 0,00</div>
       </div>
-      <div class="card">
-        <div class="label">Saldo Contas</div>
-        <div class="value" id="saldoContas">R$ 0,00</div>
+      <div class="card despesas">
+        <div class="card-label">Total Despesas</div>
+        <div class="card-value" id="totalDespesas">R$ 0,00</div>
       </div>
-      <div class="card">
-        <div class="label">Saldo Aplicações</div>
-        <div class="value" id="saldoAplicacoes">R$ 0,00</div>
-      </div>
-      <div class="card">
-        <div class="label">Patrimônio Total</div>
-        <div class="value" id="patrimonioTotal">R$ 0,00</div>
+      <div class="card saldo">
+        <div class="card-label">Saldo do Período</div>
+        <div class="card-value" id="saldoPeriodo">R$ 0,00</div>
       </div>
     </div>
 
-    <div class="panel">
-      <h2>Fluxo Mensal</h2>
-      <table id="tabelaMensal">
+    <div class="filtro">
+      <label for="filtroMes">Filtrar por mês/ano:</label>
+      <input type="month" id="filtroMes" />
+    </div>
+
+    <div class="table-wrapper">
+      <table id="tabelaFluxo">
         <thead>
           <tr>
-            <th>Mês</th>
-            <th>Receitas</th>
-            <th>Despesas</th>
-            <th>Saldo do Mês</th>
+            <th>Data</th>
+            <th>Descrição</th>
+            <th>Tipo</th>
+            <th>Valor</th>
             <th>Saldo Acumulado</th>
-            <th>Saldo Contas</th>
-            <th>Saldo Aplicações</th>
-            <th>Total Geral</th>
           </tr>
         </thead>
-        <tbody id="tbodyMensal"></tbody>
+        <tbody id="corpoTabela">
+        </tbody>
       </table>
-    </div>
-
-    <div class="panel">
-      <h2>Movimentações por Dia</h2>
-      <div class="tabs" id="tabsDias"></div>
-      <div id="panelsDias"></div>
-    </div>
-
-    <div class="panel">
-      <h2>Gráfico Receitas vs Despesas</h2>
-      <div class="chart-wrap">
-        <canvas id="chartFluxo"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal">
-      <button class="close" id="btnFecharModal">&times;</button>
-      <h3 id="modalTitulo">Detalhes</h3>
-      <div id="modalConteudo"></div>
     </div>
   </div>
 
   <script>
-    const NOME_MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-
-    let receitasCache = [];
-    let despesasCache = [];
-    let proventosCache = [];
-    let contasCache = [];
-    let chartInstance = null;
-
-    function mascaraMoeda(valor) {
-      if (valor === null || valor === undefined || isNaN(valor)) return 'R$ 0,00';
-      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(valor));
+    function formatarData(dataISO) {
+      if (!dataISO) return '';
+      const d = new Date(dataISO + 'T00:00:00');
+      return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
     }
 
     function formatarMoeda(valor) {
-      return mascaraMoeda(valor);
+      return 'R$ ' + Number(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
-    function parseValor(valor) {
-      if (typeof valor === 'number') return valor;
-      if (!valor) return 0;
-      const limpo = String(valor).replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.');
-      const n = parseFloat(limpo);
-      return isNaN(n) ? 0 : n;
+    function obterMovimentacoes(receitas, despesas) {
+      const movimentacoes = [];
+
+      receitas.forEach(item => {
+        movimentacoes.push({
+          id: item.id,
+          data: item.data,
+          descricao: item.descricao,
+          tipo: 'Receita',
+          valor: Number(item.valor)
+        });
+      });
+
+      despesas.forEach(item => {
+        movimentacoes.push({
+          id: item.id,
+          data: item.data,
+          descricao: item.descricao,
+          tipo: 'Despesa',
+          valor: Number(item.valor)
+        });
+      });
+
+      movimentacoes.sort((a, b) => new Date(a.data) - new Date(b.data));
+      return movimentacoes;
     }
 
-    function extrairAnoMes(dataStr) {
-      if (!dataStr) return { ano: null, mes: null, dia: null };
-      const d = new Date(dataStr);
-      if (isNaN(d.getTime())) return { ano: null, mes: null, dia: null };
-      return { ano: d.getFullYear(), mes: d.getMonth(), dia: d.getDate() };
+    function filtrarPorMes(movimentacoes, mesAno) {
+      if (!mesAno) return movimentacoes;
+      return movimentacoes.filter(m => m.data && m.data.startsWith(mesAno));
     }
 
-    function popularAnos() {
-      const select = document.getElementById('anoSelect');
-      select.innerHTML = '';
-      const atual = new Date().getFullYear();
-      for (let a = atual - 5; a <= atual + 5; a++) {
-        const opt = document.createElement('option');
-        opt.value = a;
-        opt.textContent = a;
-        if (a === atual) opt.selected = true;
-        select.appendChild(opt);
-      }
-    }
-
-    async function carregarDados() {
-      try {
-        if (!window.db) {
-          alert('Banco de dados não está disponível (window.db).');
-          return;
-        }
-        const [receitas, despesas, proventos, contas] = await Promise.all([
-          window.db.receitas_listar(),
-          window.db.despesas_listar(),
-          window.db.proventos_listar(),
-          window.db.contas_listar()
-        ]);
-        receitasCache = Array.isArray(receitas) ? receitas : [];
-        despesasCache = Array.isArray(despesas) ? despesas : [];
-        proventosCache = Array.isArray(proventos) ? proventos : [];
-        contasCache = Array.isArray(contas) ? contas : [];
-        atualizarTela();
-      } catch (erro) {
-        console.error('Erro ao carregar dados:', erro);
-        alert('Erro ao carregar dados: ' + erro.message);
-      }
-    }
-
-    function calcularResumo(ano) {
-      let saldoContas = 0;
-      let saldoAplicacoes = 0;
-      for (const c of contasCache) {
-        const tipo = String(c.tipo || '').toLowerCase();
-        const saldo = parseValor(c.saldo);
-        if (tipo.includes('aplica')) {
-          saldoAplicacoes += saldo;
-        } else {
-          saldoContas += saldo;
-        }
-      }
-
-      let saldoCaixa = 0;
-      let acumulado = 0;
-      for (let m = 0; m < 12; m++) {
-        const rec = somarPorMes(receitasCache, ano, m, 'valor');
-        const des = somarPorMes(despesasCache, ano, m, 'valor');
-        const prov = somarPorMes(proventosCache, ano, m, 'valor');
-        const saldoMes = rec + prov - des;
-        acumulado += saldoMes;
-      }
-      saldoCaixa = acumulado;
-      const patrimonioTotal = saldoCaixa + saldoContas + saldoAplicacoes;
-      return { saldoCaixa, saldoContas, saldoAplicacoes, patrimonioTotal };
-    }
-
-    function somarPorMes(lista, ano, mes, campoValor) {
-      let total = 0;
-      for (const item of lista) {
-        const { ano: a, mes: m } = extrairAnoMes(item.data || item.data_recebimento || item.data_pagamento || item.data_competencia);
-        if (a === ano && m === mes) {
-          total += parseValor(item[campoValor]);
-        }
-      }
-      return total;
-    }
-
-    function listarPorDia(lista, ano, mes, dia) {
-      return lista.filter(item => {
-        const { ano: a, mes: m, dia: d } = extrairAnoMes(item.data || item.data_recebimento || item.data_pagamento || item.data_competencia);
-        return a === ano && m === mes && d === dia;
+    function calcularSaldos(movimentacoes) {
+      let saldoAcumulado = 0;
+      return movimentacoes.map(m => {
+        saldoAcumulado += m.tipo === 'Receita' ? m.valor : -m.valor;
+        return { ...m, saldoAcumulado };
       });
     }
 
-    function atualizarResumo(ano) {
-      const resumo = calcularResumo(ano);
-      document.getElementById('saldoCaixa').textContent = formatarMoeda(resumo.saldoCaixa);
-      document.getElementById('saldoContas').textContent = formatarMoeda(resumo.saldoContas);
-      document.getElementById('saldoAplicacoes').textContent = formatarMoeda(resumo.saldoAplicacoes);
-      document.getElementById('patrimonioTotal').textContent = formatarMoeda(resumo.patrimonioTotal);
+    function renderizar(movimentacoes) {
+      const totalReceitas = movimentacoes
+        .filter(m => m.tipo === 'Receita')
+        .reduce((s, m) => s + m.valor, 0);
+      const totalDespesas = movimentacoes
+        .filter(m => m.tipo === 'Despesa')
+        .reduce((s, m) => s + m.valor, 0);
+      const saldoPeriodo = totalReceitas - totalDespesas;
 
-      const classes = document.querySelectorAll('#cardsResumo .value');
-      classes.forEach(el => {
-        const valor = parseValor(el.textContent);
-        el.classList.remove('positive', 'negative');
-        if (valor > 0) el.classList.add('positive');
-        if (valor < 0) el.classList.add('negative');
-      });
-    }
+      document.getElementById('totalReceitas').textContent = formatarMoeda(totalReceitas);
+      document.getElementById('totalDespesas').textContent = formatarMoeda(totalDespesas);
+      document.getElementById('saldoPeriodo').textContent = formatarMoeda(saldoPeriodo);
 
-    function atualizarTabelaMensal(ano) {
-      const tbody = document.getElementById('tbodyMensal');
-      tbody.innerHTML = '';
-      let acumulado = 0;
-      const resumo = calcularResumo(ano);
+      const corpo = document.getElementById('corpoTabela');
+      corpo.innerHTML = '';
 
-      for (let m = 0; m < 12; m++) {
-        const rec = somarPorMes(receitasCache, ano, m, 'valor');
-        const des = somarPorMes(despesasCache, ano, m, 'valor');
-        const prov = somarPorMes(proventosCache, ano, m, 'valor');
-        const saldoMes = rec + prov - des;
-        acumulado += saldoMes;
-        const totalGeral = acumulado + resumo.saldoContas + resumo.saldoAplicacoes;
+      if (movimentacoes.length === 0) {
+        corpo.innerHTML = '<tr><td colspan="5" class="empty">Nenhuma movimentação encontrada para o período.</td></tr>';
+        return;
+      }
 
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${NOME_MESES[m]}</td>
-          <td>${formatarMoeda(rec)}</td>
-          <td>${formatarMoeda(des)}</td>
-          <td>${formatarMoeda(saldoMes)}</td>
-          <td>${formatarMoeda(acumulado)}</td>
-          <td>${formatarMoeda(resumo.saldoContas)}</td>
-          <td>${formatarMoeda(resumo.saldoAplicacoes)}</td>
-          <td>${formatarMoeda(totalGeral)}</td>
+      const comSaldo = calcularSaldos(movimentacoes);
+
+      comSaldo.forEach(m => {
+        const linha = document.createElement('tr');
+        const classeTipo = m.tipo === 'Receita' ? 'tipo-receita' : 'tipo-despesa';
+        const classeValor = m.tipo === 'Receita' ? 'valor-receita' : 'valor-despesa';
+        linha.innerHTML = `
+          <td>${formatarData(m.data)}</td>
+          <td>${m.descricao}</td>
+          <td class="${classeTipo}">${m.tipo}</td>
+          <td class="${classeValor}">${formatarMoeda(m.valor)}</td>
+          <td class="valor-saldo">${formatarMoeda(m.saldoAcumulado)}</td>
         `;
-        tbody.appendChild(tr);
-      }
-    }
-
-    function gerarAbasDias(ano) {
-      const tabs = document.getElementById('tabsDias');
-      const panels = document.getElementById('panelsDias');
-      tabs.innerHTML = '';
-      panels.innerHTML = '';
-
-      for (let dia = 1; dia <= 31; dia++) {
-        const diaStr = String(dia).padStart(2, '0');
-
-        const btn = document.createElement('button');
-        btn.className = 'tab-btn' + (dia === 1 ? ' active' : '');
-        btn.textContent = diaStr;
-        btn.dataset.dia = dia;
-        btn.addEventListener('click', () => selecionarDia(dia));
-        tabs.appendChild(btn);
-
-        const panel = document.createElement('div');
-        panel.className = 'tab-panel' + (dia === 1 ? ' active' : '');
-        panel.id = 'panel-dia-' + dia;
-        panel.innerHTML = renderizarMovimentacoesDia(ano, dia);
-        panels.appendChild(panel);
-      }
-    }
-
-    function selecionarDia(dia) {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      const btn = document.querySelector(`.tab-btn[data-dia="${dia}"]`);
-      if (btn) btn.classList.add('active');
-      const panel = document.getElementById('panel-dia-' + dia);
-      if (panel) panel.classList.add('active');
-    }
-
-    function renderizarMovimentacoesDia(ano, dia) {
-      let html = '';
-      let temMov = false;
-
-      for (let m = 0; m < 12; m++) {
-        const recs = listarPorDia(receitasCache, ano, m, dia);
-        const dess = listarPorDia(despesasCache, ano, m, dia);
-        const provs = listarPorDia(proventosCache, ano, m, dia);
-        if (!recs.length && !dess.length && !provs.length) continue;
-        temMov = true;
-
-        html += `<div class="dia-group"><h4>${NOME_MESES[m]}</h4>`;
-        for (const r of recs) {
-          html += `<div class="mov-item"><span class="tipo-receita">Receita: ${r.descricao || r.cliente || 'Receita'}</span><span>${formatarMoeda(r.valor)}</span></div>`;
-        }
-        for (const d of dess) {
-          html += `<div class="mov-item"><span class="tipo-despesa">Despesa: ${d.descricao || d.fornecedor || 'Despesa'}</span><span>${formatarMoeda(d.valor)}</span></div>`;
-        }
-        for (const p of provs) {
-          html += `<div class="mov-item"><span class="tipo-provento">Provento: ${p.descricao || p.tipo || 'Provento'}</span><span>${formatarMoeda(p.valor)}</span></div>`;
-        }
-        html += '</div>';
-      }
-
-      if (!temMov) html = `<div class="empty">Nenhuma movimentação para o dia ${String(dia).padStart(2,'0')} no ano selecionado.</div>`;
-      return html;
-    }
-
-    function atualizarGrafico(ano) {
-      const ctx = document.getElementById('chartFluxo').getContext('2d');
-      const receitas = [];
-      const despesas = [];
-      for (let m = 0; m < 12; m++) {
-        receitas.push(somarPorMes(receitasCache, ano, m, 'valor'));
-        despesas.push(somarPorMes(despesasCache, ano, m, 'valor'));
-      }
-      if (chartInstance) chartInstance.destroy();
-      chartInstance = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: NOME_MESES,
-          datasets: [
-            { label: 'Receitas', data: receitas, borderColor: '#15803d', backgroundColor: 'rgba(21,128,61,0.1)', fill: true, tension: 0.3 },
-            { label: 'Despesas', data: despesas, borderColor: '#b91c1c', backgroundColor: 'rgba(185,28,28,0.1)', fill: true, tension: 0.3 }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + formatarMoeda(ctx.raw) } } },
-          scales: { y: { beginAtZero: true, ticks: { callback: val => formatarMoeda(val) } } }
-        }
+        corpo.appendChild(linha);
       });
     }
 
-    function atualizarTela() {
-      const ano = parseInt(document.getElementById('anoSelect').value, 10);
-      atualizarResumo(ano);
-      atualizarTabelaMensal(ano);
-      gerarAbasDias(ano);
-      atualizarGrafico(ano);
+    let todasMovimentacoes = [];
+
+    function carregar() {
+      try {
+        const receitas = window.db && typeof window.db.receitas_listar === 'function'
+          ? window.db.receitas_listar() : [];
+        const despesas = window.db && typeof window.db.despesas_listar === 'function'
+          ? window.db.despesas_listar() : [];
+        todasMovimentacoes = obterMovimentacoes(receitas || [], despesas || []);
+
+        const hoje = new Date();
+        const mesAtual = hoje.toISOString().slice(0, 7);
+        document.getElementById('filtroMes').value = mesAtual;
+        renderizar(filtrarPorMes(todasMovimentacoes, mesAtual));
+      } catch (e) {
+        console.error('Erro ao carregar fluxo de caixa:', e);
+      }
     }
 
-    document.getElementById('btnCarregar').addEventListener('click', carregarDados);
-    document.getElementById('anoSelect').addEventListener('change', () => { if (receitasCache.length || despesasCache.length || proventosCache.length || contasCache.length) atualizarTela(); });
-
-    document.getElementById('btnFecharModal').addEventListener('click', () => {
-      document.getElementById('modalOverlay').classList.remove('active');
-    });
-    document.getElementById('modalOverlay').addEventListener('click', (e) => {
-      if (e.target.id === 'modalOverlay') document.getElementById('modalOverlay').classList.remove('active');
+    document.getElementById('filtroMes').addEventListener('change', function () {
+      renderizar(filtrarPorMes(todasMovimentacoes, this.value));
     });
 
-    window.addEventListener('DOMContentLoaded', () => {
-      popularAnos();
-      carregarDados();
-    });
+    document.addEventListener('DOMContentLoaded', carregar);
   </script>
 </body>
 </html>
