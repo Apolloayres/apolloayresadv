@@ -77,6 +77,9 @@
             <div id="mensagem" class="mensagem"></div>
         </form>
     </div>
+
+    <!-- CORREÇÃO: db.js carregado ANTES de auth.js para garantir que window.db esteja disponível -->
+    <script src="db.js"></script>
     <script src="auth.js"></script>
     <script>
         async function logar() {
@@ -84,32 +87,51 @@
             const senha = document.getElementById('senha').value;
             const btn = document.getElementById('btn-login');
             const mensagem = document.getElementById('mensagem');
+
             if (!email || !senha) { mostrarErro('Preencha todos os campos.'); return; }
+
             btn.disabled = true;
             btn.textContent = 'Entrando...';
             mensagem.className = 'mensagem loading';
             mensagem.textContent = 'Entrando...';
+
             try {
-                if (typeof window.fazerLogin !== 'function') throw new Error('Serviço de autenticação não disponível.');
+                if (typeof window.fazerLogin !== 'function') {
+                    throw new Error('Serviço de autenticação não disponível.');
+                }
+
                 const resultado = await window.fazerLogin(email, senha);
-                if (resultado && resultado.sucesso) window.location.href = 'dashboard.html';
-                else throw new Error((resultado && resultado.mensagem) || 'E-mail ou senha incorretos.');
+
+                if (resultado && resultado.sucesso) {
+                    // Redirecionamento já é feito dentro do fazerLogin
+                } else {
+                    throw new Error((resultado && resultado.mensagem) || 'E-mail ou senha incorretos.');
+                }
             } catch (error) {
                 btn.disabled = false;
                 btn.textContent = 'Entrar';
                 mostrarErro(error.message || 'Erro ao tentar entrar. Tente novamente.');
             }
         }
+
         function mostrarErro(texto) {
             const mensagem = document.getElementById('mensagem');
             mensagem.className = 'mensagem erro';
             mensagem.textContent = texto;
         }
+
         function toggleSenha() {
             const input = document.getElementById('senha');
             const btn = document.getElementById('btn-toggle-senha');
-            if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; btn.title = 'Ocultar senha'; }
-            else { input.type = 'password'; btn.textContent = '👁️'; btn.title = 'Mostrar senha'; }
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🙈';
+                btn.title = 'Ocultar senha';
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁️';
+                btn.title = 'Mostrar senha';
+            }
             input.focus();
         }
     </script>
