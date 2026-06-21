@@ -3,273 +3,666 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Controle do Escritório</title>
+    <title>Prestação de Contas</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background-color: #f5f6fa; color: #333; }
-        .navbar { background-color: #0a58ca; padding: 12px 20px; color: #fff; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; }
-        .navbar .brand { font-size: 20px; font-weight: bold; }
-        .navbar nav { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
-        .navbar a { color: #fff; text-decoration: none; font-size: 14px; }
-        .navbar a:hover { text-decoration: underline; }
-        .navbar .user-area { display: flex; align-items: center; gap: 10px; font-size: 14px; }
-        .navbar .badge { background-color: #fff; color: #0a58ca; padding: 4px 10px; border-radius: 4px; font-weight: bold; font-size: 12px; }
-        .navbar button { background-color: #fff; color: #0a58ca; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
-        .navbar button:hover { background-color: #e9ecef; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        h2 { margin-bottom: 20px; color: #0a58ca; }
-        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
-        .card { background: #fff; border-left: 4px solid #0a58ca; padding: 20px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .card h3 { font-size: 14px; color: #666; margin-bottom: 10px; }
-        .card .valor { font-size: 22px; font-weight: bold; color: #0a58ca; }
-        .card .valor.negativo { color: #dc3545; }
-        .card .valor.positivo { color: #198754; }
-        .modulos { margin-top: 30px; }
-        .modulos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 20px; }
-        .modulo-card { display: flex; flex-direction: column; align-items: center; justify-content: center; background: #fff; border-left: 4px solid #0a58ca; padding: 25px; border-radius: 6px; text-decoration: none; color: #333; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: transform 0.2s; }
-        .modulo-card:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
-        .modulo-card .icon { font-size: 32px; margin-bottom: 10px; }
-        .modulo-card .nome { font-size: 14px; font-weight: bold; text-align: center; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
-        .modal { background: #fff; padding: 25px; border-radius: 6px; width: 100%; max-width: 420px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .modal h3 { margin-bottom: 20px; color: #0a58ca; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; }
-        .form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
-        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-        .btn { padding: 10px 18px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; }
-        .btn-primary { background-color: #0a58ca; color: #fff; }
-        .btn-secondary { background-color: #6c757d; color: #fff; }
-        .btn:hover { opacity: 0.9; }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "Times New Roman", Times, Arial, serif;
+            background-color: #fff;
+            color: #000;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border: 1px solid #000;
+        }
+        h1 {
+            text-align: center;
+            color: #0a58ca;
+            font-size: 24px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+        h2 {
+            color: #0a58ca;
+            font-size: 16px;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #0a58ca;
+            padding-bottom: 4px;
+        }
+        h3 {
+            font-size: 14px;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 3px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"], textarea, select {
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #000;
+            font-family: "Times New Roman", Times, Arial, serif;
+            font-size: 13px;
+            background: #fff;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .three-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+        .four-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 6px;
+            text-align: left;
+        }
+        th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .right {
+            text-align: right;
+        }
+        .total-row td {
+            font-weight: bold;
+            background-color: #f8f8f8;
+        }
+        .inline-text input {
+            width: 60px;
+            text-align: center;
+            display: inline-block;
+            border: 1px solid #000;
+            padding: 4px;
+            font-family: "Times New Roman", Times, Arial, serif;
+            font-size: 13px;
+        }
+        .inline-text {
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+        .buttons {
+            text-align: center;
+            margin-top: 25px;
+        }
+        button {
+            margin: 5px;
+            padding: 8px 18px;
+            font-size: 13px;
+            border: 1px solid #000;
+            background: #f0f0f0;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+        }
+        button:hover {
+            background: #e0e0e0;
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 13px;
+        }
+        .signature-line {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 13px;
+        }
+        .signature-line p {
+            margin-bottom: 0;
+        }
+        .signature-line .line {
+            width: 300px;
+            border-top: 1px solid #000;
+            margin: 0 auto 5px auto;
+        }
+        @media print {
+            body {
+                padding: 0;
+                background: #fff;
+            }
+            .container {
+                border: none;
+                padding: 0;
+                max-width: 100%;
+            }
+            .buttons {
+                display: none !important;
+            }
+            button {
+                display: none !important;
+            }
+            input, textarea, select {
+                border: none;
+                background: transparent;
+                padding: 0;
+            }
+            input[type="text"], input[type="number"] {
+                border-bottom: 1px solid #000;
+            }
+            textarea {
+                border: 1px solid #000;
+            }
+            h1, h2 {
+                color: #000;
+            }
+        }
     </style>
 </head>
 <body>
-    <header class="navbar">
-        <div class="brand">Controle do Escritório</div>
-        <nav>
-            <a href="home.html">Home</a>
-            <a href="dashboard.html">Dashboard</a>
-            <a href="cadastros.html">Cadastros</a>
-            <a href="financeiro.html">Financeiro</a>
-            <a href="fluxo-caixa.html">Fluxo Caixa</a>
-            <a href="marketing.html">Marketing</a>
-            <a href="patrimonio.html">Patrimônio</a>
-            <a href="proventos.html">Proventos</a>
-            <a href="relatorios-gerenciais.html">Rel. Gerenciais</a>
-            <a href="auditoria.html">Auditoria</a>
-            <a href="usuarios.html">Usuários</a>
-        </nav>
-        <div class="user-area">
-            <span>Olá, Usuário</span>
-            <span class="badge">Perfil</span>
-            <button onclick="abrirModal()">Alterar Senha</button>
-            <button onclick="sair()">Sair</button>
+
+<div class="container">
+    <h1>Prestação de Contas</h1>
+
+    <h2>1. Identificação do Cliente</h2>
+    <div class="two-col">
+        <div class="form-group">
+            <label for="cliente">Cliente</label>
+            <input type="text" id="cliente" name="cliente">
         </div>
-    </header>
-
-    <main class="container">
-        <section class="resumo">
-            <h2>Resumo do Mês</h2>
-            <div class="grid-4">
-                <div class="card">
-                    <h3>Total Receitas (mês)</h3>
-                    <div class="valor positivo" id="resumo-receitas">R$ 0,00</div>
-                </div>
-                <div class="card">
-                    <h3>Total Despesas (mês)</h3>
-                    <div class="valor" id="resumo-despesas">R$ 0,00</div>
-                </div>
-                <div class="card">
-                    <h3>Saldo</h3>
-                    <div class="valor" id="resumo-saldo">R$ 0,00</div>
-                </div>
-                <div class="card">
-                    <h3>Pendências</h3>
-                    <div class="valor" id="resumo-pendencias">0</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="modulos">
-            <h2>Módulos</h2>
-            <div class="modulos-grid">
-                <a href="dashboard.html" class="modulo-card">
-                    <div class="icon">📊</div>
-                    <div class="nome">Dashboard</div>
-                </a>
-                <a href="cadastros.html" class="modulo-card">
-                    <div class="icon">📋</div>
-                    <div class="nome">Cadastros</div>
-                </a>
-                <a href="financeiro.html" class="modulo-card">
-                    <div class="icon">💳</div>
-                    <div class="nome">Financeiro</div>
-                </a>
-                <a href="fluxo-caixa.html" class="modulo-card">
-                    <div class="icon">💰</div>
-                    <div class="nome">Fluxo de Caixa</div>
-                </a>
-                <a href="marketing.html" class="modulo-card">
-                    <div class="icon">📢</div>
-                    <div class="nome">Marketing</div>
-                </a>
-                <a href="patrimonio.html" class="modulo-card">
-                    <div class="icon">🏦</div>
-                    <div class="nome">Patrimônio</div>
-                </a>
-                <a href="proventos.html" class="modulo-card">
-                    <div class="icon">📋</div>
-                    <div class="nome">Proventos</div>
-                </a>
-                <a href="relatorios-gerenciais.html" class="modulo-card">
-                    <div class="icon">📊</div>
-                    <div class="nome">Rel. Gerenciais</div>
-                </a>
-                <a href="auditoria.html" class="modulo-card">
-                    <div class="icon">📋</div>
-                    <div class="nome">Auditoria</div>
-                </a>
-                <a href="prestacao-contas.html" class="modulo-card">
-                    <div class="icon">📄</div>
-                    <div class="nome">Prestação de Contas</div>
-                </a>
-                <a href="usuarios.html" class="modulo-card" style="display:none;" id="card-usuarios">
-                    <div class="icon">👥</div>
-                    <div class="nome">Usuários</div>
-                </a>
-            </div>
-        </section>
-    </main>
-
-    <div class="modal-overlay" id="modal-senha">
-        <div class="modal">
-            <h3>Alterar Senha</h3>
-            <div class="form-group">
-                <label for="email">E-mail</label>
-                <input type="email" id="email" placeholder="Digite seu e-mail">
-            </div>
-            <div class="form-group">
-                <label for="senha-atual">Senha Atual</label>
-                <input type="password" id="senha-atual" placeholder="Senha atual">
-            </div>
-            <div class="form-group">
-                <label for="nova-senha">Nova Senha</label>
-                <input type="password" id="nova-senha" placeholder="Nova senha">
-            </div>
-            <div class="form-group">
-                <label for="confirmar-senha">Confirmar Nova Senha</label>
-                <input type="password" id="confirmar-senha" placeholder="Confirmar nova senha">
-            </div>
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
-                <button class="btn btn-primary" onclick="salvarAlteracao()">Salvar</button>
-            </div>
+        <div class="form-group">
+            <label for="cpf">CPF</label>
+            <input type="text" id="cpf" name="cpf">
+        </div>
+    </div>
+    <div class="two-col">
+        <div class="form-group">
+            <label for="processo">Processo nº</label>
+            <input type="text" id="processo" name="processo">
+        </div>
+        <div class="form-group">
+            <label for="vara">Vara/Juízo</label>
+            <input type="text" id="vara" name="vara">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="acao">Ação</label>
+        <input type="text" id="acao" name="acao">
+    </div>
+    <div class="four-col">
+        <div class="form-group">
+            <label for="banco">Banco</label>
+            <input type="text" id="banco" name="banco">
+        </div>
+        <div class="form-group">
+            <label for="agencia">Agência</label>
+            <input type="text" id="agencia" name="agencia">
+        </div>
+        <div class="form-group">
+            <label for="conta">Conta</label>
+            <input type="text" id="conta" name="conta">
+        </div>
+        <div class="form-group">
+            <label for="pix">PIX</label>
+            <input type="text" id="pix" name="pix">
         </div>
     </div>
 
-    <script src="db.js"></script>
-    <script src="auth.js"></script>
-    <script>
-        function formatarMoeda(valor) {
-            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
-        }
+    <h2>2. Resumo Processual</h2>
+    <div class="form-group">
+        <textarea id="resumo" name="resumo" rows="5"></textarea>
+    </div>
 
-        function obterMesAtual() {
-            const hoje = new Date();
-            return `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}`;
-        }
+    <h2>3. Valores Recebidos</h2>
 
-        function filtrarMesAtual(lista, campoData) {
-            const mesAtual = obterMesAtual();
-            return (lista || []).filter(item => {
-                const data = item[campoData] || item.data || item.data_vencimento || item.data_pagamento || item.created_at;
-                if (!data) return false;
-                return data.substring(0, 7) === mesAtual;
+    <h3>3.1 Crédito Principal</h3>
+    <table>
+        <tr><th>Descrição</th><th class="right">Valor (R$)</th></tr>
+        <tr>
+            <td>Crédito líquido principal</td>
+            <td class="right"><input type="text" class="money" id="credito_liquido_principal" data-target="creditoPrincipal"></td>
+        </tr>
+        <tr>
+            <td>Crédito bruto</td>
+            <td class="right"><input type="text" class="money" id="credito_bruto" data-target="creditoPrincipal"></td>
+        </tr>
+        <tr>
+            <td>Juros</td>
+            <td class="right"><input type="text" class="money" id="juros" data-target="creditoPrincipal"></td>
+        </tr>
+        <tr>
+            <td>Correção monetária</td>
+            <td class="right"><input type="text" class="money" id="correcao" data-target="creditoPrincipal"></td>
+        </tr>
+        <tr class="total-row">
+            <td>Subtotal</td>
+            <td class="right" id="subtotal_credito_principal">R$ 0,00</td>
+        </tr>
+    </table>
+
+    <h3>3.2 FGTS</h3>
+    <table>
+        <tr><th>Descrição</th><th class="right">Valor (R$)</th></tr>
+        <tr>
+            <td>FGTS principal</td>
+            <td class="right"><input type="text" class="money" id="fgts_principal" data-target="fgts"></td>
+        </tr>
+        <tr>
+            <td>Atualização FGTS</td>
+            <td class="right"><input type="text" class="money" id="fgts_atualizacao" data-target="fgts"></td>
+        </tr>
+        <tr class="total-row">
+            <td>Subtotal</td>
+            <td class="right" id="subtotal_fgts">R$ 0,00</td>
+        </tr>
+    </table>
+
+    <h3>3.3 Previdência Privada</h3>
+    <table>
+        <tr><th>Descrição</th><th class="right">Valor (R$)</th></tr>
+        <tr>
+            <td>Cota Reclamante</td>
+            <td class="right"><input type="text" class="money" id="prev_reclamante" data-target="previdencia"></td>
+        </tr>
+        <tr>
+            <td>Cota Reclamada</td>
+            <td class="right"><input type="text" class="money" id="prev_reclamada" data-target="previdencia"></td>
+        </tr>
+        <tr>
+            <td>Atualizações</td>
+            <td class="right"><input type="text" class="money" id="prev_atualizacoes" data-target="previdencia"></td>
+        </tr>
+        <tr class="total-row">
+            <td>Subtotal</td>
+            <td class="right" id="subtotal_previdencia">R$ 0,00</td>
+        </tr>
+    </table>
+
+    <h3>3.4 Valores Recebidos por Liminar (se houver)</h3>
+    <table>
+        <tr><th>Ano/Período</th><th class="right">Valor (R$)</th></tr>
+        <tr>
+            <td><input type="text" id="liminar_periodo_1"></td>
+            <td class="right"><input type="text" class="money" id="liminar_valor_1" data-target="liminar"></td>
+        </tr>
+        <tr>
+            <td><input type="text" id="liminar_periodo_2"></td>
+            <td class="right"><input type="text" class="money" id="liminar_valor_2" data-target="liminar"></td>
+        </tr>
+        <tr>
+            <td><input type="text" id="liminar_periodo_3"></td>
+            <td class="right"><input type="text" class="money" id="liminar_valor_3" data-target="liminar"></td>
+        </tr>
+        <tr class="total-row">
+            <td>Total recebido por liminar</td>
+            <td class="right" id="total_liminar">R$ 0,00</td>
+        </tr>
+    </table>
+
+    <h3>3.5 Valores Incorporados em Folha (se houver)</h3>
+    <table>
+        <tr><th>Descrição</th><th class="right">Valor (R$)</th></tr>
+        <tr>
+            <td>CTVA incorporado</td>
+            <td class="right"><input type="text" class="money" id="ctva_incorporado"></td>
+        </tr>
+        <tr>
+            <td>Função incorporada</td>
+            <td class="right"><input type="text" class="money" id="funcao_incorporada"></td>
+        </tr>
+        <tr>
+            <td>Reflexos mensais</td>
+            <td class="right"><input type="text" class="money" id="reflexos_mensais"></td>
+        </tr>
+    </table>
+
+    <h3>3.6 Honorários de Sucumbência</h3>
+    <table>
+        <tr><th>Descrição</th><th class="right">Valor (R$)</th></tr>
+        <tr>
+            <td>Honorários sucumbenciais</td>
+            <td class="right"><input type="text" class="money" id="honorarios_sucumbencia"></td>
+        </tr>
+    </table>
+
+    <h2>4. Base de Cálculo dos Honorários Contratuais</h2>
+    <p class="inline-text">
+        Conforme contrato de honorários firmado entre as partes, os honorários advocatícios correspondem a
+        <input type="text" id="percentual_contratual" value="30">%
+        sobre as verbas contratualmente previstas.
+    </p>
+    <table>
+        <tr><th>Verba</th><th class="right">Valor (R$)</th></tr>
+        <tr>
+            <td>Crédito principal</td>
+            <td class="right" id="base_credito_principal">R$ 0,00</td>
+        </tr>
+        <tr>
+            <td>FGTS</td>
+            <td class="right" id="base_fgts">R$ 0,00</td>
+        </tr>
+        <tr>
+            <td>Previdência privada reclamante</td>
+            <td class="right" id="base_prev_reclamante">R$ 0,00</td>
+        </tr>
+        <tr>
+            <td>Previdência privada reclamada</td>
+            <td class="right" id="base_prev_reclamada">R$ 0,00</td>
+        </tr>
+        <tr>
+            <td>Valores recebidos por liminar</td>
+            <td class="right" id="base_liminar">R$ 0,00</td>
+        </tr>
+        <tr>
+            <td>Outros</td>
+            <td class="right"><input type="text" class="money" id="base_outros"></td>
+        </tr>
+        <tr class="total-row">
+            <td>Total da Base de Cálculo</td>
+            <td class="right" id="total_base_calculo">R$ 0,00</td>
+        </tr>
+    </table>
+
+    <h2>5. Cálculo dos Honorários Contratuais</h2>
+    <table>
+        <tr><th>Descrição</th><th class="right">Valor</th></tr>
+        <tr>
+            <td>Base de cálculo</td>
+            <td class="right" id="calc_base">R$ 0,00</td>
+        </tr>
+        <tr>
+            <td>Percentual contratual (%)</td>
+            <td class="right" id="calc_percentual">0%</td>
+        </tr>
+        <tr class="total-row">
+            <td>Honorários devidos</td>
+            <td class="right" id="calc_honorarios">R$ 0,00</td>
+        </tr>
+    </table>
+
+    <h2>6. Despesas Reembolsáveis (se houver)</h2>
+    <table>
+        <tr><th>Descrição</th><th class="right">Valor (R$)</th></tr>
+        <tr>
+            <td>Custas processuais</td>
+            <td class="right"><input type="text" class="money" id="despesa_custas" data-target="despesas"></td>
+        </tr>
+        <tr>
+            <td>Honorários periciais</td>
+            <td class="right"><input type="text" class="money" id="despesa_periciais" data-target="despesas"></td>
+        </tr>
+        <tr>
+            <td>Deslocamentos</td>
+            <td class="right"><input type="text" class="money" id="despesa_deslocamentos" data-target="despesas"></td>
+        </tr>
+        <tr>
+            <td>Cópias/Documentos</td>
+            <td class="right"><input type="text" class="money" id="despesa_copias" data-target="despesas"></td>
+        </tr>
+        <tr>
+            <td>Outros</td>
+            <td class="right"><input type="text" class="money" id="despesa_outros" data-target="despesas"></td>
+        </tr>
+        <tr class="total-row">
+            <td>Total de despesas</td>
+            <td class="right" id="total_despesas">R$ 0,00</td>
+        </tr>
+    </table>
+
+    <h2>7. Compensações e Ajustes (se houver)</h2>
+    <table>
+        <tr><th>Descrição</th><th class="right">Valor (R$)</th></tr>
+        <tr>
+            <td>Honorários cobrados anteriormente</td>
+            <td class="right"><input type="text" class="money" id="ajuste_honorarios_antes" data-target="ajustes"></td>
+        </tr>
+        <tr>
+            <td>Valores pagos pelo cliente</td>
+            <td class="right"><input type="text" class="money" id="ajuste_pagos_cliente" data-target="ajustes"></td>
+        </tr>
+        <tr>
+            <td>Restituições devidas</td>
+            <td class="right"><input type="text" class="money" id="ajuste_restituicoes" data-target="ajustes"></td>
+        </tr>
+        <tr>
+            <td>Diferenças apuradas</td>
+            <td class="right"><input type="text" class="money" id="ajuste_diferencas" data-target="ajustes"></td>
+        </tr>
+        <tr class="total-row">
+            <td>Total</td>
+            <td class="right" id="total_ajustes">R$ 0,00</td>
+        </tr>
+    </table>
+
+    <h2>8. Demonstrativo Final</h2>
+    <table>
+        <tr><th>Descrição</th><th class="right">Valor (R$)</th></tr>
+        <tr>
+            <td>Total recebido</td>
+            <td class="right" id="final_total_recebido">R$ 0,00</td>
+        </tr>
+        <tr>
+            <td>(-) Honorários contratuais</td>
+            <td class="right" id="final_honorarios">R$ 0,00</td>
+        </tr>
+        <tr>
+            <td>(-) Despesas reembolsáveis</td>
+            <td class="right" id="final_despesas">R$ 0,00</td>
+        </tr>
+        <tr>
+            <td>(+/-) Ajustes</td>
+            <td class="right" id="final_ajustes">R$ 0,00</td>
+        </tr>
+        <tr class="total-row">
+            <td>(=) Valor líquido do cliente</td>
+            <td class="right" id="final_liquido_cliente">R$ 0,00</td>
+        </tr>
+    </table>
+
+    <h2>9. Forma de Pagamento</h2>
+    <div class="two-col">
+        <div class="form-group">
+            <label for="pagamento_pix">PIX</label>
+            <input type="text" id="pagamento_pix" name="pagamento_pix">
+        </div>
+        <div class="form-group">
+            <label for="pagamento_banco">Banco</label>
+            <input type="text" id="pagamento_banco" name="pagamento_banco">
+        </div>
+    </div>
+    <div class="two-col">
+        <div class="form-group">
+            <label for="pagamento_agencia">Agência</label>
+            <input type="text" id="pagamento_agencia" name="pagamento_agencia">
+        </div>
+        <div class="form-group">
+            <label for="pagamento_conta">Conta</label>
+            <input type="text" id="pagamento_conta" name="pagamento_conta">
+        </div>
+    </div>
+    <div class="two-col">
+        <div class="form-group">
+            <label for="pagamento_data">Data prevista</label>
+            <input type="text" id="pagamento_data" name="pagamento_data">
+        </div>
+        <div class="form-group">
+            <label for="pagamento_valor">Valor líquido a transferir</label>
+            <input type="text" class="money" id="pagamento_valor" name="pagamento_valor">
+        </div>
+    </div>
+
+    <h2>10. Observações</h2>
+    <div class="form-group">
+        <textarea id="observacoes" name="observacoes" rows="8" readonly>
+• Os valores de FGTS serão disponibilizados diretamente na conta vinculada, quando aplicável.
+• Os valores de previdência privada serão disponibilizados diretamente pela entidade previdenciária, quando aplicável.
+• Os honorários sucumbenciais pertencem exclusivamente aos patronos da causa, nos termos do art. 85, §14, do CPC e art. 791-A da CLT.
+• Os valores incorporados em folha não integram o montante transferido ao cliente, por representarem vantagem salarial futura.
+• Eventuais atualizações posteriores poderão gerar ajustes complementares.
+        </textarea>
+    </div>
+
+    <div class="buttons">
+        <button type="button" onclick="salvar()">Salvar Prestação</button>
+        <button type="button" onclick="limpar()">Limpar</button>
+        <button type="button" onclick="imprimir()">Imprimir</button>
+    </div>
+
+    <footer>
+        <p>Brasília/DF, ___ de __________ de ______.</p>
+        <div class="signature-line">
+            <div class="line"></div>
+            <p>Advogada</p>
+        </div>
+    </footer>
+</div>
+
+<script>
+    const formatMoney = (value) => {
+        if (value === null || value === undefined || value === '') return '';
+        let num = parseFloat(value.toString().replace(/[^\d,-]/g, '').replace(',', '.'));
+        if (isNaN(num)) return '';
+        return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    };
+
+    const parseMoney = (value) => {
+        if (!value) return 0;
+        let num = parseFloat(value.toString().replace(/[^\d,-]/g, '').replace(',', '.'));
+        return isNaN(num) ? 0 : num;
+    };
+
+    const formatCurrencyCell = (value) => {
+        return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    };
+
+    const maskMoney = (input) => {
+        input.addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, '');
+            value = (value / 100).toFixed(2) + '';
+            value = value.replace('.', ',');
+            value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+            e.target.value = value ? 'R$ ' + value : '';
+            calcular();
+        });
+        input.addEventListener('blur', function (e) {
+            if (!e.target.value) e.target.value = '';
+        });
+    };
+
+    document.querySelectorAll('input.money').forEach(maskMoney);
+
+    const getValue = (id) => parseMoney(document.getElementById(id).value);
+
+    const sum = (...ids) => ids.reduce((acc, id) => acc + getValue(id), 0);
+
+    const setText = (id, value) => {
+        document.getElementById(id).textContent = formatCurrencyCell(value);
+    };
+
+    const calcular = () => {
+        const subtotalCreditoPrincipal = sum('credito_liquido_principal', 'credito_bruto', 'juros', 'correcao');
+        setText('subtotal_credito_principal', subtotalCreditoPrincipal);
+
+        const subtotalFgts = sum('fgts_principal', 'fgts_atualizacao');
+        setText('subtotal_fgts', subtotalFgts);
+
+        const subtotalPrevidencia = sum('prev_reclamante', 'prev_reclamada', 'prev_atualizacoes');
+        setText('subtotal_previdencia', subtotalPrevidencia);
+
+        const totalLiminar = sum('liminar_valor_1', 'liminar_valor_2', 'liminar_valor_3');
+        setText('total_liminar', totalLiminar);
+
+        const baseOutros = getValue('base_outros');
+        const totalBaseCalculo = subtotalCreditoPrincipal + subtotalFgts + getValue('prev_reclamante') + getValue('prev_reclamada') + totalLiminar + baseOutros;
+        setText('total_base_calculo', totalBaseCalculo);
+        setText('base_credito_principal', subtotalCreditoPrincipal);
+        setText('base_fgts', subtotalFgts);
+        setText('base_prev_reclamante', getValue('prev_reclamante'));
+        setText('base_prev_reclamada', getValue('prev_reclamada'));
+        setText('base_liminar', totalLiminar);
+
+        const percentual = parseFloat(document.getElementById('percentual_contratual').value.replace(',', '.')) || 0;
+        const honorariosDevidos = totalBaseCalculo * (percentual / 100);
+        setText('calc_base', totalBaseCalculo);
+        document.getElementById('calc_percentual').textContent = percentual + '%';
+        setText('calc_honorarios', honorariosDevidos);
+
+        const totalDespesas = sum('despesa_custas', 'despesa_periciais', 'despesa_deslocamentos', 'despesa_copias', 'despesa_outros');
+        setText('total_despesas', totalDespesas);
+
+        const totalAjustes = sum('ajuste_honorarios_antes', 'ajuste_pagos_cliente', 'ajuste_restituicoes', 'ajuste_diferencas');
+        setText('total_ajustes', totalAjustes);
+
+        const totalRecebido = subtotalCreditoPrincipal + subtotalFgts + subtotalPrevidencia + totalLiminar;
+        setText('final_total_recebido', totalRecebido);
+        setText('final_honorarios', honorariosDevidos);
+        setText('final_despesas', totalDespesas);
+        setText('final_ajustes', totalAjustes);
+
+        const liquidoCliente = totalRecebido - honorariosDevidos - totalDespesas + totalAjustes;
+        setText('final_liquido_cliente', liquidoCliente);
+    };
+
+    document.getElementById('percentual_contratual').addEventListener('input', calcular);
+
+    const salvar = () => {
+        const data = {};
+        document.querySelectorAll('input, textarea, select').forEach(el => {
+            data[el.id] = el.value;
+        });
+        localStorage.setItem('prestacao_contas', JSON.stringify(data));
+        alert('Prestação de contas salva com sucesso.');
+    };
+
+    const limpar = () => {
+        if (!confirm('Deseja realmente limpar todos os dados?')) return;
+        document.querySelectorAll('input, textarea').forEach(el => {
+            if (el.id !== 'observacoes') {
+                el.value = '';
+            }
+        });
+        localStorage.removeItem('prestacao_contas');
+        calcular();
+    };
+
+    const imprimir = () => {
+        window.print();
+    };
+
+    const carregar = () => {
+        const saved = localStorage.getItem('prestacao_contas');
+        if (saved) {
+            const data = JSON.parse(saved);
+            Object.keys(data).forEach(key => {
+                const el = document.getElementById(key);
+                if (el) el.value = data[key];
             });
         }
+        calcular();
+    };
 
-        async function carregarResumo() {
-            try {
-                let receitas = [];
-                let despesas = [];
+    window.addEventListener('load', carregar);
+</script>
 
-                if (window.db && typeof window.db.receitas_listar === 'function') {
-                    receitas = await window.db.receitas_listar() || [];
-                }
-                if (window.db && typeof window.db.despesas_listar === 'function') {
-                    despesas = await window.db.despesas_listar() || [];
-                }
-
-                const receitasMes = filtrarMesAtual(receitas, 'data');
-                const despesasMes = filtrarMesAtual(despesas, 'data');
-
-                const totalReceitas = receitasMes.reduce((soma, r) => soma + (parseFloat(r.valor) || 0), 0);
-                const totalDespesas = despesasMes.reduce((soma, d) => soma + (parseFloat(d.valor) || 0), 0);
-                const saldo = totalReceitas - totalDespesas;
-
-                const receitasPendentes = receitasMes.filter(r => r.status && r.status.toLowerCase() === 'pendente').length;
-                const despesasPendentes = despesasMes.filter(d => d.status && d.status.toLowerCase() === 'pendente').length;
-                const pendencias = receitasPendentes + despesasPendentes;
-
-                document.getElementById('resumo-receitas').textContent = formatarMoeda(totalReceitas);
-                document.getElementById('resumo-despesas').textContent = formatarMoeda(totalDespesas);
-                document.getElementById('resumo-saldo').textContent = formatarMoeda(saldo);
-                document.getElementById('resumo-saldo').className = 'valor ' + (saldo >= 0 ? 'positivo' : 'negativo');
-                document.getElementById('resumo-pendencias').textContent = pendencias;
-            } catch (erro) {
-                console.error('Erro ao carregar resumo:', erro);
-            }
-        }
-
-        function abrirModal() {
-            document.getElementById('modal-senha').style.display = 'flex';
-        }
-
-        function fecharModal() {
-            document.getElementById('modal-senha').style.display = 'none';
-            document.getElementById('email').value = '';
-            document.getElementById('senha-atual').value = '';
-            document.getElementById('nova-senha').value = '';
-            document.getElementById('confirmar-senha').value = '';
-        }
-
-        async function salvarAlteracao() {
-            const email = document.getElementById('email').value.trim();
-            const senhaAtual = document.getElementById('senha-atual').value;
-            const novaSenha = document.getElementById('nova-senha').value;
-            const confirmarSenha = document.getElementById('confirmar-senha').value;
-
-            if (!email || !senhaAtual || !novaSenha || !confirmarSenha) {
-                alert('Preencha todos os campos.');
-                return;
-            }
-            if (novaSenha !== confirmarSenha) {
-                alert('A nova senha e a confirmação não conferem.');
-                return;
-            }
-
-            try {
-                if (window.auth && typeof window.auth.alterarSenha === 'function') {
-                    await window.auth.alterarSenha({ email, senhaAtual, novaSenha });
-                    alert('Senha alterada com sucesso.');
-                    fecharModal();
-                } else {
-                    alert('Função de alteração de senha não disponível.');
-                }
-            } catch (erro) {
-                alert('Erro ao alterar senha: ' + (erro.message || 'Erro desconhecido'));
-            }
-        }
-
-        function sair() {
-            if (window.auth && typeof window.auth.logout === 'function') {
-                window.auth.logout();
-            } else {
-                window.location.href = 'login.html';
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', carregarResumo);
-    </script>
 </body>
 </html>
