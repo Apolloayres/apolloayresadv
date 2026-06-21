@@ -1,404 +1,589 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clientes - Controle do Escritório</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clientes - Sistema de Cobrança</title>
   <style>
-    .topo-logo { background-color: #fff; padding: 15px 20px; display: flex; justify-content: center; align-items: center; }
-    .logo-escritorio { height: 70px; width: auto; }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f7fa; color: #333; }
-
-    .navbar { background-color: #1a3a5c; color: #fff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .navbar-brand { font-size: 1.3rem; font-weight: bold; }
-    .nav-links { display: flex; list-style: none; gap: 20px; }
-    .nav-links li a { color: #fff; text-decoration: none; font-size: 0.95rem; transition: opacity 0.2s; }
-    .nav-links li a:hover { opacity: 0.8; text-decoration: underline; }
-
-    .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
-    .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
-    .header h1 { color: #1a3a5c; }
-
-    .btn { padding: 10px 18px; border: none; border-radius: 5px; cursor: pointer; font-size: 0.95rem; transition: background 0.2s, transform 0.1s; text-decoration: none; display: inline-block; }
-    .btn:active { transform: scale(0.98); }
-    .btn-primary { background-color: #1a3a5c; color: #fff; }
-    .btn-primary:hover { background-color: #142d49; }
-    .btn-success { background-color: #28a745; color: #fff; }
-    .btn-success:hover { background-color: #218838; }
-    .btn-danger { background-color: #dc3545; color: #fff; }
-    .btn-danger:hover { background-color: #c82333; }
-    .btn-secondary { background-color: #6c757d; color: #fff; }
-    .btn-secondary:hover { background-color: #5a6268; }
-    .btn-warning { background-color: #ffc107; color: #212529; }
-    .btn-warning:hover { background-color: #e0a800; }
-
-    .card { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 20px; overflow-x: auto; }
-
-    table { width: 100%; border-collapse: collapse; min-width: 900px; }
-    th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid #e0e0e0; }
-    th { background-color: #1a3a5c; color: #fff; font-weight: 500; }
-    tr:hover { background-color: #f8f9fa; }
-    .acoes { display: flex; gap: 8px; flex-wrap: wrap; }
-
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
-    .modal-overlay.active { display: flex; }
-    .modal { background: #fff; border-radius: 8px; max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-    .modal-header { background-color: #1a3a5c; color: #fff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
-    .modal-header h2 { font-size: 1.2rem; }
-    .modal-close { background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; color: #333; }
+    .navbar { background: #1565c0; color: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .navbar h1 { font-size: 22px; font-weight: 500; }
+    .navbar .actions { display: flex; gap: 10px; }
+    .btn { padding: 8px 14px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-primary { background: #fff; color: #1565c0; }
+    .btn-secondary { background: rgba(255,255,255,0.2); color: #fff; }
+    .container { max-width: 1200px; margin: 24px auto; padding: 0 24px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .card { background: #fff; padding: 18px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .card h3 { font-size: 13px; color: #666; text-transform: uppercase; margin-bottom: 6px; }
+    .card p { font-size: 24px; font-weight: 600; color: #1565c0; }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .toolbar input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; width: 300px; font-size: 14px; }
+    .table-container { background: #fff; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #fafafa; font-weight: 600; color: #555; }
+    tr:hover { background: #f9f9f9; }
+    .acoes { display: flex; gap: 8px; }
+    .btn-icon { padding: 6px 10px; font-size: 13px; border-radius: 4px; cursor: pointer; border: none; }
+    .btn-edit { background: #e3f2fd; color: #1565c0; }
+    .btn-delete { background: #ffebee; color: #c62828; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
+    .modal.active { display: flex; }
+    .modal-content { background: #fff; width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto; border-radius: 6px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+    .modal-header { padding: 16px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h2 { font-size: 18px; color: #333; }
+    .modal-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #666; }
     .modal-body { padding: 20px; }
-    .modal-footer { padding: 15px 20px; border-top: 1px solid #e0e0e0; display: flex; justify-content: flex-end; gap: 10px; }
-
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; margin-bottom: 6px; font-weight: 500; color: #555; }
-    .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 0.95rem; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } .nav-links { display: none; } }
-
-    .autocomplete-list { position: absolute; background: #fff; border: 1px solid #ccc; border-radius: 0 0 5px 5px; max-height: 150px; overflow-y: auto; z-index: 100; width: 100%; display: none; }
-    .autocomplete-list div { padding: 8px 12px; cursor: pointer; }
-    .autocomplete-list div:hover { background-color: #f0f0f0; }
+    .form-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px; }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group label { font-size: 13px; color: #555; margin-bottom: 5px; font-weight: 500; }
+    .form-group input, .form-group select { padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: #1565c0; }
+    .modal-footer { padding: 14px 20px; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 10px; }
+    .btn-save { background: #1565c0; color: #fff; }
+    .btn-cancel { background: #f5f5f5; color: #555; }
+    .empty { padding: 40px; text-align: center; color: #888; }
+    .autocomplete-list { position: absolute; background: #fff; border: 1px solid #ddd; border-radius: 4px; max-height: 150px; overflow-y: auto; z-index: 10; width: 100%; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .autocomplete-list div { padding: 8px 12px; cursor: pointer; font-size: 13px; }
+    .autocomplete-list div:hover { background: #f0f0f0; }
     .relative { position: relative; }
-
-    .empty { text-align: center; padding: 40px; color: #777; }
-    .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 500; }
-    .badge-fisica { background-color: #e3f2fd; color: #1565c0; }
-    .badge-juridica { background-color: #f3e5f5; color: #7b1fa2; }
   </style>
 </head>
 <body>
+  <nav class="navbar">
+    <h1>Clientes</h1>
+    <div class="actions">
+      <a href="dashboard.html" class="btn btn-secondary">Voltar</a>
+      <button class="btn btn-primary" onclick="novo()">Novo Cliente</button>
+    </div>
+  </nav>
 
-<div class="topo-logo">
-    <img src="https://adapta-one-prod.s3.sa-east-1.amazonaws.com/apolloayres%40yahoo.com.br/png/image-019eea86-df20-753e-b049-a7c4515d7a68.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3FLD6RMYLYFE2L2Q%2F20260621%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260621T160143Z&X-Amz-Expires=3600&X-Amz-Signature=d86ac73935a9237a01f8898aab4f62b0c323de884239f0049abf5a99c09677ae&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" alt="Apollo Ayres" class="logo-escritorio">
-</div>
+  <div class="container">
+    <div class="cards">
+      <div class="card"><h3>Total de Clientes</h3><p id="totalClientes">0</p></div>
+      <div class="card"><h3>Pessoa Física</h3><p id="totalPF">0</p></div>
+      <div class="card"><h3>Pessoa Jurídica</h3><p id="totalPJ">0</p></div>
+    </div>
 
-<nav class="navbar">
-  <div class="navbar-brand">🏢 Controle do Escritório</div>
-  <ul class="nav-links">
-    <li><a href="home.html">Home</a></li>
-    <li><a href="dashboard.html">Dashboard</a></li>
-    <li><a href="clientes.html">Clientes</a></li>
-    <li><a href="processos.html">Processos</a></li>
-    <li><a href="relatorios.html">Relatórios</a></li>
-  </ul>
-</nav>
+    <div class="toolbar">
+      <input type="text" id="busca" placeholder="Buscar por nome, CPF/CNPJ, e-mail..." oninput="filtrar()" />
+    </div>
 
-<div class="container">
-  <div class="header">
-    <h1>👥 Clientes</h1>
-    <div>
-      <a href="home.html" class="btn btn-secondary">↩ Voltar</a>
-      <button class="btn btn-success" onclick="abrirModal()">+ Novo Cliente</button>
+    <div class="table-container">
+      <table id="tabela">
+        <thead>
+          <tr>
+            <th>Nome / Razão Social</th>
+            <th>CPF / CNPJ</th>
+            <th>E-mail</th>
+            <th>Telefone</th>
+            <th>Cidade/UF</th>
+            <th>Nacionalidade</th>
+            <th>Estado Civil</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="corpo"></tbody>
+      </table>
+      <div id="empty" class="empty" style="display:none">Nenhum cliente encontrado.</div>
     </div>
   </div>
 
-  <div class="card">
-    <table id="tabelaClientes">
-      <thead>
-        <tr>
-          <th>Tipo</th>
-          <th>Nome / Razão Social</th>
-          <th>CPF / CNPJ</th>
-          <th>E-mail</th>
-          <th>Telefone</th>
-          <th>Localidade</th>
-          <th>Tipo Processo</th>
-          <th>Empresa</th>
-          <th>Tribunal</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody id="corpoTabela">
-      </tbody>
-    </table>
-  </div>
-</div>
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitulo">Novo Cliente</h2>
+        <button class="modal-close" onclick="fechar()">&times;</button>
+      </div>
+      <form id="form" onsubmit="salvar(event)">
+        <div class="modal-body">
+          <input type="hidden" id="id" />
 
-<div class="modal-overlay" id="modalCliente">
-  <div class="modal">
-    <div class="modal-header">
-      <h2 id="tituloModal">Novo Cliente</h2>
-      <button class="modal-close" onclick="fecharModal()">&times;</button>
-    </div>
-    <div class="modal-body">
-      <form id="formCliente">
-        <input type="hidden" id="clienteId">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Tipo de Pessoa</label>
+              <select id="tipoPessoa" onchange="ajustarTipo()">
+                <option value="PF">Pessoa Física</option>
+                <option value="PJ">Pessoa Jurídica</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label id="labelNome">Nome</label>
+              <input type="text" id="nome" required />
+            </div>
+            <div class="form-group">
+              <label id="labelCpfCnpj">CPF</label>
+              <input type="text" id="cpfCnpj" required oninput="mascaraCpfCnpj(this)" maxlength="18" />
+            </div>
+          </div>
 
-        <div class="form-group">
-          <label for="tipoPessoa">Tipo de Pessoa</label>
-          <select id="tipoPessoa" onchange="ajustarMascaraDocumento()">
-            <option value="fisica">Pessoa Física</option>
-            <option value="juridica">Pessoa Jurídica</option>
-          </select>
-        </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>E-mail</label>
+              <input type="email" id="email" />
+            </div>
+            <div class="form-group">
+              <label>Telefone</label>
+              <input type="text" id="telefone" oninput="mascaraTelefone(this)" maxlength="15" />
+            </div>
+          </div>
 
-        <div class="form-group">
-          <label for="nome">Nome / Razão Social</label>
-          <input type="text" id="nome" required>
-        </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nacionalidade</label>
+              <input type="text" id="nacionalidade" />
+            </div>
+            <div class="form-group">
+              <label>Estado Civil</label>
+              <select id="estadoCivil">
+                <option value="">Selecione</option>
+                <option value="Solteiro(a)">Solteiro(a)</option>
+                <option value="Casado(a)">Casado(a)</option>
+                <option value="Divorciado(a)">Divorciado(a)</option>
+                <option value="Viúvo(a)">Viúvo(a)</option>
+                <option value="União Estável">União Estável</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Profissão</label>
+              <input type="text" id="profissao" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Data de Nascimento</label>
+              <input type="date" id="dataNascimento" />
+            </div>
+            <div class="form-group">
+              <label>Naturalidade</label>
+              <input type="text" id="naturalidade" placeholder="Cidade/UF" />
+            </div>
+            <div class="form-group">
+              <label>RG</label>
+              <input type="text" id="rg" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Órgão Expedidor</label>
+              <input type="text" id="orgaoExpedidor" placeholder="Ex: SSP" />
+            </div>
+            <div class="form-group">
+              <label>UF do RG</label>
+              <select id="orgaoExpedidorUf">
+                <option value="">UF</option>
+                <option value="AC">AC</option><option value="AL">AL</option><option value="AM">AM</option><option value="AP">AP</option>
+                <option value="BA">BA</option><option value="CE">CE</option><option value="DF">DF</option><option value="ES">ES</option>
+                <option value="GO">GO</option><option value="MA">MA</option><option value="MG">MG</option><option value="MS">MS</option>
+                <option value="MT">MT</option><option value="PA">PA</option><option value="PB">PB</option><option value="PE">PE</option>
+                <option value="PI">PI</option><option value="PR">PR</option><option value="RJ">RJ</option><option value="RN">RN</option>
+                <option value="RO">RO</option><option value="RR">RR</option><option value="RS">RS</option><option value="SC">SC</option>
+                <option value="SE">SE</option><option value="SP">SP</option><option value="TO">TO</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Nome da Mãe</label>
+              <input type="text" id="nomeMae" />
+            </div>
+          </div>
 
-        <div class="form-row">
+          <div class="form-row">
+            <div class="form-group">
+              <label>CEP</label>
+              <input type="text" id="cep" oninput="onCepInput(this)" maxlength="9" />
+            </div>
+            <div class="form-group">
+              <label>Endereço</label>
+              <input type="text" id="endereco" />
+            </div>
+            <div class="form-group">
+              <label>Número</label>
+              <input type="text" id="numero" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Bairro</label>
+              <input type="text" id="bairro" />
+            </div>
+            <div class="form-group">
+              <label>Cidade</label>
+              <input type="text" id="cidade" />
+            </div>
+            <div class="form-group">
+              <label>UF</label>
+              <input type="text" id="uf" maxlength="2" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Complemento</label>
+              <input type="text" id="complemento" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group relative">
+              <label>Empresa</label>
+              <input type="text" id="empresa" oninput="autocompleteEmpresa(this)" autocomplete="off" />
+              <div id="empresaList" class="autocomplete-list" style="display:none"></div>
+            </div>
+            <div class="form-group">
+              <label>Tribunal</label>
+              <select id="tribunal">
+                <option value="">Selecione</option>
+                <option value="TJSP">TJSP</option>
+                <option value="TJMG">TJMG</option>
+                <option value="TJRS">TJRS</option>
+                <option value="TRF1">TRF1</option>
+                <option value="TRF3">TRF3</option>
+                <option value="STF">STF</option>
+                <option value="STJ">STJ</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Processo</label>
+              <input type="text" id="processo" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Vara</label>
+              <input type="text" id="vara" />
+            </div>
+            <div class="form-group">
+              <label>Ação</label>
+              <input type="text" id="acao" />
+            </div>
+            <div class="form-group">
+              <label>Tipo de Processo</label>
+              <input type="text" id="tipoProcesso" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Banco</label>
+              <input type="text" id="banco" />
+            </div>
+            <div class="form-group">
+              <label>Operação</label>
+              <input type="text" id="operacao" />
+            </div>
+            <div class="form-group">
+              <label>Conta Corrente</label>
+              <input type="text" id="contaCorrente" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>PIX</label>
+              <input type="text" id="pix" />
+            </div>
+          </div>
+
           <div class="form-group">
-            <label for="documento">CPF / CNPJ</label>
-            <input type="text" id="documento" required maxlength="18">
-          </div>
-          <div class="form-group">
-            <label for="email">E-mail</label>
-            <input type="email" id="email">
+            <label>Observações</label>
+            <textarea id="observacoes" rows="3" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:4px;font-family:inherit;font-size:14px;"></textarea>
           </div>
         </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="telefone">Telefone</label>
-            <input type="text" id="telefone">
-          </div>
-          <div class="form-group relative">
-            <label for="localidade">Localidade</label>
-            <input type="text" id="localidade" autocomplete="off" oninput="buscarLocalidade(this.value)">
-            <div class="autocomplete-list" id="listaLocalidade"></div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="endereco">Endereço</label>
-          <input type="text" id="endereco">
-        </div>
-
-        <div class="form-row">
-          <div class="form-group relative">
-            <label for="tipoProcesso">Tipo de Processo</label>
-            <input type="text" id="tipoProcesso" autocomplete="off" oninput="buscarTipoProcesso(this.value)">
-            <div class="autocomplete-list" id="listaTipoProcesso"></div>
-          </div>
-          <div class="form-group relative">
-            <label for="empresa">Empresa</label>
-            <input type="text" id="empresa" autocomplete="off" oninput="buscarEmpresa(this.value)">
-            <div class="autocomplete-list" id="listaEmpresa"></div>
-          </div>
-        </div>
-
-        <div class="form-group relative">
-          <label for="tribunal">Tribunal</label>
-          <input type="text" id="tribunal" autocomplete="off" oninput="buscarTribunal(this.value)">
-          <div class="autocomplete-list" id="listaTribunal"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-cancel" onclick="fechar()">Cancelar</button>
+          <button type="submit" class="btn btn-save">Salvar</button>
         </div>
       </form>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
-      <button class="btn btn-primary" onclick="salvarCliente()">Salvar</button>
+  </div>
+
+  <div class="modal" id="modalTribunal">
+    <div class="modal-content" style="max-width:500px">
+      <div class="modal-header">
+        <h2>Tribunais</h2>
+        <button class="modal-close" onclick="fecharTribunal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Nome do Tribunal</label>
+          <input type="text" id="novoTribunal" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-cancel" onclick="fecharTribunal()">Fechar</button>
+        <button class="btn btn-save" onclick="adicionarTribunal()">Adicionar</button>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="modal-overlay" id="modalTribunal">
-  <div class="modal">
-    <div class="modal-header">
-      <h2>Detalhes do Tribunal</h2>
-      <button class="modal-close" onclick="fecharModalTribunal()">&times;</button>
-    </div>
-    <div class="modal-body" id="conteudoTribunal">
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="fecharModalTribunal()">Fechar</button>
-    </div>
-  </div>
-</div>
+  <script>
+    let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+    let empresas = JSON.parse(localStorage.getItem('empresas')) || [];
+    let tribunais = JSON.parse(localStorage.getItem('tribunais')) || ['TJSP','TJMG','TJRS','TRF1','TRF3','STF','STJ'];
 
-<script>
-  const db = {
-    clientes: JSON.parse(localStorage.getItem('clientes') || '[]'),
-    localidades: ['São Paulo - SP', 'Rio de Janeiro - RJ', 'Belo Horizonte - MG', 'Curitiba - PR', 'Brasília - DF', 'Porto Alegre - RS', 'Salvador - BA', 'Recife - PE', 'Fortaleza - CE', 'Manaus - AM'],
-    tiposProcesso: ['Trabalhista', 'Cível', 'Previdenciário', 'Tributário', 'Família', 'Consumidor', 'Penal', 'Administrativo', 'Ambiental', 'Imobiliário'],
-    empresas: ['Apollo Ayres Advogados', 'Cliente Empresa Alpha', 'Cliente Empresa Beta', 'Cliente Empresa Gama', 'Indústria Ltda', 'Comércio S.A.'],
-    tribunais: ['TRT-2', 'TRT-3', 'TRF-3', 'TJSP', 'TJRS', 'STF', 'STJ', 'TRF-1', 'TRT-1', 'TST']
-  };
-
-  function salvarLocal() {
-    localStorage.setItem('clientes', JSON.stringify(db.clientes));
-  }
-
-  function carregarClientes() {
-    renderizarTabela(db.clientes);
-  }
-
-  function renderizarTabela(clientes) {
-    const tbody = document.getElementById('corpoTabela');
-    tbody.innerHTML = '';
-
-    if (clientes.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="10" class="empty">Nenhum cliente cadastrado.</td></tr>';
-      return;
-    }
-
-    clientes.forEach(cliente => {
-      const tr = document.createElement('tr');
-      const badge = cliente.tipoPessoa === 'juridica' ? 'badge-juridica' : 'badge-fisica';
-      const tipoLabel = cliente.tipoPessoa === 'juridica' ? 'Jurídica' : 'Física';
-      tr.innerHTML = `
-        <td><span class="badge ${badge}">${tipoLabel}</span></td>
-        <td>${cliente.nome}</td>
-        <td>${cliente.documento}</td>
-        <td>${cliente.email || '-'}</td>
-        <td>${cliente.telefone || '-'}</td>
-        <td>${cliente.localidade || '-'}</td>
-        <td>${cliente.tipoProcesso || '-'}</td>
-        <td>${cliente.empresa || '-'}</td>
-        <td>${cliente.tribunal ? `<a href="#" onclick="abrirModalTribunal('${cliente.tribunal}'); return false;">${cliente.tribunal}</a>` : '-'}</td>
-        <td class="acoes">
-          <button class="btn btn-warning" onclick="editarCliente(${cliente.id})">Editar</button>
-          <button class="btn btn-danger" onclick="excluirCliente(${cliente.id})">Excluir</button>
-        </td>
-      `;
-      tbody.appendChild(tr);
+    document.addEventListener('DOMContentLoaded', () => {
+      carregarTribunais();
+      renderizar();
     });
-  }
 
-  function abrirModal(id = null) {
-    document.getElementById('formCliente').reset();
-    document.getElementById('clienteId').value = '';
-    document.getElementById('tituloModal').textContent = 'Novo Cliente';
-    ajustarMascaraDocumento();
-    document.getElementById('modalCliente').classList.add('active');
+    function carregarTribunais() {
+      const sel = document.getElementById('tribunal');
+      const atual = sel.value;
+      sel.innerHTML = '<option value="">Selecione</option>';
+      tribunais.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t;
+        opt.textContent = t;
+        sel.appendChild(opt);
+      });
+      sel.value = atual;
+    }
 
-    if (id) {
-      const cliente = db.clientes.find(c => c.id === id);
-      if (cliente) {
-        document.getElementById('clienteId').value = cliente.id;
-        document.getElementById('tipoPessoa').value = cliente.tipoPessoa;
-        document.getElementById('nome').value = cliente.nome;
-        document.getElementById('documento').value = cliente.documento;
-        document.getElementById('email').value = cliente.email || '';
-        document.getElementById('telefone').value = cliente.telefone || '';
-        document.getElementById('endereco').value = cliente.endereco || '';
-        document.getElementById('localidade').value = cliente.localidade || '';
-        document.getElementById('tipoProcesso').value = cliente.tipoProcesso || '';
-        document.getElementById('empresa').value = cliente.empresa || '';
-        document.getElementById('tribunal').value = cliente.tribunal || '';
-        document.getElementById('tituloModal').textContent = 'Editar Cliente';
-        ajustarMascaraDocumento();
+    function abrirTribunal() {
+      document.getElementById('modalTribunal').classList.add('active');
+    }
+
+    function fecharTribunal() {
+      document.getElementById('modalTribunal').classList.remove('active');
+      document.getElementById('novoTribunal').value = '';
+    }
+
+    function adicionarTribunal() {
+      const val = document.getElementById('novoTribunal').value.trim();
+      if (!val) return;
+      if (!tribunais.includes(val)) {
+        tribunais.push(val);
+        localStorage.setItem('tribunais', JSON.stringify(tribunais));
+        carregarTribunais();
+      }
+      fecharTribunal();
+    }
+
+    function novo() {
+      document.getElementById('form').reset();
+      document.getElementById('id').value = '';
+      document.getElementById('modalTitulo').textContent = 'Novo Cliente';
+      ajustarTipo();
+      document.getElementById('modal').classList.add('active');
+    }
+
+    function fechar() {
+      document.getElementById('modal').classList.remove('active');
+      document.getElementById('empresaList').style.display = 'none';
+    }
+
+    function ajustarTipo() {
+      const tipo = document.getElementById('tipoPessoa').value;
+      document.getElementById('labelNome').textContent = tipo === 'PJ' ? 'Razão Social' : 'Nome';
+      document.getElementById('labelCpfCnpj').textContent = tipo === 'PJ' ? 'CNPJ' : 'CPF';
+      document.getElementById('cpfCnpj').value = '';
+    }
+
+    function mascaraCpfCnpj(el) {
+      let v = el.value.replace(/\D/g, '');
+      const tipo = document.getElementById('tipoPessoa').value;
+      if (tipo === 'PJ') {
+        v = v.slice(0, 14);
+        el.value = v.replace(/^(\d{2})(\d)/, '$1.$2').replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3').replace(/\.(\d{3})(\d)/, '.$1/$2').replace(/(\d{4})(\d)/, '$1-$2');
+      } else {
+        v = v.slice(0, 11);
+        el.value = v.replace(/^(\d{3})(\d)/, '$1.$2').replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3').replace(/\.(\d{3})(\d)/, '.$1-$2');
       }
     }
-  }
 
-  function fecharModal() {
-    document.getElementById('modalCliente').classList.remove('active');
-    esconderAutocomplete('listaLocalidade');
-    esconderAutocomplete('listaTipoProcesso');
-    esconderAutocomplete('listaEmpresa');
-    esconderAutocomplete('listaTribunal');
-  }
-
-  function ajustarMascaraDocumento() {
-    const tipo = document.getElementById('tipoPessoa').value;
-    const campo = document.getElementById('documento');
-    campo.value = '';
-    campo.maxLength = tipo === 'juridica' ? 18 : 14;
-    campo.placeholder = tipo === 'juridica' ? '00.000.000/0000-00' : '000.000.000-00';
-  }
-
-  function salvarCliente() {
-    const id = document.getElementById('clienteId').value;
-    const tipoPessoa = document.getElementById('tipoPessoa').value;
-    const nome = document.getElementById('nome').value.trim();
-    const documento = document.getElementById('documento').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const telefone = document.getElementById('telefone').value.trim();
-    const endereco = document.getElementById('endereco').value.trim();
-    const localidade = document.getElementById('localidade').value.trim();
-    const tipoProcesso = document.getElementById('tipoProcesso').value.trim();
-    const empresa = document.getElementById('empresa').value.trim();
-    const tribunal = document.getElementById('tribunal').value.trim();
-
-    if (!nome || !documento) {
-      alert('Nome e CPF/CNPJ são obrigatórios.');
-      return;
+    function mascaraTelefone(el) {
+      let v = el.value.replace(/\D/g, '').slice(0, 11);
+      el.value = v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/\((\d{2})\) (\d{5})(\d)/, '($1) $2-$3');
     }
 
-    if (id) {
-      const idx = db.clientes.findIndex(c => c.id == id);
-      if (idx >= 0) {
-        db.clientes[idx] = { id: Number(id), tipoPessoa, nome, documento, email, telefone, endereco, localidade, tipoProcesso, empresa, tribunal };
+    async function onCepInput(el) {
+      let v = el.value.replace(/\D/g, '').slice(0, 8);
+      el.value = v.replace(/^(\d{5})(\d)/, '$1-$2');
+      if (v.length === 8) {
+        try {
+          const r = await fetch(`https://viacep.com.br/ws/${v}/json/`);
+          const d = await r.json();
+          if (!d.erro) {
+            document.getElementById('endereco').value = d.logradouro || '';
+            document.getElementById('bairro').value = d.bairro || '';
+            document.getElementById('cidade').value = d.localidade || '';
+            document.getElementById('uf').value = d.uf || '';
+            document.getElementById('complemento').value = d.complemento || '';
+          }
+        } catch (e) { console.error(e); }
       }
-    } else {
-      const novoId = db.clientes.length ? Math.max(...db.clientes.map(c => c.id)) + 1 : 1;
-      db.clientes.push({ id: novoId, tipoPessoa, nome, documento, email, telefone, endereco, localidade, tipoProcesso, empresa, tribunal });
     }
 
-    salvarLocal();
-    renderizarTabela(db.clientes);
-    fecharModal();
-  }
-
-  function editarCliente(id) {
-    abrirModal(id);
-  }
-
-  function excluirCliente(id) {
-    if (!confirm('Tem certeza que deseja excluir este cliente?')) return;
-    db.clientes = db.clientes.filter(c => c.id !== id);
-    salvarLocal();
-    renderizarTabela(db.clientes);
-  }
-
-  function buscarLocalidade(termo) {
-    mostrarAutocomplete('listaLocalidade', termo, db.localidades, 'localidade');
-  }
-
-  function buscarTipoProcesso(termo) {
-    mostrarAutocomplete('listaTipoProcesso', termo, db.tiposProcesso, 'tipoProcesso');
-  }
-
-  function buscarEmpresa(termo) {
-    mostrarAutocomplete('listaEmpresa', termo, db.empresas, 'empresa');
-  }
-
-  function buscarTribunal(termo) {
-    mostrarAutocomplete('listaTribunal', termo, db.tribunais, 'tribunal');
-  }
-
-  function mostrarAutocomplete(listaId, termo, opcoes, campoId) {
-    const lista = document.getElementById(listaId);
-    if (!termo) { lista.style.display = 'none'; return; }
-    const filtrados = opcoes.filter(o => o.toLowerCase().includes(termo.toLowerCase()));
-    if (filtrados.length === 0) { lista.style.display = 'none'; return; }
-    lista.innerHTML = filtrados.map(o => `<div onclick="selecionarAutocomplete('${campoId}', '${listaId}', '${o.replace(/'/g, "\\'")}')">${o}</div>`).join('');
-    lista.style.display = 'block';
-  }
-
-  function selecionarAutocomplete(campoId, listaId, valor) {
-    document.getElementById(campoId).value = valor;
-    document.getElementById(listaId).style.display = 'none';
-  }
-
-  function esconderAutocomplete(listaId) {
-    document.getElementById(listaId).style.display = 'none';
-  }
-
-  function abrirModalTribunal(tribunal) {
-    const conteudo = document.getElementById('conteudoTribunal');
-    conteudo.innerHTML = `<p><strong>Tribunal:</strong> ${tribunal}</p><p>Informações e status do tribunal podem ser consultados aqui.</p>`;
-    document.getElementById('modalTribunal').classList.add('active');
-  }
-
-  function fecharModalTribunal() {
-    document.getElementById('modalTribunal').classList.remove('active');
-  }
-
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('.relative')) {
-      esconderAutocomplete('listaLocalidade');
-      esconderAutocomplete('listaTipoProcesso');
-      esconderAutocomplete('listaEmpresa');
-      esconderAutocomplete('listaTribunal');
+    function autocompleteEmpresa(el) {
+      const list = document.getElementById('empresaList');
+      const val = el.value.trim().toLowerCase();
+      if (!val) { list.style.display = 'none'; return; }
+      const filtradas = empresas.filter(e => e.toLowerCase().includes(val));
+      if (!filtradas.length) { list.style.display = 'none'; return; }
+      list.innerHTML = filtradas.map(e => `<div onclick="selecionarEmpresa('${e}')">${e}</div>`).join('');
+      list.style.display = 'block';
     }
-  });
 
-  window.onload = carregarClientes;
-</script>
+    function selecionarEmpresa(nome) {
+      document.getElementById('empresa').value = nome;
+      document.getElementById('empresaList').style.display = 'none';
+    }
 
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.relative')) document.getElementById('empresaList').style.display = 'none';
+    });
+
+    function salvar(e) {
+      e.preventDefault();
+      const id = document.getElementById('id').value;
+      const nome = document.getElementById('nome').value.trim();
+      const empresa = document.getElementById('empresa').value.trim();
+      if (empresa && !empresas.includes(empresa)) {
+        empresas.push(empresa);
+        localStorage.setItem('empresas', JSON.stringify(empresas));
+      }
+      const obj = {
+        tipoPessoa: document.getElementById('tipoPessoa').value,
+        nome,
+        cpfCnpj: document.getElementById('cpfCnpj').value,
+        email: document.getElementById('email').value.trim(),
+        telefone: document.getElementById('telefone').value.trim(),
+        nacionalidade: document.getElementById('nacionalidade').value.trim(),
+        estadoCivil: document.getElementById('estadoCivil').value,
+        profissao: document.getElementById('profissao').value.trim(),
+        dataNascimento: document.getElementById('dataNascimento').value,
+        naturalidade: document.getElementById('naturalidade').value.trim(),
+        rg: document.getElementById('rg').value.trim(),
+        orgaoExpedidor: document.getElementById('orgaoExpedidor').value.trim(),
+        orgaoExpedidorUf: document.getElementById('orgaoExpedidorUf').value,
+        nomeMae: document.getElementById('nomeMae').value.trim(),
+        observacoes: document.getElementById('observacoes').value.trim(),
+        cep: document.getElementById('cep').value.trim(),
+        endereco: document.getElementById('endereco').value.trim(),
+        numero: document.getElementById('numero').value.trim(),
+        bairro: document.getElementById('bairro').value.trim(),
+        cidade: document.getElementById('cidade').value.trim(),
+        uf: document.getElementById('uf').value.trim(),
+        complemento: document.getElementById('complemento').value.trim(),
+        empresa,
+        tribunal: document.getElementById('tribunal').value,
+        processo: document.getElementById('processo').value.trim(),
+        vara: document.getElementById('vara').value.trim(),
+        acao: document.getElementById('acao').value.trim(),
+        tipoProcesso: document.getElementById('tipoProcesso').value.trim(),
+        banco: document.getElementById('banco').value.trim(),
+        operacao: document.getElementById('operacao').value.trim(),
+        contaCorrente: document.getElementById('contaCorrente').value.trim(),
+        pix: document.getElementById('pix').value.trim()
+      };
+      if (id) {
+        const idx = clientes.findIndex(c => c.id === id);
+        if (idx >= 0) clientes[idx] = { ...clientes[idx], ...obj };
+      } else {
+        obj.id = Date.now().toString();
+        clientes.push(obj);
+      }
+      localStorage.setItem('clientes', JSON.stringify(clientes));
+      fechar();
+      renderizar();
+    }
+
+    function editar(id) {
+      const c = clientes.find(x => x.id === id);
+      if (!c) return;
+      document.getElementById('id').value = c.id;
+      document.getElementById('tipoPessoa').value = c.tipoPessoa || 'PF';
+      ajustarTipo();
+      document.getElementById('nome').value = c.nome || '';
+      document.getElementById('cpfCnpj').value = c.cpfCnpj || '';
+      document.getElementById('email').value = c.email || '';
+      document.getElementById('telefone').value = c.telefone || '';
+      document.getElementById('nacionalidade').value = c.nacionalidade || '';
+      document.getElementById('estadoCivil').value = c.estadoCivil || '';
+      document.getElementById('profissao').value = c.profissao || '';
+      document.getElementById('dataNascimento').value = c.dataNascimento || '';
+      document.getElementById('naturalidade').value = c.naturalidade || '';
+      document.getElementById('rg').value = c.rg || '';
+      document.getElementById('orgaoExpedidor').value = c.orgaoExpedidor || '';
+      document.getElementById('orgaoExpedidorUf').value = c.orgaoExpedidorUf || '';
+      document.getElementById('nomeMae').value = c.nomeMae || '';
+      document.getElementById('observacoes').value = c.observacoes || '';
+      document.getElementById('cep').value = c.cep || '';
+      document.getElementById('endereco').value = c.endereco || '';
+      document.getElementById('numero').value = c.numero || '';
+      document.getElementById('bairro').value = c.bairro || '';
+      document.getElementById('cidade').value = c.cidade || '';
+      document.getElementById('uf').value = c.uf || '';
+      document.getElementById('complemento').value = c.complemento || '';
+      document.getElementById('empresa').value = c.empresa || '';
+      document.getElementById('tribunal').value = c.tribunal || '';
+      document.getElementById('processo').value = c.processo || '';
+      document.getElementById('vara').value = c.vara || '';
+      document.getElementById('acao').value = c.acao || '';
+      document.getElementById('tipoProcesso').value = c.tipoProcesso || '';
+      document.getElementById('banco').value = c.banco || '';
+      document.getElementById('operacao').value = c.operacao || '';
+      document.getElementById('contaCorrente').value = c.contaCorrente || '';
+      document.getElementById('pix').value = c.pix || '';
+      document.getElementById('modalTitulo').textContent = 'Editar Cliente';
+      document.getElementById('modal').classList.add('active');
+    }
+
+    function excluir(id) {
+      if (!confirm('Confirma a exclusão?')) return;
+      clientes = clientes.filter(c => c.id !== id);
+      localStorage.setItem('clientes', JSON.stringify(clientes));
+      renderizar();
+    }
+
+    function filtrar() {
+      renderizar();
+    }
+
+    function renderizar() {
+      const busca = document.getElementById('busca').value.toLowerCase();
+      const filtrados = clientes.filter(c => {
+        const nome = (c.nome || '').toLowerCase();
+        const doc = (c.cpfCnpj || '').toLowerCase();
+        const email = (c.email || '').toLowerCase();
+        return nome.includes(busca) || doc.includes(busca) || email.includes(busca);
+      });
+      document.getElementById('totalClientes').textContent = clientes.length;
+      document.getElementById('totalPF').textContent = clientes.filter(c => c.tipoPessoa === 'PF').length;
+      document.getElementById('totalPJ').textContent = clientes.filter(c => c.tipoPessoa === 'PJ').length;
+      const corpo = document.getElementById('corpo');
+      const empty = document.getElementById('empty');
+      if (!filtrados.length) {
+        corpo.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+      corpo.innerHTML = filtrados.map(c => {
+        const nome = c.nome || '-';
+        const doc = c.cpfCnpj || '-';
+        const cidade = `${c.cidade || '-'}/${c.uf || '-'}`;
+        const nac = c.nacionalidade || '-';
+        const ec = c.estadoCivil || '-';
+        return `<tr>
+          <td>${nome}</td>
+          <td>${doc}</td>
+          <td>${c.email || '-'}</td>
+          <td>${c.telefone || '-'}</td>
+          <td>${cidade}</td>
+          <td>${nac}</td>
+          <td>${ec}</td>
+          <td class="acoes">
+            <button class="btn-icon btn-edit" onclick="editar('${c.id}')">Editar</button>
+            <button class="btn-icon btn-delete" onclick="excluir('${c.id}')">Excluir</button>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+  </script>
 </body>
 </html>
