@@ -1,208 +1,275 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Controle do Escritório - Home</title>
-  <style>
-    * { box-sizing: border-box; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; color: #333; margin: 0; }
-
-    /* NAVBAR */
-    .navbar { background: #0a58ca; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; color: white; flex-wrap: wrap; }
-    .navbar .brand { font-weight: 700; font-size: 1.1rem; }
-    .nav-links { display: flex; gap: 6px; flex-wrap: wrap; font-size: 0.8rem; }
-    .nav-links a { color: #dbe9ff; text-decoration: none; padding: 4px 10px; border-radius: 5px; transition: 0.2s; }
-    .nav-links a:hover { background: rgba(255,255,255,0.15); color: #fff; }
-    .nav-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .btn-nav { padding: 6px 14px; border: 2px solid rgba(255,255,255,0.4); border-radius: 7px; background: transparent; color: white; cursor: pointer; font-size: 0.8rem; }
-    .btn-nav:hover { border-color: white; background: rgba(255,255,255,0.1); }
-    .badge { background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 5px; font-weight: 600; font-size: 0.75rem; }
-
-    /* CONTAINER */
-    .container { max-width: 1200px; margin: 28px auto; padding: 0 20px; }
-    h2 { margin: 0 0 16px 0; font-size: 1.2rem; color: #333; }
-
-    /* RESUMO - Fundo branco, labels preto negrito, valores coloridos apenas na letra */
-    .resumo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 28px; }
-    .resumo-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-    .resumo-card label { display: block; font-size: 0.85rem; color: #000; font-weight: 700; margin-bottom: 6px; }
-    .resumo-card .valor { font-size: 1.6rem; font-weight: 700; }
-    .resumo-card .valor.positivo { color: #0a58ca; }
-    .resumo-card .valor.negativo { color: #dc3545; }
-    .resumo-card .valor.pendencia { color: #198754; }
-
-    /* MÓDULOS - Fundo branco, nome preto negrito */
-    .modules-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
-    .modulo-card { background: white; border-radius: 12px; padding: 18px 14px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); cursor: pointer; transition: all 0.2s; text-decoration: none; color: #333; display: block; }
-    .modulo-card:hover { transform: translateY(-3px); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
-    .modulo-card .icon { font-size: 1.8rem; margin-bottom: 6px; }
-    .modulo-card .nome { font-weight: 700; font-size: 0.85rem; color: #000; }
-
-    /* MODAL */
-    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
-    .modal-overlay.active { display: flex; }
-    .modal-box { background: white; border-radius: 14px; padding: 24px; max-width: 420px; width: 90%; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-    .modal-box h3 { margin: 0 0 16px 0; color: #0a58ca; }
-    .form-group { margin-bottom: 14px; }
-    .form-group label { display: block; font-size: 0.85rem; color: #000; font-weight: 700; margin-bottom: 4px; }
-    .form-group input { width: 100%; padding: 10px 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.95rem; box-sizing: border-box; }
-    .form-group input:read-only { background: #f8f9fa; }
-    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-    .btn-primary { padding: 10px 18px; border: none; border-radius: 8px; background: #0a58ca; color: white; cursor: pointer; font-weight: 600; }
-    .btn-secondary { padding: 10px 18px; border: none; border-radius: 8px; background: #6c757d; color: white; cursor: pointer; font-weight: 600; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Controle do Escritório</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background-color: #f5f6fa; color: #333; }
+        .navbar { background-color: #0a58ca; padding: 12px 20px; color: #fff; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+        .navbar .brand { font-size: 20px; font-weight: bold; }
+        .navbar nav { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+        .navbar a { color: #fff; text-decoration: none; font-size: 14px; }
+        .navbar a:hover { text-decoration: underline; }
+        .navbar .user-area { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+        .navbar .badge { background-color: #fff; color: #0a58ca; padding: 4px 10px; border-radius: 4px; font-weight: bold; font-size: 12px; }
+        .navbar button { background-color: #fff; color: #0a58ca; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
+        .navbar button:hover { background-color: #e9ecef; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        h2 { margin-bottom: 20px; color: #0a58ca; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .card { background: #fff; border-left: 4px solid #0a58ca; padding: 20px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .card h3 { font-size: 14px; color: #666; margin-bottom: 10px; }
+        .card .valor { font-size: 22px; font-weight: bold; color: #0a58ca; }
+        .card .valor.negativo { color: #dc3545; }
+        .card .valor.positivo { color: #198754; }
+        .modulos { margin-top: 30px; }
+        .modulos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 20px; }
+        .modulo-card { display: flex; flex-direction: column; align-items: center; justify-content: center; background: #fff; border-left: 4px solid #0a58ca; padding: 25px; border-radius: 6px; text-decoration: none; color: #333; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .modulo-card:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        .modulo-card .icon { font-size: 32px; margin-bottom: 10px; }
+        .modulo-card .nome { font-size: 14px; font-weight: bold; text-align: center; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal { background: #fff; padding: 25px; border-radius: 6px; width: 100%; max-width: 420px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .modal h3 { margin-bottom: 20px; color: #0a58ca; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+        .btn { padding: 10px 18px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; }
+        .btn-primary { background-color: #0a58ca; color: #fff; }
+        .btn-secondary { background-color: #6c757d; color: #fff; }
+        .btn:hover { opacity: 0.9; }
+    </style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="brand">Controle do Escritório</div>
-    <div class="nav-links">
-      <a href="home.html">Home</a>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="cadastros.html">Cadastros</a>
-      <a href="financeiro.html">Financeiro</a>
-      <a href="fluxo-caixa.html">Fluxo Caixa</a>
-      <a href="marketing.html">Marketing</a>
-      <a href="patrimonio.html">Patrimônio</a>
-      <a href="proventos.html">Proventos</a>
-      <a href="relatorios-gerenciais.html">Rel. Gerenciais</a>
-      <a href="auditoria.html">Auditoria</a>
-      <a href="usuarios.html">Usuários</a>
+    <header class="navbar">
+        <div class="brand">Controle do Escritório</div>
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="cadastros.html">Cadastros</a>
+            <a href="financeiro.html">Financeiro</a>
+            <a href="fluxo-caixa.html">Fluxo Caixa</a>
+            <a href="marketing.html">Marketing</a>
+            <a href="patrimonio.html">Patrimônio</a>
+            <a href="proventos.html">Proventos</a>
+            <a href="relatorios-gerenciais.html">Rel. Gerenciais</a>
+            <a href="auditoria.html">Auditoria</a>
+            <a href="usuarios.html">Usuários</a>
+        </nav>
+        <div class="user-area">
+            <span>Olá, <strong id="userName">Usuário</strong></span>
+            <span class="badge" id="userRole">Perfil</span>
+            <button onclick="abrirModal()">Alterar Senha</button>
+            <button onclick="sair()">Sair</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="resumo">
+            <h2>Resumo do Mês</h2>
+            <div class="grid-4">
+                <div class="card">
+                    <h3>Total Receitas (mês)</h3>
+                    <div class="valor positivo" id="resumo-receitas">R$ 0,00</div>
+                </div>
+                <div class="card">
+                    <h3>Total Despesas (mês)</h3>
+                    <div class="valor" id="resumo-despesas">R$ 0,00</div>
+                </div>
+                <div class="card">
+                    <h3>Saldo</h3>
+                    <div class="valor" id="resumo-saldo">R$ 0,00</div>
+                </div>
+                <div class="card">
+                    <h3>Pendências</h3>
+                    <div class="valor" id="resumo-pendencias">0</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="modulos">
+            <h2>Módulos</h2>
+            <div class="modulos-grid">
+                <a href="dashboard.html" class="modulo-card">
+                    <div class="icon">📊</div>
+                    <div class="nome">Dashboard</div>
+                </a>
+                <a href="cadastros.html" class="modulo-card">
+                    <div class="icon">📋</div>
+                    <div class="nome">Cadastros</div>
+                </a>
+                <a href="financeiro.html" class="modulo-card">
+                    <div class="icon">💳</div>
+                    <div class="nome">Financeiro</div>
+                </a>
+                <a href="fluxo-caixa.html" class="modulo-card">
+                    <div class="icon">💰</div>
+                    <div class="nome">Fluxo de Caixa</div>
+                </a>
+                <a href="marketing.html" class="modulo-card">
+                    <div class="icon">📢</div>
+                    <div class="nome">Marketing</div>
+                </a>
+                <a href="patrimonio.html" class="modulo-card">
+                    <div class="icon">🏦</div>
+                    <div class="nome">Patrimônio</div>
+                </a>
+                <a href="proventos.html" class="modulo-card">
+                    <div class="icon">📋</div>
+                    <div class="nome">Proventos</div>
+                </a>
+                <a href="relatorios-gerenciais.html" class="modulo-card">
+                    <div class="icon">📊</div>
+                    <div class="nome">Rel. Gerenciais</div>
+                </a>
+                <a href="auditoria.html" class="modulo-card">
+                    <div class="icon">📋</div>
+                    <div class="nome">Auditoria</div>
+                </a>
+                <a href="prestacao-contas.html" class="modulo-card">
+                    <div class="icon">📄</div>
+                    <div class="nome">Prestação de Contas</div>
+                </a>
+                <a href="usuarios.html" class="modulo-card" style="display:none;" id="card-usuarios">
+                    <div class="icon">👥</div>
+                    <div class="nome">Usuários</div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="modal-senha">
+        <div class="modal">
+            <h3>Alterar Senha</h3>
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" placeholder="Digite seu e-mail">
+            </div>
+            <div class="form-group">
+                <label for="senha-atual">Senha Atual</label>
+                <input type="password" id="senha-atual" placeholder="Senha atual">
+            </div>
+            <div class="form-group">
+                <label for="nova-senha">Nova Senha</label>
+                <input type="password" id="nova-senha" placeholder="Nova senha">
+            </div>
+            <div class="form-group">
+                <label for="confirmar-senha">Confirmar Nova Senha</label>
+                <input type="password" id="confirmar-senha" placeholder="Confirmar nova senha">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="salvarAlteracao()">Salvar</button>
+            </div>
+        </div>
     </div>
-    <div class="nav-right">
-      <span>Olá, <strong id="userName">Usuário</strong></span>
-      <span class="badge" id="userRole">Perfil</span>
-      <button class="btn-nav" onclick="abrirModal()">Alterar Senha</button>
-      <button class="btn-nav" onclick="window.logout()">Sair</button>
-    </div>
-  </nav>
 
-  <div class="container">
-    <h2>Resumo do Mês</h2>
-    <div class="resumo-grid">
-      <div class="resumo-card">
-        <label>Total Receitas (mês)</label>
-        <div id="resumo-receitas" class="valor positivo">R$ 0,00</div>
-      </div>
-      <div class="resumo-card">
-        <label>Total Despesas (mês)</label>
-        <div id="resumo-despesas" class="valor negativo">R$ 0,00</div>
-      </div>
-      <div class="resumo-card">
-        <label>Saldo</label>
-        <div id="resumo-saldo" class="valor positivo">R$ 0,00</div>
-      </div>
-      <div class="resumo-card">
-        <label>Pendências</label>
-        <div id="resumo-pendencias" class="valor pendencia">R$ 0,00</div>
-      </div>
-    </div>
-
-    <h2>Módulos</h2>
-    <div class="modules-grid">
-      <a href="dashboard.html" class="modulo-card"><div class="icon">📊</div><div class="nome">Dashboard</div></a>
-      <a href="cadastros.html" class="modulo-card"><div class="icon">📋</div><div class="nome">Cadastros</div></a>
-      <a href="financeiro.html" class="modulo-card"><div class="icon">💳</div><div class="nome">Financeiro</div></a>
-      <a href="fluxo-caixa.html" class="modulo-card"><div class="icon">💰</div><div class="nome">Fluxo de Caixa</div></a>
-      <a href="marketing.html" class="modulo-card"><div class="icon">📢</div><div class="nome">Marketing</div></a>
-      <a href="patrimonio.html" class="modulo-card"><div class="icon">🏦</div><div class="nome">Patrimônio</div></a>
-      <a href="proventos.html" class="modulo-card"><div class="icon">📋</div><div class="nome">Proventos</div></a>
-      <a href="relatorios-gerenciais.html" class="modulo-card"><div class="icon">📊</div><div class="nome">Rel. Gerenciais</div></a>
-      <a href="auditoria.html" class="modulo-card"><div class="icon">📋</div><div class="nome">Auditoria</div></a>
-      <a href="usuarios.html" class="modulo-card" id="card-usuarios" style="display:none;"><div class="icon">👥</div><div class="nome">Usuários</div></a>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="modalSenha">
-    <div class="modal-box">
-      <h3>Alterar Senha</h3>
-      <div class="form-group">
-        <label for="altEmail">E-mail</label>
-        <input type="email" id="altEmail" readonly>
-      </div>
-      <div class="form-group">
-        <label for="altSenhaAtual">Senha Atual</label>
-        <input type="password" id="altSenhaAtual">
-      </div>
-      <div class="form-group">
-        <label for="altNovaSenha">Nova Senha</label>
-        <input type="password" id="altNovaSenha">
-      </div>
-      <div class="form-group">
-        <label for="altConfirmar">Confirmar Nova Senha</label>
-        <input type="password" id="altConfirmar">
-      </div>
-      <div class="modal-actions">
-        <button class="btn-secondary" onclick="fecharModal()">Cancelar</button>
-        <button class="btn-primary" onclick="alterarSenha()">Salvar</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="db.js"></script>
-  <script src="auth.js"></script>
-  <script>
-    async function carregarResumo() {
-      try {
-        var receitas = await window.db.receitas_listar();
-        var despesas = await window.db.despesas_listar();
-        var hoje = new Date();
-        var mesAtual = (hoje.getMonth() + 1).toString().padStart(2, '0');
-        var anoAtual = hoje.getFullYear().toString();
-        var totalRec = 0, totalDesp = 0, pend = 0;
-        receitas.forEach(function(r) {
-          if (r.data && r.data.substring(0, 7) === anoAtual + '-' + mesAtual) {
-            totalRec += parseFloat(r.valor) || 0;
-            if (r.status === 'Pendente' || r.status === 'Atrasado') pend += parseFloat(r.valor) || 0;
-          }
-        });
-        despesas.forEach(function(d) {
-          if (d.data && d.data.substring(0, 7) === anoAtual + '-' + mesAtual) {
-            totalDesp += parseFloat(d.valor) || 0;
-            if (d.status === 'Pendente' || d.status === 'Atrasado') pend += parseFloat(d.valor) || 0;
-          }
-        });
-        document.getElementById('resumo-receitas').textContent = 'R$ ' + totalRec.toFixed(2).replace('.', ',');
-        document.getElementById('resumo-despesas').textContent = 'R$ ' + totalDesp.toFixed(2).replace('.', ',');
-        var saldo = totalRec - totalDesp;
-        var elSaldo = document.getElementById('resumo-saldo');
-        elSaldo.textContent = 'R$ ' + saldo.toFixed(2).replace('.', ',');
-        elSaldo.className = 'valor ' + (saldo >= 0 ? 'positivo' : 'negativo');
-        var elPend = document.getElementById('resumo-pendencias');
-        elPend.textContent = 'R$ ' + pend.toFixed(2).replace('.', ',');
-        elPend.className = 'valor pendencia';
-      } catch(e) { console.error(e); }
-    }
-
-    async function alterarSenha() {
-      var email = document.getElementById('altEmail').value;
-      var senhaAtual = document.getElementById('altSenhaAtual').value;
-      var novaSenha = document.getElementById('altNovaSenha').value;
-      var confirmar = document.getElementById('altConfirmar').value;
-      if (!email || !senhaAtual || !novaSenha || !confirmar) { alert('Preencha todos os campos.'); return; }
-      if (novaSenha !== confirmar) { alert('As senhas não conferem.'); return; }
-      if (novaSenha.length < 6) { alert('Mínimo 6 caracteres.'); return; }
-      var r = await window.trocarSenha(email, senhaAtual, novaSenha);
-      if (r.success) { alert('Senha alterada com sucesso!'); fecharModal(); }
-      else { alert(r.message || 'Erro ao alterar senha.'); }
-    }
-
-    function abrirModal() { document.getElementById('modalSenha').classList.add('active'); }
-    function fecharModal() { document.getElementById('modalSenha').classList.remove('active'); }
-
-    document.addEventListener('DOMContentLoaded', async function() {
-      window.verificarAutenticacao();
-      var usuario = window.getUsuarioLogado();
-      if (usuario) {
-        document.getElementById('userName').textContent = usuario.nome || usuario.email || 'Usuário';
-        document.getElementById('userRole').textContent = usuario.perfil || 'Perfil';
-        document.getElementById('altEmail').value = usuario.email || '';
-        if (usuario.perfil === 'Admin' || usuario.perfil === 'Administrador') {
-          document.getElementById('card-usuarios').style.display = 'block';
+    <script src="db.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        function formatarMoeda(valor) {
+            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
         }
-      }
-      await carregarResumo();
-    });
-  </script>
+
+        function obterMesAtual() {
+            const hoje = new Date();
+            return `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}`;
+        }
+
+        function filtrarMesAtual(lista, campoData) {
+            const mesAtual = obterMesAtual();
+            return (lista || []).filter(item => {
+                const data = item[campoData] || item.data || item.data_vencimento || item.data_pagamento || item.created_at;
+                if (!data) return false;
+                return data.substring(0, 7) === mesAtual;
+            });
+        }
+
+        async function carregarResumo() {
+            try {
+                let receitas = [];
+                let despesas = [];
+
+                if (window.db && typeof window.db.receitas_listar === 'function') {
+                    receitas = await window.db.receitas_listar() || [];
+                }
+                if (window.db && typeof window.db.despesas_listar === 'function') {
+                    despesas = await window.db.despesas_listar() || [];
+                }
+
+                const receitasMes = filtrarMesAtual(receitas, 'data');
+                const despesasMes = filtrarMesAtual(despesas, 'data');
+
+                const totalReceitas = receitasMes.reduce((soma, r) => soma + (parseFloat(r.valor) || 0), 0);
+                const totalDespesas = despesasMes.reduce((soma, d) => soma + (parseFloat(d.valor) || 0), 0);
+                const saldo = totalReceitas - totalDespesas;
+
+                const receitasPendentes = receitasMes.filter(r => r.status && r.status.toLowerCase() === 'pendente').length;
+                const despesasPendentes = despesasMes.filter(d => d.status && d.status.toLowerCase() === 'pendente').length;
+                const pendencias = receitasPendentes + despesasPendentes;
+
+                document.getElementById('resumo-receitas').textContent = formatarMoeda(totalReceitas);
+                document.getElementById('resumo-despesas').textContent = formatarMoeda(totalDespesas);
+                document.getElementById('resumo-saldo').textContent = formatarMoeda(saldo);
+                document.getElementById('resumo-saldo').className = 'valor ' + (saldo >= 0 ? 'positivo' : 'negativo');
+                document.getElementById('resumo-pendencias').textContent = pendencias;
+            } catch (erro) {
+                console.error('Erro ao carregar resumo:', erro);
+            }
+        }
+
+        function abrirModal() {
+            document.getElementById('modal-senha').style.display = 'flex';
+        }
+
+        function fecharModal() {
+            document.getElementById('modal-senha').style.display = 'none';
+            document.getElementById('email').value = '';
+            document.getElementById('senha-atual').value = '';
+            document.getElementById('nova-senha').value = '';
+            document.getElementById('confirmar-senha').value = '';
+        }
+
+        async function salvarAlteracao() {
+            const email = document.getElementById('email').value.trim();
+            const senhaAtual = document.getElementById('senha-atual').value;
+            const novaSenha = document.getElementById('nova-senha').value;
+            const confirmarSenha = document.getElementById('confirmar-senha').value;
+
+            if (!email || !senhaAtual || !novaSenha || !confirmarSenha) {
+                alert('Preencha todos os campos.');
+                return;
+            }
+            if (novaSenha !== confirmarSenha) {
+                alert('A nova senha e a confirmação não conferem.');
+                return;
+            }
+
+            try {
+                if (window.auth && typeof window.auth.alterarSenha === 'function') {
+                    await window.auth.alterarSenha({ email, senhaAtual, novaSenha });
+                    alert('Senha alterada com sucesso.');
+                    fecharModal();
+                } else {
+                    alert('Função de alteração de senha não disponível.');
+                }
+            } catch (erro) {
+                alert('Erro ao alterar senha: ' + (erro.message || 'Erro desconhecido'));
+            }
+        }
+
+        function sair() {
+            if (window.auth && typeof window.auth.logout === 'function') {
+                window.auth.logout();
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', carregarResumo);
+    </script>
 </body>
 </html>
