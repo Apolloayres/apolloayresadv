@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Relatório de Prestação de Contas - Controle do Escritório</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:Arial,sans-serif; background-color:#f0f2f5; color:#333; }
+    .navbar { background-color:#0a58ca; padding:12px 20px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+    .navbar a { color:#fff; text-decoration:none; padding:8px 12px; border-radius:4px; font-size:14px; }
+    .navbar a:hover { background-color:rgba(255,255,255,0.2); }
+    .container { max-width:1200px; margin:20px auto; padding:0 20px; }
+    .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+    .header h1 { font-size:24px; color:#0a58ca; }
+    .btn { padding:8px 16px; border:none; border-radius:4px; cursor:pointer; font-size:14px; text-decoration:none; display:inline-block; }
+    .btn-voltar { background-color:#6c757d; color:#fff; }
+    .btn-voltar:hover { background-color:#5a6268; }
+    .btn-primary { background-color:#0a58ca; color:#fff; }
+    .btn-primary:hover { background-color:#084298; }
+    .btn-success { background-color:#198754; color:#fff; }
+    .btn-success:hover { background-color:#157347; }
+    .acoes { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+    .seletor-periodo { display:flex; gap:10px; align-items:center; margin-bottom:20px; flex-wrap:wrap; }
+    .seletor-periodo label { font-weight:bold; }
+    .seletor-periodo select { padding:8px 12px; border:1px solid #ccc; border-radius:4px; font-size:14px; }
+    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:15px; margin-bottom:30px; }
+    .card { background:#fff; padding:18px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); text-align:center; border-left:4px solid #0a58ca; }
+    .card h3 { font-size:13px; color:#666; text-transform:uppercase; margin-bottom:8px; }
+    .card p { font-size:20px; font-weight:bold; }
+    .card.verde p { color:#198754; }
+    .card.vermelho p { color:#dc3545; }
+    .card.laranja p { color:#fd7e14; }
+    .card.azul p { color:#0a58ca; }
+    .card.roxo p { color:#6f42c1; }
+    .secao { background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); margin-bottom:20px; }
+    .secao h2 { font-size:18px; color:#0a58ca; margin-bottom:15px; padding-bottom:8px; border-bottom:2px solid #e9ecef; }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    th, td { padding:8px 10px; text-align:left; border-bottom:1px solid #e9ecef; }
+    th { background-color:#f1f5ff; font-weight:bold; color:#0a58ca; }
+    tbody tr:hover { background-color:#f8f9ff; }
+    .linha-total { font-weight:bold; background-color:#e9f0fc; }
+    .linha-total td { border-top:2px solid #0a58ca; }
+    .numero { text-align:right; }
+    .sem-dados { text-align:center; color:#999; padding:30px; }
+    .erro { background:#f8d7da; color:#842029; padding:12px 16px; border-radius:4px; margin-bottom:20px; }
+    @media print { .navbar,.acoes,.seletor-periodo { display:none!important; } }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="home.html">Home</a>
+  <a href="cadastros.html">Cadastros</a>
+  <a href="financeiro.html">Financeiro</a>
+  <a href="fluxo-caixa.html">Fluxo de Caixa</a>
+  <a href="marketing.html">Marketing</a>
+  <a href="patrimonio.html">Patrimônio</a>
+  <a href="proventos.html">Proventos</a>
+  <a href="relatorios-gerenciais.html">Rel. Gerenciais</a>
+  <a href="usuarios.html">Usuários</a>
+</nav>
+<div class="container">
+  <div class="header">
+    <h1>📄 Relatório de Prestação de Contas</h1>
+    <a href="home.html" class="btn btn-voltar">← Voltar</a>
+  </div>
+  <div class="acoes">
+    <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir</button>
+    <button class="btn btn-success" onclick="gerarPdf()">📥 Gerar PDF</button>
+  </div>
+  <div class="seletor-periodo">
+    <label for="mesSelect">Mês:</label>
+    <select id="mesSelect">
+      <option value="1">Janeiro</option><option value="2">Fevereiro</option><option value="3">Março</option>
+      <option value="4">Abril</option><option value="5">Maio</option><option value="6">Junho</option>
+      <option value="7">Julho</option><option value="8">Agosto</option><option value="9">Setembro</option>
+      <option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
+    </select>
+    <label for="anoSelect">Ano:</label>
+    <select id="anoSelect"></select>
+  </div>
+  <div id="mensagem"></div>
+  <div class="cards">
+    <div class="card verde"><h3>📈 Total Receitas</h3><p id="resumoReceitas">R$ 0,00</p></div>
+    <div class="card vermelho"><h3>📉 Total Despesas</h3><p id="resumoDespesas">R$ 0,00</p></div>
+    <div class="card azul" id="cardSaldo"><h3>💰 Saldo</h3><p id="resumoSaldo">R$ 0,00</p></div>
+    <div class="card laranja"><h3>👥 Proventos</h3><p id="resumoProventos">R$ 0,00</p></div>
+    <div class="card azul"><h3>🏦 Saldo Contas</h3><p id="resumoContas">R$ 0,00</p></div>
+    <div class="card roxo"><h3>📊 Saldo Aplicações</h3><p id="resumoAplicacoes">R$ 0,00</p></div>
+  </div>
+  <div class="secao"><h2>Consolidado Mensal</h2><div id="tabelaConsolidado"><p class="sem-dados">Carregando...</p></div></div>
+  <div class="secao"><h2>Receitas do Período</h2><div id="tabelaReceitas"><p class="sem-dados">Carregando...</p></div></div>
+  <div class="secao"><h2>Despesas do Período</h2><div id="tabelaDespesas"><p class="sem-dados">Carregando...</p></div></div>
+  <div class="secao"><h2>Proventos do Período</h2><div id="tabelaProventos"><p class="sem-dados">Carregando...</p></div></div>
+</div>
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script>
+function fmtMoney(v){return'R$ '+Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2})}
+function parseData(d){if(!d)return null;let dt=new Date(d);return isNaN(dt.getTime())?null:dt}
+function fmtData(d){const dt=parseData(d);return dt?dt.toLocaleDateString('pt-BR'):'-'}
+function getPeriodo(){return{mes:parseInt(document.getElementById('mesSelect').value),ano:parseInt(document.getElementById('anoSelect').value)}}
+function buildTable(lista,cols,totalCampo){
+  if(!lista||!lista.length)return'<p class="sem-dados">Nenhum registro no período.</p>';
+  const ths=cols.map(c=>`<th${c.align?' class="'+c.align+'"':''}>${c.label}</th>`).join('');
+  let total=0;
+  const rows=lista.map(item=>{
+    let cells=cols.map(c=>{
+      let v=item[c.field]||'-';
+      if(c.money){v=fmtMoney(v);if(item[c.field]!==undefined)total+=Number(item[c.field])||0;}
+      if(c.date)v=fmtData(v);
+      return`<td${c.align?' class="'+c.align+'"':''}>${v}</td>`;
+    }).join('');
+    return'<tr>'+cells+'</tr>';
+  }).join('');
+  const hasMoney=cols.some(c=>c.money);
+  const totalRow=hasMoney?'<tr class="linha-total"><td colspan="'+(cols.length-1)+'">TOTAL</td><td class="numero">'+fmtMoney(total)+'</td></tr>':'';
+  return'<table><thead><tr>'+ths+'</tr></thead><tbody>'+rows+totalRow+'</tbody></table>';
+}
+async function carregarRelatorio(){
+  const{mes,ano}=getPeriodo();
+  try{
+    const receitas=await window.db.receitas_listar()||[];
+    const despesas=await window.db.despesas_listar()||[];
+    const proventos=await window.db.proventos_listar_por_mes(mes,ano)||[];
+    const contas=await window.db.contas_listar()||[];
+    const aplicacoes=await window.db.aplicacoes_listar()||[];
+    const recMes=receitas.filter(r=>{const d=parseData(r.data);return d&&d.getMonth()+1===mes&&d.getFullYear()===ano});
+    const desMes=despesas.filter(d=>{const dt=parseData(d.data);return dt&&dt.getMonth()+1===mes&&dt.getFullYear()===ano});
+    const totalRec=recMes.reduce((a,r)=>a+(Number(r.valor)||0),0);
+    const totalDes=desMes.reduce((a,d)=>a+(Number(d.valor)||0),0);
+    const totalProv=Array.isArray(proventos)?proventos.reduce((a,p)=>a+(Number(p.total||p.fixo||0)+Number(p.variavel||0)),0):0;
+    const totalContas=contas.reduce((a,c)=>a+(Number(c.saldo)||0),0);
+    const totalAplic=aplicacoes.reduce((a,ap)=>a+(Number(ap.saldo||ap.valor||0)||0),0);
+    const saldo=totalRec-totalDes;
+    document.getElementById('resumoReceitas').textContent=fmtMoney(totalRec);
+    document.getElementById('resumoDespesas').textContent=fmtMoney(totalDes);
+    document.getElementById('resumoSaldo').textContent=fmtMoney(saldo);
+    document.getElementById('resumoProventos').textContent=fmtMoney(totalProv);
+    document.getElementById('resumoContas').textContent=fmtMoney(totalContas);
+    document.getElementById('resumoAplicacoes').textContent=fmtMoney(totalAplic);
+    document.getElementById('cardSaldo').className='card'+(saldo>=0?' verde':' vermelho');
+    const nomeMes=new Date(ano,mes-1,1).toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+    const totalGeral=saldo+totalProv+totalContas+totalAplic;
+    document.getElementById('tabelaConsolidado').innerHTML=buildTable([{
+      mes:nomeMes,receitas:totalRec,despesas:totalDes,saldo:saldo,proventos:totalProv,totalGeral:totalGeral
+    }],[{label:'Mês',field:'mes'},{label:'Receitas',field:'receitas',money:true,align:'numero'},{label:'Despesas',field:'despesas',money:true,align:'numero'},{label:'Saldo',field:'saldo',money:true,align:'numero'},{label:'Proventos',field:'proventos',money:true,align:'numero'},{label:'Total Geral',field:'totalGeral',money:true,align:'numero'}]);
+    document.getElementById('tabelaReceitas').innerHTML=buildTable(recMes,[{label:'Data',field:'data',date:true},{label:'Cliente',field:'cliente'},{label:'Descrição',field:'descricao'},{label:'Categoria',field:'categoria'},{label:'Valor',field:'valor',money:true,align:'numero'},{label:'Status',field:'status'}]);
+    document.getElementById('tabelaDespesas').innerHTML=buildTable(desMes,[{label:'Data',field:'data',date:true},{label:'Descrição',field:'descricao'},{label:'Categoria',field:'categoria'},{label:'Fornecedor',field:'fornecedor'},{label:'Valor',field:'valor',money:true,align:'numero'},{label:'Status',field:'status'}]);
+    document.getElementById('tabelaProventos').innerHTML=buildTable(Array.isArray(proventos)?proventos:[],[{label:'Nome',field:'nome'},{label:'Cargo',field:'cargo'},{label:'Fixo',field:'fixo',money:true,align:'numero'},{label:'Variável',field:'variavel',money:true,align:'numero'},{label:'Total',field:'total',money:true,align:'numero'}],'total');
+  }catch(e){console.error(e);document.getElementById('mensagem').innerHTML='<div class="erro">Erro ao carregar relatório.</div>';}
+}
+function gerarPdf(){window.print();}
+document.addEventListener('DOMContentLoaded',async()=>{
+  if(window.verificarAutenticacao)window.verificarAutenticacao();
+  const anoSelect=document.getElementById('anoSelect');
+  const anoAtual=new Date().getFullYear();
+  for(let a=anoAtual-4;a<=anoAtual+1;a++){const opt=document.createElement('option');opt.value=a;opt.textContent=a;if(a===anoAtual)opt.selected=true;anoSelect.appendChild(opt);}
+  document.getElementById('mesSelect').value=new Date().getMonth()+1;
+  document.getElementById('mesSelect').addEventListener('change',carregarRelatorio);
+  document.getElementById('anoSelect').addEventListener('change',carregarRelatorio);
+  await carregarRelatorio();
+});
+</script>
+</body>
+</html>

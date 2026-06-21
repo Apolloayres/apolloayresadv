@@ -18,21 +18,15 @@
       --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       --radius: 8px;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    .topo-logo { background-color: #fff; padding: 15px 20px; display: flex; justify-content: center; align-items: center; }
+    .logo-escritorio { height: 70px; width: auto; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f3f6fb;
       color: var(--text);
       line-height: 1.6;
     }
-
-    /* Navbar */
     .navbar {
       background-color: var(--primary);
       color: var(--white);
@@ -40,386 +34,66 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: var(--shadow);
     }
-
-    .navbar-brand {
-      font-weight: 700;
-      font-size: 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .navbar-links a {
-      color: var(--white);
-      text-decoration: none;
-      margin-left: 1.5rem;
-      font-size: 0.95rem;
-      opacity: 0.9;
-      transition: opacity 0.2s;
-    }
-
-    .navbar-links a:hover {
-      opacity: 1;
-    }
-
-    /* Container */
-    .container {
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-
-    .page-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .page-title {
-      font-size: 1.75rem;
-      color: var(--primary);
-    }
-
-    /* Botões */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.6rem 1.2rem;
-      border: none;
-      border-radius: var(--radius);
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      text-decoration: none;
-    }
-
-    .btn:active {
-      transform: scale(0.98);
-    }
-
-    .btn-primary {
-      background-color: var(--primary);
-      color: var(--white);
-    }
-
-    .btn-primary:hover {
-      background-color: #0845a0;
-    }
-
-    .btn-back {
-      background-color: var(--primary-soft);
-      color: var(--primary);
-      border: 1px solid var(--primary-light);
-      font-weight: 600;
-    }
-
-    .btn-back:hover {
-      background-color: #dce8ff;
-    }
-
-    .btn-edit {
-      background-color: #f59e0b;
-      color: var(--white);
-      padding: 0.4rem 0.8rem;
-      font-size: 0.85rem;
-    }
-
-    .btn-edit:hover {
-      background-color: #d97706;
-    }
-
-    .btn-delete {
-      background-color: var(--danger);
-      color: var(--white);
-      padding: 0.4rem 0.8rem;
-      font-size: 0.85rem;
-    }
-
-    .btn-delete:hover {
-      background-color: #b91c1c;
-    }
-
-    .btn-save {
-      background-color: var(--success);
-      color: var(--white);
-    }
-
-    .btn-save:hover {
-      background-color: #15803d;
-    }
-
-    .btn-cancel {
-      background-color: #e5e7eb;
-      color: var(--text);
-    }
-
-    .btn-cancel:hover {
-      background-color: #d1d5db;
-    }
-
-    /* Abas */
-    .tabs {
-      display: flex;
-      gap: 0.5rem;
-      border-bottom: 2px solid var(--border);
-      margin-bottom: 1.5rem;
-    }
-
-    .tab {
-      padding: 0.75rem 1.5rem;
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      color: var(--muted);
-      font-size: 1rem;
-      cursor: pointer;
-      transition: color 0.2s, border-color 0.2s;
-    }
-
-    .tab:hover {
-      color: var(--primary);
-    }
-
-    .tab.active {
-      color: var(--primary);
-      border-bottom-color: var(--primary);
-      font-weight: 600;
-    }
-
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-
-    .section-title {
-      font-size: 1.25rem;
-      color: var(--primary);
-    }
-
-    /* Tabela */
-    .table-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    thead {
-      background-color: var(--primary-soft);
-    }
-
-    th, td {
-      padding: 0.85rem 1rem;
-      text-align: left;
-      font-size: 0.95rem;
-    }
-
-    th {
-      color: var(--primary);
-      font-weight: 600;
-    }
-
-    tbody tr {
-      border-bottom: 1px solid #f1f5f9;
-      transition: background 0.2s;
-    }
-
-    tbody tr:hover {
-      background-color: #f8fafc;
-    }
-
-    tbody tr:last-child {
-      border-bottom: none;
-    }
-
-    .actions {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 2rem;
-      color: var(--muted);
-    }
-
-    /* Modal */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background-color: rgba(0, 0, 0, 0.45);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      padding: 1rem;
-    }
-
-    .modal-overlay.active {
-      display: flex;
-    }
-
-    .modal {
-      background: var(--white);
-      border-radius: var(--radius);
-      width: 100%;
-      max-width: 520px;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      animation: fadeIn 0.2s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .modal-header {
-      background-color: var(--primary);
-      color: var(--white);
-      padding: 1rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .modal-title {
-      font-size: 1.15rem;
-      font-weight: 600;
-    }
-
-    .modal-close {
-      background: none;
-      border: none;
-      color: var(--white);
-      font-size: 1.5rem;
-      cursor: pointer;
-      line-height: 1;
-    }
-
-    .modal-body {
-      padding: 1.5rem;
-    }
-
-    .form-group {
-      margin-bottom: 1rem;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 0.35rem;
-      font-weight: 500;
-      color: var(--text);
-      font-size: 0.9rem;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: 0.6rem 0.85rem;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      font-size: 0.95rem;
-      font-family: inherit;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      outline: none;
-      border-color: var(--primary-light);
-      box-shadow: 0 0 0 3px rgba(79, 140, 255, 0.15);
-    }
-
-    .form-group textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-
-    .modal-footer {
-      padding: 1rem 1.5rem;
-      border-top: 1px solid #e5e7eb;
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.75rem;
-    }
-
-    /* Responsivo */
+    .navbar-brand { font-size: 1.25rem; font-weight: 700; }
+    .navbar-links { display: flex; gap: 1.25rem; }
+    .navbar-links a { color: rgba(255,255,255,0.9); text-decoration: none; font-size: 0.9rem; transition: 0.2s; }
+    .navbar-links a:hover { color: #fff; text-decoration: underline; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .page-title { font-size: 1.5rem; color: var(--primary); }
+    .btn { display: inline-block; padding: 0.6rem 1.2rem; border: none; border-radius: var(--radius); cursor: pointer; font-size: 0.9rem; text-decoration: none; transition: 0.2s; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: #084298; }
+    .btn-back { background: #6c757d; color: #fff; }
+    .btn-back:hover { background: #5c636a; }
+    .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-success { background: var(--success); color: #fff; }
+    .tabs { display: flex; gap: 0.25rem; border-bottom: 3px solid var(--primary); margin-bottom: 1.5rem; }
+    .tab { padding: 0.7rem 1.5rem; cursor: pointer; background: #e0e0e0; border: none; border-radius: 6px 6px 0 0; font-weight: 600; font-size: 0.9rem; color: #555; }
+    .tab.active { background: var(--primary); color: #fff; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.5rem; margin-bottom: 1.5rem; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .card-header h2 { font-size: 1.1rem; color: var(--primary); }
+    .resumo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .resumo-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.25rem; text-align: center; border-left: 4px solid var(--primary); }
+    .resumo-card .label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; }
+    .resumo-card .value { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-top: 0.25rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: var(--primary); color: #fff; padding: 0.75rem; text-align: left; font-size: 0.85rem; }
+    td { padding: 0.75rem; border-bottom: 1px solid #e5e7eb; font-size: 0.85rem; }
+    tbody tr:hover { background: var(--primary-soft); }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: var(--white); border-radius: var(--radius); width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    .modal-header { background: var(--primary); color: var(--white); padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h3 { font-size: 1.1rem; }
+    .modal-close { background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+    .modal-body { padding: 1.5rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-weight: 600; font-size: 0.85rem; color: var(--text); margin-bottom: 0.35rem; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 4px; font-size: 0.9rem; }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(10,88,202,0.15); }
+    .form-actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem; }
+    .empty-state { text-align: center; padding: 2rem; color: var(--muted); }
     @media (max-width: 768px) {
-      .page-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .tabs {
-        overflow-x: auto;
-      }
-
-      table, thead, tbody, th, td, tr {
-        display: block;
-      }
-
-      thead {
-        display: none;
-      }
-
-      tbody tr {
-        margin-bottom: 1rem;
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 0.75rem;
-      }
-
-      td {
-        display: flex;
-        justify-content: space-between;
-        padding: 0.6rem 0;
-        border-bottom: 1px solid #f1f5f9;
-      }
-
-      td:last-child {
-        border-bottom: none;
-      }
-
-      td::before {
-        content: attr(data-label);
-        font-weight: 600;
-        color: var(--primary);
-      }
-
-      .actions {
-        justify-content: flex-end;
-      }
+      .navbar { flex-direction: column; gap: 0.5rem; text-align: center; }
+      .page-header { flex-direction: column; gap: 1rem; text-align: center; }
+      .tabs { flex-wrap: wrap; }
+      td:last-child { border-bottom: none; }
+      td::before { content: attr(data-label); font-weight: 600; color: var(--primary); }
+      .actions { justify-content: flex-end; }
     }
   </style>
 </head>
 <body>
-
-  <!-- Navbar -->
+  <div class="topo-logo">
+      <img src="https://adapta-one-prod.s3.sa-east-1.amazonaws.com/apolloayres%40yahoo.com.br/png/image-019eea86-df20-753e-b049-a7c4515d7a68.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3FLD6RMYLYFE2L2Q%2F20260621%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260621T160143Z&X-Amz-Expires=3600&X-Amz-Signature=d86ac73935a9237a01f8898aab4f62b0c323de884239f0049abf5a99c09677ae&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" alt="Apollo Ayres" class="logo-escritorio">
+  </div>
   <nav class="navbar">
     <div class="navbar-brand">💼 Controle do Escritório</div>
     <div class="navbar-links">
@@ -427,485 +101,124 @@
       <a href="patrimonio.html">Patrimônio</a>
     </div>
   </nav>
-
   <div class="container">
-    <!-- Cabeçalho da página -->
     <div class="page-header">
       <h1 class="page-title">🏦 Patrimônio</h1>
       <a href="home.html" class="btn btn-back">← Voltar</a>
     </div>
-
-    <!-- Abas -->
     <div class="tabs">
       <button class="tab active" data-tab="imoveis">🏠 Imóveis</button>
       <button class="tab" data-tab="contas">🏦 Contas</button>
       <button class="tab" data-tab="aplicacoes">📈 Aplicações</button>
     </div>
-
-    <!-- Aba Imóveis -->
     <div id="imoveis" class="tab-content active">
-      <div class="section-header">
-        <h2 class="section-title">🏠 Imóveis</h2>
-        <button class="btn btn-primary" onclick="abrirModal('imovel')">+ Novo</button>
+      <div class="resumo-grid">
+        <div class="resumo-card"><div class="label">Total Imóveis</div><div class="value" id="totalImoveis">0</div></div>
+        <div class="resumo-card"><div class="label">Valor Total</div><div class="value" id="valorImoveis">R$ 0</div></div>
       </div>
-      <div class="table-card">
-        <table id="tabela-imoveis">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Endereço</th>
-              <th>Valor</th>
-              <th>Tipo</th>
-              <th>Observação</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <div class="card">
+        <div class="card-header"><h2>Imóveis Cadastrados</h2><button class="btn btn-primary btn-sm" onclick="abrirModal('imovel')">+ Novo Imóvel</button></div>
+        <table><thead><tr><th>Nome</th><th>Endereço</th><th>Valor</th><th>Tipo</th><th>Ações</th></tr></thead><tbody id="tbodyImoveis"></tbody></table>
       </div>
     </div>
-
-    <!-- Aba Contas -->
     <div id="contas" class="tab-content">
-      <div class="section-header">
-        <h2 class="section-title">🏦 Contas</h2>
-        <button class="btn btn-primary" onclick="abrirModal('conta')">+ Novo</button>
+      <div class="resumo-grid">
+        <div class="resumo-card"><div class="label">Total Contas</div><div class="value" id="totalContas">0</div></div>
+        <div class="resumo-card"><div class="label">Saldo Total</div><div class="value" id="saldoContas">R$ 0</div></div>
       </div>
-      <div class="table-card">
-        <table id="tabela-contas">
-          <thead>
-            <tr>
-              <th>Banco</th>
-              <th>Tipo</th>
-              <th>Saldo</th>
-              <th>Agência</th>
-              <th>Conta</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <div class="card">
+        <div class="card-header"><h2>Contas Bancárias</h2><button class="btn btn-primary btn-sm" onclick="abrirModal('conta')">+ Nova Conta</button></div>
+        <table><thead><tr><th>Banco</th><th>Agência</th><th>Conta</th><th>Tipo</th><th>Saldo</th><th>Ações</th></tr></thead><tbody id="tbodyContas"></tbody></table>
       </div>
     </div>
-
-    <!-- Aba Aplicações -->
     <div id="aplicacoes" class="tab-content">
-      <div class="section-header">
-        <h2 class="section-title">📈 Aplicações</h2>
-        <button class="btn btn-primary" onclick="abrirModal('aplicacao')">+ Novo</button>
+      <div class="resumo-grid">
+        <div class="resumo-card"><div class="label">Total Aplicações</div><div class="value" id="totalAplicacoes">0</div></div>
+        <div class="resumo-card"><div class="label">Valor Total</div><div class="value" id="valorAplicacoes">R$ 0</div></div>
       </div>
-      <div class="table-card">
-        <table id="tabela-aplicacoes">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Tipo</th>
-              <th>Valor Aplicado</th>
-              <th>Data Aplicação</th>
-              <th>Data Vencimento</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <div class="card">
+        <div class="card-header"><h2>Aplicações Financeiras</h2><button class="btn btn-primary btn-sm" onclick="abrirModal('aplicacao')">+ Nova Aplicação</button></div>
+        <table><thead><tr><th>Descrição</th><th>Instituição</th><th>Valor Aplicado</th><th>Rentabilidade</th><th>Vencimento</th><th>Ações</th></tr></thead><tbody id="tbodyAplicacoes"></tbody></table>
       </div>
     </div>
   </div>
-
-  <!-- Modal Imóvel -->
-  <div id="modal-imovel" class="modal-overlay">
-    <div class="modal">
-      <div class="modal-header">
-        <span class="modal-title" id="titulo-imovel">🏠 Imóvel</span>
-        <button class="modal-close" onclick="fecharModal('imovel')">&times;</button>
-      </div>
-      <div class="modal-body">
-        <input type="hidden" id="imovel-id">
-        <div class="form-group">
-          <label for="imovel-nome">Nome</label>
-          <input type="text" id="imovel-nome" required>
-        </div>
-        <div class="form-group">
-          <label for="imovel-endereco">Endereço</label>
-          <input type="text" id="imovel-endereco" required>
-        </div>
-        <div class="form-group">
-          <label for="imovel-valor">Valor</label>
-          <input type="number" id="imovel-valor" step="0.01" required>
-        </div>
-        <div class="form-group">
-          <label for="imovel-tipo">Tipo</label>
-          <select id="imovel-tipo" required>
-            <option value="Residencial">Residencial</option>
-            <option value="Comercial">Comercial</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="imovel-observacao">Observação</label>
-          <textarea id="imovel-observacao"></textarea>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-cancel" onclick="fecharModal('imovel')">Cancelar</button>
-        <button class="btn btn-save" onclick="salvarImovel()">Salvar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Conta -->
-  <div id="modal-conta" class="modal-overlay">
-    <div class="modal">
-      <div class="modal-header">
-        <span class="modal-title" id="titulo-conta">🏦 Conta</span>
-        <button class="modal-close" onclick="fecharModal('conta')">&times;</button>
-      </div>
-      <div class="modal-body">
-        <input type="hidden" id="conta-id">
-        <div class="form-group">
-          <label for="conta-banco">Nome do banco</label>
-          <input type="text" id="conta-banco" required>
-        </div>
-        <div class="form-group">
-          <label for="conta-tipo">Tipo</label>
-          <select id="conta-tipo" required>
-            <option value="Corrente">Corrente</option>
-            <option value="Poupança">Poupança</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="conta-saldo">Saldo</label>
-          <input type="number" id="conta-saldo" step="0.01" required>
-        </div>
-        <div class="form-group">
-          <label for="conta-agencia">Agência</label>
-          <input type="text" id="conta-agencia">
-        </div>
-        <div class="form-group">
-          <label for="conta-numero">Conta</label>
-          <input type="text" id="conta-numero">
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-cancel" onclick="fecharModal('conta')">Cancelar</button>
-        <button class="btn btn-save" onclick="salvarConta()">Salvar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Aplicação -->
-  <div id="modal-aplicacao" class="modal-overlay">
-    <div class="modal">
-      <div class="modal-header">
-        <span class="modal-title" id="titulo-aplicacao">📈 Aplicação</span>
-        <button class="modal-close" onclick="fecharModal('aplicacao')">&times;</button>
-      </div>
-      <div class="modal-body">
-        <input type="hidden" id="aplicacao-id">
-        <div class="form-group">
-          <label for="aplicacao-nome">Nome</label>
-          <input type="text" id="aplicacao-nome" required>
-        </div>
-        <div class="form-group">
-          <label for="aplicacao-tipo">Tipo</label>
-          <input type="text" id="aplicacao-tipo" placeholder="Ex: CDB, Tesouro, LCI" required>
-        </div>
-        <div class="form-group">
-          <label for="aplicacao-valor">Valor aplicado</label>
-          <input type="number" id="aplicacao-valor" step="0.01" required>
-        </div>
-        <div class="form-group">
-          <label for="aplicacao-data">Data aplicação</label>
-          <input type="date" id="aplicacao-data" required>
-        </div>
-        <div class="form-group">
-          <label for="aplicacao-vencimento">Data vencimento</label>
-          <input type="date" id="aplicacao-vencimento" required>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-cancel" onclick="fecharModal('aplicacao')">Cancelar</button>
-        <button class="btn btn-save" onclick="salvarAplicacao()">Salvar</button>
-      </div>
-    </div>
-  </div>
-
+  <div class="modal-overlay" id="modalOverlay"><div class="modal"><div class="modal-header"><h3 id="modalTitle">Novo</h3><button class="modal-close" onclick="fecharModal()">&times;</button></div><div class="modal-body"><form id="modalForm"><input type="hidden" id="itemId"><input type="hidden" id="itemTipo"><div id="modalFields"></div><div class="form-actions"><button type="button" class="btn btn-back" onclick="fecharModal()">Cancelar</button><button type="submit" class="btn btn-primary">Salvar</button></div></form></div></div></div>
+  <script src="db.js"></script>
+  <script src="auth.js"></script>
   <script>
-    // === Navegação de abas ===
-    const tabs = document.querySelectorAll('.tab');
-    const tabContents = document.querySelectorAll('.tab-content');
-
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tabContents.forEach(c => c.classList.remove('active'));
-
-        tab.classList.add('active');
-        document.getElementById(tab.dataset.tab).classList.add('active');
-      });
+    let dados = { imoveis: [], contas: [], aplicacoes: [] };
+    const STORAGE_KEY = 'patrimonio';
+    function getData() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{"imoveis":[],"contas":[],"aplicacoes":[]}'); } catch(e) { return {imoveis:[],contas:[],aplicacoes:[]}; } }
+    function setData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(dados)); }
+    function genId() { return Date.now().toString(36)+Math.random().toString(36).substr(2,5); }
+    function fmt(v) { return 'R$ '+(v||0).toFixed(2).replace('.',','); }
+    function carregar() { dados = getData(); renderizar(); }
+    function renderizar() {
+      // Imoveis
+      document.getElementById('totalImoveis').textContent = dados.imoveis.length;
+      document.getElementById('valorImoveis').textContent = fmt(dados.imoveis.reduce((s,i)=>s+(i.valor||0),0));
+      document.getElementById('tbodyImoveis').innerHTML = dados.imoveis.map(i => `<tr><td>${i.nome}</td><td>${i.endereco||'—'}</td><td>${fmt(i.valor)}</td><td>${i.tipo||'—'}</td><td><button class="btn btn-primary btn-sm" onclick='editar("imovel","${i.id}")'>Editar</button><button class="btn btn-danger btn-sm" onclick=excluir("imovel","${i.id}")>Excluir</button></td></tr>`).join('');
+      // Contas
+      document.getElementById('totalContas').textContent = dados.contas.length;
+      document.getElementById('saldoContas').textContent = fmt(dados.contas.reduce((s,c)=>s+(c.saldo||0),0));
+      document.getElementById('tbodyContas').innerHTML = dados.contas.map(c => `<tr><td>${c.banco}</td><td>${c.agencia||'—'}</td><td>${c.conta||'—'}</td><td>${c.tipo||'—'}</td><td>${fmt(c.saldo)}</td><td><button class="btn btn-primary btn-sm" onclick='editar("conta","${c.id}")'>Editar</button><button class="btn btn-danger btn-sm" onclick=excluir("conta","${c.id}")>Excluir</button></td></tr>`).join('');
+      // Aplicacoes
+      document.getElementById('totalAplicacoes').textContent = dados.aplicacoes.length;
+      document.getElementById('valorAplicacoes').textContent = fmt(dados.aplicacoes.reduce((s,a)=>s+(a.valor||0),0));
+      document.getElementById('tbodyAplicacoes').innerHTML = dados.aplicacoes.map(a => `<tr><td>${a.descricao}</td><td>${a.instituicao||'—'}</td><td>${fmt(a.valor)}</td><td>${a.rentabilidade||'—'}</td><td>${a.vencimento||'—'}</td><td><button class="btn btn-primary btn-sm" onclick='editar("aplicacao","${a.id}")'>Editar</button><button class="btn btn-danger btn-sm" onclick=excluir("aplicacao","${a.id}")>Excluir</button></td></tr>`).join('');
+    }
+    const campos = {
+      imovel: [{id:'nome',label:'Nome',type:'text'},{id:'endereco',label:'Endereço',type:'text'},{id:'valor',label:'Valor (R$)',type:'number'},{id:'tipo',label:'Tipo',type:'select',options:['Residencial','Comercial','Terreno','Outro']}],
+      conta: [{id:'banco',label:'Banco',type:'text'},{id:'agencia',label:'Agência',type:'text'},{id:'conta',label:'Conta',type:'text'},{id:'tipo',label:'Tipo',type:'select',options:['Corrente','Poupança','Salário','Outro']},{id:'saldo',label:'Saldo (R$)',type:'number'}],
+      aplicacao: [{id:'descricao',label:'Descrição',type:'text'},{id:'instituicao',label:'Instituição',type:'text'},{id:'valor',label:'Valor Aplicado (R$)',type:'number'},{id:'rentabilidade',label:'Rentabilidade',type:'text'},{id:'vencimento',label:'Vencimento',type:'date'}]
+    };
+    function abrirModal(tipo) {
+      document.getElementById('itemId').value = '';
+      document.getElementById('itemTipo').value = tipo;
+      document.getElementById('modalTitle').textContent = tipo==='imovel'?'Novo Imóvel':tipo==='conta'?'Nova Conta':'Nova Aplicação';
+      const container = document.getElementById('modalFields');
+      container.innerHTML = campos[tipo].map(c => {
+        if(c.type==='select') return `<div class="form-group"><label>${c.label}</label><select id="${c.id}">${c.options.map(o=>`<option>${o}</option>`).join('')}</select></div>`;
+        return `<div class="form-group"><label>${c.label}</label><input type="${c.type}" id="${c.id}" step="${c.type==='number'?'0.01':'any'}"></div>`;
+      }).join('');
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+    function fecharModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+    document.getElementById('modalForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const tipo = document.getElementById('itemTipo').value;
+      const id = document.getElementById('itemId').value;
+      const obj = {id: id||genId()};
+      campos[tipo].forEach(c => obj[c.id] = document.getElementById(c.id).value);
+      if(c.tipo==='number') obj[c.id] = parseFloat(obj[c.id])||0;
+      if(tipo==='imovel') { obj.valor = parseFloat(obj.valor)||0; }
+      if(tipo==='conta') { obj.saldo = parseFloat(obj.saldo)||0; }
+      if(tipo==='aplicacao') { obj.valor = parseFloat(obj.valor)||0; }
+      if(id) { const i=dados[tipo+'s'=='imoveis'?'imoveis':tipo+'s'].findIndex(x=>x.id===id); if(i>=0) dados[tipo+'s'=='imoveis'?'imoveis':tipo+'s'][i]=obj; else dados[tipo+'s'=='imoveis'?'imoveis':tipo+'s'].push(obj); }
+      else dados[tipo+'s'=='imoveis'?'imoveis':tipo+'s'].push(obj);
+      setData(); fecharModal(); renderizar();
     });
-
-    // === Utilitários ===
-    function formatarMoeda(valor) {
-      if (valor === undefined || valor === null || valor === '') return '-';
-      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
+    function editar(tipo, id) {
+      const arr = tipo==='imovel'?dados.imoveis:tipo==='conta'?dados.contas:dados.aplicacoes;
+      const item = arr.find(x=>x.id===id); if(!item) return;
+      document.getElementById('itemId').value = id;
+      document.getElementById('itemTipo').value = tipo;
+      document.getElementById('modalTitle').textContent = 'Editar '+(tipo==='imovel'?'Imóvel':tipo==='conta'?'Conta':'Aplicação');
+      const container = document.getElementById('modalFields');
+      container.innerHTML = campos[tipo].map(c => {
+        if(c.type==='select') return `<div class="form-group"><label>${c.label}</label><select id="${c.id}">${c.options.map(o=>`<option ${o===item[c.id]?'selected':''}>${o}</option>`).join('')}</select></div>`;
+        return `<div class="form-group"><label>${c.label}</label><input type="${c.type}" id="${c.id}" value="${item[c.id]||''}" step="${c.type==='number'?'0.01':'any'}"></div>`;
+      }).join('');
+      document.getElementById('modalOverlay').classList.add('active');
     }
-
-    function formatarData(data) {
-      if (!data) return '-';
-      const d = new Date(data);
-      if (isNaN(d.getTime())) return data;
-      return d.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
-    }
-
-    function limparTabela(idTabela) {
-      const tbody = document.querySelector(`#${idTabela} tbody`);
-      tbody.innerHTML = '';
-    }
-
-    function mostrarVazio(idTabela, mensagem) {
-      const tbody = document.querySelector(`#${idTabela} tbody`);
-      const colunas = document.querySelectorAll(`#${idTabela} thead th`).length;
-      tbody.innerHTML = `<tr><td colspan="${colunas}" class="empty-state">${mensagem}</td></tr>`;
-    }
-
-    // === Imóveis ===
-    async function carregarImoveis() {
-      limparTabela('tabela-imoveis');
-      const lista = await window.db.imoveis_listar();
-      const tbody = document.querySelector('#tabela-imoveis tbody');
-
-      if (!lista || lista.length === 0) {
-        mostrarVazio('tabela-imoveis', 'Nenhum imóvel cadastrado.');
-        return;
-      }
-
-      lista.forEach(item => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td data-label="Nome">${item.nome || '-'}</td>
-          <td data-label="Endereço">${item.endereco || '-'}</td>
-          <td data-label="Valor">${formatarMoeda(item.valor)}</td>
-          <td data-label="Tipo">${item.tipo || '-'}</td>
-          <td data-label="Observação">${item.observacao || '-'}</td>
-          <td data-label="Ações" class="actions">
-            <button class="btn btn-edit" onclick="editarImovel(${item.id})">Editar</button>
-            <button class="btn btn-delete" onclick="excluirImovel(${item.id})">Excluir</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function abrirModal(tipo, id = null) {
-      document.getElementById(`modal-${tipo}`).classList.add('active');
-      document.getElementById(`titulo-${tipo}`).textContent = id ? `${document.getElementById(`titulo-${tipo}`).textContent.split(' ')[0]} Editar ${tipo === 'imovel' ? 'Imóvel' : tipo === 'conta' ? 'Conta' : 'Aplicação'}` : `${document.getElementById(`titulo-${tipo}`).textContent.split(' ')[0]} Novo ${tipo === 'imovel' ? 'Imóvel' : tipo === 'conta' ? 'Conta' : 'Aplicação'}`;
-    }
-
-    function fecharModal(tipo) {
-      document.getElementById(`modal-${tipo}`).classList.remove('active');
-      document.getElementById(`${tipo}-id`).value = '';
-      const campos = document.querySelectorAll(`#modal-${tipo} input, #modal-${tipo} select, #modal-${tipo} textarea`);
-      campos.forEach(campo => {
-        if (campo.id !== `${tipo}-id`) {
-          campo.value = '';
-        }
-      });
-    }
-
-    async function salvarImovel() {
-      const id = document.getElementById('imovel-id').value;
-      const nome = document.getElementById('imovel-nome').value.trim();
-      const endereco = document.getElementById('imovel-endereco').value.trim();
-      const valor = parseFloat(document.getElementById('imovel-valor').value);
-      const tipo = document.getElementById('imovel-tipo').value;
-      const observacao = document.getElementById('imovel-observacao').value.trim();
-
-      if (!nome || !endereco || isNaN(valor)) {
-        alert('Preencha os campos obrigatórios: Nome, Endereço e Valor.');
-        return;
-      }
-
-      const obj = { nome, endereco, valor, tipo, observacao };
-      if (id) obj.id = parseInt(id);
-
-      await window.db.imoveis_salvar(obj);
-      fecharModal('imovel');
-      await carregarImoveis();
-    }
-
-    async function editarImovel(id) {
-      const lista = await window.db.imoveis_listar();
-      const item = lista.find(i => i.id === id);
-      if (!item) return;
-
-      document.getElementById('imovel-id').value = item.id;
-      document.getElementById('imovel-nome').value = item.nome || '';
-      document.getElementById('imovel-endereco').value = item.endereco || '';
-      document.getElementById('imovel-valor').value = item.valor || '';
-      document.getElementById('imovel-tipo').value = item.tipo || 'Residencial';
-      document.getElementById('imovel-observacao').value = item.observacao || '';
-      abrirModal('imovel', id);
-    }
-
-    async function excluirImovel(id) {
-      if (!confirm('Deseja realmente excluir este imóvel?')) return;
-      await window.db.imoveis_excluir(id);
-      await carregarImoveis();
-    }
-
-    // === Contas ===
-    async function carregarContas() {
-      limparTabela('tabela-contas');
-      const lista = await window.db.contas_listar();
-      const tbody = document.querySelector('#tabela-contas tbody');
-
-      if (!lista || lista.length === 0) {
-        mostrarVazio('tabela-contas', 'Nenhuma conta cadastrada.');
-        return;
-      }
-
-      lista.forEach(item => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td data-label="Banco">${item.banco || item.nome_banco || '-'}</td>
-          <td data-label="Tipo">${item.tipo || '-'}</td>
-          <td data-label="Saldo">${formatarMoeda(item.saldo)}</td>
-          <td data-label="Agência">${item.agencia || '-'}</td>
-          <td data-label="Conta">${item.conta || '-'}</td>
-          <td data-label="Ações" class="actions">
-            <button class="btn btn-edit" onclick="editarConta(${item.id})">Editar</button>
-            <button class="btn btn-delete" onclick="excluirConta(${item.id})">Excluir</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    async function salvarConta() {
-      const id = document.getElementById('conta-id').value;
-      const nome_banco = document.getElementById('conta-banco').value.trim();
-      const tipo = document.getElementById('conta-tipo').value;
-      const saldo = parseFloat(document.getElementById('conta-saldo').value);
-      const agencia = document.getElementById('conta-agencia').value.trim();
-      const conta = document.getElementById('conta-numero').value.trim();
-
-      if (!nome_banco || isNaN(saldo)) {
-        alert('Preencha os campos obrigatórios: Banco e Saldo.');
-        return;
-      }
-
-      const obj = { nome_banco, banco: nome_banco, tipo, saldo, agencia, conta };
-      if (id) obj.id = parseInt(id);
-
-      await window.db.contas_salvar(obj);
-      fecharModal('conta');
-      await carregarContas();
-    }
-
-    async function editarConta(id) {
-      const lista = await window.db.contas_listar();
-      const item = lista.find(i => i.id === id);
-      if (!item) return;
-
-      document.getElementById('conta-id').value = item.id;
-      document.getElementById('conta-banco').value = item.nome_banco || item.banco || '';
-      document.getElementById('conta-tipo').value = item.tipo || 'Corrente';
-      document.getElementById('conta-saldo').value = item.saldo || '';
-      document.getElementById('conta-agencia').value = item.agencia || '';
-      document.getElementById('conta-numero').value = item.conta || '';
-      abrirModal('conta', id);
-    }
-
-    async function excluirConta(id) {
-      if (!confirm('Deseja realmente excluir esta conta?')) return;
-      await window.db.contas_excluir(id);
-      await carregarContas();
-    }
-
-    // === Aplicações ===
-    async function carregarAplicacoes() {
-      limparTabela('tabela-aplicacoes');
-      const lista = await window.db.aplicacoes_listar();
-      const tbody = document.querySelector('#tabela-aplicacoes tbody');
-
-      if (!lista || lista.length === 0) {
-        mostrarVazio('tabela-aplicacoes', 'Nenhuma aplicação cadastrada.');
-        return;
-      }
-
-      lista.forEach(item => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td data-label="Nome">${item.nome || '-'}</td>
-          <td data-label="Tipo">${item.tipo || '-'}</td>
-          <td data-label="Valor Aplicado">${formatarMoeda(item.valor)}</td>
-          <td data-label="Data Aplicação">${formatarData(item.data_aplicacao || item.data)}</td>
-          <td data-label="Data Vencimento">${formatarData(item.data_vencimento || item.vencimento)}</td>
-          <td data-label="Ações" class="actions">
-            <button class="btn btn-edit" onclick="editarAplicacao(${item.id})">Editar</button>
-            <button class="btn btn-delete" onclick="excluirAplicacao(${item.id})">Excluir</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    async function salvarAplicacao() {
-      const id = document.getElementById('aplicacao-id').value;
-      const nome = document.getElementById('aplicacao-nome').value.trim();
-      const tipo = document.getElementById('aplicacao-tipo').value.trim();
-      const valor = parseFloat(document.getElementById('aplicacao-valor').value);
-      const data_aplicacao = document.getElementById('aplicacao-data').value;
-      const data_vencimento = document.getElementById('aplicacao-vencimento').value;
-
-      if (!nome || !tipo || isNaN(valor) || !data_aplicacao || !data_vencimento) {
-        alert('Preencha todos os campos obrigatórios.');
-        return;
-      }
-
-      const obj = { nome, tipo, valor, data_aplicacao, data_vencimento };
-      if (id) obj.id = parseInt(id);
-
-      await window.db.aplicacoes_salvar(obj);
-      fecharModal('aplicacao');
-      await carregarAplicacoes();
-    }
-
-    async function editarAplicacao(id) {
-      const lista = await window.db.aplicacoes_listar();
-      const item = lista.find(i => i.id === id);
-      if (!item) return;
-
-      document.getElementById('aplicacao-id').value = item.id;
-      document.getElementById('aplicacao-nome').value = item.nome || '';
-      document.getElementById('aplicacao-tipo').value = item.tipo || '';
-      document.getElementById('aplicacao-valor').value = item.valor || '';
-      document.getElementById('aplicacao-data').value = item.data_aplicacao || item.data || '';
-      document.getElementById('aplicacao-vencimento').value = item.data_vencimento || item.vencimento || '';
-      abrirModal('aplicacao', id);
-    }
-
-    async function excluirAplicacao(id) {
-      if (!confirm('Deseja realmente excluir esta aplicação?')) return;
-      await window.db.aplicacoes_excluir(id);
-      await carregarAplicacoes();
-    }
-
-    // === Inicialização ===
-    document.addEventListener('DOMContentLoaded', () => {
-      carregarImoveis();
-      carregarContas();
-      carregarAplicacoes();
-    });
-
-    // Fechar modal ao clicar fora
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) {
-          overlay.classList.remove('active');
-        }
-      });
-    });
+    function excluir(tipo, id) { if(confirm('Excluir?')) { dados[tipo==='imovel'?'imoveis':tipo+'s'] = dados[tipo==='imovel'?'imoveis':tipo+'s'].filter(x=>x.id!==id); setData(); renderizar(); } }
+    document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', function() {
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+      this.classList.add('active');
+      document.getElementById(this.dataset.tab).classList.add('active');
+    }));
+    document.addEventListener('DOMContentLoaded', carregar);
   </script>
 </body>
 </html>

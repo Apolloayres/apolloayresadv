@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metas - Apollo Ayres</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        :root { --primary-blue: #0a58ca; --light-blue: #e7f1ff; }
+    .topo-logo { background-color: #fff; padding: 15px 20px; display: flex; justify-content: center; align-items: center; }
+    .logo-escritorio { height: 70px; width: auto; }
+        body { background-color: #f8f9fa; }
+        .nav-tabs .nav-link.active { background-color: var(--primary-blue); color: #fff; font-weight: 600; }
+        .nav-tabs .nav-link { color: var(--primary-blue); font-weight: 500; }
+        .card { border: none; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .card-header { background-color: var(--light-blue); color: var(--primary-blue); font-weight: 600; border-radius: 12px 12px 0 0 !important; }
+        .btn-primary { background-color: var(--primary-blue); border-color: var(--primary-blue); }
+        .btn-primary:hover { background-color: #084298; border-color: #084298; }
+        .table thead th { background-color: var(--light-blue); color: var(--primary-blue); }
+        .kpi-card { background: linear-gradient(135deg, var(--primary-blue), #4a90e2); color: #fff; border-radius: 12px; }
+        .kpi-number { font-size: 1.8rem; font-weight: 700; }
+        .canvas-container { position: relative; height: 320px; }
+        .navbar-brand { font-weight: 700; }
+        .nav-item.dropdown:hover .dropdown-menu { display: block; }
+        .dropdown-menu { margin-top: 0; }
+        .form-label { font-weight: 500; color: #495057; }
+    </style>
+</head>
+<body>
+<div class="topo-logo">
+    <img src="https://adapta-one-prod.s3.sa-east-1.amazonaws.com/apolloayres%40yahoo.com.br/png/image-019eea86-df20-753e-b049-a7c4515d7a68.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3FLD6RMYLYFE2L2Q%2F20260621%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260621T160143Z&X-Amz-Expires=3600&X-Amz-Signature=d86ac73935a9237a01f8898aab4f62b0c323de884239f0049abf5a99c09677ae&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" alt="Apollo Ayres" class="logo-escritorio">
+</div>
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-blue);">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="index.html"><i class="bi bi-briefcase-fill me-2"></i>Apollo Ayres</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button">Cadastros</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="clientes.html">Clientes</a></li>
+                        <li><a class="dropdown-item" href="processos.html">Processos</a></li>
+                        <li><a class="dropdown-item" href="pautas.html">PADs</a></li>
+                        <li><a class="dropdown-item" href="colaboradores.html">Colaboradores</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button">Financeiro</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="contas_pagar.html">Contas a Pagar</a></li>
+                        <li><a class="dropdown-item" href="contas_receber.html">Contas a Receber</a></li>
+                        <li><a class="dropdown-item" href="faturamento.html">Faturamento</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="fluxo_caixa.html">Fluxo Caixa</a></li>
+                <li class="nav-item"><a class="nav-link" href="marketing.html">Marketing</a></li>
+                <li class="nav-item"><a class="nav-link" href="patrimonio.html">Patrimônio</a></li>
+                <li class="nav-item"><a class="nav-link" href="proventos.html">Proventos</a></li>
+                <li class="nav-item"><a class="nav-link" href="processos.html">Processos</a></li>
+                <li class="nav-item"><a class="nav-link" href="documentos.html">Documentos</a></li>
+                <li class="nav-item"><a class="nav-link" href="prestacao_contas.html">Prest. Contas</a></li>
+                <li class="nav-item"><a class="nav-link" href="cartoes.html">Cartões</a></li>
+                <li class="nav-item"><a class="nav-link" href="cartao_credito.html">Cartão Crédito</a></li>
+                <li class="nav-item"><a class="nav-link active" href="metas.html">Metas</a></li>
+                <li class="nav-item"><a class="nav-link" href="rel_gerenciais.html">Rel. Gerenciais</a></li>
+                <li class="nav-item"><a class="nav-link" href="auditoria.html">Auditoria</a></li>
+                <li class="nav-item"><a class="nav-link" href="usuarios.html">Usuários</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person-circle me-1"></i>Admin</a></li>
+                <li class="nav-item"><a class="nav-link" href="login.html"><i class="bi bi-box-arrow-right me-1"></i>Sair</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary mb-0"><i class="bi bi-bullseye me-2"></i>Gestão de Metas</h2>
+        <div>
+            <button class="btn btn-outline-primary me-2" onclick="window.print()"><i class="bi bi-printer me-1"></i>Imprimir</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalColaborador"><i class="bi bi-plus-lg me-1"></i>Novo Colaborador</button>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs mb-4" id="tabMetas" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab-meta-anual" data-bs-toggle="tab" data-bs-target="#meta-anual" type="button" role="tab">Meta Anual</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-por-colaborador" data-bs-toggle="tab" data-bs-target="#por-colaborador" type="button" role="tab">Por Colaborador</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-acompanhamento" data-bs-toggle="tab" data-bs-target="#acompanhamento" type="button" role="tab">Acompanhamento Mensal</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-dashboard" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab">Dashboard</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="tabMetasContent">
+        <!-- ABA META ANUAL -->
+        <div class="tab-pane fade show active" id="meta-anual" role="tabpanel">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+                        <div class="card-header"><i class="bi bi-calendar3 me-2"></i>Definição da Meta Anual</div>
+                        <div class="card-body">
+                            <form id="formMetaAnual">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Ano</label>
+                                        <select class="form-select" id="anoMeta">
+                                            <option value="2024">2024</option>
+                                            <option value="2025" selected>2025</option>
+                                            <option value="2026">2026</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Faturamento Ano Anterior (R$)</label>
+                                        <input type="text" class="form-control money" id="fatAnterior" value="0,00">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">IPCA Projetado (%)</label>
+                                        <input type="number" step="0.01" class="form-control" id="ipca" value="4.50">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Crescimento Real Desejado (%)</label>
+                                        <input type="number" step="0.01" class="form-control" id="crescimento" value="15.00">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Meta Bruta Anual (R$)</label>
+                                        <input type="text" class="form-control money" id="metaBruta" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Meta Líquida Anual (R$)</label>
+                                        <input type="text" class="form-control money" id="metaLiquida" readonly>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Clientes Novos</label>
+                                        <input type="number" class="form-control" id="metaClientes" value="120">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Processos Novos</label>
+                                        <input type="number" class="form-control" id="metaProcessos" value="450">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">PADs Novos</label>
+                                        <input type="number" class="form-control" id="metaPads" value="180">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Ticket Médio (R$)</label>
+                                        <input type="text" class="form-control money" id="ticketMedio" readonly>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="form-label">Observações</label>
+                                        <textarea class="form-control" id="obsMeta" rows="2"></textarea>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end mt-3">
+                                    <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Salvar Meta Anual</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-header"><i class="bi bi-clock-history me-2"></i>Histórico de Metas</div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover" id="tabelaHistorico">
+                                    <thead>
+                                        <tr><th>Ano</th><th>Bruta</th><th>Líquida</th><th>Ações</th></tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card kpi-card mb-4">
+                        <div class="card-body text-center">
+                            <div class="kpi-number" id="kpiMetaLiquida">R$ 0,00</div>
+                            <small>Meta Líquida Anual</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABA POR COLABORADOR -->
+        <div class="tab-pane fade" id="por-colaborador" role="tabpanel">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-people me-2"></i>Distribuição por Colaborador</span>
+                    <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#modalColaborador"><i class="bi bi-plus-lg"></i></button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="tabelaColaboradores">
+                            <thead>
+                                <tr>
+                                    <th>Colaborador</th>
+                                    <th>Cargo</th>
+                                    <th>% Distribuição</th>
+                                    <th>Valor Bruto (R$)</th>
+                                    <th>Valor Líquido (R$)</th>
+                                    <th>Clientes</th>
+                                    <th>Processos</th>
+                                    <th>PADs</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot class="table-group-divider">
+                                <tr class="fw-bold">
+                                    <td colspan="2">Total</td>
+                                    <td id="totalPerc">0%</td>
+                                    <td id="totalBruto">R$ 0,00</td>
+                                    <td id="totalLiquido">R$ 0,00</td>
+                                    <td id="totalClientes">0</td>
+                                    <td id="totalProcessos">0</td>
+                                    <td id="totalPads">0</td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABA ACOMPANHAMENTO MENSAL -->
+        <div class="tab-pane fade" id="acompanhamento" role="tabpanel">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-calendar-check me-2"></i>Acompanhamento Mensal</span>
+                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalMensal"><i class="bi bi-plus-lg me-1"></i>Lançar Mês</button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="tabelaMensal">
+                            <thead>
+                                <tr>
+                                    <th>Mês</th>
+                                    <th>Faturamento (R$)</th>
+                                    <th>Processos</th>
+                                    <th>PADs</th>
+                                    <th>Clientes</th>
+                                    <th>% Meta</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABA DASHBOARD -->
+        <div class="tab-pane fade" id="dashboard" role="tabpanel">
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card kpi-card h-100">
+                        <div class="card-body text-center">
+                            <div class="kpi-number" id="dashMetaLiquida">R$ 0,00</div>
+                            <small>Meta Líquida Anual</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card kpi-card h-100" style="background: linear-gradient(135deg, #198754, #20c997);">
+                        <div class="card-body text-center">
+                            <div class="kpi-number" id="dashRealizado">R$ 0,00</div>
+                            <small>Realizado no Ano</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card kpi-card h-100" style="background: linear-gradient(135deg, #fd7e14, #ffc107);">
+                        <div class="card-body text-center">
+                            <div class="kpi-number" id="dashPerc">0%</div>
+                            <small>Atingimento</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card kpi-card h-100" style="background: linear-gradient(135deg, #dc3545, #e35d6a);">
+                        <div class="card-body text-center">
+                            <div class="kpi-number" id="dashProjetado">R$ 0,00</div>
+                            <small>Projeção Anual</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header"><i class="bi bi-graph-up me-2"></i>Faturamento Mensal vs Meta</div>
+                        <div class="card-body canvas-container">
+                            <canvas id="chartFaturamento"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header"><i class="bi bi-pie-chart me-2"></i>Captação por Canal</div>
+                        <div class="card-body canvas-container">
+                            <canvas id="chartCaptacao"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="bi bi-list-check me-2"></i>Resumo Mensal</div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm" id="tabelaResumo">
+                            <thead>
+                                <tr><th>Mês</th><th>Meta</th><th>Realizado</th><th>Diferença</th><th>Status</th></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Colaborador -->
+<div class="modal fade" id="modalColaborador" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title"><i class="bi bi-person-plus me-2"></i>Colaborador</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formColaborador">
+                <div class="modal-body">
+                    <input type="hidden" id="colabId">
+                    <div class="mb-3">
+                        <label class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="colabNome" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cargo</label>
+                        <input type="text" class="form-control" id="colabCargo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">% Distribuição</label>
+                        <input type="number" step="0.01" class="form-control" id="colabPerc" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Mensal -->
+<div class="modal fade" id="modalMensal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title"><i class="bi bi-calendar-plus me-2"></i>Lançamento Mensal</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formMensal">
+                <div class="modal-body">
+                    <input type="hidden" id="mensalId">
+                    <div class="mb-3">
+                        <label class="form-label">Mês</label>
+                        <select class="form-select" id="mensalMes" required>
+                            <option value="1">Janeiro</option>
+                            <option value="2">Fevereiro</option>
+                            <option value="3">Março</option>
+                            <option value="4">Abril</option>
+                            <option value="5">Maio</option>
+                            <option value="6">Junho</option>
+                            <option value="7">Julho</option>
+                            <option value="8">Agosto</option>
+                            <option value="9">Setembro</option>
+                            <option value="10">Outubro</option>
+                            <option value="11">Novembro</option>
+                            <option value="12">Dezembro</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Faturamento (R$)</label>
+                        <input type="text" class="form-control money" id="mensalFaturamento" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Processos</label>
+                            <input type="number" class="form-control" id="mensalProcessos" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">PADs</label>
+                            <input type="number" class="form-control" id="mensalPads" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Clientes</label>
+                            <input type="number" class="form-control" id="mensalClientes" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // === UTILITÁRIOS ===
+    const formatMoney = (value) => {
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value || 0);
+    };
+    const parseMoney = (str) => {
+        if (!str) return 0;
+        return parseFloat(str.replace(/\./g, '').replace(',', '.').replace(/[^0-9.-]/g, '')) || 0;
+    };
+    const formatPerc = (value) => (value || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+
+    // === LOCALSTORAGE ===
+    const STORAGE_KEYS = {
+        meta: 'metas_metaAnual',
+        colab: 'metas_colaboradores',
+        mensal: 'metas_mensal'
+    };
+
+    const getData = (key, defaultValue) => {
+        try {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : defaultValue;
+        } catch (e) {
+            return defaultValue;
+        }
+    };
+
+    const saveData = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+
+    let metaAnual = getData(STORAGE_KEYS.meta, null);
+    let colaboradores = getData(STORAGE_KEYS.colab, []);
+    let mensal = getData(STORAGE_KEYS.mensal, []);
+
+    let chartFaturamento = null;
+    let chartCaptacao = null;
+
+    // === MÁSCARA DINHEIRO ===
+    document.querySelectorAll('.money').forEach(input => {
+        input.addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, '');
+            value = (parseInt(value || '0') / 100).toFixed(2);
+            e.target.value = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2 }).format(value);
+        });
+    });
+
+    // === META ANUAL ===
+    function calcularMeta() {
+        const fatAnterior = parseMoney(document.getElementById('fatAnterior').value);
+        const ipca = parseFloat(document.getElementById('ipca').value) || 0;
+        const cresc = parseFloat(document.getElementById('crescimento').value) || 0;
+        const metaBruta = fatAnterior * (1 + (ipca + cresc) / 100);
+        const metaLiquida = metaBruta * 0.85;
+        const clientes = parseInt(document.getElementById('metaClientes').value) || 0;
+        const ticket = clientes > 0 ? metaLiquida / clientes : 0;
+        document.getElementById('metaBruta').value = formatMoney(metaBruta).replace('R$\u00A0', '');
+        document.getElementById('metaLiquida').value = formatMoney(metaLiquida).replace('R$\u00A0', '');
+        document.getElementById('ticketMedio').value = formatMoney(ticket).replace('R$\u00A0', '');
+        document.getElementById('kpiMetaLiquida').textContent = formatMoney(metaLiquida);
+    }
+
+    function initMeta() {
+        document.getElementById('fatAnterior').addEventListener('input', calcularMeta);
+        document.getElementById('ipca').addEventListener('input', calcularMeta);
+        document.getElementById('crescimento').addEventListener('input', calcularMeta);
+        document.getElementById('metaClientes').addEventListener('input', calcularMeta);
+        document.getElementById('formMetaAnual').addEventListener('submit', function (e) {
+            e.preventDefault();
+            metaAnual = {
+                ano: document.getElementById('anoMeta').value,
+                fatAnterior: parseMoney(document.getElementById('fatAnterior').value),
+                ipca: parseFloat(document.getElementById('ipca').value),
+                crescimento: parseFloat(document.getElementById('crescimento').value),
+                metaBruta: parseMoney(document.getElementById('metaBruta').value),
+                metaLiquida: parseMoney(document.getElementById('metaLiquida').value),
+                clientes: parseInt(document.getElementById('metaClientes').value),
+                processos: parseInt(document.getElementById('metaProcessos').value),
+                pads: parseInt(document.getElementById('metaPads').value),
+                ticket: parseMoney(document.getElementById('ticketMedio').value),
+                obs: document.getElementById('obsMeta').value
+            };
+            saveData(STORAGE_KEYS.meta, metaAnual);
+            renderHistorico();
+            renderDistribuicao();
+            initDash();
+            alert('Meta anual salva com sucesso!');
+        });
+        if (metaAnual) {
+            document.getElementById('anoMeta').value = metaAnual.ano;
+            document.getElementById('fatAnterior').value = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2 }).format(metaAnual.fatAnterior);
+            document.getElementById('ipca').value = metaAnual.ipca;
+            document.getElementById('crescimento').value = metaAnual.crescimento;
+            document.getElementById('metaClientes').value = metaAnual.clientes;
+            document.getElementById('metaProcessos').value = metaAnual.processos;
+            document.getElementById('metaPads').value = metaAnual.pads;
+            document.getElementById('obsMeta').value = metaAnual.obs || '';
+        }
+        calcularMeta();
+        renderHistorico();
+    }
+
+    function renderHistorico() {
+        const tbody = document.querySelector('#tabelaHistorico tbody');
+        tbody.innerHTML = '';
+        if (!metaAnual) return;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${metaAnual.ano}</td>
+            <td>${formatMoney(metaAnual.metaBruta)}</td>
+            <td>${formatMoney(metaAnual.metaLiquida)}</td>
+            <td><button class="btn btn-sm btn-outline-primary" onclick="carregarMeta()"><i class="bi bi-pencil"></i></button></td>
+        `;
+        tbody.appendChild(tr);
+    }
+
+    function carregarMeta() {
+        if (!metaAnual) return;
+        document.getElementById('anoMeta').value = metaAnual.ano;
+        document.getElementById('fatAnterior').value = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2 }).format(metaAnual.fatAnterior);
+        document.getElementById('ipca').value = metaAnual.ipca;
+        document.getElementById('crescimento').value = metaAnual.crescimento;
+        document.getElementById('metaClientes').value = metaAnual.clientes;
+        document.getElementById('metaProcessos').value = metaAnual.processos;
+        document.getElementById('metaPads').value = metaAnual.pads;
+        document.getElementById('obsMeta').value = metaAnual.obs || '';
+        calcularMeta();
+    }
+
+    // === COLABORADORES ===
+    function initColab() {
+        document.getElementById('formColaborador').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const id = document.getElementById('colabId').value;
+            const nome = document.getElementById('colabNome').value;
+            const cargo = document.getElementById('colabCargo').value;
+            const perc = parseFloat(document.getElementById('colabPerc').value) || 0;
+            if (id) {
+                const idx = colaboradores.findIndex(c => c.id == id);
+                if (idx >= 0) colaboradores[idx] = { id, nome, cargo, perc };
+            } else {
+                colaboradores.push({ id: Date.now(), nome, cargo, perc });
+            }
+            saveData(STORAGE_KEYS.colab, colaboradores);
+            renderDistribuicao();
+            bootstrap.Modal.getInstance(document.getElementById('modalColaborador')).hide();
+            this.reset();
+        });
+        renderDistribuicao();
+    }
+
+    function renderDistribuicao() {
+        const tbody = document.querySelector('#tabelaColaboradores tbody');
+        tbody.innerHTML = '';
+        const metaLiquida = metaAnual ? metaAnual.metaLiquida : 0;
+        const metaBruta = metaAnual ? metaAnual.metaBruta : 0;
+        const totalClientes = metaAnual ? metaAnual.clientes : 0;
+        const totalProcessos = metaAnual ? metaAnual.processos : 0;
+        const totalPads = metaAnual ? metaAnual.pads : 0;
+        let totalPerc = 0, totalB = 0, totalL = 0, totalC = 0, totalP = 0, totalPa = 0;
+        colaboradores.forEach(c => {
+            const bruto = metaBruta * c.perc / 100;
+            const liquido = metaLiquida * c.perc / 100;
+            const cli = Math.round(totalClientes * c.perc / 100);
+            const pro = Math.round(totalProcessos * c.perc / 100);
+            const pad = Math.round(totalPads * c.perc / 100);
+            totalPerc += c.perc;
+            totalB += bruto; totalL += liquido; totalC += cli; totalP += pro; totalPa += pad;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${c.nome}</td>
+                <td>${c.cargo}</td>
+                <td><input type="number" step="0.01" class="form-control form-control-sm" value="${c.perc}" onchange="atualizarPerc(${c.id}, this.value)"></td>
+                <td>${formatMoney(bruto)}</td>
+                <td>${formatMoney(liquido)}</td>
+                <td>${cli}</td>
+                <td>${pro}</td>
+                <td>${pad}</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editarColab(${c.id})"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="excluirColab(${c.id})"><i class="bi bi-trash"></i></button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+        document.getElementById('totalPerc').textContent = totalPerc.toFixed(2) + '%';
+        document.getElementById('totalBruto').textContent = formatMoney(totalB);
+        document.getElementById('totalLiquido').textContent = formatMoney(totalL);
+        document.getElementById('totalClientes').textContent = totalC;
+        document.getElementById('totalProcessos').textContent = totalP;
+        document.getElementById('totalPads').textContent = totalPa;
+    }
+
+    function atualizarPerc(id, perc) {
+        const c = colaboradores.find(x => x.id == id);
+        if (c) { c.perc = parseFloat(perc) || 0; saveData(STORAGE_KEYS.colab, colaboradores); renderDistribuicao(); }
+    }
+
+    function editarColab(id) {
+        const c = colaboradores.find(x => x.id == id);
+        if (!c) return;
+        document.getElementById('colabId').value = c.id;
+        document.getElementById('colabNome').value = c.nome;
+        document.getElementById('colabCargo').value = c.cargo;
+        document.getElementById('colabPerc').value = c.perc;
+        new bootstrap.Modal(document.getElementById('modalColaborador')).show();
+    }
+
+    function excluirColab(id) {
+        if (confirm('Excluir colaborador?')) {
+            colaboradores = colaboradores.filter(x => x.id != id);
+            saveData(STORAGE_KEYS.colab, colaboradores);
+            renderDistribuicao();
+        }
+    }
+
+    // === MENSAL ===
+    function initMensal() {
+        document.getElementById('formMensal').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const id = document.getElementById('mensalId').value;
+            const mes = parseInt(document.getElementById('mensalMes').value);
+            const fat = parseMoney(document.getElementById('mensalFaturamento').value);
+            const pro = parseInt(document.getElementById('mensalProcessos').value) || 0;
+            const pad = parseInt(document.getElementById('mensalPads').value) || 0;
+            const cli = parseInt(document.getElementById('mensalClientes').value) || 0;
+            if (id) {
+                const idx = mensal.findIndex(m => m.id == id);
+                if (idx >= 0) mensal[idx] = { id, mes, fat, pro, pad, cli };
+            } else {
+                mensal.push({ id: Date.now(), mes, fat, pro, pad, cli });
+            }
+            saveData(STORAGE_KEYS.mensal, mensal);
+            renderMensal();
+            initDash();
+            bootstrap.Modal.getInstance(document.getElementById('modalMensal')).hide();
+            this.reset();
+        });
+        renderMensal();
+    }
+
+    const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
+    function renderMensal() {
+        const tbody = document.querySelector('#tabelaMensal tbody');
+        tbody.innerHTML = '';
+        const metaLiquida = metaAnual ? metaAnual.metaLiquida / 12 : 0;
+        mensal.sort((a, b) => a.mes - b.mes).forEach(m => {
+            const perc = metaLiquida > 0 ? (m.fat / metaLiquida) * 100 : 0;
+            const status = perc >= 100 ? '<span class="badge bg-success">Atingida</span>' : perc >= 80 ? '<span class="badge bg-warning text-dark">Próxima</span>' : '<span class="badge bg-danger">Abaixo</span>';
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${meses[m.mes - 1]}</td>
+                <td>${formatMoney(m.fat)}</td>
+                <td>${m.pro}</td>
+                <td>${m.pad}</td>
+                <td>${m.cli}</td>
+                <td>${formatPerc(perc)}</td>
+                <td>${status}</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editarMensal(${m.id})"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="excluirMensal(${m.id})"><i class="bi bi-trash"></i></button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function editarMensal(id) {
+        const m = mensal.find(x => x.id == id);
+        if (!m) return;
+        document.getElementById('mensalId').value = m.id;
+        document.getElementById('mensalMes').value = m.mes;
+        document.getElementById('mensalFaturamento').value = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2 }).format(m.fat);
+        document.getElementById('mensalProcessos').value = m.pro;
+        document.getElementById('mensalPads').value = m.pad;
+        document.getElementById('mensalClientes').value = m.cli;
+        new bootstrap.Modal(document.getElementById('modalMensal')).show();
+    }
+
+    function excluirMensal(id) {
+        if (confirm('Excluir lançamento mensal?')) {
+            mensal = mensal.filter(x => x.id != id);
+            saveData(STORAGE_KEYS.mensal, mensal);
+            renderMensal();
+            initDash();
+        }
+    }
+
+    // === DASHBOARD ===
+    function initDash() {
+        const metaLiquida = metaAnual ? metaAnual.metaLiquida : 0;
+        const totalRealizado = mensal.reduce((acc, m) => acc + m.fat, 0);
+        const perc = metaLiquida > 0 ? (totalRealizado / metaLiquida) * 100 : 0;
+        const mesesComDados = mensal.length || 1;
+        const projetado = (totalRealizado / mesesComDados) * 12;
+        document.getElementById('dashMetaLiquida').textContent = formatMoney(metaLiquida);
+        document.getElementById('dashRealizado').textContent = formatMoney(totalRealizado);
+        document.getElementById('dashPerc').textContent = formatPerc(perc);
+        document.getElementById('dashProjetado').textContent = formatMoney(projetado);
+
+        // Gráfico Faturamento
+        const ctxFat = document.getElementById('chartFaturamento').getContext('2d');
+        const dataFat = [];
+        const dataMeta = [];
+        for (let i = 1; i <= 12; i++) {
+            const m = mensal.find(x => x.mes == i);
+            dataFat.push(m ? m.fat : 0);
+            dataMeta.push(metaLiquida / 12);
+        }
+        if (chartFaturamento) chartFaturamento.destroy();
+        chartFaturamento = new Chart(ctxFat, {
+            type: 'bar',
+            data: {
+                labels: meses,
+                datasets: [
+                    { label: 'Realizado', data: dataFat, backgroundColor: '#0a58ca', borderRadius: 6 },
+                    { label: 'Meta Mensal', data: dataMeta, type: 'line', borderColor: '#fd7e14', borderWidth: 2, fill: false, tension: 0.4 }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'top' } },
+                scales: { y: { beginAtZero: true, ticks: { callback: v => formatMoney(v) } } }
+            }
+        });
+
+        // Gráfico Captação
+        const ctxCap = document.getElementById('chartCaptacao').getContext('2d');
+        const totalCli = mensal.reduce((acc, m) => acc + m.cli, 0);
+        const totalPro = mensal.reduce((acc, m) => acc + m.pro, 0);
+        const totalPad = mensal.reduce((acc, m) => acc + m.pad, 0);
+        if (chartCaptacao) chartCaptacao.destroy();
+        chartCaptacao = new Chart(ctxCap, {
+            type: 'doughnut',
+            data: {
+                labels: ['Clientes', 'Processos', 'PADs'],
+                datasets: [{
+                    data: [totalCli, totalPro, totalPad],
+                    backgroundColor: ['#0a58ca', '#198754', '#fd7e14'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+
+        // Resumo Mensal
+        const tbody = document.querySelector('#tabelaResumo tbody');
+        tbody.innerHTML = '';
+        const metaMensal = metaLiquida / 12;
+        for (let i = 1; i <= 12; i++) {
+            const m = mensal.find(x => x.mes == i);
+            const real = m ? m.fat : 0;
+            const diff = real - metaMensal;
+            const status = diff >= 0 ? '<span class="badge bg-success">Superávit</span>' : '<span class="badge bg-danger">Déficit</span>';
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${meses[i - 1]}</td><td>${formatMoney(metaMensal)}</td><td>${formatMoney(real)}</td><td>${formatMoney(diff)}</td><td>${status}</td>`;
+            tbody.appendChild(tr);
+        }
+    }
+
+    // === INICIALIZAÇÃO ===
+    document.addEventListener('DOMContentLoaded', function () {
+        initMeta();
+        initColab();
+        initMensal();
+        initDash();
+
+        document.querySelectorAll('button[data-bs-toggle="tab"]').forEach(tab => {
+            tab.addEventListener('shown.bs.tab', function () {
+                if (this.id === 'tab-dashboard') initDash();
+                if (this.id === 'tab-por-colaborador') renderDistribuicao();
+                if (this.id === 'tab-acompanhamento') renderMensal();
+            });
+        });
+    });
+</script>
+</body>
+</html>

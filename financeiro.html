@@ -24,787 +24,228 @@
       --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       --radius: 10px;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    .topo-logo { background-color: #fff; padding: 15px 20px; display: flex; justify-content: center; align-items: center; }
+    .logo-escritorio { height: 70px; width: auto; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.6;
     }
-
     .navbar {
-      background-color: var(--primary);
+      background: var(--primary);
       color: var(--white);
-      padding: 1rem 1.5rem;
+      padding: 0.75rem 1.5rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-
-    .navbar-brand {
-      font-size: 1.25rem;
-      font-weight: 700;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 1.5rem auto;
-      padding: 0 1rem;
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .page-title {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: var(--primary-dark);
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      border: none;
-      border-radius: var(--radius);
-      padding: 0.6rem 1.1rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
-      text-decoration: none;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-primary {
-      background-color: var(--primary);
-      color: var(--white);
-    }
-
-    .btn-primary:hover {
-      background-color: var(--primary-dark);
-      box-shadow: 0 4px 10px rgba(10, 88, 202, 0.3);
-    }
-
-    .btn-outline {
-      background-color: transparent;
-      color: var(--primary);
-      border: 2px solid var(--primary);
-    }
-
-    .btn-outline:hover {
-      background-color: var(--primary-light);
-    }
-
-    .btn-success {
-      background-color: var(--success);
-      color: var(--white);
-    }
-
-    .btn-success:hover {
-      background-color: var(--success-dark);
-    }
-
-    .btn-warning {
-      background-color: var(--warning);
-      color: var(--text);
-    }
-
-    .btn-warning:hover {
-      background-color: var(--warning-dark);
-    }
-
-    .btn-danger {
-      background-color: var(--danger);
-      color: var(--white);
-    }
-
-    .btn-danger:hover {
-      background-color: var(--danger-dark);
-    }
-
-    .tabs {
-      display: flex;
-      gap: 0.5rem;
-      border-bottom: 3px solid var(--border);
-      margin-bottom: 1.5rem;
-    }
-
-    .tab {
-      padding: 0.8rem 1.4rem;
-      background: transparent;
-      border: none;
-      border-bottom: 3px solid transparent;
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--muted);
-      cursor: pointer;
-      transition: color 0.2s, border-color 0.2s;
-      margin-bottom: -3px;
-    }
-
-    .tab:hover {
-      color: var(--primary);
-    }
-
-    .tab.active {
-      color: var(--primary);
-      border-bottom-color: var(--primary);
-    }
-
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    .panel {
-      background-color: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 1.25rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .panel-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--primary-dark);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.95rem;
-    }
-
-    thead {
-      background-color: var(--primary-light);
-      color: var(--primary-dark);
-    }
-
-    th,
-    td {
-      padding: 0.85rem 0.75rem;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-    }
-
-    th {
-      font-weight: 700;
-    }
-
-    tbody tr:hover {
-      background-color: #f1f5ff;
-    }
-
-    .actions {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .actions .btn {
-      padding: 0.4rem 0.7rem;
-      font-size: 0.85rem;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 2.5rem 1rem;
-      color: var(--muted);
-    }
-
-    .empty-state-icon {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background-color: rgba(0, 0, 0, 0.45);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      padding: 1rem;
-    }
-
-    .modal-overlay.active {
-      display: flex;
-    }
-
-    .modal {
-      background-color: var(--white);
-      border-radius: var(--radius);
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-      width: 100%;
-      max-width: 520px;
-      max-height: 90vh;
-      overflow-y: auto;
-      animation: modalIn 0.25s ease;
-    }
-
-    @keyframes modalIn {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .modal-header {
-      background-color: var(--primary);
-      color: var(--white);
-      padding: 1rem 1.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .modal-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-    }
-
-    .modal-close {
-      background: transparent;
-      border: none;
-      color: var(--white);
-      font-size: 1.5rem;
-      cursor: pointer;
-      line-height: 1;
-    }
-
-    .modal-body {
-      padding: 1.25rem;
-    }
-
-    .form-group {
-      margin-bottom: 1rem;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 0.35rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .form-control {
-      width: 100%;
-      padding: 0.6rem 0.85rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.95rem;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .form-control:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(10, 88, 202, 0.15);
-    }
-
-    .modal-footer {
-      padding: 1rem 1.25rem;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.75rem;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 0.25rem 0.6rem;
-      border-radius: 50px;
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
-
-    .badge-success {
-      background-color: #d1e7dd;
-      color: #0f5132;
-    }
-
-    .badge-warning {
-      background-color: #fff3cd;
-      color: #664d03;
-    }
-
-    .valor-receita {
-      color: var(--success);
-      font-weight: 700;
-    }
-
-    .valor-despesa {
-      color: var(--danger);
-      font-weight: 700;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 2rem;
-      color: var(--muted);
-    }
-
-    @media (max-width: 768px) {
-      .header-actions,
-      .panel-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      table {
-        font-size: 0.85rem;
-      }
-
-      th,
-      td {
-        padding: 0.65rem 0.5rem;
-      }
-
-      .actions {
-        flex-direction: column;
-        gap: 0.35rem;
-      }
+    .navbar-brand { font-size: 1.15rem; font-weight: 700; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+    .header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+    .page-title { font-size: 1.5rem; color: var(--primary); }
+    .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1.1rem; border: none; border-radius: var(--radius); cursor: pointer; font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .btn-primary { background: var(--primary); color: var(--white); }
+    .btn-success { background: var(--success); color: var(--white); }
+    .btn-warning { background: var(--warning); color: #000; }
+    .btn-danger { background: var(--danger); color: var(--white); }
+    .btn-outline { background: var(--white); color: var(--primary); border: 1px solid var(--primary); }
+    .btn-sm { padding: 0.35rem 0.7rem; font-size: 0.8rem; }
+    .tabs { display: flex; gap: 0.25rem; border-bottom: 3px solid var(--primary); margin-bottom: 1.5rem; }
+    .tab { padding: 0.65rem 1.4rem; cursor: pointer; background: #e9ecef; border: none; border-radius: 6px 6px 0 0; font-weight: 600; font-size: 0.9rem; color: var(--muted); }
+    .tab.active { background: var(--primary); color: var(--white); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .panel { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+    .panel-header { background: var(--primary); color: var(--white); padding: 0.85rem 1.25rem; display: flex; justify-content: space-between; align-items: center; }
+    .panel-title { font-size: 1rem; font-weight: 600; }
+    .loading { padding: 1.25rem; text-align: center; color: var(--muted); }
+    .table-responsive { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 0.75rem 0.85rem; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.4px; color: var(--muted); border-bottom: 2px solid var(--border); background: var(--bg); }
+    td { padding: 0.7rem 0.85rem; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; }
+    tr:hover td { background: var(--primary-light); }
+    .actions { display: flex; gap: 0.35rem; }
+    .valor-receita { color: var(--success); font-weight: 700; }
+    .valor-despesa { color: var(--danger); font-weight: 700; }
+    .empty-state { text-align: center; padding: 2.5rem 1.5rem; color: var(--muted); }
+    .empty-state-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: var(--white); border-radius: var(--radius); width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    .modal-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h2 { font-size: 1.1rem; color: var(--primary); }
+    .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--muted); }
+    .modal-body { padding: 1.25rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.3rem; }
+    .form-group input, .form-group select { width: 100%; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.9rem; }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(10,88,202,0.15); }
+    .form-actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem; }
+    @media (max-width: 640px) {
+      .header-actions { flex-direction: column; align-items: flex-start; }
+      .tabs { flex-wrap: wrap; }
+      table { font-size: 0.8rem; }
+      th, td { padding: 0.5rem; }
+      .actions { flex-direction: column; gap: 0.35rem; }
     }
   </style>
 </head>
 <body>
+  <div class="topo-logo">
+    <img src="https://adapta-one-prod.s3.sa-east-1.amazonaws.com/apolloayres%40yahoo.com.br/png/image-019eea86-df20-753e-b049-a7c4515d7a68.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3FLD6RMYLYFE2L2Q%2F20260621%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260621T160143Z&X-Amz-Expires=3600&X-Amz-Signature=d86ac73935a9237a01f8898aab4f62b0c323de884239f0049abf5a99c09677ae&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" alt="Apollo Ayres" class="logo-escritorio">
+  </div>
   <nav class="navbar">
     <div class="navbar-brand">Controle do Escritório</div>
   </nav>
-
   <div class="container">
     <div class="header-actions">
       <h1 class="page-title">💳 Financeiro</h1>
       <a href="home.html" class="btn btn-outline">← Voltar</a>
     </div>
-
     <div class="tabs">
       <button class="tab active" data-tab="receitas">📥 Receitas</button>
       <button class="tab" data-tab="despesas">📤 Despesas</button>
     </div>
-
     <div id="receitas" class="tab-content active">
       <div class="panel">
-        <div class="panel-header">
-          <h2 class="panel-title">Receitas</h2>
-          <button class="btn btn-success" onclick="abrirModalReceita()">+ Nova Receita</button>
-        </div>
+        <div class="panel-header"><h2 class="panel-title">Receitas</h2><button class="btn btn-success" onclick="abrirModalReceita()">+ Nova Receita</button></div>
         <div id="loading-receitas" class="loading">Carregando receitas...</div>
         <div id="tabela-receitas-container"></div>
       </div>
     </div>
-
     <div id="despesas" class="tab-content">
       <div class="panel">
-        <div class="panel-header">
-          <h2 class="panel-title">Despesas</h2>
-          <button class="btn btn-danger" onclick="abrirModalDespesa()">+ Nova Despesa</button>
-        </div>
+        <div class="panel-header"><h2 class="panel-title">Despesas</h2><button class="btn btn-success" onclick="abrirModalDespesa()">+ Nova Despesa</button></div>
         <div id="loading-despesas" class="loading">Carregando despesas...</div>
         <div id="tabela-despesas-container"></div>
       </div>
     </div>
   </div>
-
-  <div id="modal-receita" class="modal-overlay">
+  <!-- Modais -->
+  <div class="modal-overlay" id="modal-receita">
     <div class="modal">
-      <div class="modal-header">
-        <span id="modal-receita-titulo" class="modal-title">Nova Receita</span>
-        <button class="modal-close" onclick="fecharModalReceita()">&times;</button>
-      </div>
-      <form id="form-receita" onsubmit="salvarReceita(event)">
-        <div class="modal-body">
+      <div class="modal-header"><h2 id="modal-receita-titulo">Nova Receita</h2><button class="modal-close" onclick="fecharModalReceita()">&times;</button></div>
+      <div class="modal-body">
+        <form id="form-receita" onsubmit="salvarReceita(event)">
           <input type="hidden" id="receita-id" />
-          <div class="form-group">
-            <label for="receita-descricao">Descrição</label>
-            <input type="text" id="receita-descricao" class="form-control" required placeholder="Ex: Serviço prestado" />
-          </div>
-          <div class="form-group">
-            <label for="receita-valor">Valor (R$)</label>
-            <input type="number" id="receita-valor" class="form-control" step="0.01" min="0.01" required placeholder="0,00" />
-          </div>
-          <div class="form-group">
-            <label for="receita-data">Data</label>
-            <input type="date" id="receita-data" class="form-control" required />
-          </div>
-          <div class="form-group">
-            <label for="receita-categoria">Categoria</label>
-            <select id="receita-categoria" class="form-control" required>
-              <option value="">Selecione...</option>
-              <option value="Serviços">Serviços</option>
-              <option value="Vendas">Vendas</option>
-              <option value="Consultoria">Consultoria</option>
-              <option value="Outros">Outros</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="receita-forma">Forma de pagamento</label>
-            <select id="receita-forma" class="form-control" required>
-              <option value="">Selecione...</option>
-              <option value="Dinheiro">Dinheiro</option>
-              <option value="Pix">Pix</option>
-              <option value="Cartão de crédito">Cartão de crédito</option>
-              <option value="Cartão de débito">Cartão de débito</option>
-              <option value="Boleto">Boleto</option>
-              <option value="Transferência">Transferência</option>
-              <option value="Outro">Outro</option>
-            </select>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline" onclick="fecharModalReceita()">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Salvar</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div id="modal-despesa" class="modal-overlay">
-    <div class="modal">
-      <div class="modal-header">
-        <span id="modal-despesa-titulo" class="modal-title">Nova Despesa</span>
-        <button class="modal-close" onclick="fecharModalDespesa()">&times;</button>
+          <div class="form-group"><label for="receita-descricao">Descrição</label><input type="text" id="receita-descricao" required /></div>
+          <div class="form-group"><label for="receita-valor">Valor (R$)</label><input type="number" id="receita-valor" step="0.01" min="0.01" required /></div>
+          <div class="form-group"><label for="receita-data">Data</label><input type="date" id="receita-data" required /></div>
+          <div class="form-group"><label for="receita-categoria">Categoria</label><select id="receita-categoria" class="form-control" required><option value="">Selecione...</option><option value="Honorários">Honorários</option><option value="Sucumbência">Sucumbência</option><option value="Custas">Custas</option><option value="Serviços">Serviços</option><option value="Outros">Outros</option></select></div>
+          <div class="form-group"><label for="receita-forma">Forma de pagamento</label><select id="receita-forma" class="form-control" required><option value="">Selecione...</option><option value="Dinheiro">Dinheiro</option><option value="Pix">Pix</option><option value="Cartão de crédito">Cartão de crédito</option><option value="Cartão de débito">Cartão de débito</option><option value="Boleto">Boleto</option><option value="Transferência">Transferência</option><option value="Outro">Outro</option></select></div>
+          <div class="form-actions"><button type="button" class="btn btn-outline" onclick="fecharModalReceita()">Cancelar</button><button type="submit" class="btn btn-primary">Salvar</button></div>
+        </form>
       </div>
-      <form id="form-despesa" onsubmit="salvarDespesa(event)">
-        <div class="modal-body">
-          <input type="hidden" id="despesa-id" />
-          <div class="form-group">
-            <label for="despesa-descricao">Descrição</label>
-            <input type="text" id="despesa-descricao" class="form-control" required placeholder="Ex: Aluguel do escritório" />
-          </div>
-          <div class="form-group">
-            <label for="despesa-valor">Valor (R$)</label>
-            <input type="number" id="despesa-valor" class="form-control" step="0.01" min="0.01" required placeholder="0,00" />
-          </div>
-          <div class="form-group">
-            <label for="despesa-data">Data</label>
-            <input type="date" id="despesa-data" class="form-control" required />
-          </div>
-          <div class="form-group">
-            <label for="despesa-categoria">Categoria</label>
-            <select id="despesa-categoria" class="form-control" required>
-              <option value="">Selecione...</option>
-              <option value="Aluguel">Aluguel</option>
-              <option value="Salários">Salários</option>
-              <option value="Impostos">Impostos</option>
-              <option value="Fornecedores">Fornecedores</option>
-              <option value="Serviços">Serviços</option>
-              <option value="Marketing">Marketing</option>
-              <option value="Outros">Outros</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="despesa-forma">Forma de pagamento</label>
-            <select id="despesa-forma" class="form-control" required>
-              <option value="">Selecione...</option>
-              <option value="Dinheiro">Dinheiro</option>
-              <option value="Pix">Pix</option>
-              <option value="Cartão de crédito">Cartão de crédito</option>
-              <option value="Cartão de débito">Cartão de débito</option>
-              <option value="Boleto">Boleto</option>
-              <option value="Transferência">Transferência</option>
-              <option value="Outro">Outro</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="despesa-status">Status</label>
-            <select id="despesa-status" class="form-control" required>
-              <option value="">Selecione...</option>
-              <option value="Paga">Paga</option>
-              <option value="Pendente">Pendente</option>
-            </select>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline" onclick="fecharModalDespesa()">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Salvar</button>
-        </div>
-      </form>
     </div>
   </div>
-
+  <div class="modal-overlay" id="modal-despesa">
+    <div class="modal">
+      <div class="modal-header"><h2 id="modal-despesa-titulo">Nova Despesa</h2><button class="modal-close" onclick="fecharModalDespesa()">&times;</button></div>
+      <div class="modal-body">
+        <form id="form-despesa" onsubmit="salvarDespesa(event)">
+          <input type="hidden" id="despesa-id" />
+          <div class="form-group"><label for="despesa-descricao">Descrição</label><input type="text" id="despesa-descricao" required /></div>
+          <div class="form-group"><label for="despesa-valor">Valor (R$)</label><input type="number" id="despesa-valor" step="0.01" min="0.01" required /></div>
+          <div class="form-group"><label for="despesa-data">Data</label><input type="date" id="despesa-data" required /></div>
+          <div class="form-group"><label for="despesa-categoria">Categoria</label><select id="despesa-categoria" class="form-control" required><option value="">Selecione...</option><option value="Aluguel">Aluguel</option><option value="Salários">Salários</option><option value="Impostos">Impostos</option><option value="Fornecedores">Fornecedores</option><option value="Serviços">Serviços</option><option value="Marketing">Marketing</option><option value="Outros">Outros</option></select></div>
+          <div class="form-group"><label for="despesa-forma">Forma de pagamento</label><select id="despesa-forma" class="form-control" required><option value="">Selecione...</option><option value="Dinheiro">Dinheiro</option><option value="Pix">Pix</option><option value="Cartão de crédito">Cartão de crédito</option><option value="Cartão de débito">Cartão de débito</option><option value="Boleto">Boleto</option><option value="Transferência">Transferência</option><option value="Outro">Outro</option></select></div>
+          <div class="form-group"><label for="despesa-status">Status</label><select id="despesa-status" class="form-control" required><option value="">Selecione...</option><option value="Paga">Paga</option><option value="Pendente">Pendente</option></select></div>
+          <div class="form-actions"><button type="button" class="btn btn-outline" onclick="fecharModalDespesa()">Cancelar</button><button type="submit" class="btn btn-primary">Salvar</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="db.js"></script>
   <script>
-    let receitas = [];
-    let despesas = [];
-
-    document.addEventListener('DOMContentLoaded', () => {
-      configurarTabs();
-      carregarReceitas();
-      carregarDespesas();
-    });
-
-    function configurarTabs() {
-      const tabs = document.querySelectorAll('.tab');
-      tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-          tabs.forEach(t => t.classList.remove('active'));
-          tab.classList.add('active');
-          const alvo = tab.dataset.tab;
-          document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
-          document.getElementById(alvo).classList.add('active');
-        });
-      });
-    }
-
-    async function carregarReceitas() {
+    let receitas = [], despesas = [];
+    async function carregarDados() {
       try {
         document.getElementById('loading-receitas').style.display = 'block';
-        receitas = await window.db.receitas_listar();
+        receitas = await window.db.receitas_listar() || [];
         document.getElementById('loading-receitas').style.display = 'none';
         renderizarReceitas();
-      } catch (erro) {
-        document.getElementById('loading-receitas').style.display = 'none';
-        document.getElementById('tabela-receitas-container').innerHTML =
-          '<div class="empty-state">Erro ao carregar receitas.</div>';
-        console.error(erro);
-      }
-    }
-
-    async function carregarDespesas() {
+      } catch(e) { document.getElementById('loading-receitas').textContent = 'Erro ao carregar receitas.'; }
       try {
-        document.getElementById('loading-despesas').style.display = 'block';
-        despesas = await window.db.despesas_listar();
-        document.getElementById('loading-despesas').style.display = 'none';
+        despesas = await window.db.despesas_listar() || [];
         renderizarDespesas();
-      } catch (erro) {
-        document.getElementById('loading-despesas').style.display = 'none';
-        document.getElementById('tabela-despesas-container').innerHTML =
-          '<div class="empty-state">Erro ao carregar despesas.</div>';
-        console.error(erro);
-      }
+      } catch(e) {}
     }
-
-    function formatarValor(valor) {
-      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor || 0);
-    }
-
-    function formatarData(data) {
-      if (!data) return '-';
-      const d = new Date(data);
-      if (isNaN(d.getTime())) return data;
-      return d.toLocaleDateString('pt-BR');
-    }
-
+    function formatarValor(valor) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor || 0); }
+    function formatarData(data) { if (!data) return '-'; const d = new Date(data); if (isNaN(d.getTime())) return data; return d.toLocaleDateString('pt-BR'); }
     function renderizarReceitas() {
       const container = document.getElementById('tabela-receitas-container');
-      if (!receitas || receitas.length === 0) {
-        container.innerHTML =
-          '<div class="empty-state"><div class="empty-state-icon">📥</div><p>Nenhuma receita cadastrada.</p></div>';
-        return;
-      }
-
-      let html = '<div class="table-responsive"><table><thead><tr>';
-      html += '<th>Descrição</th><th>Valor</th><th>Data</th><th>Categoria</th><th>Forma de pagamento</th><th>Ações</th>';
-      html += '</tr></thead><tbody>';
-
+      if (!receitas || receitas.length === 0) { container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📥</div><p>Nenhuma receita cadastrada.</p></div>'; return; }
+      let html = '<div class="table-responsive"><table><thead><tr><th>Descrição</th><th>Valor</th><th>Data</th><th>Categoria</th><th>Forma de pagamento</th><th>Ações</th></tr></thead><tbody>';
       receitas.forEach(item => {
         html += '<tr>';
-        html += `<td>${escapar(item.descricao || '')}</td>`;
+        html += `<td>${item.descricao||''}</td>`;
         html += `<td class="valor-receita">${formatarValor(item.valor)}</td>`;
         html += `<td>${formatarData(item.data)}</td>`;
-        html += `<td>${escapar(item.categoria || '')}</td>`;
-        html += `<td>${escapar(item.forma_pagamento || '')}</td>`;
-        html += `<td class="actions">`;
-        html += `<button class="btn btn-warning" onclick="editarReceita('${item.id}')">Editar</button>`;
-        html += `<button class="btn btn-danger" onclick="excluirReceita('${item.id}')">Excluir</button>`;
-        html += `</td>`;
+        html += `<td>${item.categoria||''}</td>`;
+        html += `<td>${item.forma_pagamento||''}</td>`;
+        html += `<td class="actions"><button class="btn btn-warning" onclick="editarReceita('${item.id}')">Editar</button><button class="btn btn-danger" onclick="excluirReceita('${item.id}')">Excluir</button></td>`;
         html += '</tr>';
       });
-
       html += '</tbody></table></div>';
       container.innerHTML = html;
     }
-
     function renderizarDespesas() {
       const container = document.getElementById('tabela-despesas-container');
-      if (!despesas || despesas.length === 0) {
-        container.innerHTML =
-          '<div class="empty-state"><div class="empty-state-icon">📤</div><p>Nenhuma despesa cadastrada.</p></div>';
-        return;
-      }
-
-      let html = '<div class="table-responsive"><table><thead><tr>';
-      html += '<th>Descrição</th><th>Valor</th><th>Data</th><th>Categoria</th><th>Forma de pagamento</th><th>Status</th><th>Ações</th>';
-      html += '</tr></thead><tbody>';
-
+      if (!despesas || despesas.length === 0) { container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📤</div><p>Nenhuma despesa cadastrada.</p></div>'; return; }
+      let html = '<div class="table-responsive"><table><thead><tr><th>Descrição</th><th>Valor</th><th>Data</th><th>Categoria</th><th>Forma de pagamento</th><th>Status</th><th>Ações</th></tr></thead><tbody>';
       despesas.forEach(item => {
-        const statusBadge = item.status === 'Paga'
-          ? '<span class="badge badge-success">Paga</span>'
-          : '<span class="badge badge-warning">Pendente</span>';
-
         html += '<tr>';
-        html += `<td>${escapar(item.descricao || '')}</td>`;
+        html += `<td>${item.descricao||''}</td>`;
         html += `<td class="valor-despesa">${formatarValor(item.valor)}</td>`;
         html += `<td>${formatarData(item.data)}</td>`;
-        html += `<td>${escapar(item.categoria || '')}</td>`;
-        html += `<td>${escapar(item.forma_pagamento || '')}</td>`;
-        html += `<td>${statusBadge}</td>`;
-        html += `<td class="actions">`;
-        html += `<button class="btn btn-warning" onclick="editarDespesa('${item.id}')">Editar</button>`;
-        html += `<button class="btn btn-danger" onclick="excluirDespesa('${item.id}')">Excluir</button>`;
-        html += `</td>`;
+        html += `<td>${item.categoria||''}</td>`;
+        html += `<td>${item.forma_pagamento||''}</td>`;
+        html += `<td>${item.status === 'Paga' ? 'Paga' : 'Pendente'}</td>`;
+        html += `<td class="actions"><button class="btn btn-warning" onclick="editarDespesa('${item.id}')">Editar</button><button class="btn btn-danger" onclick="excluirDespesa('${item.id}')">Excluir</button></td>`;
         html += '</tr>';
       });
-
       html += '</tbody></table></div>';
       container.innerHTML = html;
     }
-
-    function escapar(texto) {
-      const div = document.createElement('div');
-      div.textContent = texto;
-      return div.innerHTML;
-    }
-
     function abrirModalReceita(id = null) {
       document.getElementById('form-receita').reset();
       document.getElementById('receita-id').value = id || '';
       document.getElementById('modal-receita-titulo').textContent = id ? 'Editar Receita' : 'Nova Receita';
-      if (id) {
-        const item = receitas.find(r => r.id === id);
-        if (item) {
-          document.getElementById('receita-descricao').value = item.descricao || '';
-          document.getElementById('receita-valor').value = item.valor || '';
-          document.getElementById('receita-data').value = item.data ? item.data.substring(0, 10) : '';
-          document.getElementById('receita-categoria').value = item.categoria || '';
-          document.getElementById('receita-forma').value = item.forma_pagamento || '';
-        }
-      }
+      if (id) { const item = receitas.find(r => r.id === id); if (item) { document.getElementById('receita-descricao').value = item.descricao||''; document.getElementById('receita-valor').value = item.valor||''; document.getElementById('receita-data').value = item.data||''; document.getElementById('receita-categoria').value = item.categoria||''; document.getElementById('receita-forma').value = item.forma_pagamento||''; } }
       document.getElementById('modal-receita').classList.add('active');
     }
-
-    function fecharModalReceita() {
-      document.getElementById('modal-receita').classList.remove('active');
-    }
-
-    async function salvarReceita(event) {
-      event.preventDefault();
+    function fecharModalReceita() { document.getElementById('modal-receita').classList.remove('active'); }
+    async function salvarReceita(e) {
+      e.preventDefault();
       const id = document.getElementById('receita-id').value;
-      const obj = {
-        id: id || undefined,
-        descricao: document.getElementById('receita-descricao').value.trim(),
-        valor: parseFloat(document.getElementById('receita-valor').value),
-        data: document.getElementById('receita-data').value,
-        categoria: document.getElementById('receita-categoria').value,
-        forma_pagamento: document.getElementById('receita-forma').value
-      };
-      try {
-        await window.db.receitas_salvar(obj);
-        fecharModalReceita();
-        await carregarReceitas();
-      } catch (erro) {
-        console.error(erro);
-        alert('Erro ao salvar receita.');
-      }
+      const obj = { descricao: document.getElementById('receita-descricao').value, valor: parseFloat(document.getElementById('receita-valor').value), data: document.getElementById('receita-data').value, categoria: document.getElementById('receita-categoria').value, forma_pagamento: document.getElementById('receita-forma').value };
+      try { await window.db.receitas_salvar(id ? { ...obj, id } : obj); fecharModalReceita(); await carregarDados(); } catch(e) { alert('Erro ao salvar receita.'); }
     }
-
-    function editarReceita(id) {
-      abrirModalReceita(id);
-    }
-
-    async function excluirReceita(id) {
-      if (!confirm('Deseja realmente excluir esta receita?')) return;
-      try {
-        await window.db.receitas_excluir(id);
-        await carregarReceitas();
-      } catch (erro) {
-        console.error(erro);
-        alert('Erro ao excluir receita.');
-      }
-    }
-
+    async function editarReceita(id) { abrirModalReceita(id); }
+    async function excluirReceita(id) { if(!confirm('Excluir?')) return; try { await window.db.receitas_excluir(id); await carregarDados(); } catch(e) { alert('Erro ao excluir receita.'); } }
     function abrirModalDespesa(id = null) {
       document.getElementById('form-despesa').reset();
       document.getElementById('despesa-id').value = id || '';
       document.getElementById('modal-despesa-titulo').textContent = id ? 'Editar Despesa' : 'Nova Despesa';
-      if (id) {
-        const item = despesas.find(d => d.id === id);
-        if (item) {
-          document.getElementById('despesa-descricao').value = item.descricao || '';
-          document.getElementById('despesa-valor').value = item.valor || '';
-          document.getElementById('despesa-data').value = item.data ? item.data.substring(0, 10) : '';
-          document.getElementById('despesa-categoria').value = item.categoria || '';
-          document.getElementById('despesa-forma').value = item.forma_pagamento || '';
-          document.getElementById('despesa-status').value = item.status || '';
-        }
-      }
+      if (id) { const item = despesas.find(d => d.id === id); if (item) { document.getElementById('despesa-descricao').value = item.descricao||''; document.getElementById('despesa-valor').value = item.valor||''; document.getElementById('despesa-data').value = item.data||''; document.getElementById('despesa-categoria').value = item.categoria||''; document.getElementById('despesa-forma').value = item.forma_pagamento||''; document.getElementById('despesa-status').value = item.status||''; } }
       document.getElementById('modal-despesa').classList.add('active');
     }
-
-    function fecharModalDespesa() {
-      document.getElementById('modal-despesa').classList.remove('active');
-    }
-
-    async function salvarDespesa(event) {
-      event.preventDefault();
+    function fecharModalDespesa() { document.getElementById('modal-despesa').classList.remove('active'); }
+    async function salvarDespesa(e) {
+      e.preventDefault();
       const id = document.getElementById('despesa-id').value;
-      const obj = {
-        id: id || undefined,
-        descricao: document.getElementById('despesa-descricao').value.trim(),
-        valor: parseFloat(document.getElementById('despesa-valor').value),
-        data: document.getElementById('despesa-data').value,
-        categoria: document.getElementById('despesa-categoria').value,
-        forma_pagamento: document.getElementById('despesa-forma').value,
-        status: document.getElementById('despesa-status').value
-      };
-      try {
-        await window.db.despesas_salvar(obj);
-        fecharModalDespesa();
-        await carregarDespesas();
-      } catch (erro) {
-        console.error(erro);
-        alert('Erro ao salvar despesa.');
-      }
+      const obj = { descricao: document.getElementById('despesa-descricao').value, valor: parseFloat(document.getElementById('despesa-valor').value), data: document.getElementById('despesa-data').value, categoria: document.getElementById('despesa-categoria').value, forma_pagamento: document.getElementById('despesa-forma').value, status: document.getElementById('despesa-status').value };
+      try { await window.db.despesas_salvar(id ? { ...obj, id } : obj); fecharModalDespesa(); await carregarDados(); } catch(e) { alert('Erro ao salvar despesa.'); }
     }
-
-    function editarDespesa(id) {
-      abrirModalDespesa(id);
-    }
-
-    async function excluirDespesa(id) {
-      if (!confirm('Deseja realmente excluir esta despesa?')) return;
-      try {
-        await window.db.despesas_excluir(id);
-        await carregarDespesas();
-      } catch (erro) {
-        console.error(erro);
-        alert('Erro ao excluir despesa.');
-      }
-    }
+    async function editarDespesa(id) { abrirModalDespesa(id); }
+    async function excluirDespesa(id) { if(!confirm('Excluir?')) return; try { await window.db.despesas_excluir(id); await carregarDados(); } catch(e) { alert('Erro ao excluir despesa.'); } }
+    document.querySelectorAll('.tab').forEach(tab => { tab.addEventListener('click', function() { document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); this.classList.add('active'); document.getElementById(this.dataset.tab).classList.add('active'); }); });
+    document.addEventListener('DOMContentLoaded', carregarDados);
   </script>
 </body>
 </html>

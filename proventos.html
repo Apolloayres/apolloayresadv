@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Proventos - Controle do Escritório</title>
   <style>
+    .topo-logo { background-color: #fff; padding: 15px 20px; display: flex; justify-content: center; align-items: center; }
+    .logo-escritorio { height: 70px; width: auto; }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
     body { background-color: #f0f2f5; color: #333; }
     nav {
@@ -27,108 +29,36 @@
     nav a:hover { background-color: rgba(255,255,255,0.2); }
     nav a.active { background-color: rgba(255,255,255,0.3); font-weight: bold; }
     .container { max-width: 1200px; margin: 20px auto; padding: 0 16px; }
-    h1 { color: #0a58ca; margin-bottom: 16px; font-size: 24px; }
-    .tabs { display: flex; gap: 8px; border-bottom: 2px solid #ccc; margin-bottom: 16px; }
-    .tab {
-      padding: 10px 20px;
-      cursor: pointer;
-      background-color: #e9ecef;
-      border: none;
-      border-radius: 4px 4px 0 0;
-      font-weight: bold;
-      color: #555;
-    }
-    .tab.active { background-color: #0a58ca; color: #fff; }
+    h1 { color: #0a58ca; margin-bottom: 20px; font-size: 24px; }
+    .tabs { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 2px solid #0a58ca; }
+    .tab { padding: 10px 24px; cursor: pointer; border: none; background: #e0e0e0; font-weight: 600; border-radius: 6px 6px 0 0; font-size: 14px; }
+    .tab.active { background: #0a58ca; color: white; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-    .toolbar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
-    .toolbar .group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-    .btn {
-      padding: 8px 14px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 14px;
-    }
-    .btn-primary { background-color: #0a58ca; color: #fff; }
-    .btn-primary:hover { background-color: #084298; }
-    .btn-secondary { background-color: #6c757d; color: #fff; }
-    .btn-secondary:hover { background-color: #545b62; }
-    .btn-danger { background-color: #dc3545; color: #fff; }
-    .btn-danger:hover { background-color: #a71d2a; }
-    .btn-success { background-color: #198754; color: #fff; }
-    .btn-success:hover { background-color: #146c43; }
-    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px; }
-    .card {
-      background: #fff;
-      padding: 16px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-      text-align: center;
-    }
-    .card-label { font-size: 13px; color: #666; margin-bottom: 6px; text-transform: uppercase; }
-    .card-value { font-size: 22px; font-weight: bold; color: #0a58ca; }
-    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.08); }
-    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #dee2e6; font-size: 14px; }
-    th { background-color: #0a58ca; color: #fff; }
-    tr:hover { background-color: #f8f9fa; }
-    .actions { display: flex; gap: 6px; }
-    .actions .btn { padding: 5px 8px; font-size: 12px; }
-    .empty { text-align: center; padding: 24px; color: #666; }
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background-color: rgba(0,0,0,0.5);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      padding: 16px;
-    }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .card { background: #fff; padding: 16px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); border-left: 4px solid #0a58ca; }
+    .card h3 { font-size: 13px; color: #666; margin-bottom: 6px; text-transform: uppercase; }
+    .card p { font-size: 20px; font-weight: bold; color: #0a58ca; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.08); margin-bottom: 20px; }
+    th { background: #0a58ca; color: #fff; padding: 10px; text-align: left; font-size: 13px; }
+    td { padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; }
+    .acoes { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+    .btn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; }
+    .btn-primary { background: #0a58ca; color: #fff; }
+    .btn-secondary { background: #6c757d; color: #fff; }
+    .btn-danger { background: #dc3545; color: #fff; }
+    .btn-sm { padding: 5px 10px; font-size: 12px; }
+    .numero { text-align: right; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; z-index: 1000; }
     .modal-overlay.active { display: flex; }
-    .modal {
-      background: #fff;
-      border-radius: 8px;
-      width: 100%;
-      max-width: 520px;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-    .modal-header {
-      background-color: #0a58ca;
-      color: #fff;
-      padding: 14px 18px;
-      font-size: 18px;
-      font-weight: bold;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .modal-close { cursor: pointer; font-size: 22px; line-height: 1; }
-    .modal-body { padding: 18px; }
-    .form-row { margin-bottom: 14px; }
-    .form-row label { display: block; margin-bottom: 5px; font-size: 13px; font-weight: bold; color: #555; }
-    .form-row input, .form-row select {
-      width: 100%;
-      padding: 8px 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-    .form-row input:focus, .form-row select:focus { outline: none; border-color: #0a58ca; }
-    .modal-footer {
-      padding: 14px 18px;
-      background: #f8f9fa;
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-    .readonly { background-color: #e9ecef; color: #6c757d; }
-    .mes-ano { display: flex; gap: 10px; }
-    .mes-ano select { flex: 1; }
-    @media (max-width: 768px) {
+    .modal { background: #fff; border-radius: 8px; width: 100%; max-width: 500px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+    .modal h2 { color: #0a58ca; margin-bottom: 16px; }
+    .modal label { display: block; margin-bottom: 4px; font-size: 13px; font-weight: 600; }
+    .modal input, .modal select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 12px; font-size: 13px; }
+    .form-actions { display: flex; gap: 8px; justify-content: flex-end; }
+    .total-row { font-weight: bold; background: #e8f0fe; }
+    .total-row td { border-top: 2px solid #0a58ca; }
+    @media (max-width: 600px) {
       .cards { grid-template-columns: repeat(2, 1fr); }
       table { font-size: 12px; }
       th, td { padding: 8px; }
@@ -136,6 +66,9 @@
   </style>
 </head>
 <body>
+  <div class="topo-logo">
+    <img src="https://adapta-one-prod.s3.sa-east-1.amazonaws.com/apolloayres%40yahoo.com.br/png/image-019eea86-df20-753e-b049-a7c4515d7a68.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3FLD6RMYLYFE2L2Q%2F20260621%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260621T160143Z&X-Amz-Expires=3600&X-Amz-Signature=d86ac73935a9237a01f8898aab4f62b0c323de884239f0049abf5a99c09677ae&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" alt="Apollo Ayres" class="logo-escritorio">
+  </div>
   <nav>
     <a href="home.html">Home</a>
     <a href="cadastros.html">Cadastros</a>
@@ -147,638 +80,92 @@
     <a href="relatorios-gerenciais.html">Relatórios Gerenciais</a>
     <a href="usuarios.html">Usuários</a>
   </nav>
-
   <div class="container">
     <h1>Proventos</h1>
-
     <div class="tabs">
       <button class="tab active" onclick="mudarAba('colaboradores')">Colaboradores</button>
       <button class="tab" onclick="mudarAba('proventos')">Proventos</button>
     </div>
-
-    <!-- ABA COLABORADORES -->
     <div id="aba-colaboradores" class="tab-content active">
       <div class="cards">
-        <div class="card">
-          <div class="card-label">Total</div>
-          <div class="card-value" id="cardColabTotal">0</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Ativos</div>
-          <div class="card-value" id="cardColabAtivos">0</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Inativos</div>
-          <div class="card-value" id="cardColabInativos">0</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Folha de Pagamento</div>
-          <div class="card-value" id="cardColabFolha">R$ 0,00</div>
-        </div>
+        <div class="card"><h3>Total Colaboradores</h3><p id="totalColab">0</p></div>
+        <div class="card"><h3>Total Proventos (mês)</h3><p id="totalProvMes">R$ 0</p></div>
+        <div class="card"><h3>Custo Total (mês)</h3><p id="totalCustoMes">R$ 0</p></div>
       </div>
-
-      <div class="toolbar">
-        <div class="group">
-          <button class="btn btn-primary" onclick="abrirModalColaborador()">Novo Colaborador</button>
-          <button class="btn btn-secondary" onclick="limparColaboradores()">Limpar</button>
-        </div>
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>CPF</th>
-            <th>Tipo</th>
-            <th>Fixo (R$)</th>
-            <th>Admissão</th>
-            <th>Status</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody id="tabelaColaboradores"></tbody>
-      </table>
+      <div class="acoes"><button class="btn btn-primary" onclick="abrirModalColab()">+ Novo Colaborador</button></div>
+      <table><thead><tr><th>Nome</th><th>Cargo</th><th>Salário Base</th><th>Adicionais</th><th>Descontos</th><th>Líquido</th><th>Ações</th></tr></thead><tbody id="tbodyColab"></tbody></table>
     </div>
-
-    <!-- ABA PROVENTOS -->
     <div id="aba-proventos" class="tab-content">
-      <div class="toolbar">
-        <div class="group mes-ano">
-          <select id="selMesProventos">
-            <option value="1">Janeiro</option>
-            <option value="2">Fevereiro</option>
-            <option value="3">Março</option>
-            <option value="4">Abril</option>
-            <option value="5">Maio</option>
-            <option value="6">Junho</option>
-            <option value="7">Julho</option>
-            <option value="8">Agosto</option>
-            <option value="9">Setembro</option>
-            <option value="10">Outubro</option>
-            <option value="11">Novembro</option>
-            <option value="12">Dezembro</option>
-          </select>
-          <select id="selAnoProventos"></select>
-          <button class="btn btn-primary" onclick="carregarProventosMes()">Carregar Proventos</button>
-        </div>
-        <div class="group">
-          <button class="btn btn-primary" onclick="abrirModalProvento()">Novo Provento</button>
-          <button class="btn btn-secondary" onclick="limparProventos()">Limpar</button>
-        </div>
-      </div>
-
       <div class="cards">
-        <div class="card">
-          <div class="card-label">Total</div>
-          <div class="card-value" id="cardProvTotal">R$ 0,00</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Fixo</div>
-          <div class="card-value" id="cardProvFixo">R$ 0,00</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Variável</div>
-          <div class="card-value" id="cardProvVariavel">R$ 0,00</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Quantidade</div>
-          <div class="card-value" id="cardProvQuantidade">0</div>
-        </div>
+        <div class="card"><h3>Total Proventos</h3><p id="totalProvGeral">R$ 0</p></div>
+        <div class="card"><h3>Total Descontos</h3><p id="totalDescGeral">R$ 0</p></div>
+        <div class="card"><h3>Saldo Líquido</h3><p id="totalLiqGeral">R$ 0</p></div>
       </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Tipo</th>
-            <th>Fixo</th>
-            <th>Variável</th>
-            <th>Base</th>
-            <th>Bônus</th>
-            <th>Bônus Acumulado</th>
-            <th>Total</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody id="tabelaProventos"></tbody>
-      </table>
+      <div class="acoes"><button class="btn btn-primary" onclick="abrirModalProv()">+ Novo Provento</button></div>
+      <table><thead><tr><th>Colaborador</th><th>Tipo</th><th>Valor Bruto</th><th>Descontos</th><th>Líquido</th><th>Data</th><th>Ações</th></tr></thead><tbody id="tbodyProv"></tbody></table>
     </div>
   </div>
-
-  <!-- Modal Colaborador -->
-  <div id="modalColaborador" class="modal-overlay">
-    <div class="modal">
-      <div class="modal-header">
-        <span id="tituloModalColaborador">Novo Colaborador</span>
-        <span class="modal-close" onclick="fecharModalColaborador()">&times;</span>
-      </div>
-      <div class="modal-body">
-        <input type="hidden" id="colabId">
-        <div class="form-row">
-          <label for="colabNome">Nome</label>
-          <input type="text" id="colabNome">
-        </div>
-        <div class="form-row">
-          <label for="colabCpf">CPF</label>
-          <input type="text" id="colabCpf" maxlength="14">
-        </div>
-        <div class="form-row">
-          <label for="colabTipo">Tipo</label>
-          <select id="colabTipo">
-            <option value="">Selecione</option>
-            <option value="Advogado">Advogado</option>
-            <option value="Estagiário">Estagiário</option>
-            <option value="Funcionário">Funcionário</option>
-            <option value="Parceiro">Parceiro</option>
-            <option value="Outro">Outro</option>
-          </select>
-        </div>
-        <div class="form-row">
-          <label for="colabFixo">Fixo (R$)</label>
-          <input type="text" id="colabFixo" class="moeda" inputmode="decimal">
-        </div>
-        <div class="form-row">
-          <label for="colabAdmissao">Admissão</label>
-          <input type="date" id="colabAdmissao">
-        </div>
-        <div class="form-row">
-          <label for="colabStatus">Status</label>
-          <select id="colabStatus">
-            <option value="Ativo">Ativo</option>
-            <option value="Inativo">Inativo</option>
-          </select>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="limparFormColaborador()">Limpar</button>
-        <button class="btn btn-primary" onclick="salvarColaborador()">Salvar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Provento -->
-  <div id="modalProvento" class="modal-overlay">
-    <div class="modal">
-      <div class="modal-header">
-        <span id="tituloModalProvento">Novo Provento</span>
-        <span class="modal-close" onclick="fecharModalProvento()">&times;</span>
-      </div>
-      <div class="modal-body">
-        <input type="hidden" id="provId">
-        <div class="form-row">
-          <label for="provColaborador">Colaborador</label>
-          <select id="provColaborador" onchange="aoSelecionarColaborador()">
-            <option value="">Selecione</option>
-          </select>
-        </div>
-        <div class="form-row">
-          <label for="provNome">Nome</label>
-          <input type="text" id="provNome" class="readonly" readonly>
-        </div>
-        <div class="form-row">
-          <label for="provTipo">Tipo</label>
-          <input type="text" id="provTipo" class="readonly" readonly>
-        </div>
-        <div class="form-row">
-          <label for="provFixo">Fixo</label>
-          <input type="text" id="provFixo" class="moeda" inputmode="decimal" oninput="calcularTotalProvento()">
-        </div>
-        <div class="form-row">
-          <label for="provVariavel">Variável</label>
-          <input type="text" id="provVariavel" class="moeda" inputmode="decimal" oninput="calcularTotalProvento()">
-        </div>
-        <div class="form-row">
-          <label for="provBase">Base</label>
-          <input type="text" id="provBase" class="moeda" inputmode="decimal" oninput="calcularTotalProvento()">
-        </div>
-        <div class="form-row">
-          <label for="provBonus">Bônus</label>
-          <input type="text" id="provBonus" class="moeda" inputmode="decimal" oninput="calcularTotalProvento()">
-        </div>
-        <div class="form-row">
-          <label for="provBonusAcumulado">Bônus Acumulado</label>
-          <input type="text" id="provBonusAcumulado" class="moeda" inputmode="decimal" oninput="calcularTotalProvento()">
-        </div>
-        <div class="form-row">
-          <label for="provTotal">Total (auto calculado)</label>
-          <input type="text" id="provTotal" class="readonly moeda" inputmode="decimal" readonly>
-        </div>
-        <div class="form-row mes-ano">
-          <div style="flex:1">
-            <label for="provMes">Mês</label>
-            <select id="provMes">
-              <option value="1">Janeiro</option>
-              <option value="2">Fevereiro</option>
-              <option value="3">Março</option>
-              <option value="4">Abril</option>
-              <option value="5">Maio</option>
-              <option value="6">Junho</option>
-              <option value="7">Julho</option>
-              <option value="8">Agosto</option>
-              <option value="9">Setembro</option>
-              <option value="10">Outubro</option>
-              <option value="11">Novembro</option>
-              <option value="12">Dezembro</option>
-            </select>
-          </div>
-          <div style="flex:1">
-            <label for="provAno">Ano</label>
-            <select id="provAno"></select>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="limparFormProvento()">Limpar</button>
-        <button class="btn btn-primary" onclick="salvarProvento()">Salvar</button>
-      </div>
-    </div>
-  </div>
-
+  <div class="modal-overlay" id="modalColab"><div class="modal"><h2 id="tituloModalColab">Novo Colaborador</h2><form id="formColab"><input type="hidden" id="colabId"><label>Nome</label><input type="text" id="colabNome" required><label>Cargo</label><input type="text" id="colabCargo"><label>Salário Base (R$)</label><input type="number" id="colabSalario" step="0.01" required><div class="form-actions"><button type="button" class="btn btn-secondary" onclick="fecharModalColab()">Cancelar</button><button type="submit" class="btn btn-primary">Salvar</button></div></form></div></div>
+  <div class="modal-overlay" id="modalProv"><div class="modal"><h2 id="tituloModalProv">Novo Provento</h2><form id="formProv"><input type="hidden" id="provId"><label>Colaborador</label><select id="provColab" required></select><label>Tipo</label><select id="provTipo"><option>Salário</option><option>Comissão</option><option>Bônus</option><option>Férias</option><option>13º</option><option>Outro</option></select><label>Valor Bruto (R$)</label><input type="number" id="provBruto" step="0.01" required><label>Descontos (R$)</label><input type="number" id="provDescontos" step="0.01"><label>Data</label><input type="date" id="provData"><div class="form-actions"><button type="button" class="btn btn-secondary" onclick="fecharModalProv()">Cancelar</button><button type="submit" class="btn btn-primary">Salvar</button></div></form></div></div>
+  <script src="db.js"></script>
   <script>
-    let colaboradoresCache = [];
-    let proventosCache = [];
-
-    document.addEventListener('DOMContentLoaded', async () => {
-      preencherAnos();
-      definirMesAnoAtual();
-      aplicarMascaraMoeda(document.querySelectorAll('.moeda'));
-      await carregarColaboradores();
-      await carregarProventosMes();
-    });
-
-    function mudarAba(aba) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      document.querySelector(`.tab[onclick="mudarAba('${aba}')"]`).classList.add('active');
-      document.getElementById('aba-' + aba).classList.add('active');
-      if (aba === 'proventos') carregarProventosMes();
+    const LS_COLAB = 'proventos_colaboradores';
+    const LS_PROV = 'proventos_registros';
+    let colabs = [], provs = [];
+    function getData(k) { try { return JSON.parse(localStorage.getItem(k)||'[]'); } catch(e) { return []; } }
+    function setData(k,v) { localStorage.setItem(k,JSON.stringify(v)); }
+    function genId() { return Date.now().toString(36)+Math.random().toString(36).substr(2,5); }
+    function fmt(v) { return 'R$ '+(v||0).toFixed(2).replace('.',','); }
+    function mudarAba(nome) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+      document.getElementById('aba-'+nome).classList.add('active');
+      document.querySelectorAll('.tab').forEach(el => { if(el.textContent.includes(nome==='colaboradores'?'Colab':'Prov')) el.classList.add('active'); });
     }
-
-    // Helpers moeda
-    function formatarMoeda(valor) {
-      const num = parseFloat(valor) || 0;
-      return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    function carregar() {
+      colabs = getData(LS_COLAB);
+      provs = getData(LS_PROV);
+      renderColab();
+      renderProv();
     }
-
-    function formatarNumero(valor) {
-      const num = parseFloat(valor) || 0;
-      return num.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    function renderColab() {
+      document.getElementById('totalColab').textContent = colabs.length;
+      const tbody = document.getElementById('tbodyColab');
+      tbody.innerHTML = colabs.map(c => `<tr><td>${c.nome}</td><td>${c.cargo||'—'}</td><td class="numero">${fmt(c.salario)}</td><td class="numero">${fmt(0)}</td><td class="numero">${fmt(0)}</td><td class="numero">${fmt(c.salario)}</td><td><button class="btn btn-sm btn-primary" onclick='editarColab("${c.id}")'>Editar</button><button class="btn btn-sm btn-danger" onclick=excluirColab("${c.id}")>Excluir</button></td></tr>`).join('');
     }
-
-    function setValorMoeda(input, valor) {
-      input.value = formatarNumero(valor);
+    function renderProv() {
+      let totalBruto=0, totalDesc=0;
+      const tbody = document.getElementById('tbodyProv');
+      tbody.innerHTML = provs.map(p => { totalBruto+=p.bruto||0; totalDesc+=p.descontos||0; return `<tr><td>${p.colabNome||'—'}</td><td>${p.tipo}</td><td class="numero">${fmt(p.bruto)}</td><td class="numero">${fmt(p.descontos)}</td><td class="numero">${fmt((p.bruto||0)-(p.descontos||0))}</td><td>${p.data||'—'}</td><td><button class="btn btn-sm btn-primary" onclick='editarProv("${p.id}")'>Editar</button><button class="btn btn-sm btn-danger" onclick=excluirProv("${p.id}")>Excluir</button></td></tr>`; }).join('');
+      document.getElementById('totalProvGeral').textContent = fmt(totalBruto);
+      document.getElementById('totalDescGeral').textContent = fmt(totalDesc);
+      document.getElementById('totalLiqGeral').textContent = fmt(totalBruto - totalDesc);
     }
-
-    function getValorMoeda(input) {
-      if (!input || !input.value) return 0;
-      const limpo = input.value.replace(/\./g, '').replace(',', '.').replace(/[^0-9.]/g, '');
-      return parseFloat(limpo) || 0;
-    }
-
-    function aplicarMascaraMoeda(inputs) {
-      inputs.forEach(input => {
-        input.addEventListener('input', () => {
-          let val = input.value.replace(/\D/g, '');
-          if (!val) { input.value = ''; return; }
-          val = (parseInt(val, 10) / 100).toFixed(2);
-          input.value = parseFloat(val).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        });
-        input.addEventListener('blur', () => {
-          if (input.value) input.value = parseFloat(input.value.replace(/\./g, '').replace(',', '.')).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        });
-      });
-    }
-
-    function preencherAnos() {
-      const anoAtual = new Date().getFullYear();
-      const selects = [document.getElementById('selAnoProventos'), document.getElementById('provAno')];
-      selects.forEach(sel => {
-        sel.innerHTML = '';
-        for (let a = anoAtual - 5; a <= anoAtual + 2; a++) {
-          const opt = document.createElement('option');
-          opt.value = a;
-          opt.textContent = a;
-          sel.appendChild(opt);
-        }
-        sel.value = anoAtual;
-      });
-    }
-
-    function definirMesAnoAtual() {
-      const agora = new Date();
-      document.getElementById('selMesProventos').value = agora.getMonth() + 1;
-      document.getElementById('provMes').value = agora.getMonth() + 1;
-    }
-
-    // Colaboradores
-    async function carregarColaboradores() {
-      try {
-        colaboradoresCache = await window.db.colaboradores_listar() || [];
-        renderizarColaboradores();
-      } catch (e) {
-        console.error('Erro ao carregar colaboradores:', e);
-        alert('Erro ao carregar colaboradores.');
-      }
-    }
-
-    function renderizarColaboradores() {
-      const tbody = document.getElementById('tabelaColaboradores');
-      tbody.innerHTML = '';
-      let total = 0, ativos = 0, inativos = 0, folha = 0;
-      if (!colaboradoresCache.length) {
-        tbody.innerHTML = '<tr><td colspan="7" class="empty">Nenhum colaborador cadastrado.</td></tr>';
-      } else {
-        colaboradoresCache.forEach(c => {
-          total++;
-          if (c.status === 'Ativo') ativos++;
-          else inativos++;
-          folha += parseFloat(c.fixo) || 0;
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${c.nome || ''}</td>
-            <td>${c.cpf || ''}</td>
-            <td>${c.tipo || ''}</td>
-            <td>${formatarMoeda(c.fixo)}</td>
-            <td>${c.admissao ? new Date(c.admissao).toLocaleDateString('pt-BR') : '-'}</td>
-            <td>${c.status || 'Ativo'}</td>
-            <td class="actions">
-              <button class="btn btn-success" onclick="editarColaborador(${c.id})">Editar</button>
-              <button class="btn btn-danger" onclick="excluirColaborador(${c.id})">Excluir</button>
-            </td>
-          `;
-          tbody.appendChild(tr);
-        });
-      }
-      document.getElementById('cardColabTotal').textContent = total;
-      document.getElementById('cardColabAtivos').textContent = ativos;
-      document.getElementById('cardColabInativos').textContent = inativos;
-      document.getElementById('cardColabFolha').textContent = formatarMoeda(folha);
-      preencherSelectColaboradores();
-    }
-
-    function abrirModalColaborador(id = null) {
-      limparFormColaborador();
-      document.getElementById('tituloModalColaborador').textContent = id ? 'Editar Colaborador' : 'Novo Colaborador';
-      if (id) {
-        const c = colaboradoresCache.find(x => x.id === id);
-        if (c) {
-          document.getElementById('colabId').value = c.id;
-          document.getElementById('colabNome').value = c.nome || '';
-          document.getElementById('colabCpf').value = c.cpf || '';
-          document.getElementById('colabTipo').value = c.tipo || '';
-          setValorMoeda(document.getElementById('colabFixo'), c.fixo);
-          document.getElementById('colabAdmissao').value = c.admissao || '';
-          document.getElementById('colabStatus').value = c.status || 'Ativo';
-        }
-      }
-      document.getElementById('modalColaborador').classList.add('active');
-    }
-
-    function fecharModalColaborador() {
-      document.getElementById('modalColaborador').classList.remove('active');
-    }
-
-    function limparFormColaborador() {
-      document.getElementById('colabId').value = '';
-      document.getElementById('colabNome').value = '';
-      document.getElementById('colabCpf').value = '';
-      document.getElementById('colabTipo').value = '';
-      document.getElementById('colabFixo').value = '';
-      document.getElementById('colabAdmissao').value = '';
-      document.getElementById('colabStatus').value = 'Ativo';
-    }
-
-    function limparColaboradores() {
-      limparFormColaborador();
-      document.getElementById('tabelaColaboradores').innerHTML = '<tr><td colspan="7" class="empty">Clique em "Novo Colaborador" para cadastrar.</td></tr>';
-      document.getElementById('cardColabTotal').textContent = '0';
-      document.getElementById('cardColabAtivos').textContent = '0';
-      document.getElementById('cardColabInativos').textContent = '0';
-      document.getElementById('cardColabFolha').textContent = 'R$ 0,00';
-    }
-
-    async function salvarColaborador() {
+    function abrirModalColab() { document.getElementById('formColab').reset(); document.getElementById('colabId').value=''; document.getElementById('tituloModalColab').textContent='Novo Colaborador'; document.getElementById('modalColab').classList.add('active'); }
+    function fecharModalColab() { document.getElementById('modalColab').classList.remove('active'); }
+    function abrirModalProv() { document.getElementById('formProv').reset(); document.getElementById('provId').value=''; document.getElementById('tituloModalProv').textContent='Novo Provento'; const sel=document.getElementById('provColab'); sel.innerHTML='<option value="">Selecione</option>'; colabs.forEach(c=>sel.add(new Option(c.nome, c.id))); document.getElementById('provData').value=new Date().toISOString().split('T')[0]; document.getElementById('modalProv').classList.add('active'); }
+    function fecharModalProv() { document.getElementById('modalProv').classList.remove('active'); }
+    document.getElementById('formColab').addEventListener('submit', function(e) {
+      e.preventDefault();
       const id = document.getElementById('colabId').value;
-      const dados = {
-        id: id ? parseInt(id) : null,
-        nome: document.getElementById('colabNome').value.trim(),
-        cpf: document.getElementById('colabCpf').value.trim(),
-        tipo: document.getElementById('colabTipo').value,
-        fixo: getValorMoeda(document.getElementById('colabFixo')),
-        admissao: document.getElementById('colabAdmissao').value,
-        status: document.getElementById('colabStatus').value
-      };
-      if (!dados.nome || !dados.tipo) { alert('Nome e Tipo são obrigatórios.'); return; }
-      try {
-        await window.db.colaboradores_salvar(dados);
-        fecharModalColaborador();
-        await carregarColaboradores();
-      } catch (e) {
-        console.error('Erro ao salvar colaborador:', e);
-        alert('Erro ao salvar colaborador.');
-      }
-    }
-
-    async function excluirColaborador(id) {
-      if (!confirm('Deseja excluir este colaborador?')) return;
-      try {
-        await window.db.colaboradores_excluir(id);
-        await carregarColaboradores();
-      } catch (e) {
-        console.error('Erro ao excluir colaborador:', e);
-        alert('Erro ao excluir colaborador.');
-      }
-    }
-
-    function editarColaborador(id) {
-      abrirModalColaborador(id);
-    }
-
-    function preencherSelectColaboradores() {
-      const sel = document.getElementById('provColaborador');
-      sel.innerHTML = '<option value="">Selecione</option>';
-      colaboradoresCache.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c.id;
-        opt.textContent = c.nome;
-        opt.dataset.nome = c.nome;
-        opt.dataset.tipo = c.tipo;
-        opt.dataset.fixo = c.fixo;
-        sel.appendChild(opt);
-      });
-    }
-
-    function aoSelecionarColaborador() {
-      const sel = document.getElementById('provColaborador');
-      const opt = sel.options[sel.selectedIndex];
-      if (opt && opt.value) {
-        document.getElementById('provNome').value = opt.dataset.nome || '';
-        document.getElementById('provTipo').value = opt.dataset.tipo || '';
-        setValorMoeda(document.getElementById('provFixo'), opt.dataset.fixo || 0);
-      } else {
-        document.getElementById('provNome').value = '';
-        document.getElementById('provTipo').value = '';
-        document.getElementById('provFixo').value = '';
-      }
-      calcularTotalProvento();
-    }
-
-    // Proventos
-    async function carregarProventosMes() {
-      const mes = parseInt(document.getElementById('selMesProventos').value);
-      const ano = parseInt(document.getElementById('selAnoProventos').value);
-      try {
-        proventosCache = await window.db.proventos_listar_por_mes(mes, ano) || [];
-        renderizarProventos();
-      } catch (e) {
-        console.error('Erro ao carregar proventos:', e);
-        alert('Erro ao carregar proventos.');
-      }
-    }
-
-    function renderizarProventos() {
-      const tbody = document.getElementById('tabelaProventos');
-      tbody.innerHTML = '';
-      let total = 0, fixo = 0, variavel = 0, qtd = 0;
-      if (!proventosCache.length) {
-        tbody.innerHTML = '<tr><td colspan="9" class="empty">Nenhum provento para o período selecionado.</td></tr>';
-      } else {
-        proventosCache.forEach(p => {
-          qtd++;
-          total += parseFloat(p.total) || 0;
-          fixo += parseFloat(p.fixo) || 0;
-          variavel += parseFloat(p.variavel) || 0;
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${p.nome || ''}</td>
-            <td>${p.tipo || ''}</td>
-            <td>${formatarMoeda(p.fixo)}</td>
-            <td>${formatarMoeda(p.variavel)}</td>
-            <td>${formatarMoeda(p.base)}</td>
-            <td>${formatarMoeda(p.bonus)}</td>
-            <td>${formatarMoeda(p.bonus_acumulado)}</td>
-            <td>${formatarMoeda(p.total)}</td>
-            <td class="actions">
-              <button class="btn btn-success" onclick="editarProvento(${p.id})">Editar</button>
-              <button class="btn btn-danger" onclick="excluirProvento(${p.id})">Excluir</button>
-            </td>
-          `;
-          tbody.appendChild(tr);
-        });
-      }
-      document.getElementById('cardProvTotal').textContent = formatarMoeda(total);
-      document.getElementById('cardProvFixo').textContent = formatarMoeda(fixo);
-      document.getElementById('cardProvVariavel').textContent = formatarMoeda(variavel);
-      document.getElementById('cardProvQuantidade').textContent = qtd;
-    }
-
-    function abrirModalProvento(id = null) {
-      limparFormProvento();
-      document.getElementById('provMes').value = document.getElementById('selMesProventos').value;
-      document.getElementById('provAno').value = document.getElementById('selAnoProventos').value;
-      document.getElementById('tituloModalProvento').textContent = id ? 'Editar Provento' : 'Novo Provento';
-      if (id) {
-        const p = proventosCache.find(x => x.id === id);
-        if (p) {
-          document.getElementById('provId').value = p.id;
-          document.getElementById('provColaborador').value = p.colaborador_id || '';
-          document.getElementById('provNome').value = p.nome || '';
-          document.getElementById('provTipo').value = p.tipo || '';
-          setValorMoeda(document.getElementById('provFixo'), p.fixo);
-          setValorMoeda(document.getElementById('provVariavel'), p.variavel);
-          setValorMoeda(document.getElementById('provBase'), p.base);
-          setValorMoeda(document.getElementById('provBonus'), p.bonus);
-          setValorMoeda(document.getElementById('provBonusAcumulado'), p.bonus_acumulado);
-          setValorMoeda(document.getElementById('provTotal'), p.total);
-          document.getElementById('provMes').value = p.mes;
-          document.getElementById('provAno').value = p.ano;
-        }
-      }
-      document.getElementById('modalProvento').classList.add('active');
-    }
-
-    function fecharModalProvento() {
-      document.getElementById('modalProvento').classList.remove('active');
-    }
-
-    function limparFormProvento() {
-      document.getElementById('provId').value = '';
-      document.getElementById('provColaborador').value = '';
-      document.getElementById('provNome').value = '';
-      document.getElementById('provTipo').value = '';
-      document.getElementById('provFixo').value = '';
-      document.getElementById('provVariavel').value = '';
-      document.getElementById('provBase').value = '';
-      document.getElementById('provBonus').value = '';
-      document.getElementById('provBonusAcumulado').value = '';
-      document.getElementById('provTotal').value = '';
-      document.getElementById('provMes').value = new Date().getMonth() + 1;
-      document.getElementById('provAno').value = new Date().getFullYear();
-    }
-
-    function limparProventos() {
-      limparFormProvento();
-      document.getElementById('tabelaProventos').innerHTML = '<tr><td colspan="9" class="empty">Selecione um mês/ano e clique em "Carregar Proventos".</td></tr>';
-      document.getElementById('cardProvTotal').textContent = 'R$ 0,00';
-      document.getElementById('cardProvFixo').textContent = 'R$ 0,00';
-      document.getElementById('cardProvVariavel').textContent = 'R$ 0,00';
-      document.getElementById('cardProvQuantidade').textContent = '0';
-    }
-
-    function calcularTotalProvento() {
-      const fixo = getValorMoeda(document.getElementById('provFixo'));
-      const variavel = getValorMoeda(document.getElementById('provVariavel'));
-      const base = getValorMoeda(document.getElementById('provBase'));
-      const bonus = getValorMoeda(document.getElementById('provBonus'));
-      const bonusAcumulado = getValorMoeda(document.getElementById('provBonusAcumulado'));
-      const total = fixo + variavel + base + bonus + bonusAcumulado;
-      setValorMoeda(document.getElementById('provTotal'), total);
-    }
-
-    async function salvarProvento() {
+      const r = {id: id||genId(), nome: document.getElementById('colabNome').value, cargo: document.getElementById('colabCargo').value, salario: parseFloat(document.getElementById('colabSalario').value)||0};
+      if(id) { const i=colabs.findIndex(x=>x.id===id); if(i>=0) colabs[i]=r; else colabs.push(r); } else colabs.push(r);
+      setData(LS_COLAB, colabs); fecharModalColab(); renderColab();
+    });
+    document.getElementById('formProv').addEventListener('submit', function(e) {
+      e.preventDefault();
       const id = document.getElementById('provId').value;
-      const colaborador_id = document.getElementById('provColaborador').value;
-      if (!colaborador_id) { alert('Selecione um colaborador.'); return; }
-      const dados = {
-        id: id ? parseInt(id) : null,
-        colaborador_id: parseInt(colaborador_id),
-        nome: document.getElementById('provNome').value.trim(),
-        tipo: document.getElementById('provTipo').value.trim(),
-        fixo: getValorMoeda(document.getElementById('provFixo')),
-        variavel: getValorMoeda(document.getElementById('provVariavel')),
-        base: getValorMoeda(document.getElementById('provBase')),
-        bonus: getValorMoeda(document.getElementById('provBonus')),
-        bonus_acumulado: getValorMoeda(document.getElementById('provBonusAcumulado')),
-        total: getValorMoeda(document.getElementById('provTotal')),
-        mes: parseInt(document.getElementById('provMes').value),
-        ano: parseInt(document.getElementById('provAno').value)
-      };
-      try {
-        await window.db.proventos_salvar(dados);
-        fecharModalProvento();
-        document.getElementById('selMesProventos').value = dados.mes;
-        document.getElementById('selAnoProventos').value = dados.ano;
-        await carregarProventosMes();
-      } catch (e) {
-        console.error('Erro ao salvar provento:', e);
-        alert('Erro ao salvar provento.');
-      }
-    }
-
-    async function excluirProvento(id) {
-      if (!confirm('Deseja excluir este provento?')) return;
-      try {
-        await window.db.proventos_excluir(id);
-        await carregarProventosMes();
-      } catch (e) {
-        console.error('Erro ao excluir provento:', e);
-        alert('Erro ao excluir provento.');
-      }
-    }
-
-    function editarProvento(id) {
-      abrirModalProvento(id);
-    }
+      const colabId = document.getElementById('provColab').value;
+      const colab = colabs.find(c=>c.id===colabId);
+      const r = {id: id||genId(), colabId, colabNome: colab?colab.nome:'—', tipo: document.getElementById('provTipo').value, bruto: parseFloat(document.getElementById('provBruto').value)||0, descontos: parseFloat(document.getElementById('provDescontos').value)||0, data: document.getElementById('provData').value};
+      if(id) { const i=provs.findIndex(x=>x.id===id); if(i>=0) provs[i]=r; else provs.push(r); } else provs.push(r);
+      setData(LS_PROV, provs); fecharModalProv(); renderProv();
+    });
+    function editarColab(id) { const c=colabs.find(x=>x.id===id); if(!c) return; document.getElementById('colabId').value=c.id; document.getElementById('colabNome').value=c.nome; document.getElementById('colabCargo').value=c.cargo||''; document.getElementById('colabSalario').value=c.salario; document.getElementById('tituloModalColab').textContent='Editar Colaborador'; document.getElementById('modalColab').classList.add('active'); }
+    function excluirColab(id) { if(confirm('Excluir?')){colabs=colabs.filter(x=>x.id!==id);setData(LS_COLAB,colabs);renderColab();} }
+    function editarProv(id) { const p=provs.find(x=>x.id===id); if(!p) return; document.getElementById('provId').value=p.id; const sel=document.getElementById('provColab'); sel.innerHTML='<option value="">Selecione</option>'; colabs.forEach(c=>sel.add(new Option(c.nome, c.id))); sel.value=p.colabId; document.getElementById('provTipo').value=p.tipo; document.getElementById('provBruto').value=p.bruto; document.getElementById('provDescontos').value=p.descontos; document.getElementById('provData').value=p.data; document.getElementById('tituloModalProv').textContent='Editar Provento'; document.getElementById('modalProv').classList.add('active'); }
+    function excluirProv(id) { if(confirm('Excluir?')){provs=provs.filter(x=>x.id!==id);setData(LS_PROV,provs);renderProv();} }
+    document.addEventListener('DOMContentLoaded', carregar);
   </script>
 </body>
 </html>

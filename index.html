@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Controle do Escritório</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             min-height: 100vh;
@@ -20,7 +15,6 @@
             background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
             padding: 20px;
         }
-
         .card {
             background: #ffffff;
             border-radius: 16px;
@@ -30,237 +24,92 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             animation: fadeIn 0.5s ease-in-out;
         }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-16px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .header { text-align: center; margin-bottom: 32px; }
+        .header h1 { font-size: 24px; color: #0f172a; margin-bottom: 8px; }
+        .header p { font-size: 14px; color: #64748b; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px; }
+        .input-wrapper { display: flex; align-items: center; border: 1px solid #e2e8f0; border-radius: 10px; background: #f8fafc; transition: 0.2s; padding: 0 12px; }
+        .input-wrapper:focus-within { border-color: #0a58ca; box-shadow: 0 0 0 3px rgba(10, 88, 202, 0.15); background: #fff; }
+        .input-wrapper input { flex: 1; border: none; background: transparent; padding: 14px 10px; font-size: 14px; outline: none; }
+        .btn-login {
+            width: 100%; padding: 14px; background: linear-gradient(135deg, #0a58ca, #1e40af);
+            color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700;
+            cursor: pointer; transition: 0.2s;
         }
-
-        .header {
-            text-align: center;
-            margin-bottom: 28px;
-        }
-
-        .header h1 {
-            font-size: 1.6rem;
-            color: #1e293b;
-            margin-bottom: 6px;
-        }
-
-        .header p {
-            font-size: 0.95rem;
-            color: #64748b;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 0.9rem;
-            color: #334155;
-            font-weight: 600;
-        }
-
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .input-wrapper .icon {
-            position: absolute;
-            left: 12px;
-            font-size: 1rem;
-            color: #64748b;
-            pointer-events: none;
-        }
-
-        .input-wrapper input {
-            width: 100%;
-            padding: 12px 42px 12px 38px;
-            border: 1px solid #cbd5e1;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            color: #1e293b;
-            outline: none;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .input-wrapper input:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-        }
-
-        .input-wrapper .toggle-senha {
-            position: absolute;
-            right: 12px;
-            font-size: 1rem;
-            color: #64748b;
-            cursor: pointer;
-            user-select: none;
-            transition: color 0.2s ease, transform 0.2s ease;
-        }
-
-        .input-wrapper .toggle-senha:hover {
-            color: #2563eb;
-            transform: scale(1.1);
-        }
-
-        .btn-entrar {
-            width: 100%;
-            padding: 13px;
-            background: #2563eb;
-            color: #ffffff;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s ease, transform 0.1s ease;
-            margin-top: 8px;
-        }
-
-        .btn-entrar:hover {
-            background: #1d4ed8;
-        }
-
-        .btn-entrar:active {
-            transform: scale(0.99);
-        }
-
-        .btn-entrar:disabled {
-            background: #93c5fd;
-            cursor: not-allowed;
-        }
-
-        .mensagem {
-            margin-top: 14px;
-            padding: 10px 12px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            text-align: center;
-            display: none;
-        }
-
-        .mensagem.erro {
-            display: block;
-            background: #fee2e2;
-            color: #991b1b;
-            border: 1px solid #fecaca;
-        }
-
-        .mensagem.loading {
-            display: block;
-            background: #dbeafe;
-            color: #1e40af;
-            border: 1px solid #bfdbfe;
-        }
-
-        @media (max-width: 480px) {
-            .card {
-                padding: 32px 24px;
-            }
-        }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(10, 88, 202, 0.4); }
+        .btn-login:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .mensagem { display: none; margin-top: 16px; padding: 12px; border-radius: 8px; font-size: 13px; text-align: center; }
+        .mensagem.erro { display: block; background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+        .mensagem.loading { display: block; background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+        .senha-wrapper { position: relative; }
+        .btn-toggle-senha { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 16px; padding: 4px; }
+        @media (max-width: 480px) { .card { padding: 32px 24px; } }
     </style>
 </head>
 <body>
     <div class="card">
+        <div style="text-align:center;margin-bottom:20px;">
+            <img src="https://adapta-one-prod.s3.sa-east-1.amazonaws.com/apolloayres%40yahoo.com.br/png/image-019eea86-df20-753e-b049-a7c4515d7a68.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3FLD6RMYLYFE2L2Q%2F20260621%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260621T160143Z&X-Amz-Expires=3600&X-Amz-Signature=d86ac73935a9237a01f8898aab4f62b0c323de884239f0049abf5a99c09677ae&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" alt="Apollo Ayres" style="height:80px;width:auto;">
+        </div>
         <div class="header">
             <h1>Controle do Escritório</h1>
             <p>Acesse sua conta</p>
         </div>
-
         <form id="form-login" onsubmit="event.preventDefault(); logar();">
             <div class="form-group">
                 <label for="email">E-mail</label>
                 <div class="input-wrapper">
-                    <span class="icon">✉️</span>
+                    ✉️
                     <input type="email" id="email" placeholder="seu@email.com" required autocomplete="email">
                 </div>
             </div>
-
             <div class="form-group">
                 <label for="senha">Senha</label>
-                <div class="input-wrapper">
-                    <span class="icon">🔒</span>
-                    <input type="password" id="senha" placeholder="Digite sua senha" required autocomplete="current-password">
-                    <span class="toggle-senha" id="btn-toggle-senha" onclick="toggleSenha()" title="Mostrar senha">👁️</span>
+                <div class="input-wrapper senha-wrapper">
+                    🔒
+                    <input type="password" id="senha" placeholder="Sua senha" required autocomplete="current-password">
+                    <button type="button" id="btn-toggle-senha" class="btn-toggle-senha" onclick="toggleSenha()" title="Mostrar senha">👁️</button>
                 </div>
             </div>
-
-            <button type="submit" id="btn-entrar" class="btn-entrar">Entrar</button>
+            <button type="submit" class="btn-login" id="btn-login">Entrar</button>
+            <div id="mensagem" class="mensagem"></div>
         </form>
-
-        <div id="mensagem" class="mensagem"></div>
     </div>
-
-    <script src="db.js"></script>
     <script src="auth.js"></script>
     <script>
         async function logar() {
             const email = document.getElementById('email').value.trim();
             const senha = document.getElementById('senha').value;
-            const btn = document.getElementById('btn-entrar');
+            const btn = document.getElementById('btn-login');
             const mensagem = document.getElementById('mensagem');
-
-            if (!email || !senha) {
-                mostrarErro('Por favor, preencha o e-mail e a senha.');
-                return;
-            }
-
+            if (!email || !senha) { mostrarErro('Preencha todos os campos.'); return; }
             btn.disabled = true;
             btn.textContent = 'Entrando...';
             mensagem.className = 'mensagem loading';
             mensagem.textContent = 'Entrando...';
-
             try {
-                if (typeof window.fazerLogin !== 'function') {
-                    throw new Error('Serviço de autenticação não disponível.');
-                }
-
+                if (typeof window.fazerLogin !== 'function') throw new Error('Serviço de autenticação não disponível.');
                 const resultado = await window.fazerLogin(email, senha);
-
-                if (resultado && resultado.sucesso) {
-                    window.location.href = 'dashboard.html';
-                } else {
-                    throw new Error((resultado && resultado.mensagem) || 'E-mail ou senha incorretos.');
-                }
+                if (resultado && resultado.sucesso) window.location.href = 'dashboard.html';
+                else throw new Error((resultado && resultado.mensagem) || 'E-mail ou senha incorretos.');
             } catch (error) {
                 btn.disabled = false;
                 btn.textContent = 'Entrar';
                 mostrarErro(error.message || 'Erro ao tentar entrar. Tente novamente.');
             }
         }
-
         function mostrarErro(texto) {
             const mensagem = document.getElementById('mensagem');
             mensagem.className = 'mensagem erro';
             mensagem.textContent = texto;
         }
-
         function toggleSenha() {
             const input = document.getElementById('senha');
             const btn = document.getElementById('btn-toggle-senha');
-
-            if (input.type === 'password') {
-                input.type = 'text';
-                btn.textContent = '🙈';
-                btn.title = 'Ocultar senha';
-            } else {
-                input.type = 'password';
-                btn.textContent = '👁️';
-                btn.title = 'Mostrar senha';
-            }
-
+            if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; btn.title = 'Ocultar senha'; }
+            else { input.type = 'password'; btn.textContent = '👁️'; btn.title = 'Mostrar senha'; }
             input.focus();
         }
     </script>

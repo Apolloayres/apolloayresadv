@@ -6,6 +6,8 @@
   <title>Auditoria - Controle do Escritório</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    .topo-logo { background-color: #fff; padding: 15px 20px; display: flex; justify-content: center; align-items: center; }
+    .logo-escritorio { height: 70px; width: auto; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f0f2f5;
@@ -158,14 +160,9 @@
       cursor: pointer;
       font-size: 14px;
     }
-    .paginacao button:disabled { background-color: #adb5bd; cursor: not-allowed; }
+    .paginacao button:disabled { background-color: #ccc; cursor: not-allowed; }
     .paginacao span { font-size: 14px; color: #555; }
-    .mensagem {
-      padding: 16px;
-      text-align: center;
-      color: #666;
-      font-size: 14px;
-    }
+    .mensagem { text-align: center; padding: 30px; color: #666; font-style: italic; }
     .erro {
       background-color: #f8d7da;
       color: #721c24;
@@ -177,6 +174,9 @@
   </style>
 </head>
 <body>
+  <div class="topo-logo">
+    <img src="https://adapta-one-prod.s3.sa-east-1.amazonaws.com/apolloayres%40yahoo.com.br/png/image-019eea86-df20-753e-b049-a7c4515d7a68.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3FLD6RMYLYFE2L2Q%2F20260621%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260621T160143Z&X-Amz-Expires=3600&X-Amz-Signature=d86ac73935a9237a01f8898aab4f62b0c323de884239f0049abf5a99c09677ae&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" alt="Apollo Ayres" class="logo-escritorio">
+  </div>
   <nav>
     <a href="home.html">Home</a>
     <a href="dashboard.html">Dashboard</a>
@@ -190,172 +190,79 @@
     <a href="auditoria.html">Auditoria</a>
     <a href="usuarios.html">Usuários</a>
   </nav>
-
   <div class="container">
     <a href="home.html" class="voltar-btn">← Voltar</a>
-
     <h1>📋 Auditoria do Sistema</h1>
     <p class="subtitle">Registro de todas as alterações realizadas no sistema</p>
-
     <div id="mensagem-erro"></div>
-
     <div class="grid4">
-      <div class="card">
-        <div class="card-value" id="total-registros">0</div>
-        <div class="card-label">Total de Registros</div>
-      </div>
-      <div class="card">
-        <div class="card-value" id="total-criacao">0</div>
-        <div class="card-label">Ações de Criação</div>
-      </div>
-      <div class="card">
-        <div class="card-value" id="total-edicao">0</div>
-        <div class="card-label">Ações de Edição</div>
-      </div>
-      <div class="card">
-        <div class="card-value" id="total-exclusao">0</div>
-        <div class="card-label">Ações de Exclusão</div>
-      </div>
+      <div class="card"><div class="card-value" id="total-registros">0</div><div class="card-label">Total de Registros</div></div>
+      <div class="card"><div class="card-value" id="total-criacao">0</div><div class="card-label">Ações de Criação</div></div>
+      <div class="card"><div class="card-value" id="total-edicao">0</div><div class="card-label">Ações de Edição</div></div>
+      <div class="card"><div class="card-value" id="total-exclusao">0</div><div class="card-label">Ações de Exclusão</div></div>
     </div>
-
     <div class="filtros">
-      <div>
-        <label for="data-inicio">Data Início</label>
-        <input type="date" id="data-inicio" />
-      </div>
-      <div>
-        <label for="data-fim">Data Fim</label>
-        <input type="date" id="data-fim" />
-      </div>
-      <div>
-        <label for="filtro-modulo">Módulo</label>
-        <select id="filtro-modulo">
-          <option value="">Todos</option>
-          <option value="receitas">Receitas</option>
-          <option value="despesas">Despesas</option>
-          <option value="contas">Contas</option>
-          <option value="aplicacoes">Aplicações</option>
-          <option value="imoveis">Imóveis</option>
-          <option value="unidades">Unidades</option>
-          <option value="clientes">Clientes</option>
-          <option value="colaboradores">Colaboradores</option>
-          <option value="proventos">Proventos</option>
-          <option value="marketing">Marketing</option>
-          <option value="usuarios">Usuários</option>
-        </select>
-      </div>
-      <div>
-        <label for="filtro-usuario">Usuário (email)</label>
-        <input type="text" id="filtro-usuario" placeholder="ex: usuario@email.com" />
-      </div>
+      <div><label for="data-inicio">Data Início</label><input type="date" id="data-inicio"></div>
+      <div><label for="data-fim">Data Fim</label><input type="date" id="data-fim"></div>
+      <div><label for="filtro-modulo">Módulo</label><select id="filtro-modulo"><option value="">Todos</option><option value="receitas">Receitas</option><option value="despesas">Despesas</option><option value="contas">Contas</option><option value="aplicacoes">Aplicações</option><option value="imoveis">Imóveis</option><option value="unidades">Unidades</option><option value="clientes">Clientes</option><option value="colaboradores">Colaboradores</option><option value="proventos">Proventos</option><option value="marketing">Marketing</option><option value="usuarios">Usuários</option></select></div>
+      <div><label for="filtro-usuario">Usuário (email)</label><input type="text" id="filtro-usuario" placeholder="ex: usuario@email.com"></div>
       <button class="btn btn-primary" onclick="aplicarFiltros()">Filtrar</button>
       <button class="btn btn-secondary" onclick="limparFiltros()">Limpar Filtros</button>
     </div>
-
     <div class="table-wrap">
       <table>
-        <thead>
-          <tr>
-            <th>Data/Hora</th>
-            <th>Módulo</th>
-            <th>Ação</th>
-            <th>Usuário</th>
-            <th>Descrição</th>
-            <th>Detalhes</th>
-          </tr>
-        </thead>
-        <tbody id="tabela-auditoria">
-          <tr>
-            <td colspan="6" class="mensagem">Carregando registros de auditoria...</td>
-          </tr>
-        </tbody>
+        <thead><tr><th>Data/Hora</th><th>Módulo</th><th>Ação</th><th>Usuário</th><th>Descrição</th><th>Detalhes</th></tr></thead>
+        <tbody id="tabela-auditoria"><tr><td colspan="6" class="mensagem">Carregando registros de auditoria...</td></tr></tbody>
       </table>
     </div>
-
     <div class="paginacao">
       <button id="btn-anterior" onclick="paginaAnterior()" disabled>Anterior</button>
       <span id="info-pagina">Página 1 de 1</span>
       <button id="btn-proximo" onclick="paginaProxima()" disabled>Próximo</button>
     </div>
   </div>
-
   <script src="db.js"></script>
   <script src="auth.js"></script>
-
   <script>
     let todosLogs = [];
     let logsFiltrados = [];
     let paginaAtual = 1;
     const itensPorPagina = 20;
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      try {
-        if (typeof window.verificarAutenticacao === 'function') {
-          await window.verificarAutenticacao();
-        }
-      } catch (err) {
-        console.warn('verificarAutenticacao não disponível:', err);
-      }
-
-      await carregarAuditoria();
-    });
-
     async function carregarAuditoria() {
       try {
-        if (!window.db || typeof window.db.auditoria_listar !== 'function') {
+        if (typeof window.db === 'undefined' || typeof window.db.auditoria_listar !== 'function') {
           throw new Error('A função de auditoria não está disponível no momento. Verifique a conexão com o Supabase.');
         }
-
         todosLogs = await window.db.auditoria_listar() || [];
         aplicarFiltros(false);
       } catch (erro) {
         mostrarErro('Erro ao carregar auditoria: ' + erro.message);
-        document.getElementById('tabela-auditoria').innerHTML =
-          '<tr><td colspan="6" class="mensagem">Nenhum registro encontrado.</td></tr>';
+        document.getElementById('tabela-auditoria').innerHTML = '<tr><td colspan="6" class="mensagem">Nenhum registro encontrado.</td></tr>';
         atualizarIndicadores([]);
       }
     }
 
     async function aplicarFiltros(consultar = true) {
       try {
+        if (consultar) {
+          todosLogs = await window.db.auditoria_listar() || [];
+        }
         const dataInicio = document.getElementById('data-inicio').value;
         const dataFim = document.getElementById('data-fim').value;
         const modulo = document.getElementById('filtro-modulo').value;
-        const usuario = document.getElementById('filtro-usuario').value.trim().toLowerCase();
-
-        let dados = [];
-
-        if (consultar && window.db) {
-          if (dataInicio && dataFim && typeof window.db.auditoria_listar_por_periodo === 'function') {
-            dados = await window.db.auditoria_listar_por_periodo(dataInicio, dataFim) || [];
-          } else if (modulo && typeof window.db.auditoria_listar_por_modulo === 'function') {
-            dados = await window.db.auditoria_listar_por_modulo(modulo) || [];
-          } else if (usuario && typeof window.db.auditoria_listar_por_usuario === 'function') {
-            dados = await window.db.auditoria_listar_por_usuario(usuario) || [];
-          } else if (typeof window.db.auditoria_listar === 'function') {
-            dados = await window.db.auditoria_listar() || [];
-          } else {
-            throw new Error('Função de auditoria não encontrada.');
-          }
-        } else {
-          dados = todosLogs;
-        }
-
-        logsFiltrados = dados.filter(log => {
+        const usuario = document.getElementById('filtro-usuario').value.toLowerCase().trim();
+        logsFiltrados = todosLogs.filter(log => {
           const dt = log.data_hora || log.created_at || log.data || '';
-          const dataLog = new Date(dt);
-          const inicio = dataInicio ? new Date(dataInicio + 'T00:00:00') : null;
-          const fim = dataFim ? new Date(dataFim + 'T23:59:59') : null;
-
-          if (inicio && dataLog < inicio) return false;
-          if (fim && dataLog > fim) return false;
-
-          if (modulo && (log.modulo || '').toLowerCase() !== modulo.toLowerCase()) return false;
-          if (usuario && !(log.usuario || log.email || log.user_email || '').toLowerCase().includes(usuario)) return false;
-
+          if (dataInicio && dt < dataInicio) return false;
+          if (dataFim && dt > dataFim + 'T23:59:59') return false;
+          if (modulo && (log.modulo || '').toLowerCase() !== modulo) return false;
+          if (usuario) {
+            const email = (log.usuario || log.email || log.user_email || '').toLowerCase();
+            if (!email.includes(usuario)) return false;
+          }
           return true;
         });
-
         paginaAtual = 1;
         atualizarIndicadores(logsFiltrados);
         renderizarTabela();
@@ -377,27 +284,45 @@
       const criacao = logs.filter(l => (l.acao || '').toLowerCase() === 'criacao').length;
       const edicao = logs.filter(l => (l.acao || '').toLowerCase() === 'edicao').length;
       const exclusao = logs.filter(l => (l.acao || '').toLowerCase() === 'exclusao').length;
-
       document.getElementById('total-registros').textContent = total;
       document.getElementById('total-criacao').textContent = criacao;
       document.getElementById('total-edicao').textContent = edicao;
       document.getElementById('total-exclusao').textContent = exclusao;
     }
 
+    function formatarDataHora(valor) {
+      if (!valor) return '-';
+      try {
+        const d = new Date(valor);
+        if (isNaN(d.getTime())) return valor;
+        return d.toLocaleString('pt-BR');
+      } catch(e) { return valor; }
+    }
+
+    function formatarModulo(modulo) {
+      return modulo ? modulo.charAt(0).toUpperCase() + modulo.slice(1) : '-';
+    }
+
+    function formatarJson(obj) {
+      try { return JSON.stringify(obj, null, 2); } catch(e) { return String(obj); }
+    }
+
+    function toggleDetalhes(index) {
+      const row = document.getElementById('detalhes-' + index);
+      if (row) row.classList.toggle('active');
+    }
+
     function renderizarTabela() {
       const tbody = document.getElementById('tabela-auditoria');
       tbody.innerHTML = '';
-
       if (logsFiltrados.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" class="mensagem">Nenhum registro encontrado.</td></tr>';
         atualizarPaginacao();
         return;
       }
-
       const inicio = (paginaAtual - 1) * itensPorPagina;
       const fim = inicio + itensPorPagina;
       const paginaLogs = logsFiltrados.slice(inicio, fim);
-
       paginaLogs.forEach((log, index) => {
         const acao = (log.acao || 'criacao').toLowerCase();
         const badgeClass = acao === 'edicao' ? 'badge-edicao' : (acao === 'exclusao' ? 'badge-exclusao' : 'badge-criacao');
@@ -407,73 +332,16 @@
         const usuario = log.usuario || log.email || log.user_email || '-';
         const descricao = log.descricao || log.mensagem || '-';
         const globalIndex = inicio + index;
-
         const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${dataHora}</td>
-          <td>${modulo}</td>
-          <td><span class="badge ${badgeClass}">${acaoLabel}</span></td>
-          <td>${usuario}</td>
-          <td>${descricao}</td>
-          <td><button class="btn-detalhes" onclick="toggleDetalhes(${globalIndex})">Ver detalhes</button></td>
-        `;
+        tr.innerHTML = `<td>${dataHora}</td><td>${modulo}</td><td><span class="badge ${badgeClass}">${acaoLabel}</span></td><td>${usuario}</td><td>${descricao}</td><td><button class="btn-detalhes" onclick="toggleDetalhes(${globalIndex})">Ver detalhes</button></td>`;
         tbody.appendChild(tr);
-
         const trDetalhes = document.createElement('tr');
         trDetalhes.className = 'detalhes-row';
         trDetalhes.id = 'detalhes-' + globalIndex;
-        trDetalhes.innerHTML = `
-          <td colspan="6">
-            <pre>${formatarJson(log)}</pre>
-          </td>
-        `;
+        trDetalhes.innerHTML = `<td colspan="6"><pre>${formatarJson(log)}</pre></td>`;
         tbody.appendChild(trDetalhes);
       });
-
       atualizarPaginacao();
-    }
-
-    function toggleDetalhes(index) {
-      const row = document.getElementById('detalhes-' + index);
-      if (row) row.classList.toggle('active');
-    }
-
-    function formatarDataHora(valor) {
-      if (!valor) return '-';
-      const data = new Date(valor);
-      if (isNaN(data.getTime())) return valor;
-      const dia = String(data.getDate()).padStart(2, '0');
-      const mes = String(data.getMonth() + 1).padStart(2, '0');
-      const ano = data.getFullYear();
-      const horas = String(data.getHours()).padStart(2, '0');
-      const minutos = String(data.getMinutes()).padStart(2, '0');
-      return `${dia}/${mes}/${ano} ${horas}:${minutos}`;
-    }
-
-    function formatarModulo(modulo) {
-      if (!modulo) return '-';
-      const mapa = {
-        receitas: 'Receitas',
-        despesas: 'Despesas',
-        contas: 'Contas',
-        aplicacoes: 'Aplicações',
-        imoveis: 'Imóveis',
-        unidades: 'Unidades',
-        clientes: 'Clientes',
-        colaboradores: 'Colaboradores',
-        proventos: 'Proventos',
-        marketing: 'Marketing',
-        usuarios: 'Usuários'
-      };
-      return mapa[modulo.toLowerCase()] || modulo.charAt(0).toUpperCase() + modulo.slice(1);
-    }
-
-    function formatarJson(log) {
-      try {
-        return JSON.stringify(log, null, 2);
-      } catch {
-        return String(log);
-      }
     }
 
     function atualizarPaginacao() {
@@ -483,26 +351,14 @@
       document.getElementById('btn-proximo').disabled = paginaAtual >= totalPaginas;
     }
 
-    function paginaAnterior() {
-      if (paginaAtual > 1) {
-        paginaAtual--;
-        renderizarTabela();
-      }
-    }
-
-    function paginaProxima() {
-      const totalPaginas = Math.ceil(logsFiltrados.length / itensPorPagina);
-      if (paginaAtual < totalPaginas) {
-        paginaAtual++;
-        renderizarTabela();
-      }
-    }
-
+    function paginaAnterior() { if (paginaAtual > 1) { paginaAtual--; renderizarTabela(); } }
+    function paginaProxima() { const total = Math.ceil(logsFiltrados.length / itensPorPagina); if (paginaAtual < total) { paginaAtual++; renderizarTabela(); } }
     function mostrarErro(mensagem) {
       const div = document.getElementById('mensagem-erro');
       div.innerHTML = `<div class="erro">${mensagem}</div>`;
       setTimeout(() => { div.innerHTML = ''; }, 8000);
     }
+    document.addEventListener('DOMContentLoaded', carregarAuditoria);
   </script>
 </body>
 </html>

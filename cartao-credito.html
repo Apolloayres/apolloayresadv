@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cartão Crédito - Controle do Escritório</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .topo-logo { background-color: #fff; padding: 15px 20px; display: flex; justify-content: center; align-items: center; }
+    .logo-escritorio { height: 70px; width: auto; }
+
+    :root {
+      --azul-escuro: #0a2540;
+      --azul-medio: #1b4965;
+      --azul-claro: #5fa8d3;
+      --verde: #1aa37a;
+      --vermelho: #d9534f;
+      --amarelo: #f0ad4e;
+      --cinza-bg: #f4f6f8;
+      --cinza-texto: #6c757d;
+    }
+
+    body {
+      background-color: var(--cinza-bg);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .navbar {
+      background-color: var(--azul-escuro) !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .navbar-brand, .nav-link {
+      color: #fff !important;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--azul-claro) !important;
+      font-weight: 600;
+    }
+
+    .card-metrica {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      transition: transform 0.2s ease;
+    }
+
+    .card-metrica:hover {
+      transform: translateY(-3px);
+    }
+
+    .card-header-custom {
+      background-color: var(--azul-medio);
+      color: #fff;
+      border-radius: 12px 12px 0 0 !important;
+      padding: 15px 20px;
+      font-weight: 600;
+    }
+
+    .table-custom thead {
+      background-color: var(--azul-medio);
+      color: #fff;
+    }
+
+    .table-custom tbody tr:hover {
+      background-color: rgba(95, 168, 211, 0.1);
+    }
+
+    .status-pago { color: var(--verde); font-weight: 600; }
+    .status-pendente { color: var(--vermelho); font-weight: 600; }
+    .status-parcial { color: var(--amarelo); font-weight: 600; }
+
+    .btn-primary-custom {
+      background-color: var(--azul-medio);
+      border-color: var(--azul-medio);
+    }
+
+    .btn-primary-custom:hover {
+      background-color: var(--azul-escuro);
+      border-color: var(--azul-escuro);
+    }
+
+    .total-bar {
+      background-color: var(--azul-escuro);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    .btn-acao {
+      padding: 4px 10px;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="topo-logo">
+    <img src="https://adapta-one-prod.s3.sa-east-1.amazonaws.com/apolloayres%40yahoo.com.br/png/image-019eea86-df20-753e-b049-a7c4515d7a68.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3FLD6RMYLYFE2L2Q%2F20260621%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260621T160143Z&X-Amz-Expires=3600&X-Amz-Signature=d86ac73935a9237a01f8898aab4f62b0c323de884239f0049abf5a99c09677ae&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" alt="Apollo Ayres" class="logo-escritorio">
+</div>
+
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="home.html">Controle do Escritório</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 flex-wrap">
+          <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="clientes.html">Clientes</a></li>
+          <li class="nav-item"><a class="nav-link" href="processos.html">Processos</a></li>
+          <li class="nav-item"><a class="nav-link" href="financeiro.html">Financeiro</a></li>
+          <li class="nav-item"><a class="nav-link" href="contas-pagar.html">Contas a Pagar</a></li>
+          <li class="nav-item"><a class="nav-link" href="contas-receber.html">Contas a Receber</a></li>
+          <li class="nav-item"><a class="nav-link active" href="cartao-credito.html">Cartão Crédito</a></li>
+          <li class="nav-item"><a class="nav-link" href="despesas.html">Despesas</a></li>
+          <li class="nav-item"><a class="nav-link" href="relatorios.html">Relatórios</a></li>
+          <li class="nav-item"><a class="nav-link" href="configuracoes.html">Configurações</a></li>
+        </ul>
+        <a href="home.html" class="btn btn-light btn-sm">← Voltar</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">💳 Controle de Faturas</h2>
+      <button class="btn btn-primary-custom btn-lg text-white" data-bs-toggle="modal" data-bs-target="#modalFatura">+ Nova Fatura</button>
+    </div>
+
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="card card-metrica h-100">
+          <div class="card-body">
+            <h6 class="text-muted">Total Faturas</h6>
+            <h3 id="metricaTotalFaturas">R$ 0,00</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card card-metrica h-100">
+          <div class="card-body">
+            <h6 class="text-muted">Total Pendente</h6>
+            <h3 id="metricaTotalPendente" class="text-danger">R$ 0,00</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card card-metrica h-100">
+          <div class="card-body">
+            <h6 class="text-muted">Total Pago</h6>
+            <h3 id="metricaTotalPago" class="text-success">R$ 0,00</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-8 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-header-custom">Faturas</div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-custom table-striped mb-0">
+                <thead>
+                  <tr>
+                    <th>Cartão</th>
+                    <th>Mês/Ano</th>
+                    <th>Vencimento</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaFaturas">
+                  <tr>
+                    <td colspan="6" class="text-center text-muted py-4">Nenhuma fatura cadastrada.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="total-bar d-flex justify-content-between">
+            <span>Total Geral</span>
+            <span id="totalGeralFaturas">R$ 0,00</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-header-custom">Resumo por Cartão</div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-custom table-striped mb-0">
+                <thead>
+                  <tr>
+                    <th>Cartão</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaResumoCartao">
+                  <tr>
+                    <td colspan="2" class="text-center text-muted py-4">Nenhum dado disponível.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalFatura" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: var(--azul-escuro); color: #fff;">
+          <h5 class="modal-title" id="modalFaturaTitulo">Nova Fatura</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formFatura">
+            <input type="hidden" id="faturaId">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="cartao" class="form-label">Cartão</label>
+                <input type="text" class="form-control" id="cartao" placeholder="Ex: Nubank, Itaú, Bradesco" required>
+              </div>
+              <div class="col-md-6">
+                <label for="mesAno" class="form-label">Mês/Ano</label>
+                <input type="month" class="form-control" id="mesAno" required>
+              </div>
+              <div class="col-md-6">
+                <label for="vencimento" class="form-label">Vencimento</label>
+                <input type="date" class="form-control" id="vencimento" required>
+              </div>
+              <div class="col-md-6">
+                <label for="valor" class="form-label">Valor</label>
+                <input type="number" class="form-control" id="valor" step="0.01" min="0" placeholder="0,00" required>
+              </div>
+              <div class="col-md-6">
+                <label for="status" class="form-label">Status</label>
+                <select class="form-select" id="status" required>
+                  <option value="Pendente">Pendente</option>
+                  <option value="Pago">Pago</option>
+                  <option value="Parcial">Parcial</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="valorPago" class="form-label">Valor Pago</label>
+                <input type="number" class="form-control" id="valorPago" step="0.01" min="0" placeholder="0,00">
+              </div>
+              <div class="col-12">
+                <label for="observacao" class="form-label">Observação</label>
+                <textarea class="form-control" id="observacao" rows="2" placeholder="Opcional"></textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary-custom text-white" onclick="salvarFatura()">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const STORAGE_KEY = 'faturas_cartao_credito';
+    let faturas = [];
+    let modalFatura;
+
+    document.addEventListener('DOMContentLoaded', function() {
+      modalFatura = new bootstrap.Modal(document.getElementById('modalFatura'));
+      carregarFaturas();
+      configurarModalReset();
+    });
+
+    function configurarModalReset() {
+      document.getElementById('modalFatura').addEventListener('hidden.bs.modal', function () {
+        document.getElementById('formFatura').reset();
+        document.getElementById('faturaId').value = '';
+        document.getElementById('modalFaturaTitulo').textContent = 'Nova Fatura';
+      });
+    }
+
+    function carregarFaturas() {
+      const dados = localStorage.getItem(STORAGE_KEY);
+      faturas = dados ? JSON.parse(dados) : [];
+      renderizarTudo();
+    }
+
+    function salvarFaturas() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(faturas));
+      renderizarTudo();
+    }
+
+    function formatarMoeda(valor) {
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor || 0);
+    }
+
+    function formatarMesAno(mesAno) {
+      if (!mesAno) return '-';
+      const [ano, mes] = mesAno.split('-');
+      return `${mes}/${ano}`;
+    }
+
+    function formatarData(data) {
+      if (!data) return '-';
+      const [ano, mes, dia] = data.split('-');
+      return `${dia}/${mes}/${ano}`;
+    }
+
+    function classeStatus(status) {
+      switch(status) {
+        case 'Pago': return 'status-pago';
+        case 'Pendente': return 'status-pendente';
+        case 'Parcial': return 'status-parcial';
+        default: return 'status-pendente';
+      }
+    }
+
+    function renderizarTudo() {
+      renderizarTabelaFaturas();
+      renderizarResumoCartao();
+      renderizarMetricas();
+    }
+
+    function renderizarTabelaFaturas() {
+      const tbody = document.getElementById('tabelaFaturas');
+      if (faturas.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">Nenhuma fatura cadastrada.</td></tr>';
+        document.getElementById('totalGeralFaturas').textContent = formatarMoeda(0);
+        return;
+      }
+
+      let total = 0;
+      tbody.innerHTML = faturas.map(f => {
+        total += parseFloat(f.valor) || 0;
+        return `
+          <tr>
+            <td>${f.cartao}</td>
+            <td>${formatarMesAno(f.mesAno)}</td>
+            <td>${formatarData(f.vencimento)}</td>
+            <td>${formatarMoeda(f.valor)}</td>
+            <td class="${classeStatus(f.status)}">${f.status}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary btn-acao me-1" onclick="editarFatura('${f.id}')">Editar</button>
+              <button class="btn btn-sm btn-outline-danger btn-acao" onclick="excluirFatura('${f.id}')">Excluir</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+      document.getElementById('totalGeralFaturas').textContent = formatarMoeda(total);
+    }
+
+    function renderizarResumoCartao() {
+      const tbody = document.getElementById('tabelaResumoCartao');
+      if (faturas.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="2" class="text-center text-muted py-4">Nenhum dado disponível.</td></tr>';
+        return;
+      }
+
+      const resumo = faturas.reduce((acc, f) => {
+        acc[f.cartao] = (acc[f.cartao] || 0) + (parseFloat(f.valor) || 0);
+        return acc;
+      }, {});
+
+      const ordenado = Object.entries(resumo).sort((a, b) => b[1] - a[1]);
+      tbody.innerHTML = ordenado.map(([cartao, total]) => `
+        <tr>
+          <td>${cartao}</td>
+          <td>${formatarMoeda(total)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderizarMetricas() {
+      let totalFaturas = 0;
+      let totalPago = 0;
+      let totalPendente = 0;
+
+      faturas.forEach(f => {
+        const valor = parseFloat(f.valor) || 0;
+        const valorPago = parseFloat(f.valorPago) || 0;
+        totalFaturas += valor;
+
+        if (f.status === 'Pago') {
+          totalPago += valor;
+        } else if (f.status === 'Parcial') {
+          totalPago += valorPago;
+          totalPendente += (valor - valorPago);
+        } else {
+          totalPendente += valor;
+        }
+      });
+
+      document.getElementById('metricaTotalFaturas').textContent = formatarMoeda(totalFaturas);
+      document.getElementById('metricaTotalPendente').textContent = formatarMoeda(totalPendente);
+      document.getElementById('metricaTotalPago').textContent = formatarMoeda(totalPago);
+    }
+
+    function salvarFatura() {
+      const form = document.getElementById('formFatura');
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const id = document.getElementById('faturaId').value;
+      const novaFatura = {
+        id: id || Date.now().toString(),
+        cartao: document.getElementById('cartao').value.trim(),
+        mesAno: document.getElementById('mesAno').value,
+        vencimento: document.getElementById('vencimento').value,
+        valor: parseFloat(document.getElementById('valor').value) || 0,
+        status: document.getElementById('status').value,
+        valorPago: parseFloat(document.getElementById('valorPago').value) || 0,
+        observacao: document.getElementById('observacao').value.trim()
+      };
+
+      if (id) {
+        const index = faturas.findIndex(f => f.id === id);
+        if (index !== -1) faturas[index] = novaFatura;
+      } else {
+        faturas.push(novaFatura);
+      }
+
+      salvarFaturas();
+      modalFatura.hide();
+    }
+
+    function editarFatura(id) {
+      const fatura = faturas.find(f => f.id === id);
+      if (!fatura) return;
+
+      document.getElementById('faturaId').value = fatura.id;
+      document.getElementById('cartao').value = fatura.cartao;
+      document.getElementById('mesAno').value = fatura.mesAno;
+      document.getElementById('vencimento').value = fatura.vencimento;
+      document.getElementById('valor').value = fatura.valor;
+      document.getElementById('status').value = fatura.status;
+      document.getElementById('valorPago').value = fatura.valorPago || 0;
+      document.getElementById('observacao').value = fatura.observacao || '';
+      document.getElementById('modalFaturaTitulo').textContent = 'Editar Fatura';
+      modalFatura.show();
+    }
+
+    function excluirFatura(id) {
+      if (!confirm('Tem certeza que deseja excluir esta fatura?')) return;
+      faturas = faturas.filter(f => f.id !== id);
+      salvarFaturas();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cartões e Parcelas - Controle do Escritório</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .topo-logo { background-color: #fff; padding: 15px 20px; display: flex; justify-content: center; align-items: center; }
+    .logo-escritorio { height: 70px; width: auto; }
+
+    body { background-color: #f8f9fa; }
+    .navbar { background-color: #1a237e; }
+    .card { border: none; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .card-resumo { color: #fff; }
+    .card-resumo .card-title { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .card-resumo .display-6 { font-size: 1.8rem; font-weight: 700; }
+    .nav-tabs .nav-link.active { font-weight: 600; color: #1a237e; }
+    .table thead { background-color: #1a237e; color: #fff; }
+    .btn-acao { padding: 0.25rem 0.5rem; font-size: 0.875rem; }
+    .badge-status { font-size: 0.85rem; padding: 0.4em 0.7em; }
+  </style>
+</head>
+<body>
+
+<div class="topo-logo">
+    <img src="https://adapta-one-prod.s3.sa-east-1.amazonaws.com/apolloayres%40yahoo.com.br/png/image-019eea86-df20-753e-b049-a7c4515d7a68.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3FLD6RMYLYFE2L2Q%2F20260621%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260621T160143Z&X-Amz-Expires=3600&X-Amz-Signature=d86ac73935a9237a01f8898aab4f62b0c323de884239f0049abf5a99c09677ae&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" alt="Apollo Ayres" class="logo-escritorio">
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="home.html">Controle do Escritório</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 flex-wrap">
+        <li class="nav-item"><a class="nav-link active" href="cartoes.html">Cartões</a></li>
+        <li class="nav-item"><a class="nav-link" href="clientes.html">Clientes</a></li>
+        <li class="nav-item"><a class="nav-link" href="fornecedores.html">Fornecedores</a></li>
+        <li class="nav-item"><a class="nav-link" href="despesas.html">Despesas</a></li>
+        <li class="nav-item"><a class="nav-link" href="receitas.html">Receitas</a></li>
+        <li class="nav-item"><a class="nav-link" href="relatorios.html">Relatórios</a></li>
+      </ul>
+      <a href="home.html" class="btn btn-light btn-sm">← Voltar</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-4">
+  <h2 class="mb-4">💳 Cartões</h2>
+
+  <!-- Resumo -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card card-resumo bg-primary h-100">
+        <div class="card-body">
+          <h6 class="card-title">Total em Cartões</h6>
+          <p class="display-6 mb-0" id="totalCartoes">R$ 0,00</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-resumo bg-success h-100">
+        <div class="card-body">
+          <h6 class="card-title">Parcelas Pagas</h6>
+          <p class="display-6 mb-0" id="totalPagas">R$ 0,00</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-resumo bg-warning h-100">
+        <div class="card-body">
+          <h6 class="card-title">Parcelas Pendentes</h6>
+          <p class="display-6 mb-0" id="totalPendentes">R$ 0,00</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-resumo bg-info h-100">
+        <div class="card-body">
+          <h6 class="card-title">Próximo Vencimento</h6>
+          <p class="display-6 mb-0" id="proxVencimento">-</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Abas -->
+  <ul class="nav nav-tabs mb-3" id="cartoesTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="cartoes-tab" data-bs-toggle="tab" data-bs-target="#cartoes" type="button" role="tab">Cartões</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="parcelas-tab" data-bs-toggle="tab" data-bs-target="#parcelas" type="button" role="tab">Parcelas</button>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="cartoesTabContent">
+    <!-- Aba Cartões -->
+    <div class="tab-pane fade show active" id="cartoes" role="tabpanel">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-title mb-0">Meus Cartões</h5>
+            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalCartao">+ Novo Cartão</button>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle" id="tabelaCartoes">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Banco</th>
+                  <th>Limite</th>
+                  <th>Vencimento</th>
+                  <th>Status</th>
+                  <th class="text-end">Ações</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Aba Parcelas -->
+    <div class="tab-pane fade" id="parcelas" role="tabpanel">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-title mb-0">Parcelas</h5>
+            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalParcela">+ Nova Parcela</button>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle" id="tabelaParcelas">
+              <thead>
+                <tr>
+                  <th>Cartão</th>
+                  <th>Descrição</th>
+                  <th>Valor</th>
+                  <th>Parcela</th>
+                  <th>Vencimento</th>
+                  <th>Status</th>
+                  <th class="text-end">Ações</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Cartão -->
+<div class="modal fade" id="modalCartao" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cadastrar Cartão</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formCartao">
+          <input type="hidden" id="cartaoId">
+          <div class="mb-3">
+            <label for="cartaoNome" class="form-label">Nome do Cartão</label>
+            <input type="text" class="form-control" id="cartaoNome" required>
+          </div>
+          <div class="mb-3">
+            <label for="cartaoBanco" class="form-label">Banco</label>
+            <input type="text" class="form-control" id="cartaoBanco" required>
+          </div>
+          <div class="mb-3">
+            <label for="cartaoLimite" class="form-label">Limite (R$)</label>
+            <input type="number" step="0.01" class="form-control" id="cartaoLimite" required>
+          </div>
+          <div class="mb-3">
+            <label for="cartaoVencimento" class="form-label">Dia do Vencimento</label>
+            <input type="number" class="form-control" id="cartaoVencimento" min="1" max="31" required>
+          </div>
+          <div class="mb-3">
+            <label for="cartaoStatus" class="form-label">Status</label>
+            <select class="form-select" id="cartaoStatus" required>
+              <option value="Ativo">Ativo</option>
+              <option value="Cancelado">Cancelado</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="salvarCartao()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Parcela -->
+<div class="modal fade" id="modalParcela" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cadastrar Parcela</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formParcela">
+          <input type="hidden" id="parcelaId">
+          <div class="mb-3">
+            <label for="parcelaCartao" class="form-label">Cartão</label>
+            <select class="form-select" id="parcelaCartao" required></select>
+          </div>
+          <div class="mb-3">
+            <label for="parcelaDescricao" class="form-label">Descrição</label>
+            <input type="text" class="form-control" id="parcelaDescricao" required>
+          </div>
+          <div class="mb-3">
+            <label for="parcelaValor" class="form-label">Valor (R$)</label>
+            <input type="number" step="0.01" class="form-control" id="parcelaValor" required>
+          </div>
+          <div class="row">
+            <div class="col-6 mb-3">
+              <label for="parcelaNumero" class="form-label">Parcela Atual</label>
+              <input type="number" class="form-control" id="parcelaNumero" min="1" required>
+            </div>
+            <div class="col-6 mb-3">
+              <label for="parcelaTotal" class="form-label">Total de Parcelas</label>
+              <input type="number" class="form-control" id="parcelaTotal" min="1" required>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="parcelaVencimento" class="form-label">Vencimento</label>
+            <input type="date" class="form-control" id="parcelaVencimento" required>
+          </div>
+          <div class="mb-3">
+            <label for="parcelaStatus" class="form-label">Status</label>
+            <select class="form-select" id="parcelaStatus" required>
+              <option value="Pendente">Pendente</option>
+              <option value="Pago">Pago</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="salvarParcela()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const STORAGE_CARTOES = 'cartoes';
+  const STORAGE_PARCELAS = 'parcelas';
+
+  function formatarMoeda(valor) {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor || 0);
+  }
+
+  function getCartoes() {
+    return JSON.parse(localStorage.getItem(STORAGE_CARTOES)) || [];
+  }
+
+  function setCartoes(lista) {
+    localStorage.setItem(STORAGE_CARTOES, JSON.stringify(lista));
+  }
+
+  function getParcelas() {
+    return JSON.parse(localStorage.getItem(STORAGE_PARCELAS)) || [];
+  }
+
+  function setParcelas(lista) {
+    localStorage.setItem(STORAGE_PARCELAS, JSON.stringify(lista));
+  }
+
+  function gerarId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+  }
+
+  function listarCartoes() {
+    const cartoes = getCartoes();
+    const tbody = document.querySelector('#tabelaCartoes tbody');
+    tbody.innerHTML = '';
+    cartoes.forEach(c => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${c.nome}</td>
+        <td>${c.banco}</td>
+        <td>${formatarMoeda(c.limite)}</td>
+        <td>${c.vencimento}º dia</td>
+        <td><span class="badge badge-status bg-${c.status === 'Ativo' ? 'success' : 'secondary'}">${c.status}</span></td>
+        <td class="text-end">
+          <button class="btn btn-warning btn-acao" onclick="editarCartao('${c.id}')">Editar</button>
+          <button class="btn btn-danger btn-acao" onclick="excluirCartao('${c.id}')">Excluir</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+    atualizarSelectCartoes();
+    atualizarResumo();
+  }
+
+  function listarParcelas() {
+    const parcelas = getParcelas();
+    const cartoes = getCartoes();
+    const tbody = document.querySelector('#tabelaParcelas tbody');
+    tbody.innerHTML = '';
+    parcelas.forEach(p => {
+      const cartao = cartoes.find(c => c.id === p.cartaoId);
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${cartao ? cartao.nome : '—'}</td>
+        <td>${p.descricao}</td>
+        <td>${formatarMoeda(p.valor)}</td>
+        <td>${p.numero}/${p.total}</td>
+        <td>${new Date(p.vencimento + 'T00:00:00').toLocaleDateString('pt-BR')}</td>
+        <td><span class="badge badge-status bg-${p.status === 'Pago' ? 'success' : 'warning'}">${p.status}</span></td>
+        <td class="text-end">
+          <button class="btn btn-warning btn-acao" onclick="editarParcela('${p.id}')">Editar</button>
+          <button class="btn btn-danger btn-acao" onclick="excluirParcela('${p.id}')">Excluir</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+    atualizarResumo();
+  }
+
+  function atualizarSelectCartoes() {
+    const select = document.getElementById('parcelaCartao');
+    select.innerHTML = '';
+    getCartoes().forEach(c => {
+      const option = document.createElement('option');
+      option.value = c.id;
+      option.textContent = `${c.nome} - ${c.banco}`;
+      select.appendChild(option);
+    });
+  }
+
+  function atualizarResumo() {
+    const cartoes = getCartoes();
+    const parcelas = getParcelas();
+    const totalCartoes = cartoes.reduce((acc, c) => acc + Number(c.limite || 0), 0);
+    const totalPagas = parcelas.filter(p => p.status === 'Pago').reduce((acc, p) => acc + Number(p.valor || 0), 0);
+    const totalPendentes = parcelas.filter(p => p.status === 'Pendente').reduce((acc, p) => acc + Number(p.valor || 0), 0);
+    const prox = parcelas
+      .filter(p => p.status === 'Pendente')
+      .sort((a, b) => new Date(a.vencimento) - new Date(b.vencimento))[0];
+
+    document.getElementById('totalCartoes').textContent = formatarMoeda(totalCartoes);
+    document.getElementById('totalPagas').textContent = formatarMoeda(totalPagas);
+    document.getElementById('totalPendentes').textContent = formatarMoeda(totalPendentes);
+    document.getElementById('proxVencimento').textContent = prox
+      ? new Date(prox.vencimento + 'T00:00:00').toLocaleDateString('pt-BR')
+      : '-';
+  }
+
+  function salvarCartao() {
+    const id = document.getElementById('cartaoId').value;
+    const cartoes = getCartoes();
+    const dados = {
+      id: id || gerarId(),
+      nome: document.getElementById('cartaoNome').value,
+      banco: document.getElementById('cartaoBanco').value,
+      limite: Number(document.getElementById('cartaoLimite').value),
+      vencimento: Number(document.getElementById('cartaoVencimento').value),
+      status: document.getElementById('cartaoStatus').value
+    };
+    if (id) {
+      const idx = cartoes.findIndex(c => c.id === id);
+      cartoes[idx] = dados;
+    } else {
+      cartoes.push(dados);
+    }
+    setCartoes(cartoes);
+    bootstrap.Modal.getInstance(document.getElementById('modalCartao')).hide();
+    document.getElementById('formCartao').reset();
+    document.getElementById('cartaoId').value = '';
+    listarCartoes();
+    listarParcelas();
+  }
+
+  function editarCartao(id) {
+    const cartao = getCartoes().find(c => c.id === id);
+    if (!cartao) return;
+    document.getElementById('cartaoId').value = cartao.id;
+    document.getElementById('cartaoNome').value = cartao.nome;
+    document.getElementById('cartaoBanco').value = cartao.banco;
+    document.getElementById('cartaoLimite').value = cartao.limite;
+    document.getElementById('cartaoVencimento').value = cartao.vencimento;
+    document.getElementById('cartaoStatus').value = cartao.status;
+    new bootstrap.Modal(document.getElementById('modalCartao')).show();
+  }
+
+  function excluirCartao(id) {
+    if (!confirm('Deseja realmente excluir este cartão?')) return;
+    setCartoes(getCartoes().filter(c => c.id !== id));
+    setParcelas(getParcelas().filter(p => p.cartaoId !== id));
+    listarCartoes();
+    listarParcelas();
+  }
+
+  function salvarParcela() {
+    const id = document.getElementById('parcelaId').value;
+    const parcelas = getParcelas();
+    const dados = {
+      id: id || gerarId(),
+      cartaoId: document.getElementById('parcelaCartao').value,
+      descricao: document.getElementById('parcelaDescricao').value,
+      valor: Number(document.getElementById('parcelaValor').value),
+      numero: Number(document.getElementById('parcelaNumero').value),
+      total: Number(document.getElementById('parcelaTotal').value),
+      vencimento: document.getElementById('parcelaVencimento').value,
+      status: document.getElementById('parcelaStatus').value
+    };
+    if (id) {
+      const idx = parcelas.findIndex(p => p.id === id);
+      parcelas[idx] = dados;
+    } else {
+      parcelas.push(dados);
+    }
+    setParcelas(parcelas);
+    bootstrap.Modal.getInstance(document.getElementById('modalParcela')).hide();
+    document.getElementById('formParcela').reset();
+    document.getElementById('parcelaId').value = '';
+    listarParcelas();
+  }
+
+  function editarParcela(id) {
+    const parcela = getParcelas().find(p => p.id === id);
+    if (!parcela) return;
+    document.getElementById('parcelaId').value = parcela.id;
+    document.getElementById('parcelaCartao').value = parcela.cartaoId;
+    document.getElementById('parcelaDescricao').value = parcela.descricao;
+    document.getElementById('parcelaValor').value = parcela.valor;
+    document.getElementById('parcelaNumero').value = parcela.numero;
+    document.getElementById('parcelaTotal').value = parcela.total;
+    document.getElementById('parcelaVencimento').value = parcela.vencimento;
+    document.getElementById('parcelaStatus').value = parcela.status;
+    new bootstrap.Modal(document.getElementById('modalParcela')).show();
+  }
+
+  function excluirParcela(id) {
+    if (!confirm('Deseja realmente excluir esta parcela?')) return;
+    setParcelas(getParcelas().filter(p => p.id !== id));
+    listarParcelas();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    listarCartoes();
+    listarParcelas();
+  });
+</script>
+
+</body>
+</html>

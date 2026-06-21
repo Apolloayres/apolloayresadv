@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Processos - Controle do Escritório</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .topo-logo { background-color: #fff; padding: 15px 20px; display: flex; justify-content: center; align-items: center; }
+    .logo-escritorio { height: 70px; width: auto; }
+    :root { --primary-blue: #0a58ca; --light-blue: #e7f1ff; }
+    body { background: #f0f2f5; font-family: 'Segoe UI', sans-serif; }
+    .navbar { background: #0a58ca !important; }
+    .navbar .nav-link, .navbar .navbar-brand { color: #fff !important; }
+    .navbar .nav-link.active { background: rgba(255,255,255,0.15); border-radius: 6px; }
+    .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border: none; }
+    .card-header { background: #0a58ca !important; color: #fff; border-radius: 8px 8px 0 0 !important; font-weight: 600; }
+    .table thead th { background: #0a58ca; color: #fff; }
+    .table tbody tr:hover { background: var(--light-blue); }
+    .btn-primary { background: #0a58ca; border-color: #0a58ca; }
+    .btn-primary:hover { background: #084298; }
+    .btn-secondary { background: #6c757d; border-color: #6c757d; }
+    .btn-danger { background: #dc3545; border-color: #dc3545; }
+    .btn-success { background: #198754; border-color: #198754; }
+    .nav-tabs .nav-link.active { color: var(--primary-blue); border-bottom: 2px solid var(--primary-blue); font-weight: 600; }
+    .nav-tabs .nav-link { color: #6c757d; }
+    .form-control:focus, .form-select:focus { border-color: #0a58ca; box-shadow: 0 0 0 0.2rem rgba(10,88,202,0.25); }
+    .badge-ativo { background: #d1e7dd; color: #0f5132; }
+    .badge-pendente { background: #fff3cd; color: #856404; }
+    .badge-concluido { background: #cff4fc; color: #055160; }
+    .badge-suspenso { background: #f8d7da; color: #842029; }
+    .badge-encerrado { background: #e2e3e5; color: #41464b; }
+  </style>
+</head>
+<body>
+  <div class="topo-logo">
+      <img src="https://adapta-one-prod.s3.sa-east-1.amazonaws.com/apolloayres%40yahoo.com.br/png/image-019eea86-df20-753e-b049-a7c4515d7a68.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3FLD6RMYLYFE2L2Q%2F20260621%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260621T160143Z&X-Amz-Expires=3600&X-Amz-Signature=d86ac73935a9237a01f8898aab4f62b0c323de884239f0049abf5a99c09677ae&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" alt="Apollo Ayres" class="logo-escritorio">
+  </div>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="home.html">Controle do Escritório</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=""></button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 flex-wrap">
+          <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="cadastros.html">Cadastros</a></li>
+          <li class="nav-item"><a class="nav-link" href="despesas.html">Despesas</a></li>
+          <li class="nav-item"><a class="nav-link" href="fluxo-caixa.html">Fluxo Caixa</a></li>
+          <li class="nav-item"><a class="nav-link" href="marketing.html">Marketing</a></li>
+          <li class="nav-item"><a class="nav-link" href="patrimonio.html">Patrimônio</a></li>
+          <li class="nav-item"><a class="nav-link" href="proventos.html">Proventos</a></li>
+          <li class="nav-item"><a class="nav-link active" href="processos.html">Processos</a></li>
+          <li class="nav-item"><a class="nav-link" href="documentos.html">Documentos</a></li>
+          <li class="nav-item"><a class="nav-link" href="prestacao-contas.html">Prest. Contas</a></li>
+          <li class="nav-item"><a class="nav-link" href="cartoes.html">Cartões</a></li>
+          <li class="nav-item"><a class="nav-link" href="cartao-credito.html">Cartão Crédito</a></li>
+          <li class="nav-item"><a class="nav-link" href="metas.html">Metas</a></li>
+          <li class="nav-item"><a class="nav-link" href="relatorios-gerenciais.html">Rel. Gerenciais</a></li>
+          <li class="nav-item"><a class="nav-link" href="auditoria.html">Auditoria</a></li>
+          <li class="nav-item"><a class="nav-link" href="usuarios.html">Usuários</a></li>
+        </ul>
+        <a href="home.html" class="btn btn-light btn-sm">← Voltar</a>
+      </div>
+    </div>
+  </nav>
+  <div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="m-0">⚖️ Controle de Processos</h2>
+      <button class="btn btn-primary" onclick="abrirModal()">+ Novo Processo</button>
+    </div>
+    <div class="row g-3 mb-4">
+      <div class="col-md-3"><label class="form-label">Status</label><select class="form-select" id="filtroStatus" onchange="render()"><option value="">Todos</option><option value="ativo">Ativo</option><option value="pendente">Pendente</option><option value="concluído">Concluído</option><option value="suspenso">Suspenso</option><option value="encerrado">Encerrado</option></select></div>
+      <div class="col-md-3"><label class="form-label">Advogado</label><select class="form-select" id="filtroAdvogado" onchange="render()"><option value="">Todos</option></select></div>
+      <div class="col-md-3"><label class="form-label">Data Início</label><input type="date" class="form-control" id="filtroDataInicio" onchange="render()"></div>
+      <div class="col-md-3"><label class="form-label">Data Fim</label><input type="date" class="form-control" id="filtroDataFim" onchange="render()"></div>
+    </div>
+    <div class="card">
+      <div class="card-header">Lista de Processos</div>
+      <div class="card-body table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Nº Processo</th>
+              <th>Reclamante</th>
+              <th>Reclamada</th>
+              <th>Status</th>
+              <th>Fase Atual</th>
+              <th>Advogado</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyProcessos"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="modalProcesso" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="tituloModal">Novo Processo</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="formProcesso" onsubmit="salvar(event)">
+          <div class="modal-body">
+            <input type="hidden" id="processoId">
+            <div class="row g-3">
+              <div class="col-md-4"><label class="form-label">Nº Processo *</label><input type="text" class="form-control" id="numProcesso" required></div>
+              <div class="col-md-4"><label class="form-label">Status</label><select class="form-select" id="status"><option value="ativo">Ativo</option><option value="pendente">Pendente</option><option value="concluído">Concluído</option><option value="suspenso">Suspenso</option><option value="encerrado">Encerrado</option></select></div>
+              <div class="col-md-4"><label class="form-label">Data Abertura *</label><input type="date" class="form-control" id="dataAbertura" required></div>
+              <div class="col-md-6"><label class="form-label">Reclamante</label><input type="text" class="form-control" id="reclamante"></div>
+              <div class="col-md-6"><label class="form-label">Reclamada</label><input type="text" class="form-control" id="reclamada"></div>
+              <div class="col-md-6"><label class="form-label">Advogado Responsável</label><select class="form-select" id="advogado"></select></div>
+              <div class="col-md-6"><label class="form-label">Fase Atual</label><input type="text" class="form-control" id="faseAtual"></div>
+              <div class="col-12"><label class="form-label">Fases do Processo</label><div id="fasesContainer"></div><button type="button" class="btn btn-secondary btn-sm" onclick="adicionarFase()">+ Adicionar Fase</button></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="db.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    const STORAGE_KEY = 'processos';
+    let dados = [];
+    let editandoId = null;
+    const modal = new bootstrap.Modal(document.getElementById('modalProcesso'));
+    function getData(k) { try { return JSON.parse(localStorage.getItem(k)||'[]'); } catch(e) { return []; } }
+    function setData(k,v) { localStorage.setItem(k,JSON.stringify(v)); }
+    function genId() { return Date.now().toString(36)+Math.random().toString(36).substr(2,5); }
+    function isAtivo(p) { const s=(p.status||'').toLowerCase(); return s==='ativo'||s==='pendente'||s===''; }
+    function isEncerrado(p) { return (p.status||'').toLowerCase()==='encerrado'; }
+    function isSuspenso(p) { return (p.status||'').toLowerCase()==='suspenso'; }
+    function isConcluido(p) { return (p.status||'').toLowerCase()==='concluído'||(p.status||'').toLowerCase()==='concluido'; }
+    async function carregar() { try { dados = await window.db.processos_listar(); } catch(e) { dados = getData(STORAGE_KEY); } popularAdvogados(); render(); }
+    function getUsuarios() { try { return JSON.parse(localStorage.getItem('usuarios')||'[]'); } catch(e) { return []; } }
+    function popularAdvogados() {
+      const ids = ['advogado','filtroAdvogado'];
+      ids.forEach(id => {
+        const sel = document.getElementById(id);
+        if (!sel) return;
+        sel.innerHTML = id==='filtroAdvogado' ? '<option value="">Todos</option>' : '<option value="">Selecione</option>';
+        getUsuarios().forEach(u => sel.add(new Option(u.nome||u.name||u.email||u, u.id||u.nome||u)));
+      });
+    }
+    function render() {
+      const fStatus = document.getElementById('filtroStatus').value.toLowerCase();
+      const fAdv = document.getElementById('filtroAdvogado').value;
+      const fDtIni = document.getElementById('filtroDataInicio').value;
+      const fDtFim = document.getElementById('filtroDataFim').value;
+      let lista = [...dados];
+      if (fStatus) lista = lista.filter(p => (p.status||'').toLowerCase() === fStatus);
+      if (fAdv) lista = lista.filter(p => String(p.advogado) === String(fAdv));
+      if (fDtIni) lista = lista.filter(p => p.data_abertura >= fDtIni);
+      if (fDtFim) lista = lista.filter(p => p.data_abertura <= fDtFim);
+      function badgeStatus(st) {
+        const map = {ativo:'badge-ativo',pendente:'badge-pendente',concluído:'badge-concluido',concluido:'badge-concluido',suspenso:'badge-suspenso',encerrado:'badge-encerrado'};
+        return `<span class="badge ${map[st.toLowerCase()]||'bg-secondary'}">${st}</span>`;
+      }
+      const tbody = document.getElementById('tbodyProcessos');
+      tbody.innerHTML = lista.map(p => `<tr>
+        <td><strong>${p.num_processo||'—'}</strong></td>
+        <td>${p.reclamante||'—'}</td>
+        <td>${p.reclamada||'—'}</td>
+        <td>${badgeStatus(p.status||'')}</td>
+        <td>${p.fase_atual||'—'}</td>
+        <td>${getNomeUsuario(p.advogado)}</td>
+        <td><button class="btn btn-sm btn-primary" onclick='editar("${p.id}")'>Editar</button><button class="btn btn-sm btn-danger" onclick='excluir("${p.id}")'>Excluir</button></td>
+      </tr>`).join('');
+    }
+    function getNomeUsuario(id) { const u=getUsuarios().find(x=>String(x.id||x.nome||x)===String(id)); return u?(u.nome||u.name||u.email||u):'—'; }
+    function abrirModal() {
+      editandoId = null;
+      document.getElementById('formProcesso').reset();
+      document.getElementById('processoId').value = '';
+      document.getElementById('tituloModal').textContent = 'Novo Processo';
+      document.getElementById('dataAbertura').value = new Date().toISOString().split('T')[0];
+      document.getElementById('fasesContainer').innerHTML = '';
+      adicionarFase();
+      popularAdvogados();
+      modal.show();
+    }
+    function adicionarFase() {
+      const c = document.getElementById('fasesContainer');
+      const d = document.createElement('div');
+      d.className = 'row g-2 mb-2 fase-item';
+      d.innerHTML = `<div class="col-md-4"><select class="form-select fase-nome"><option>Petição Inicial</option><option>Agravo</option><option>Sentença</option><option>Recurso 2ª Instância</option><option>Recurso Adesivo</option><option>Recurso de Revista TST</option><option>Agravo de Petição</option></select></div><div class="col-md-3"><input type="date" class="form-control fase-data"></div><div class="col-md-3"><div class="form-check mt-2"><input class="form-check-input fase-atingida" type="checkbox"><label class="form-check-label">Atingida</label></div></div><div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" onclick="removerFase(this)">✕</button></div>`;
+      c.appendChild(d);
+    }
+    function removerFase(btn) { btn.closest('.fase-item').remove(); }
+    function salvar(e) {
+      e.preventDefault();
+      const fases = [];
+      document.querySelectorAll('.fase-item').forEach(el => { fases.push({nome:el.querySelector('.fase-nome').value,data:el.querySelector('.fase-data').value,atingida:el.querySelector('.fase-atingida').checked}); });
+      const r = {id:editandoId||genId(),num_processo:document.getElementById('numProcesso').value,status:document.getElementById('status').value,reclamante:document.getElementById('reclamante').value,reclamada:document.getElementById('reclamada').value,data_abertura:document.getElementById('dataAbertura').value,advogado:document.getElementById('advogado').value,fase_atual:document.getElementById('faseAtual').value,fases:JSON.stringify(fases)};
+      if (editandoId) { const i = dados.findIndex(x=>x.id===editandoId); if(i>=0) dados[i]=r; else dados.push(r); }
+      else dados.push(r);
+      setData(STORAGE_KEY,dados);
+      modal.hide();
+      render();
+    }
+    function editar(id) {
+      const p = dados.find(x=>x.id===id); if(!p) return;
+      editandoId = p.id;
+      document.getElementById('numProcesso').value = p.num_processo||'';
+      document.getElementById('status').value = p.status||'';
+      document.getElementById('reclamante').value = p.reclamante||'';
+      document.getElementById('reclamada').value = p.reclamada||'';
+      document.getElementById('dataAbertura').value = p.data_abertura||'';
+      document.getElementById('advogado').value = p.advogado||'';
+      document.getElementById('faseAtual').value = p.fase_atual||'';
+      document.getElementById('tituloModal').textContent = 'Editar Processo';
+      const c = document.getElementById('fasesContainer');
+      c.innerHTML = '';
+      try { const fases = typeof p.fases === 'string' ? JSON.parse(p.fases) : (p.fases||[]); fases.forEach(f=>{const d=document.createElement('div');d.className='row g-2 mb-2 fase-item';d.innerHTML=`<div class="col-md-4"><select class="form-select fase-nome">${['Petição Inicial','Agravo','Sentença','Recurso 2ª Instância','Recurso Adesivo','Recurso de Revista TST','Agravo de Petição'].map(o=>`<option ${o===f.nome?'selected':''}>${o}</option>`).join('')}</select></div><div class="col-md-3"><input type="date" class="form-control fase-data" value="${f.data||''}"></div><div class="col-md-3"><div class="form-check mt-2"><input class="form-check-input fase-atingida" type="checkbox" ${f.atingida?'checked':''}><label class="form-check-label">Atingida</label></div></div><div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" onclick="removerFase(this)">✕</button></div>`;c.appendChild(d);}); } catch(e) { adicionarFase(); }
+      popularAdvogados();
+      modal.show();
+    }
+    function excluir(id) { if(confirm('Excluir este processo?')){dados=dados.filter(x=>x.id!==id);setData(STORAGE_KEY,dados);render();} }
+    document.addEventListener('DOMContentLoaded', carregar);
+  </script>
+</body>
+</html>

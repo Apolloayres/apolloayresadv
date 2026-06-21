@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Despesas - Controle do Escritório</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root { --primary-blue: #0a58ca; --light-blue: #e7f1ff; }
+    .topo-logo { background-color: #fff; padding: 15px 20px; display: flex; justify-content: center; align-items: center; }
+    .logo-escritorio { height: 70px; width: auto; }
+    body { background: #f0f2f5; font-family: 'Segoe UI', sans-serif; }
+    .navbar { background: #0a58ca !important; }
+    .navbar .nav-link, .navbar .navbar-brand { color: #fff !important; }
+    .navbar .nav-link.active { background: rgba(255,255,255,0.15); border-radius: 6px; }
+    .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border: none; }
+    .card-header { background: #0a58ca !important; color: #fff; border-radius: 8px 8px 0 0 !important; font-weight: 600; }
+    .table thead th { background: #0a58ca; color: #fff; }
+    .table tbody tr:hover { background: var(--light-blue); }
+    .btn-primary { background: #0a58ca; border-color: #0a58ca; }
+    .btn-primary:hover { background: #084298; }
+    .btn-secondary { background: #6c757d; border-color: #6c757d; }
+    .btn-success { background: #198754; border-color: #198754; }
+    .btn-danger { background: #dc3545; border-color: #dc3545; }
+    .btn-warning { background: #ffc107; border-color: #ffc107; color: #000; }
+    .form-control:focus, .form-select:focus { border-color: #0a58ca; box-shadow: 0 0 0 0.2rem rgba(10,88,202,0.25); }
+    .val-calculado { font-weight: 600; color: var(--primary-blue); }
+    .iptu-destaque { background: #fff3cd; border-left: 4px solid #ffc107; padding: 0.5rem 1rem; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="topo-logo">
+    <img src="https://adapta-one-prod.s3.sa-east-1.amazonaws.com/apolloayres%40yahoo.com.br/png/image-019eea86-df20-753e-b049-a7c4515d7a68.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3FLD6RMYLYFE2L2Q%2F20260621%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260621T160143Z&X-Amz-Expires=3600&X-Amz-Signature=d86ac73935a9237a01f8898aab4f62b0c323de884239f0049abf5a99c09677ae&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" alt="Apollo Ayres" class="logo-escritorio">
+  </div>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="home.html">Controle do Escritório</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=""></button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 flex-wrap">
+          <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="cadastros.html">Cadastros</a></li>
+          <li class="nav-item"><a class="nav-link active" href="despesas.html">Despesas</a></li>
+          <li class="nav-item"><a class="nav-link" href="fluxo-caixa.html">Fluxo Caixa</a></li>
+          <li class="nav-item"><a class="nav-link" href="marketing.html">Marketing</a></li>
+          <li class="nav-item"><a class="nav-link" href="patrimonio.html">Patrimônio</a></li>
+          <li class="nav-item"><a class="nav-link" href="proventos.html">Proventos</a></li>
+          <li class="nav-item"><a class="nav-link" href="processos.html">Processos</a></li>
+          <li class="nav-item"><a class="nav-link" href="documentos.html">Documentos</a></li>
+          <li class="nav-item"><a class="nav-link" href="prestacao-contas.html">Prest. Contas</a></li>
+          <li class="nav-item"><a class="nav-link" href="cartoes.html">Cartões</a></li>
+          <li class="nav-item"><a class="nav-link" href="cartao-credito.html">Cartão Crédito</a></li>
+          <li class="nav-item"><a class="nav-link" href="metas.html">Metas</a></li>
+          <li class="nav-item"><a class="nav-link" href="relatorios-gerenciais.html">Rel. Gerenciais</a></li>
+          <li class="nav-item"><a class="nav-link" href="auditoria.html">Auditoria</a></li>
+          <li class="nav-item"><a class="nav-link" href="usuarios.html">Usuários</a></li>
+        </ul>
+        <a href="home.html" class="btn btn-light btn-sm">← Voltar</a>
+      </div>
+    </div>
+  </nav>
+  <div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="m-0">💰 Despesas do Escritório</h2>
+      <button class="btn btn-primary" onclick="abrirModal()">+ Nova Despesa</button>
+    </div>
+    <div class="row g-3 mb-4">
+      <div class="col-md-4"><label class="form-label">Unidade</label><select class="form-select" id="filtroUnidade" onchange="renderDespesas()"><option value="">Todas</option><option value="BSB">BSB - Brasília</option><option value="CGR">CGR - Campo Grande</option></select></div>
+      <div class="col-md-3"><label class="form-label">Ano</label><select class="form-select" id="filtroAno" onchange="renderDespesas()"></select></div>
+      <div class="col-md-3"><label class="form-label">Categoria</label><select class="form-select" id="filtroCategoria" onchange="renderDespesas()"><option value="">Todas</option><option value="Aluguel">Aluguel</option><option value="Condomínio">Condomínio</option><option value="Água">Água</option><option value="Energia">Energia</option><option value="Internet">Internet</option><option value="Telefone">Telefone</option><option value="Material de Expediente">Material de Expediente</option><option value="Limpeza">Limpeza</option><option value="Manutenção">Manutenção</option><option value="Salários">Salários</option><option value="Pró-Labore">Pró-Labore</option><option value="FGTS">FGTS</option><option value="Rescisões">Rescisões</option><option value="Honorários Contábeis">Honorários Contábeis</option><option value="Impostos e Taxas">Impostos e Taxas</option><option value="IPTU">IPTU</option><option value="Seguros">Seguros</option><option value="Assinaturas">Assinaturas</option><option value="Sistemas e TI">Sistemas e TI</option><option value="Marketing e Publicidade">Marketing e Publicidade</option><option value="Representação">Representação</option><option value="Transporte e Combustível">Transporte e Combustível</option><option value="Viagens">Viagens</option><option value="Cursos e Treinamentos">Cursos e Treinamentos</option><option value="Despesas Bancárias">Despesas Bancárias</option><option value="Taxa de Licença e Alvará">Taxa de Licença e Alvará</option><option value="Outras">Outras</option></select></div>
+      <div class="col-md-2"><label class="form-label">&nbsp;</label><button class="btn btn-secondary w-100" onclick="limparFiltros()">Limpar Filtros</button></div>
+    </div>
+    <!-- Cards de resumo -->
+    <div class="row g-3 mb-4" id="resumoDespesas">
+      <div class="col-md-3"><div class="card"><div class="card-body text-center"><h6 class="card-title text-muted mb-1">Total (Período)</h6><h4 class="mb-0" id="resumoTotal" style="color:var(--primary-blue)">R$ 0,00</h4></div></div></div>
+      <div class="col-md-3"><div class="card"><div class="card-body text-center"><h6 class="card-title text-muted mb-1">Média Mensal</h6><h4 class="mb-0" id="resumoMedia" style="color:var(--primary-blue)">R$ 0,00</h4></div></div></div>
+      <div class="col-md-3"><div class="card"><div class="card-body text-center"><h6 class="card-title text-muted mb-1">Mês Atual</h6><h4 class="mb-0" id="resumoMesAtual" style="color:var(--primary-blue)">R$ 0,00</h4></div></div></div>
+      <div class="col-md-3"><div class="card"><div class="card-body text-center"><h6 class="card-title text-muted mb-1">Maior Despesa</h6><h4 class="mb-0" id="resumoMaior" style="color:var(--primary-blue)">R$ 0,00</h4></div></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header">Lista de Despesas</div>
+      <div class="card-body table-responsive">
+        <table class="table table-striped">
+          <thead><tr><th>Unidade</th><th>Data</th><th>Categoria</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr></thead>
+          <tbody id="tbodyDespesas"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card mt-4">
+      <div class="card-header">📅 Acompanhamento IPTU</div>
+      <div class="card-body">
+        <div class="iptu-destaque mb-3">💡 O IPTU pode ser parcelado em até 10x. Use o filtro por categoria "IPTU" para visualizar.</div>
+        <div class="table-responsive"><table class="table table-striped"><thead><tr><th>Ano</th><th>Unidade</th><th>Total</th><th>Pago</th><th>Pendente</th><th>Status</th></tr></thead><tbody id="tbodyIPTU"></tbody></table></div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="modalDespesa" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="tituloModal">Nova Despesa</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="formDespesa" onsubmit="salvar(event)">
+          <div class="modal-body">
+            <input type="hidden" id="despesaId">
+            <div class="row g-3">
+              <div class="col-md-6"><label class="form-label">Unidade</label><select class="form-select" id="unidade"><option value="BSB">BSB - Brasília</option><option value="CGR">CGR - Campo Grande</option></select></div>
+              <div class="col-md-6"><label class="form-label">Data *</label><input type="date" class="form-control" id="data" required></div>
+              <div class="col-md-6"><label class="form-label">Categoria *</label><select class="form-select" id="categoria" required><option value="">Selecione</option><option value="Aluguel">Aluguel</option><option value="Condomínio">Condomínio</option><option value="Água">Água</option><option value="Energia">Energia</option><option value="Internet">Internet</option><option value="Telefone">Telefone</option><option value="Material de Expediente">Material de Expediente</option><option value="Limpeza">Limpeza</option><option value="Manutenção">Manutenção</option><option value="Salários">Salários</option><option value="Pró-Labore">Pró-Labore</option><option value="FGTS">FGTS</option><option value="Rescisões">Rescisões</option><option value="Honorários Contábeis">Honorários Contábeis</option><option value="Impostos e Taxas">Impostos e Taxas</option><option value="IPTU">IPTU</option><option value="Seguros">Seguros</option><option value="Assinaturas">Assinaturas</option><option value="Sistemas e TI">Sistemas e TI</option><option value="Marketing e Publicidade">Marketing e Publicidade</option><option value="Representação">Representação</option><option value="Transporte e Combustível">Transporte e Combustível</option><option value="Viagens">Viagens</option><option value="Cursos e Treinamentos">Cursos e Treinamentos</option><option value="Despesas Bancárias">Despesas Bancárias</option><option value="Taxa de Licença e Alvará">Taxa de Licença e Alvará</option><option value="Outras">Outras</option></select></div>
+              <div class="col-md-6"><label class="form-label">Valor (R$) *</label><input type="number" step="0.01" class="form-control" id="valor" required></div>
+              <div class="col-12"><label class="form-label">Descrição</label><input type="text" class="form-control" id="descricao"></div>
+              <div class="col-12"><div class="form-check"><input class="form-check-input" type="checkbox" id="ehIPTU" onchange="document.getElementById('grupoParcelaIPTU').style.display=this.checked?'block':'none'"><label class="form-check-label">É IPTU?</label></div></div>
+              <div class="col-12" id="grupoParcelaIPTU" style="display:none"><label class="form-label">Parcela (1-10)</label><input type="number" min="1" max="10" class="form-control" id="parcelaIPTU"></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const STORAGE_KEY = 'despesas';
+    let despesas = [], editandoId = null;
+    const modal = new bootstrap.Modal(document.getElementById('modalDespesa'));
+    function getData(k) { try { return JSON.parse(localStorage.getItem(k)||'[]'); } catch(e) { return []; } }
+    function setData(k,v) { localStorage.setItem(k,JSON.stringify(v)); }
+    function genId() { return Date.now().toString(36)+Math.random().toString(36).substr(2,5); }
+    function fmt(v) { return (v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+    function carregar() { try { despesas = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) { despesas = []; } preencherAnos(); renderDespesas(); renderIPTU(); }
+    function preencherAnos() {
+      const el = document.getElementById('filtroAno');
+      if (!el) return;
+      el.innerHTML = '';
+      const anoAtual = new Date().getFullYear();
+      for (let a = anoAtual; a >= anoAtual - 5; a--) { const opt = document.createElement('option'); opt.value = a; opt.textContent = a; if (a === anoAtual) opt.selected = true; el.appendChild(opt); }
+    }
+    function limparFiltros() {
+      document.getElementById('filtroUnidade').value = '';
+      document.getElementById('filtroCategoria').value = '';
+      renderDespesas();
+    }
+    function renderDespesas() {
+      const filtroUnidade = document.getElementById('filtroUnidade').value;
+      const filtroAno = document.getElementById('filtroAno').value;
+      const filtroCategoria = document.getElementById('filtroCategoria').value;
+      let lista = despesas.filter(d => {
+        if (filtroUnidade && d.unidade !== filtroUnidade) return false;
+        if (filtroAno && d.data && !d.data.startsWith(filtroAno)) return false;
+        if (filtroCategoria && d.categoria !== filtroCategoria) return false;
+        return true;
+      });
+      const total = lista.reduce((s,d) => s + (d.valor||0), 0);
+      document.getElementById('resumoTotal').textContent = fmt(total);
+      document.getElementById('resumoMedia').textContent = lista.length ? fmt(total / lista.length) : fmt(0);
+      const mesAtual = new Date().toISOString().slice(0,7);
+      const mesCorrente = lista.filter(d => d.data && d.data.startsWith(mesAtual));
+      document.getElementById('resumoMesAtual').textContent = fmt(mesCorrente.reduce((s,d) => s + (d.valor||0), 0));
+      const maior = lista.reduce((max, d) => (d.valor||0) > (max||0) ? d.valor : max, 0);
+      document.getElementById('resumoMaior').textContent = fmt(maior);
+      const tbody = document.getElementById('tbodyDespesas');
+      tbody.innerHTML = lista.length === 0 ? '<tr><td colspan="6" class="text-center text-muted">Nenhuma despesa encontrada.</td></tr>' : lista.sort((a,b) => b.data?.localeCompare(a.data)).map(d => `<tr><td>${d.unidade||'BSB'}</td><td>${d.data||'—'}</td><td>${d.categoria||'—'}</td><td>${fmt(d.valor)}</td><td>${d.descricao||'—'}</td><td><button class="btn btn-sm btn-primary" onclick='editar("${d.id}")'>Editar</button><button class="btn btn-sm btn-danger" onclick='excluir("${d.id}")'>Excluir</button></td></tr>`).join('');
+    }
+    function renderIPTU() {
+      const iptus = despesas.filter(d => d.categoria === 'IPTU');
+      const anos = [...new Set(iptus.map(d => d.data?.substring(0,4)).filter(Boolean))].sort();
+      const tbody = document.getElementById('tbodyIPTU');
+      if (anos.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Nenhum IPTU cadastrado.</td></tr>'; return; }
+      tbody.innerHTML = anos.map(ano => {
+        const registros = iptus.filter(d => d.data?.startsWith(ano));
+        const total = registros.reduce((s,d) => s + (d.valor||0), 0);
+        const pago = registros.filter(d => d.eh_iptu && d.parcela_iptu).length;
+        const pendente = Math.max(0, 10 - pago);
+        return `<tr><td>${ano}</td><td>BSB</td><td>${fmt(total)}</td><td>${fmt(total * pago / 10)}</td><td>${fmt(total * pendente / 10)}</td><td>${pendente === 0 ? '✅ Quite' : '⚠️ Pendente'}</td></tr>`;
+      }).join('');
+    }
+    function abrirModal() {
+      editandoId = null;
+      document.getElementById('formDespesa').reset();
+      document.getElementById('despesaId').value = '';
+      document.getElementById('data').value = new Date().toISOString().split('T')[0];
+      document.getElementById('tituloModal').textContent = 'Nova Despesa';
+      document.getElementById('grupoParcelaIPTU').style.display = 'none';
+      modal.show();
+    }
+    function salvar(e) {
+      e.preventDefault();
+      const r = { id: editandoId || genId(), unidade: document.getElementById('unidade').value, data: document.getElementById('data').value, categoria: document.getElementById('categoria').value, valor: parseFloat(document.getElementById('valor').value)||0, descricao: document.getElementById('descricao').value, eh_iptu: document.getElementById('ehIPTU').checked, parcela_iptu: document.getElementById('ehIPTU').checked ? document.getElementById('parcelaIPTU').value : '' };
+      if (editandoId) { const i = despesas.findIndex(d => d.id === editandoId); if(i>=0) despesas[i]=r; else despesas.push(r); } else despesas.push(r);
+      salvarDados();
+      modal.hide();
+      renderDespesas();
+      renderIPTU();
+    }
+    function salvarDados() { localStorage.setItem(STORAGE_KEY, JSON.stringify(despesas)); }
+    function editar(id) {
+      const d = despesas.find(x => x.id === id); if(!d) return;
+      editandoId = d.id;
+      document.getElementById('despesaId').value = d.id;
+      document.getElementById('unidade').value = d.unidade;
+      document.getElementById('data').value = d.data;
+      document.getElementById('categoria').value = d.categoria;
+      document.getElementById('valor').value = d.valor;
+      document.getElementById('descricao').value = d.descricao || '';
+      document.getElementById('ehIPTU').checked = !!d.eh_iptu;
+      document.getElementById('grupoParcelaIPTU').style.display = d.eh_iptu ? 'block' : 'none';
+      document.getElementById('parcelaIPTU').value = d.parcela_iptu || '';
+      document.getElementById('tituloModal').textContent = 'Editar Despesa';
+      modal.show();
+    }
+    function excluir(id) { if(!confirm('Excluir esta despesa?')) return; despesas = despesas.filter(d => d.id !== id); salvarDados(); renderDespesas(); renderIPTU(); }
+    document.addEventListener('DOMContentLoaded', carregar);
+  </script>
+</body>
+</html>

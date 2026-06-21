@@ -21,20 +21,15 @@
       --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       --radius: 10px;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    .topo-logo { background-color: #fff; padding: 15px 20px; display: flex; justify-content: center; align-items: center; }
+    .logo-escritorio { height: 70px; width: auto; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Segoe UI', Roboto, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.5;
     }
-
     .navbar {
       background: var(--primary);
       color: #fff;
@@ -44,305 +39,60 @@
       justify-content: space-between;
       align-items: center;
     }
-
-    .navbar h1 {
-      font-size: 1.25rem;
-      font-weight: 600;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-
-    .page-header {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .page-title {
-      font-size: 1.75rem;
-      color: var(--primary-dark);
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 18px;
-      border-radius: var(--radius);
-      border: none;
-      font-size: 0.95rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      text-decoration: none;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-back {
-      background: #fff;
-      color: var(--primary);
-      border: 1px solid var(--primary);
-    }
-
-    .btn-back:hover {
-      background: var(--primary-light);
-    }
-
-    .btn-new {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .btn-new:hover {
-      background: var(--primary-dark);
-    }
-
-    .btn-edit {
-      background: var(--primary-light);
-      color: var(--primary);
-    }
-
-    .btn-edit:hover {
-      background: #dbe8ff;
-    }
-
-    .btn-delete {
-      background: var(--danger-light);
-      color: var(--danger);
-    }
-
-    .btn-delete:hover {
-      background: #fee2e2;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: var(--shadow);
-      border-left: 5px solid var(--primary);
-    }
-
-    .card-label {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-    }
-
-    .card-value {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--primary-dark);
-    }
-
-    .table-container {
-      background: var(--surface);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    thead {
-      background: var(--primary-light);
-    }
-
-    th, td {
-      padding: 14px 16px;
-      text-align: left;
-      font-size: 0.95rem;
-    }
-
-    th {
-      font-weight: 600;
-      color: var(--primary-dark);
-      border-bottom: 2px solid var(--border);
-    }
-
-    td {
-      border-bottom: 1px solid var(--border);
-    }
-
-    tbody tr:hover {
-      background: #f8fafc;
-    }
-
-    .actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.45);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .modal-overlay.active {
-      display: flex;
-    }
-
-    .modal {
-      background: var(--surface);
-      border-radius: var(--radius);
-      width: 100%;
-      max-width: 520px;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-      animation: fadeIn 0.2s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-16px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .modal-header {
-      background: var(--primary);
-      color: #fff;
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .modal-header h2 {
-      font-size: 1.25rem;
-    }
-
-    .modal-close {
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-
-    .modal-body {
-      padding: 20px;
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    .form-group label {
-      display: block;
-      font-weight: 500;
-      margin-bottom: 6px;
-      color: var(--text);
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.95rem;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      font-family: inherit;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(10, 88, 202, 0.15);
-    }
-
-    .form-group textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-
-    .modal-footer {
-      padding: 16px 20px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    .btn-save {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .btn-save:hover {
-      background: var(--primary-dark);
-    }
-
-    .btn-cancel {
-      background: #f3f4f6;
-      color: var(--text);
-    }
-
-    .btn-cancel:hover {
-      background: #e5e7eb;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 40px;
-      color: var(--text-muted);
-    }
-
-    @media (max-width: 640px) {
-      .container {
-        padding: 16px;
-      }
-
-      .page-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      th, td {
-        padding: 12px;
-      }
-
-      .actions {
-        flex-direction: column;
-      }
-    }
+    .navbar h1 { font-size: 1.2rem; font-weight: 700; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 28px 20px; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
+    .page-title { font-size: 1.5rem; color: var(--primary); }
+    .btn { display: inline-block; padding: 10px 18px; border: none; border-radius: var(--radius); cursor: pointer; font-size: 0.9rem; text-decoration: none; transition: 0.2s; font-weight: 600; }
+    .btn-new { background: var(--primary); color: #fff; }
+    .btn-new:hover { background: var(--primary-dark); transform: translateY(-1px); }
+    .btn-back { background: #6b7280; color: #fff; }
+    .btn-back:hover { background: #4b5563; }
+    .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+    .btn-edit { background: var(--primary); color: #fff; }
+    .btn-edit:hover { background: var(--primary-dark); }
+    .btn-delete { background: var(--danger); color: #fff; }
+    .btn-delete:hover { background: #b91c1c; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .stat-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; text-align: center; border-left: 4px solid var(--primary); }
+    .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-top: 4px; }
+    .card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+    .card-header { background: var(--primary); color: #fff; padding: 14px 20px; font-weight: 700; font-size: 1rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 12px 16px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); background: #f9fafb; border-bottom: 2px solid #e5e7eb; }
+    td { padding: 12px 16px; border-bottom: 1px solid #f3f4f6; font-size: 0.9rem; }
+    tr:hover td { background: var(--primary-light); }
+    .actions { display: flex; gap: 6px; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: var(--surface); border-radius: var(--radius); width: 100%; max-width: 500px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    .modal-header { padding: 16px 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h2 { font-size: 1.1rem; color: var(--primary); }
+    .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); }
+    .modal-body { padding: 20px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; color: var(--text); }
+    .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.9rem; }
+    .form-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(10,88,202,0.15); }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 10px; padding: 16px 20px; border-top: 1px solid #e5e7eb; }
+    .btn-save { background: var(--primary); color: #fff; }
+    .btn-save:hover { background: var(--primary-dark); }
+    .btn-cancel { background: #f3f4f6; color: var(--text); }
+    .btn-cancel:hover { background: #e5e7eb; }
+    .empty-state { text-align: center; padding: 40px; color: var(--text-muted); }
+    @media (max-width: 640px) { .container { padding: 16px; } .page-header { flex-direction: column; align-items: flex-start; } th, td { padding: 12px; } .actions { flex-direction: column; } }
   </style>
 </head>
 <body>
+  <div class="topo-logo">
+    <img src="https://adapta-one-prod.s3.sa-east-1.amazonaws.com/apolloayres%40yahoo.com.br/png/image-019eea86-df20-753e-b049-a7c4515d7a68.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3FLD6RMYLYFE2L2Q%2F20260621%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260621T160143Z&X-Amz-Expires=3600&X-Amz-Signature=d86ac73935a9237a01f8898aab4f62b0c323de884239f0049abf5a99c09677ae&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" alt="Apollo Ayres" class="logo-escritorio">
+  </div>
   <nav class="navbar">
     <h1>Controle do Escritório</h1>
-    <span>🏠 Imóveis</span>
+    🏠 Imóveis
   </nav>
-
   <div class="container">
     <div class="page-header">
       <h1 class="page-title">🏠 Imóveis</h1>
@@ -351,217 +101,98 @@
         <button class="btn btn-new" onclick="abrirModal()">+ Novo Imóvel</button>
       </div>
     </div>
-
-    <div class="cards">
-      <div class="card">
-        <div class="card-label">Total de imóveis</div>
-        <div class="card-value" id="totalImoveis">0</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Valor total do patrimônio</div>
-        <div class="card-value" id="valorTotalPatrimonio">R$ 0,00</div>
-      </div>
+    <div class="stats">
+      <div class="stat-card"><div class="stat-label">Total Imóveis</div><div class="stat-value" id="totalImoveis">0</div></div>
+      <div class="stat-card"><div class="stat-label">Valor Total</div><div class="stat-value" id="valorTotal">R$ 0,00</div></div>
     </div>
-
-    <div class="table-container">
-      <table id="tabelaImoveis">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Endereço</th>
-            <th>Valor</th>
-            <th>Tipo</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
+    <div class="card">
+      <div class="card-header">Imóveis Cadastrados</div>
+      <table>
+        <thead><tr><th>Nome</th><th>Endereço</th><th>Valor</th><th>Tipo</th><th>Ações</th></tr></thead>
+        <tbody id="tbodyImoveis">
+          <tr><td colspan="5" class="empty-state">Nenhum imóvel cadastrado.</td></tr>
+        </tbody>
       </table>
-      <div class="empty-state" id="emptyState" style="display: none;">
-        Nenhum imóvel cadastrado.
-      </div>
     </div>
   </div>
-
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal">
-      <div class="modal-header">
-        <h2 id="modalTitulo">Novo Imóvel</h2>
-        <button class="modal-close" onclick="fecharModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <form id="formImovel">
-          <input type="hidden" id="imovelId" />
-          <div class="form-group">
-            <label for="nome">Nome</label>
-            <input type="text" id="nome" required />
-          </div>
-          <div class="form-group">
-            <label for="endereco">Endereço</label>
-            <input type="text" id="endereco" required />
-          </div>
-          <div class="form-group">
-            <label for="valor">Valor (R$)</label>
-            <input type="number" id="valor" min="0" step="0.01" required />
-          </div>
-          <div class="form-group">
-            <label for="tipo">Tipo</label>
-            <select id="tipo" required>
-              <option value="Comercial">Comercial</option>
-              <option value="Residencial">Residencial</option>
-              <option value="Terreno">Terreno</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="observacao">Observação</label>
-            <textarea id="observacao"></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-cancel" onclick="fecharModal()">Cancelar</button>
-        <button class="btn btn-save" onclick="salvarImovel()">Salvar</button>
-      </div>
+      <div class="modal-header"><h2 id="modalTitle">Novo Imóvel</h2><button class="modal-close" onclick="fecharModal()">&times;</button></div>
+      <form id="formImovel" onsubmit="salvar(event)">
+        <div class="modal-body">
+          <input type="hidden" id="imovelId">
+          <div class="form-group"><label>Nome *</label><input type="text" id="nome" required></div>
+          <div class="form-group"><label>Endereço</label><input type="text" id="endereco"></div>
+          <div class="form-group"><label>Valor (R$) *</label><input type="number" id="valor" step="0.01" required></div>
+          <div class="form-group"><label>Tipo</label><select id="tipo"><option>Residencial</option><option>Comercial</option><option>Terreno</option><option>Outro</option></select></div>
+          <div class="form-group"><label>Observações</label><textarea id="observacao" rows="3" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:6px;"></textarea></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-cancel" onclick="fecharModal()">Cancelar</button>
+          <button type="submit" class="btn btn-save">Salvar</button>
+        </div>
+      </form>
     </div>
   </div>
-
+  <script src="db.js"></script>
   <script>
     let imoveis = [];
-
-    function formatarMoeda(valor) {
-      const numero = parseFloat(valor) || 0;
-      return numero.toLocaleString('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-      });
-    }
-
     async function carregarImoveis() {
-      try {
-        imoveis = await window.db.imoveis_listar();
-      } catch (e) {
-        imoveis = [];
-      }
-      atualizarTabela();
-      atualizarCards();
+      try { imoveis = await window.db.imoveis_listar() || []; } catch(e) { imoveis = []; }
+      renderizar();
     }
-
-    function atualizarCards() {
-      const total = imoveis.length;
-      const valorTotal = imoveis.reduce((soma, item) => soma + (parseFloat(item.valor) || 0), 0);
-      document.getElementById('totalImoveis').textContent = total;
-      document.getElementById('valorTotalPatrimonio').textContent = formatarMoeda(valorTotal);
+    function formatarMoeda(v) { return 'R$ ' + (v||0).toLocaleString('pt-BR',{minimumFractionDigits:2}); }
+    function renderizar() {
+      document.getElementById('totalImoveis').textContent = imoveis.length;
+      document.getElementById('valorTotal').textContent = formatarMoeda(imoveis.reduce((s,i) => s + (i.valor||0), 0));
+      const tbody = document.getElementById('tbodyImoveis');
+      tbody.innerHTML = imoveis.length === 0
+        ? '<tr><td colspan="5" class="empty-state">Nenhum imóvel cadastrado.</td></tr>'
+        : imoveis.map(i => `<tr><td>${i.nome||'—'}</td><td>${i.endereco||'—'}</td><td>${formatarMoeda(i.valor)}</td><td>${i.tipo||'—'}</td><td><div class="actions"><button class="btn btn-edit btn-sm" onclick="abrirModal('${i.id}')">Editar</button><button class="btn btn-delete btn-sm" onclick="excluirImovel('${i.id}')">Excluir</button></div></td></tr>`).join('');
     }
-
-    function atualizarTabela() {
-      const tbody = document.querySelector('#tabelaImoveis tbody');
-      const emptyState = document.getElementById('emptyState');
-      tbody.innerHTML = '';
-
-      if (imoveis.length === 0) {
-        emptyState.style.display = 'block';
-        return;
-      }
-
-      emptyState.style.display = 'none';
-
-      imoveis.forEach(imovel => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${imovel.nome || ''}</td>
-          <td>${imovel.endereco || ''}</td>
-          <td>${formatarMoeda(imovel.valor)}</td>
-          <td>${imovel.tipo || ''}</td>
-          <td>
-            <div class="actions">
-              <button class="btn btn-edit" onclick="editarImovel(${imovel.id})">Editar</button>
-              <button class="btn btn-delete" onclick="excluirImovel(${imovel.id})">Excluir</button>
-            </div>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function abrirModal(id = null) {
+    function abrirModal(id) {
       document.getElementById('formImovel').reset();
       document.getElementById('imovelId').value = '';
-      document.getElementById('modalTitulo').textContent = id ? 'Editar Imóvel' : 'Novo Imóvel';
-
+      document.getElementById('modalTitle').textContent = 'Novo Imóvel';
       if (id) {
-        const imovel = imoveis.find(i => i.id === id);
-        if (imovel) {
-          document.getElementById('imovelId').value = imovel.id;
-          document.getElementById('nome').value = imovel.nome || '';
-          document.getElementById('endereco').value = imovel.endereco || '';
-          document.getElementById('valor').value = imovel.valor || '';
-          document.getElementById('tipo').value = imovel.tipo || 'Residencial';
-          document.getElementById('observacao').value = imovel.observacao || '';
+        const i = imoveis.find(x => String(x.id) === String(id));
+        if (i) {
+          document.getElementById('imovelId').value = i.id;
+          document.getElementById('nome').value = i.nome||'';
+          document.getElementById('endereco').value = i.endereco||'';
+          document.getElementById('valor').value = i.valor||'';
+          document.getElementById('tipo').value = i.tipo||'Residencial';
+          document.getElementById('observacao').value = i.observacao||'';
+          document.getElementById('modalTitle').textContent = 'Editar Imóvel';
         }
       }
-
       document.getElementById('modalOverlay').classList.add('active');
     }
-
-    function fecharModal() {
-      document.getElementById('modalOverlay').classList.remove('active');
-    }
-
-    async function salvarImovel() {
+    function fecharModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+    async function salvar(e) {
+      e.preventDefault();
       const id = document.getElementById('imovelId').value;
-      const nome = document.getElementById('nome').value.trim();
-      const endereco = document.getElementById('endereco').value.trim();
-      const valor = document.getElementById('valor').value;
-      const tipo = document.getElementById('tipo').value;
-      const observacao = document.getElementById('observacao').value.trim();
-
-      if (!nome || !endereco || !valor || !tipo) {
-        alert('Preencha todos os campos obrigatórios.');
-        return;
-      }
-
       const obj = {
-        nome,
-        endereco,
-        valor: parseFloat(valor),
-        tipo,
-        observacao
+        nome: document.getElementById('nome').value,
+        endereco: document.getElementById('endereco').value,
+        valor: parseFloat(document.getElementById('valor').value)||0,
+        tipo: document.getElementById('tipo').value,
+        observacao: document.getElementById('observacao').value
       };
-
-      if (id) {
-        obj.id = parseInt(id, 10);
-      }
-
+      if (id) obj.id = parseInt(id, 10);
       try {
         await window.db.imoveis_salvar(obj);
         fecharModal();
         await carregarImoveis();
-      } catch (e) {
-        alert('Erro ao salvar imóvel.');
-      }
+      } catch(e) { alert('Erro ao salvar imóvel.'); }
     }
-
-    async function editarImovel(id) {
-      abrirModal(id);
-    }
-
     async function excluirImovel(id) {
       if (!confirm('Deseja realmente excluir este imóvel?')) return;
-      try {
-        await window.db.imoveis_excluir(id);
-        await carregarImoveis();
-      } catch (e) {
-        alert('Erro ao excluir imóvel.');
-      }
+      try { await window.db.imoveis_excluir(id); await carregarImoveis(); }
+      catch(e) { alert('Erro ao excluir imóvel.'); }
     }
-
-    document.getElementById('modalOverlay').addEventListener('click', function (e) {
-      if (e.target === this) fecharModal();
-    });
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') fecharModal();
-    });
-
+    document.getElementById('modalOverlay').addEventListener('click', function(e) { if(e.target===this) fecharModal(); });
+    document.addEventListener('keydown', function(e) { if(e.key==='Escape') fecharModal(); });
     document.addEventListener('DOMContentLoaded', carregarImoveis);
   </script>
 </body>

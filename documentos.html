@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentos - Controle do Escritório</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root { --primary-blue: #0a58ca; --light-blue: #e7f1ff; }
+    .topo-logo { background-color: #fff; padding: 15px 20px; display: flex; justify-content: center; align-items: center; }
+    .logo-escritorio { height: 70px; width: auto; }
+    body { background: #f0f2f5; font-family: 'Segoe UI', sans-serif; }
+    .navbar { background: #0a58ca !important; }
+    .navbar .nav-link, .navbar .navbar-brand { color: #fff !important; }
+    .navbar .nav-link.active { background: rgba(255,255,255,0.15); border-radius: 6px; }
+    .card { background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border: none; }
+    .card-header { background: #0a58ca !important; color: #fff; border-radius: 8px 8px 0 0 !important; font-weight: 600; }
+    .table thead th { background: #0a58ca; color: #fff; }
+    .table tbody tr:hover { background: var(--light-blue); }
+    .btn-primary { background: #0a58ca; border-color: #0a58ca; }
+    .btn-primary:hover { background: #084298; }
+    .btn-secondary { background: #6c757d; border-color: #6c757d; }
+    .btn-danger { background: #dc3545; border-color: #dc3545; }
+    .btn-success { background: #198754; border-color: #198754; }
+    .btn-warning { background: #ffc107; border-color: #ffc107; color: #000; }
+    .form-control:focus, .form-select:focus { border-color: #0a58ca; box-shadow: 0 0 0 0.2rem rgba(10,88,202,0.25); }
+    .tag-documento { background: #e7f1ff; border-radius: 4px; padding: 2px 8px; font-size: 0.8rem; }
+    .upload-area { border: 2px dashed #0a58ca; border-radius: 8px; padding: 2rem; text-align: center; background: #f8faff; cursor: pointer; transition: background 0.2s; }
+    .upload-area:hover { background: #e7f1ff; }
+    .upload-area.dragging { background: #cfe2ff; border-color: #084298; }
+  </style>
+</head>
+<body>
+  <div class="topo-logo">
+    <img src="https://adapta-one-prod.s3.sa-east-1.amazonaws.com/apolloayres%40yahoo.com.br/png/image-019eea86-df20-753e-b049-a7c4515d7a68.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3FLD6RMYLYFE2L2Q%2F20260621%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260621T160143Z&X-Amz-Expires=3600&X-Amz-Signature=d86ac73935a9237a01f8898aab4f62b0c323de884239f0049abf5a99c09677ae&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" alt="Apollo Ayres" class="logo-escritorio">
+  </div>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="home.html">Controle do Escritório</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=""></button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 flex-wrap">
+          <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="cadastros.html">Cadastros</a></li>
+          <li class="nav-item"><a class="nav-link" href="despesas.html">Despesas</a></li>
+          <li class="nav-item"><a class="nav-link" href="fluxo-caixa.html">Fluxo Caixa</a></li>
+          <li class="nav-item"><a class="nav-link" href="marketing.html">Marketing</a></li>
+          <li class="nav-item"><a class="nav-link" href="patrimonio.html">Patrimônio</a></li>
+          <li class="nav-item"><a class="nav-link" href="proventos.html">Proventos</a></li>
+          <li class="nav-item"><a class="nav-link" href="processos.html">Processos</a></li>
+          <li class="nav-item"><a class="nav-link active" href="documentos.html">Documentos</a></li>
+          <li class="nav-item"><a class="nav-link" href="prestacao-contas.html">Prest. Contas</a></li>
+          <li class="nav-item"><a class="nav-link" href="cartoes.html">Cartões</a></li>
+          <li class="nav-item"><a class="nav-link" href="cartao-credito.html">Cartão Crédito</a></li>
+          <li class="nav-item"><a class="nav-link" href="metas.html">Metas</a></li>
+          <li class="nav-item"><a class="nav-link" href="relatorios-gerenciais.html">Rel. Gerenciais</a></li>
+          <li class="nav-item"><a class="nav-link" href="auditoria.html">Auditoria</a></li>
+          <li class="nav-item"><a class="nav-link" href="usuarios.html">Usuários</a></li>
+        </ul>
+        <a href="home.html" class="btn btn-light btn-sm">← Voltar</a>
+      </div>
+    </div>
+  </nav>
+  <div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="m-0">📄 Gerenciamento de Documentos</h2>
+      <button class="btn btn-primary" onclick="abrirModal()">+ Novo Documento</button>
+    </div>
+    <div class="row g-3 mb-4">
+      <div class="col-md-3"><label class="form-label">Categoria</label><select class="form-select" id="filtroCategoria" onchange="render()"><option value="">Todas</option><option value="Contrato">Contrato</option><option value="Petição">Petição</option><option value="Planilha">Planilha</option><option value="Relatório">Relatório</option><option value="Outro">Outro</option></select></div>
+      <div class="col-md-3"><label class="form-label">Status</label><select class="form-select" id="filtroStatus" onchange="render()"><option value="">Todos</option><option value="Ativo">Ativo</option><option value="Arquivado">Arquivado</option><option value="Pendente">Pendente</option></select></div>
+      <div class="col-md-4"><label class="form-label">Buscar</label><input type="text" class="form-control" id="filtroBusca" placeholder="Título, descrição ou processo..." onkeyup="render()"></div>
+    </div>
+    <div class="row g-3 mb-4" id="resumoDocs">
+      <div class="col-md-3"><div class="card"><div class="card-body text-center"><h6 class="text-muted mb-1">Total Documentos</h6><h4 id="totalDocs" style="color:var(--primary-blue)">0</h4></div></div></div>
+      <div class="col-md-3"><div class="card"><div class="card-body text-center"><h6 class="text-muted mb-1">Ativos</h6><h4 id="totalAtivos" style="color:#198754">0</h4></div></div></div>
+      <div class="col-md-3"><div class="card"><div class="card-body text-center"><h6 class="text-muted mb-1">Pendentes</h6><h4 id="totalPendentes" style="color:#ffc107">0</h4></div></div></div>
+      <div class="col-md-3"><div class="card"><div class="card-body text-center"><h6 class="text-muted mb-1">Arquivados</h6><h4 id="totalArquivados" style="color:#6c757d">0</h4></div></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header">Lista de Documentos</div>
+      <div class="card-body table-responsive">
+        <table class="table table-striped">
+          <thead><tr><th>Título</th><th>Categoria</th><th>Processo</th><th>Data</th><th>Status</th><th>Arquivo</th><th>Ações</th></tr></thead>
+          <tbody id="tbodyDocumentos"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="modalDocumento" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="tituloModal">Novo Documento</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="formDocumento" onsubmit="salvar(event)">
+          <div class="modal-body">
+            <input type="hidden" id="documentoId">
+            <input type="hidden" id="arquivoBase64">
+            <div class="row g-3">
+              <div class="col-md-6"><label class="form-label">Título *</label><input type="text" class="form-control" id="titulo" required></div>
+              <div class="col-md-6"><label class="form-label">Categoria</label><select class="form-select" id="categoria"><option value="Contrato">Contrato</option><option value="Petição">Petição</option><option value="Planilha">Planilha</option><option value="Relatório">Relatório</option><option value="Outro">Outro</option></select></div>
+              <div class="col-md-6"><label class="form-label">Processo (opcional)</label><select class="form-select" id="processo"><option value="">Nenhum</option></select></div>
+              <div class="col-md-6"><label class="form-label">Advogado (opcional)</label><select class="form-select" id="advogado"><option value="">Selecione</option></select></div>
+              <div class="col-md-6"><label class="form-label">Status</label><select class="form-select" id="status"><option value="Ativo">Ativo</option><option value="Pendente">Pendente</option><option value="Arquivado">Arquivado</option></select></div>
+              <div class="col-md-6"><label class="form-label">Data</label><input type="date" class="form-control" id="data"></div>
+              <div class="col-12"><label class="form-label">Descrição</label><textarea class="form-control" id="descricao" rows="2"></textarea></div>
+              <div class="col-12">
+                <label class="form-label">Arquivo</label>
+                <div class="upload-area" id="uploadArea" onclick="document.getElementById('arquivoInput').click()">
+                  <p class="mb-1" style="font-size:2rem">📎</p>
+                  <p class="mb-0">Clique para selecionar um arquivo</p>
+                  <small class="text-muted">PDF, DOC, DOCX, XLS, XLSX, JPG, PNG (max 10MB)</small>
+                  <input type="file" id="arquivoInput" style="display:none" onchange="handleFileUpload(event)">
+                </div>
+                <div id="previewArquivo" style="display:none" class="d-flex align-items-center gap-2 p-3 bg-light rounded">
+                  <span id="arquivoIcone" style="font-size:1.5rem">📄</span>
+                  <div><strong id="arquivoNome"></strong><br><small id="arquivoTamanho" class="text-muted"></small></div>
+                  <button type="button" class="btn btn-danger btn-sm ms-auto" onclick="removerArquivo()">✕</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const STORAGE_KEY = 'documentos';
+    let dados = [], editandoId = null, arquivoBase64 = null, arquivoNome = '', arquivoTamanho = 0;
+    const modal = new bootstrap.Modal(document.getElementById('modalDocumento'));
+    function getData(k) { try { return JSON.parse(localStorage.getItem(k)||'[]'); } catch(e) { return []; } }
+    function setData(k,v) { localStorage.setItem(k,JSON.stringify(v)); }
+    function genId() { return Date.now().toString(36)+Math.random().toString(36).substr(2,5); }
+    function fmtData(d) { if(!d) return '—'; try{return new Date(d+'T12:00:00').toLocaleDateString('pt-BR')}catch(e){return d} }
+    function fmtBytes(n) { if(!n) return '—'; if(n<<1024) return n+' B'; if(n<<1048576) return (n/1024).toFixed(1)+' KB'; return (n/1048576).toFixed(1)+' MB'; }
+    function carregar() { dados = getData(STORAGE_KEY); popularProcessos(); popularAdvogados(); render(); }
+    function popularProcessos() { const sel = document.getElementById('processo'); sel.innerHTML = '<option value="">Nenhum</option>'; try { const processos = JSON.parse(localStorage.getItem('processos')||'[]'); processos.forEach(p => sel.add(new Option(p.num_processo||p.id||'Sem número', p.id||p.num_processo))); } catch(e) {} }
+    function popularAdvogados() { const sel = document.getElementById('advogado'); sel.innerHTML = '<option value="">Selecione</option>'; try { const usuarios = JSON.parse(localStorage.getItem('usuarios')||'[]'); usuarios.forEach(u => sel.add(new Option(u.nome||u.name||u.email||u, u.id||u.nome||u))); } catch(e) {} }
+    function render() {
+      const fCat = document.getElementById('filtroCategoria').value, fStatus = document.getElementById('filtroStatus').value, fBusca = document.getElementById('filtroBusca').value.toLowerCase().trim();
+      let lista = [...dados];
+      if (fCat) lista = lista.filter(d => d.categoria === fCat);
+      if (fStatus) lista = lista.filter(d => d.status === fStatus);
+      if (fBusca) lista = lista.filter(d => (d.titulo||'').toLowerCase().includes(fBusca) || (d.descricao||'').toLowerCase().includes(fBusca) || (d.processo||'').toLowerCase().includes(fBusca));
+      lista.sort((a,b) => (b.data||'').localeCompare(a.data||''));
+      let total = dados.length, ativos = 0, pendentes = 0, arquivados = 0;
+      dados.forEach(d => { if (d.status === 'Ativo') ativos++; else if (d.status === 'Pendente') pendentes++; else if (d.status === 'Arquivado') arquivados++; });
+      document.getElementById('totalDocs').textContent = total;
+      document.getElementById('totalAtivos').textContent = ativos;
+      document.getElementById('totalPendentes').textContent = pendentes;
+      document.getElementById('totalArquivados').textContent = arquivados;
+      const ext = (a) => { const e = (a||'').split('.').pop().toLowerCase(); return '📕'; };
+      const tbody = document.getElementById('tbodyDocumentos');
+      tbody.innerHTML = lista.length === 0 ? '<tr><td colspan="7" class="text-center text-muted">Nenhum documento encontrado.</td></tr>' : lista.map(d => `<tr><td><strong>${d.titulo||'—'}</strong></td><td><span class="tag-documento">${d.categoria||'—'}</span></td><td>${d.processoNome||'—'}</td><td>${fmtData(d.data)}</td><td>${d.status||'—'}</td><td>${d.arquivo_nome ? '📄 '+d.arquivo_nome : '—'}</td><td><button class="btn btn-sm btn-primary" onclick='editar("${d.id}")'>Editar</button><button class="btn btn-sm btn-danger" onclick='excluir("${d.id}")'>Excluir</button></td></tr>`).join('');
+    }
+    function handleFileUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 10 * 1024 * 1024) { alert('Arquivo muito grande. Máximo 10MB.'); return; }
+      arquivoNome = file.name; arquivoTamanho = file.size;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        arquivoBase64 = ev.target.result;
+        const ext = arquivoNome.split('.').pop().toLowerCase();
+        const icone = ext==='pdf'?'📕':['doc','docx'].includes(ext)?'📘':['xls','xlsx'].includes(ext)?'📗':['png','jpg','jpeg'].includes(ext)?'🖼️':'📄';
+        document.getElementById('arquivoIcone').textContent = icone;
+        document.getElementById('arquivoNome').textContent = arquivoNome;
+        document.getElementById('arquivoTamanho').textContent = fmtBytes(arquivoTamanho);
+        document.getElementById('previewArquivo').style.display = 'flex';
+        document.querySelector('.upload-area').style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+    function removerArquivo() { arquivoBase64 = null; arquivoNome = ''; arquivoTamanho = 0; document.getElementById('arquivoInput').value = ''; document.getElementById('previewArquivo').style.display = 'none'; document.querySelector('.upload-area').style.display = 'block'; }
+    function abrirModal() {
+      editandoId = null; document.getElementById('formDocumento').reset(); document.getElementById('documentoId').value = ''; document.getElementById('data').value = new Date().toISOString().split('T')[0]; document.getElementById('tituloModal').textContent = 'Novo Documento'; removerArquivo(); popularProcessos(); popularAdvogados(); modal.show();
+    }
+    function salvar(e) {
+      e.preventDefault();
+      const r = { id: editandoId || genId(), titulo: document.getElementById('titulo').value, categoria: document.getElementById('categoria').value, processo: document.getElementById('processo').value, advogado: document.getElementById('advogado').value, status: document.getElementById('status').value, data: document.getElementById('data').value, descricao: document.getElementById('descricao').value, arquivo_base64: arquivoBase64, arquivo_nome: arquivoNome, arquivo_tamanho: arquivoTamanho };
+      if (editandoId) { const i = dados.findIndex(x=>x.id===editandoId); if(i>=0) dados[i]=r; else dados.push(r); } else dados.push(r);
+      setData(STORAGE_KEY, dados); modal.hide(); render();
+    }
+    function editar(id) {
+      const d = dados.find(x=>x.id===id); if(!d) return;
+      editandoId = d.id;
+      document.getElementById('documentoId').value = d.id;
+      document.getElementById('titulo').value = d.titulo||'';
+      document.getElementById('categoria').value = d.categoria||'';
+      document.getElementById('processo').value = d.processo||'';
+      document.getElementById('advogado').value = d.advogado||'';
+      document.getElementById('status').value = d.status||'';
+      document.getElementById('data').value = d.data||'';
+      document.getElementById('descricao').value = d.descricao||'';
+      document.getElementById('tituloModal').textContent = 'Editar Documento';
+      if (d.arquivo_nome) {
+        arquivoBase64 = d.arquivo_base64; arquivoNome = d.arquivo_nome; arquivoTamanho = d.arquivo_tamanho;
+        const ext = arquivoNome.split('.').pop().toLowerCase();
+        const icone = ext==='pdf'?'📕':['doc','docx'].includes(ext)?'📘':['xls','xlsx'].includes(ext)?'📗':['png','jpg','jpeg'].includes(ext)?'🖼️':'📄';
+        document.getElementById('arquivoIcone').textContent = icone;
+        document.getElementById('arquivoNome').textContent = d.arquivo_nome;
+        document.getElementById('arquivoTamanho').textContent = fmtBytes(d.arquivo_tamanho);
+        document.getElementById('previewArquivo').style.display = 'flex';
+        document.querySelector('.upload-area').style.display = 'none';
+      } else { removerArquivo(); }
+      popularProcessos(); popularAdvogados(); modal.show();
+    }
+    function excluir(id) { if(!confirm('Excluir este documento?')) return; dados = dados.filter(x => x.id !== id); setData(STORAGE_KEY, dados); render(); }
+    document.addEventListener('DOMContentLoaded', carregar);
+  </script>
+</body>
+</html>

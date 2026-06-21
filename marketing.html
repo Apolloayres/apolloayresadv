@@ -18,17 +18,15 @@
       --card: #ffffff;
       --border: #d0d7e0;
     }
-
+    .topo-logo { background-color: #fff; padding: 15px 20px; display: flex; justify-content: center; align-items: center; }
+    .logo-escritorio { height: 70px; width: auto; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.6;
     }
-
-    /* Navbar */
     .navbar {
       background-color: var(--primary);
       padding: 0.8rem 1.5rem;
@@ -37,247 +35,51 @@
       align-items: center;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
-
-    .navbar-brand {
-      color: #fff;
-      font-weight: 700;
-      font-size: 1.2rem;
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1.2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 0.95rem;
-      transition: opacity 0.2s;
-    }
-
-    .nav-links a:hover { opacity: 0.85; }
-
-    /* Container */
-    .container {
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
-    }
-
-    /* Header */
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .title { font-size: 1.8rem; color: var(--primary); }
-
-    .btn {
-      border: none;
-      border-radius: 6px;
-      padding: 0.6rem 1.2rem;
-      cursor: pointer;
-      font-weight: 600;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      transition: background 0.2s, transform 0.1s;
-    }
-
-    .btn:active { transform: scale(0.98); }
-
-    .btn-back { background-color: var(--gray); color: #fff; }
-    .btn-back:hover { background-color: #5a6268; }
-
-    .btn-primary { background-color: var(--primary); color: #fff; }
-    .btn-primary:hover { background-color: var(--primary-dark); }
-
-    .btn-success { background-color: var(--success); color: #fff; }
-    .btn-success:hover { background-color: #157347; }
-
-    .btn-danger { background-color: var(--danger); color: #fff; }
-    .btn-danger:hover { background-color: #bb2d3b; }
-
-    .btn-warning { background-color: var(--warning); color: #fff; }
-    .btn-warning:hover { background-color: #d97706; }
-
-    .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
-
-    .actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
-
-    /* Cards */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.2rem;
-      margin-bottom: 1.8rem;
-    }
-
-    .card {
-      background: var(--card);
-      border-left: 5px solid var(--primary);
-      border-radius: 8px;
-      padding: 1.2rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-
-    .card-label {
-      font-size: 0.9rem;
-      color: var(--gray);
-      margin-bottom: 0.3rem;
-    }
-
-    .card-value {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    /* Table */
-    .table-container {
-      background: var(--card);
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      overflow: hidden;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    th, td {
-      padding: 0.85rem 1rem;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-    }
-
-    th {
-      background-color: var(--primary-light);
-      color: var(--primary);
-      font-weight: 700;
-    }
-
-    tr:hover { background-color: #f8fafc; }
-
-    .badge {
-      padding: 0.3rem 0.7rem;
-      border-radius: 12px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      display: inline-block;
-    }
-
-    .status-ativa { background-color: #d1fae5; color: #065f46; }
-    .status-concluida { background-color: #dbeafe; color: #1e40af; }
-    .status-cancelada { background-color: #fee2e2; color: #991b1b; }
-
-    .empty-state {
-      text-align: center;
-      padding: 2.5rem;
-      color: var(--gray);
-    }
-
-    /* Modal */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      padding: 1rem;
-    }
-
+    .navbar-brand { color: #fff; text-decoration: none; font-weight: 700; font-size: 1.1rem; }
+    .nav-links { list-style: none; display: flex; gap: 1.5rem; }
+    .nav-links a { color: rgba(255,255,255,0.9); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
+    .nav-links a:hover { color: #fff; text-decoration: underline; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .title { font-size: 1.5rem; color: var(--primary); }
+    .actions { display: flex; gap: 0.5rem; }
+    .card { background: var(--card); border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 1.5rem; margin-bottom: 1.5rem; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .card-header h2 { font-size: 1.1rem; color: var(--primary); }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat { background: var(--card); border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 1.25rem; text-align: center; }
+    .stat-label { font-size: 0.8rem; color: var(--gray); text-transform: uppercase; }
+    .stat-value { font-size: 1.4rem; font-weight: 700; color: var(--primary); margin-top: 0.25rem; }
+    .btn { display: inline-block; padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem; text-decoration: none; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-back { background: var(--gray); color: #fff; }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-sm { padding: 0.35rem 0.7rem; font-size: 0.8rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: var(--primary); color: #fff; padding: 0.7rem; text-align: left; font-size: 0.85rem; }
+    td { padding: 0.7rem; border-bottom: 1px solid #e5e7eb; font-size: 0.85rem; }
+    tbody tr:hover { background: var(--primary-light); }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: none; align-items: center; justify-content: center; z-index: 1000; }
     .modal-overlay.active { display: flex; }
-
-    .modal {
-      background: var(--card);
-      border-radius: 10px;
-      width: 100%;
-      max-width: 560px;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-
-    .modal-header {
-      background: var(--primary);
-      color: #fff;
-      padding: 1rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .modal-title { font-size: 1.2rem; font-weight: 700; }
-
-    .modal-close {
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-
+    .modal { background: var(--card); border-radius: 10px; width: 100%; max-width: 540px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+    .modal-header { background: var(--primary); color: #fff; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h3 { font-size: 1.1rem; }
+    .modal-close { background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
     .modal-body { padding: 1.5rem; }
-
-    .form-group { margin-bottom: 1.1rem; }
-
-    .form-group label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 0.35rem;
-      font-size: 0.9rem;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: 0.6rem 0.8rem;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 0.95rem;
-      font-family: inherit;
-    }
-
-    .form-group textarea { resize: vertical; min-height: 80px; }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    .modal-footer {
-      padding: 1rem 1.5rem;
-      background: #f8fafc;
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.8rem;
-      border-top: 1px solid var(--border);
-    }
-
-    @media (max-width: 600px) {
-      .form-row { grid-template-columns: 1fr; }
-      .nav-links { display: none; }
-    }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.3rem; }
+    .form-group input, .form-group select { width: 100%; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.9rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .modal-footer { padding: 1rem 1.5rem; background: #f8fafc; display: flex; justify-content: flex-end; gap: 0.8rem; border-top: 1px solid var(--border); }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } .nav-links { display: none; } }
   </style>
 </head>
 <body>
-
-  <!-- Navbar -->
+  <div class="topo-logo">
+    <img src="https://adapta-one-prod.s3.sa-east-1.amazonaws.com/apolloayres%40yahoo.com.br/png/image-019eea86-df20-753e-b049-a7c4515d7a68.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA3FLD6RMYLYFE2L2Q%2F20260621%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260621T160143Z&X-Amz-Expires=3600&X-Amz-Signature=d86ac73935a9237a01f8898aab4f62b0c323de884239f0049abf5a99c09677ae&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" alt="Apollo Ayres" class="logo-escritorio">
+  </div>
   <nav class="navbar">
     <a href="home.html" class="navbar-brand">📁 Controle do Escritório</a>
     <ul class="nav-links">
@@ -288,264 +90,74 @@
       <li><a href="relatorios.html">Relatórios</a></li>
     </ul>
   </nav>
-
   <div class="container">
     <div class="header">
       <h1 class="title">📢 Marketing</h1>
       <div class="actions">
-        <a href="home.html" class="btn btn-back">← Voltar</a>
         <button class="btn btn-primary" onclick="abrirModal()">+ Nova Campanha</button>
+        <a href="home.html" class="btn btn-back">← Voltar</a>
       </div>
     </div>
-
-    <!-- Cards -->
-    <div class="cards-grid">
-      <div class="card">
-        <div class="card-label">Total de Campanhas</div>
-        <div class="card-value" id="cardTotal">0</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Em Andamento</div>
-        <div class="card-value" id="cardAtivas">0</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Total Gasto</div>
-        <div class="card-value" id="cardGasto">R$ 0,00</div>
-      </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-label">Total Campanhas</div><div class="stat-value" id="totalCampanhas">0</div></div>
+      <div class="stat"><div class="stat-label">Ativas</div><div class="stat-value" id="campanhasAtivas">0</div></div>
+      <div class="stat"><div class="stat-label">Valor Total</div><div class="stat-value" id="valorTotal">R$ 0</div></div>
+      <div class="stat"><div class="stat-label">Valor Gasto</div><div class="stat-value" id="valorGasto">R$ 0</div></div>
     </div>
-
-    <!-- Tabela -->
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Início</th>
-            <th>Fim</th>
-            <th>Valor Estimado</th>
-            <th>Valor Gasto</th>
-            <th>Status</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody id="tabelaCampanhas">
-          <tr>
-            <td colspan="7" class="empty-state">Nenhuma campanha cadastrada.</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="card">
+      <div class="card-header"><h2>Campanhas de Marketing</h2></div>
+      <table><thead><tr><th>Nome</th><th>Início</th><th>Fim</th><th>Valor Estimado</th><th>Valor Gasto</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tabelaCampanhas"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--gray)">Nenhuma campanha cadastrada.</td></tr></tbody></table>
     </div>
   </div>
-
-  <!-- Modal -->
-  <div class="modal-overlay" id="modalOverlay" onclick="fecharModalOverlay(event)">
-    <div class="modal" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <span class="modal-title" id="modalTitulo">Nova Campanha</span>
-        <button class="modal-close" onclick="fecharModal()">&times;</button>
-      </div>
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header"><h3 id="modalTitle">Nova Campanha</h3><button class="modal-close" onclick="fecharModal()">&times;</button></div>
       <div class="modal-body">
         <form id="formCampanha">
-          <input type="hidden" id="campanhaId" />
-          <div class="form-group">
-            <label for="nome">Nome da campanha</label>
-            <input type="text" id="nome" required maxlength="100" />
+          <input type="hidden" id="campanhaId">
+          <div class="form-group"><label>Nome da Campanha</label><input type="text" id="nome" required></div>
+          <div class="form-row">
+            <div class="form-group"><label>Data Início</label><input type="date" id="dataInicio"></div>
+            <div class="form-group"><label>Data Fim</label><input type="date" id="dataFim"></div>
           </div>
           <div class="form-row">
-            <div class="form-group">
-              <label for="dataInicio">Data início</label>
-              <input type="date" id="dataInicio" required />
-            </div>
-            <div class="form-group">
-              <label for="dataFim">Data fim</label>
-              <input type="date" id="dataFim" required />
-            </div>
+            <div class="form-group"><label>Valor Estimado (R$)</label><input type="number" id="valorEstimado" step="0.01"></div>
+            <div class="form-group"><label>Valor Gasto (R$)</label><input type="number" id="valorGastoInput" step="0.01"></div>
           </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="valorEstimado">Valor estimado (R$)</label>
-              <input type="number" id="valorEstimado" min="0" step="0.01" required />
-            </div>
-            <div class="form-group">
-              <label for="valorGasto">Valor gasto (R$)</label>
-              <input type="number" id="valorGasto" min="0" step="0.01" required />
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="status">Status</label>
-            <select id="status" required>
-              <option value="Ativa">Ativa</option>
-              <option value="Concluída">Concluída</option>
-              <option value="Cancelada">Cancelada</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="observacao">Observação</label>
-            <textarea id="observacao" maxlength="500"></textarea>
+          <div class="form-group"><label>Status</label><select id="status"><option>Planejada</option><option>Ativa</option><option>Concluída</option><option>Cancelada</option></select></div>
+          <div class="form-group"><label>Observações</label><textarea id="observacao" rows="3" style="width:100%;padding:0.6rem;border:1px solid var(--border);border-radius:6px;"></textarea></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-back" onclick="fecharModal()">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
           </div>
         </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-back" onclick="fecharModal()">Cancelar</button>
-        <button type="button" class="btn btn-primary" onclick="salvarCampanha()">Salvar</button>
-      </div>
     </div>
   </div>
-
   <script>
-    const STORAGE_KEY = 'marketing_campanhas';
-
-    function gerarId() {
-      return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
-    }
-
-    function getCampanhas() {
-      try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-      } catch (e) {
-        return [];
-      }
-    }
-
-    function setCampanhas(campanhas) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(campanhas));
-    }
-
-    function formatarMoeda(valor) {
-      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor || 0);
-    }
-
-    function formatarData(data) {
-      if (!data) return '-';
-      const d = new Date(data + 'T00:00:00');
-      return d.toLocaleDateString('pt-BR');
-    }
-
-    function classeStatus(status) {
-      switch (status) {
-        case 'Ativa': return 'status-ativa';
-        case 'Concluída': return 'status-concluida';
-        case 'Cancelada': return 'status-cancelada';
-        default: return 'status-ativa';
-      }
-    }
-
-    function renderizar() {
-      const campanhas = getCampanhas();
+    let dados = [];
+    const key = 'campanhas_marketing';
+    function getData() { try { return JSON.parse(localStorage.getItem(key)||'[]'); } catch(e){return [];} }
+    function setData(v) { localStorage.setItem(key,JSON.stringify(v)); }
+    function genId() { return Date.now().toString(36)+Math.random().toString(36).substr(2,5); }
+    function fmt(v) { return 'R$ '+(v||0).toFixed(2).replace('.',','); }
+    function fmtData(d) { if(!d) return '—'; try{return new Date(d+'T12:00:00').toLocaleDateString('pt-BR')}catch(e){return d} }
+    function carregar() { dados = getData(); render(); }
+    function render() {
+      document.getElementById('totalCampanhas').textContent = dados.length;
+      const ativas = dados.filter(c=>c.status==='Ativa').length;
+      document.getElementById('campanhasAtivas').textContent = ativas;
+      document.getElementById('valorTotal').textContent = fmt(dados.reduce((s,c)=>s+(parseFloat(c.valorEstimado)||0),0));
+      document.getElementById('valorGasto').textContent = fmt(dados.reduce((s,c)=>s+(parseFloat(c.valorGasto)||0),0));
       const tbody = document.getElementById('tabelaCampanhas');
-      tbody.innerHTML = '';
-
-      let totalGasto = 0;
-      let ativas = 0;
-
-      if (campanhas.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Nenhuma campanha cadastrada.</td></tr>';
-      } else {
-        campanhas.forEach(c => {
-          const gasto = parseFloat(c.valorGasto) || 0;
-          totalGasto += gasto;
-          if (c.status === 'Ativa') ativas += 1;
-
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${c.nome}</td>
-            <td>${formatarData(c.dataInicio)}</td>
-            <td>${formatarData(c.dataFim)}</td>
-            <td>${formatarMoeda(c.valorEstimado)}</td>
-            <td>${formatarMoeda(c.valorGasto)}</td>
-            <td><span class="badge ${classeStatus(c.status)}">${c.status}</span></td>
-            <td>
-              <button class="btn btn-warning btn-sm" onclick="editarCampanha('${c.id}')">Editar</button>
-              <button class="btn btn-danger btn-sm" onclick="excluirCampanha('${c.id}')">Excluir</button>
-            </td>
-          `;
-          tbody.appendChild(tr);
-        });
-      }
-
-      document.getElementById('cardTotal').textContent = campanhas.length;
-      document.getElementById('cardAtivas').textContent = ativas;
-      document.getElementById('cardGasto').textContent = formatarMoeda(totalGasto);
+      tbody.innerHTML = dados.map(c => `<tr><td>${c.nome}</td><td>${fmtData(c.dataInicio)}</td><td>${fmtData(c.dataFim)}</td><td>${fmt(c.valorEstimado)}</td><td>${fmt(c.valorGasto)}</td><td>${c.status}</td><td><button class="btn btn-primary btn-sm" onclick='editar("${c.id}")'>Editar</button><button class="btn btn-danger btn-sm" onclick=excluir("${c.id}")>Excluir</button></td></tr>`).join('');
     }
-
-    function abrirModal() {
-      document.getElementById('formCampanha').reset();
-      document.getElementById('campanhaId').value = '';
-      document.getElementById('modalTitulo').textContent = 'Nova Campanha';
-      document.getElementById('modalOverlay').classList.add('active');
-    }
-
-    function fecharModal() {
-      document.getElementById('modalOverlay').classList.remove('active');
-    }
-
-    function fecharModalOverlay(event) {
-      if (event.target === document.getElementById('modalOverlay')) {
-        fecharModal();
-      }
-    }
-
-    function salvarCampanha() {
-      const id = document.getElementById('campanhaId').value;
-      const nome = document.getElementById('nome').value.trim();
-      const dataInicio = document.getElementById('dataInicio').value;
-      const dataFim = document.getElementById('dataFim').value;
-      const valorEstimado = parseFloat(document.getElementById('valorEstimado').value) || 0;
-      const valorGasto = parseFloat(document.getElementById('valorGasto').value) || 0;
-      const status = document.getElementById('status').value;
-      const observacao = document.getElementById('observacao').value.trim();
-
-      if (!nome || !dataInicio || !dataFim) {
-        alert('Preencha todos os campos obrigatórios.');
-        return;
-      }
-
-      if (new Date(dataFim) < new Date(dataInicio)) {
-        alert('A data fim não pode ser anterior à data início.');
-        return;
-      }
-
-      const campanhas = getCampanhas();
-
-      if (id) {
-        const index = campanhas.findIndex(c => c.id === id);
-        if (index !== -1) {
-          campanhas[index] = { id, nome, dataInicio, dataFim, valorEstimado, valorGasto, status, observacao };
-        }
-      } else {
-        campanhas.push({ id: gerarId(), nome, dataInicio, dataFim, valorEstimado, valorGasto, status, observacao });
-      }
-
-      setCampanhas(campanhas);
-      fecharModal();
-      renderizar();
-    }
-
-    function editarCampanha(id) {
-      const campanha = getCampanhas().find(c => c.id === id);
-      if (!campanha) return;
-
-      document.getElementById('campanhaId').value = campanha.id;
-      document.getElementById('nome').value = campanha.nome;
-      document.getElementById('dataInicio').value = campanha.dataInicio;
-      document.getElementById('dataFim').value = campanha.dataFim;
-      document.getElementById('valorEstimado').value = campanha.valorEstimado;
-      document.getElementById('valorGasto').value = campanha.valorGasto;
-      document.getElementById('status').value = campanha.status;
-      document.getElementById('observacao').value = campanha.observacao || '';
-
-      document.getElementById('modalTitulo').textContent = 'Editar Campanha';
-      document.getElementById('modalOverlay').classList.add('active');
-    }
-
-    function excluirCampanha(id) {
-      if (!confirm('Tem certeza que deseja excluir esta campanha?')) return;
-      const campanhas = getCampanhas().filter(c => c.id !== id);
-      setCampanhas(campanhas);
-      renderizar();
-    }
-
-    document.addEventListener('DOMContentLoaded', renderizar);
+    function abrirModal() { document.getElementById('formCampanha').reset(); document.getElementById('campanhaId').value=''; document.getElementById('modalTitle').textContent='Nova Campanha'; document.getElementById('modalOverlay').classList.add('active'); }
+    function fecharModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+    document.getElementById('formCampanha').addEventListener('submit',function(e){e.preventDefault();const id=document.getElementById('campanhaId').value;const obj={id:id||genId(),nome:document.getElementById('nome').value,dataInicio:document.getElementById('dataInicio').value,dataFim:document.getElementById('dataFim').value,valorEstimado:document.getElementById('valorEstimado').value,valorGasto:document.getElementById('valorGastoInput').value,status:document.getElementById('status').value,observacao:document.getElementById('observacao').value};if(id){const i=dados.findIndex(x=>x.id===id);if(i>=0)dados[i]=obj;else dados.push(obj);}else dados.push(obj);setData(dados);fecharModal();render();});
+    function editar(id) { const c=dados.find(x=>x.id===id);if(!c)return;document.getElementById('campanhaId').value=c.id;document.getElementById('nome').value=c.nome;document.getElementById('dataInicio').value=c.dataInicio;document.getElementById('dataFim').value=c.dataFim;document.getElementById('valorEstimado').value=c.valorEstimado;document.getElementById('valorGastoInput').value=c.valorGasto;document.getElementById('status').value=c.status;document.getElementById('observacao').value=c.observacao||'';document.getElementById('modalTitle').textContent='Editar Campanha';document.getElementById('modalOverlay').classList.add('active');}
+    function excluir(id) { if(confirm('Excluir campanha?')){dados=dados.filter(x=>x.id!==id);setData(dados);render();} }
+    document.addEventListener('DOMContentLoaded', carregar);
   </script>
 </body>
 </html>
