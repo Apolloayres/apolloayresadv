@@ -5,336 +5,385 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fluxo de Caixa - Controle do Escritório</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f0f6ff;
-      color: #1a3a5c;
-      min-height: 100vh;
-    }
-    .navbar {
-      background: #0a58ca;
-      color: #fff;
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    }
-    .navbar-brand {
-      font-size: 1.25rem;
-      font-weight: 600;
-    }
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .title {
-      font-size: 1.6rem;
-      color: #0a58ca;
-    }
-    .btn-back {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #0a58ca;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 16px;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
-      text-decoration: none;
-    }
-    .btn-back:hover {
-      background: #0846a3;
-      transform: translateX(-2px);
-    }
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .card {
-      background: #fff;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(10, 88, 202, 0.1);
-      border-left: 5px solid #0a58ca;
-    }
-    .card.receitas {
-      border-left-color: #198754;
-    }
-    .card.despesas {
-      border-left-color: #dc3545;
-    }
-    .card.saldo {
-      border-left-color: #0a58ca;
-    }
-    .card-label {
-      font-size: 0.85rem;
-      color: #6c88a8;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .card-value {
-      font-size: 1.4rem;
-      font-weight: 700;
-    }
-    .receitas .card-value { color: #198754; }
-    .despesas .card-value { color: #dc3545; }
-    .saldo .card-value { color: #0a58ca; }
-    .filtro {
-      background: #fff;
-      border-radius: 8px;
-      padding: 16px 20px;
-      box-shadow: 0 2px 8px rgba(10, 88, 202, 0.1);
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .filtro label {
-      font-weight: 600;
-      color: #0a58ca;
-    }
-    .filtro input[type="month"] {
-      border: 1px solid #b6d0f7;
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 0.95rem;
-      color: #1a3a5c;
-      background: #f8fbff;
-      outline: none;
-    }
-    .filtro input[type="month"]:focus {
-      border-color: #0a58ca;
-    }
-    .table-wrapper {
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(10, 88, 202, 0.1);
-      overflow: hidden;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    thead {
-      background: #0a58ca;
-      color: #fff;
-    }
-    th, td {
-      padding: 14px 16px;
-      text-align: left;
-      font-size: 0.95rem;
-    }
-    tbody tr:nth-child(even) {
-      background: #f3f8ff;
-    }
-    tbody tr:hover {
-      background: #e6f0ff;
-    }
-    .tipo-receita {
-      color: #198754;
-      font-weight: 600;
-    }
-    .tipo-despesa {
-      color: #dc3545;
-      font-weight: 600;
-    }
-    .valor-receita { color: #198754; font-weight: 600; }
-    .valor-despesa { color: #dc3545; font-weight: 600; }
-    .valor-saldo { color: #0a58ca; font-weight: 700; }
-    .empty {
-      text-align: center;
-      padding: 28px;
-      color: #6c88a8;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; }
+
+    .navbar { background: #0a58ca; color: white; padding: 0 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+    .navbar ul { display: flex; align-items: center; list-style: none; height: 56px; }
+    .navbar li { margin-right: 24px; }
+    .navbar a { color: white; text-decoration: none; font-weight: 500; font-size: 15px; transition: opacity .2s; }
+    .navbar a:hover { opacity: 0.8; }
+    .navbar .brand { font-weight: 700; font-size: 18px; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
+
+    .header-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .header-actions h1 { flex: 1 1 100%; font-size: 26px; margin-bottom: 8px; color: #0a58ca; }
+
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; font-weight: 600; transition: background .2s, transform .1s; text-decoration: none; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: #0a58ca; color: white; }
+    .btn-primary:hover { background: #0846a3; }
+    .btn-secondary { background: #e9ecef; color: #333; }
+    .btn-secondary:hover { background: #dde2e6; }
+    .btn-danger { background: #dc3545; color: white; }
+    .btn-danger:hover { background: #b02a37; }
+    .btn-sm { padding: 6px 10px; font-size: 13px; }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .card { background: white; border-radius: 8px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .card-title { font-size: 13px; color: #6c757d; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .card-value { font-size: 22px; font-weight: 700; }
+    .card-receita { border-left: 5px solid #198754; }
+    .card-receita .card-value { color: #198754; }
+    .card-despesa { border-left: 5px solid #dc3545; }
+    .card-despesa .card-value { color: #dc3545; }
+    .card-saldo { border-left: 5px solid #0a58ca; }
+    .card-saldo .card-value { color: #0a58ca; }
+
+    .filter-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+    .filter-bar label { font-weight: 600; font-size: 14px; }
+    .filter-bar input[type="month"] { padding: 8px 10px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px; }
+
+    .table-responsive { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 700px; }
+    th, td { padding: 14px 16px; text-align: left; font-size: 14px; }
+    th { background: #f8f9fa; color: #495057; font-weight: 700; border-bottom: 2px solid #dee2e6; }
+    tbody tr { border-bottom: 1px solid #eceff2; }
+    tbody tr:hover { background: #f8f9fa; }
+    .tipo-receita { color: #198754; font-weight: 700; }
+    .tipo-despesa { color: #dc3545; font-weight: 700; }
+    .valor-receita { color: #198754; font-weight: 700; }
+    .valor-despesa { color: #dc3545; font-weight: 700; }
+    .acoes { display: flex; gap: 8px; }
+
+    .empty { text-align: center; padding: 36px 16px; color: #6c757d; font-size: 15px; }
+
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: white; border-radius: 10px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: fadeIn .2s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    .modal-header { background: #0a58ca; color: white; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h2 { font-size: 18px; }
+    .modal-close { background: none; border: none; color: white; font-size: 22px; cursor: pointer; }
+    .modal-body { padding: 20px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; color: #495057; }
+    .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px; }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: #0a58ca; box-shadow: 0 0 0 3px rgba(10,88,202,0.15); }
+    .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
+    .hidden { display: none !important; }
+
     @media (max-width: 600px) {
-      .header { flex-direction: column; align-items: flex-start; }
-      th, td { padding: 10px 12px; font-size: 0.88rem; }
+      .navbar ul { flex-wrap: wrap; height: auto; padding: 10px 0; }
+      .navbar li { margin: 6px 12px 6px 0; }
+      .cards { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
+
   <nav class="navbar">
-    <div class="navbar-brand">Controle do Escritório</div>
+    <ul>
+      <li class="brand"><a href="home.html">🏢 Controle do Escritório</a></li>
+      <li><a href="home.html">Início</a></li>
+      <li><a href="clientes.html">Clientes</a></li>
+      <li><a href="servicos.html">Serviços</a></li>
+      <li><a href="fluxo-caixa.html">Fluxo de Caixa</a></li>
+    </ul>
   </nav>
 
   <div class="container">
-    <div class="header">
-      <h1 class="title">📈 Fluxo de Caixa</h1>
-      <a href="home.html" class="btn-back">← Voltar</a>
+    <div class="header-actions">
+      <h1>📈 Fluxo de Caixa</h1>
+      <a href="home.html" class="btn btn-secondary">← Voltar</a>
+      <button class="btn btn-primary" onclick="abrirModal()">+ Nova Movimentação</button>
     </div>
 
     <div class="cards">
-      <div class="card receitas">
-        <div class="card-label">Total Receitas</div>
+      <div class="card card-receita">
+        <div class="card-title">Total Receitas</div>
         <div class="card-value" id="totalReceitas">R$ 0,00</div>
       </div>
-      <div class="card despesas">
-        <div class="card-label">Total Despesas</div>
+      <div class="card card-despesa">
+        <div class="card-title">Total Despesas</div>
         <div class="card-value" id="totalDespesas">R$ 0,00</div>
       </div>
-      <div class="card saldo">
-        <div class="card-label">Saldo do Período</div>
+      <div class="card card-saldo">
+        <div class="card-title">Saldo do Período</div>
         <div class="card-value" id="saldoPeriodo">R$ 0,00</div>
       </div>
     </div>
 
-    <div class="filtro">
+    <div class="filter-bar">
       <label for="filtroMes">Filtrar por mês/ano:</label>
-      <input type="month" id="filtroMes" />
+      <input type="month" id="filtroMes" onchange="renderizar()">
     </div>
 
-    <div class="table-wrapper">
+    <div class="table-responsive">
       <table id="tabelaFluxo">
         <thead>
           <tr>
             <th>Data</th>
             <th>Descrição</th>
             <th>Tipo</th>
+            <th>Categoria</th>
+            <th>Forma de Pagamento</th>
             <th>Valor</th>
             <th>Saldo Acumulado</th>
+            <th>Ações</th>
           </tr>
         </thead>
         <tbody id="corpoTabela">
+          <tr><td colspan="8" class="empty">Carregando...</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
+  <div class="modal-overlay" id="modalOverlay" onclick="fecharModalOverlay(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h2 id="tituloModal">Nova Movimentação</h2>
+        <button class="modal-close" onclick="fecharModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="formMovimentacao" onsubmit="salvar(event)">
+          <input type="hidden" id="id">
+
+          <div class="form-group">
+            <label for="tipo">Tipo *</label>
+            <select id="tipo" required onchange="adaptarCampos()">
+              <option value="">Selecione</option>
+              <option value="RECEITA">RECEITA</option>
+              <option value="DESPESA">DESPESA</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="descricao">Descrição</label>
+            <input type="text" id="descricao" placeholder="Ex: Venda de serviço, pagamento de aluguel">
+          </div>
+
+          <div class="form-group">
+            <label for="valor">Valor (R$) *</label>
+            <input type="number" id="valor" step="0.01" min="0.01" required placeholder="0,00">
+          </div>
+
+          <div class="form-group">
+            <label for="data">Data *</label>
+            <input type="date" id="data" required>
+          </div>
+
+          <div class="form-group">
+            <label for="categoria">Categoria</label>
+            <select id="categoria">
+              <option value="">Selecione</option>
+              <option value="Serviços">Serviços</option>
+              <option value="Vendas">Vendas</option>
+              <option value="Impostos">Impostos</option>
+              <option value="Aluguel">Aluguel</option>
+              <option value="Salários">Salários</option>
+              <option value="Fornecedores">Fornecedores</option>
+              <option value="Transporte">Transporte</option>
+              <option value="Outros">Outros</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="forma_pagamento">Forma de Pagamento</label>
+            <select id="forma_pagamento">
+              <option value="">Selecione</option>
+              <option value="Dinheiro">Dinheiro</option>
+              <option value="Pix">Pix</option>
+              <option value="Cartão de Crédito">Cartão de Crédito</option>
+              <option value="Cartão de Débito">Cartão de Débito</option>
+              <option value="Boleto">Boleto</option>
+              <option value="Transferência">Transferência</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+
+          <div class="form-group hidden" id="grupoStatus">
+            <label for="status">Status</label>
+            <select id="status">
+              <option value="Pendente">Pendente</option>
+              <option value="Paga">Paga</option>
+            </select>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="db.js"></script>
   <script>
-    function formatarData(dataISO) {
-      if (!dataISO) return '';
-      const d = new Date(dataISO + 'T00:00:00');
-      return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const fmt = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+    const fmtData = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+    let receitas = [];
+    let despesas = [];
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const agora = new Date();
+      document.getElementById('filtroMes').value = `${agora.getFullYear()}-${String(agora.getMonth() + 1).padStart(2, '0')}`;
+      await carregarDados();
+    });
+
+    async function carregarDados() {
+      try {
+        receitas = await window.db.receitas_listar() || [];
+        despesas = await window.db.despesas_listar() || [];
+      } catch (e) {
+        console.error('Erro ao carregar dados:', e);
+        receitas = [];
+        despesas = [];
+      }
+      renderizar();
     }
 
-    function formatarMoeda(valor) {
-      return 'R$ ' + Number(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    function adaptarCampos() {
+      const tipo = document.getElementById('tipo').value;
+      document.getElementById('grupoStatus').classList.toggle('hidden', tipo !== 'DESPESA');
     }
 
-    function obterMovimentacoes(receitas, despesas) {
+    function abrirModal(item = null) {
+      const form = document.getElementById('formMovimentacao');
+      form.reset();
+      document.getElementById('id').value = '';
+      document.getElementById('tituloModal').textContent = item ? 'Editar Movimentação' : 'Nova Movimentação';
+      document.getElementById('grupoStatus').classList.add('hidden');
+
+      if (item) {
+        document.getElementById('id').value = item.id || '';
+        document.getElementById('tipo').value = item.tipo;
+        document.getElementById('descricao').value = item.descricao || '';
+        document.getElementById('valor').value = item.valor || '';
+        document.getElementById('data').value = item.data ? item.data.slice(0, 10) : '';
+        document.getElementById('categoria').value = item.categoria || '';
+        document.getElementById('forma_pagamento').value = item.forma_pagamento || '';
+        if (item.tipo === 'DESPESA') {
+          document.getElementById('status').value = item.status || 'Pendente';
+        }
+        adaptarCampos();
+      }
+
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function fecharModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+    }
+
+    function fecharModalOverlay(e) {
+      if (e.target === document.getElementById('modalOverlay')) fecharModal();
+    }
+
+    async function salvar(e) {
+      e.preventDefault();
+      const id = document.getElementById('id').value;
+      const tipo = document.getElementById('tipo').value;
+      const obj = {
+        id: id || undefined,
+        descricao: document.getElementById('descricao').value.trim(),
+        valor: parseFloat(document.getElementById('valor').value),
+        data: document.getElementById('data').value,
+        categoria: document.getElementById('categoria').value,
+        forma_pagamento: document.getElementById('forma_pagamento').value
+      };
+
+      if (!tipo) return alert('Selecione o tipo.');
+
+      try {
+        if (tipo === 'RECEITA') {
+          await window.db.receitas_salvar(obj);
+        } else {
+          obj.status = document.getElementById('status').value;
+          await window.db.despesas_salvar(obj);
+        }
+        fecharModal();
+        await carregarDados();
+      } catch (err) {
+        console.error('Erro ao salvar:', err);
+        alert('Erro ao salvar movimentação.');
+      }
+    }
+
+    async function excluir(id, tipo) {
+      if (!confirm('Tem certeza que deseja excluir esta movimentação?')) return;
+      try {
+        if (tipo === 'RECEITA') {
+          await window.db.receitas_excluir(id);
+        } else {
+          await window.db.despesas_excluir(id);
+        }
+        await carregarDados();
+      } catch (err) {
+        console.error('Erro ao excluir:', err);
+        alert('Erro ao excluir movimentação.');
+      }
+    }
+
+    function renderizar() {
+      const filtroMes = document.getElementById('filtroMes').value;
       const movimentacoes = [];
 
-      receitas.forEach(item => {
-        movimentacoes.push({
-          id: item.id,
-          data: item.data,
-          descricao: item.descricao,
-          tipo: 'Receita',
-          valor: Number(item.valor)
-        });
+      receitas.forEach(r => {
+        if (!filtroMes || (r.data && r.data.slice(0, 7) === filtroMes)) {
+          movimentacoes.push({ ...r, tipo: 'RECEITA', sinal: 1 });
+        }
       });
 
-      despesas.forEach(item => {
-        movimentacoes.push({
-          id: item.id,
-          data: item.data,
-          descricao: item.descricao,
-          tipo: 'Despesa',
-          valor: Number(item.valor)
-        });
+      despesas.forEach(d => {
+        if (!filtroMes || (d.data && d.data.slice(0, 7) === filtroMes)) {
+          movimentacoes.push({ ...d, tipo: 'DESPESA', sinal: -1 });
+        }
       });
 
       movimentacoes.sort((a, b) => new Date(a.data) - new Date(b.data));
-      return movimentacoes;
-    }
 
-    function filtrarPorMes(movimentacoes, mesAno) {
-      if (!mesAno) return movimentacoes;
-      return movimentacoes.filter(m => m.data && m.data.startsWith(mesAno));
-    }
+      const totalReceitas = movimentacoes.filter(m => m.tipo === 'RECEITA').reduce((s, m) => s + (m.valor || 0), 0);
+      const totalDespesas = movimentacoes.filter(m => m.tipo === 'DESPESA').reduce((s, m) => s + (m.valor || 0), 0);
+      const saldo = totalReceitas - totalDespesas;
 
-    function calcularSaldos(movimentacoes) {
-      let saldoAcumulado = 0;
-      return movimentacoes.map(m => {
-        saldoAcumulado += m.tipo === 'Receita' ? m.valor : -m.valor;
-        return { ...m, saldoAcumulado };
-      });
-    }
+      document.getElementById('totalReceitas').textContent = fmt.format(totalReceitas);
+      document.getElementById('totalDespesas').textContent = fmt.format(totalDespesas);
+      document.getElementById('saldoPeriodo').textContent = fmt.format(saldo);
 
-    function renderizar(movimentacoes) {
-      const totalReceitas = movimentacoes
-        .filter(m => m.tipo === 'Receita')
-        .reduce((s, m) => s + m.valor, 0);
-      const totalDespesas = movimentacoes
-        .filter(m => m.tipo === 'Despesa')
-        .reduce((s, m) => s + m.valor, 0);
-      const saldoPeriodo = totalReceitas - totalDespesas;
-
-      document.getElementById('totalReceitas').textContent = formatarMoeda(totalReceitas);
-      document.getElementById('totalDespesas').textContent = formatarMoeda(totalDespesas);
-      document.getElementById('saldoPeriodo').textContent = formatarMoeda(saldoPeriodo);
-
-      const corpo = document.getElementById('corpoTabela');
-      corpo.innerHTML = '';
+      const tbody = document.getElementById('corpoTabela');
+      tbody.innerHTML = '';
 
       if (movimentacoes.length === 0) {
-        corpo.innerHTML = '<tr><td colspan="5" class="empty">Nenhuma movimentação encontrada para o período.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" class="empty">Nenhuma movimentação encontrada para o período.</td></tr>';
         return;
       }
 
-      const comSaldo = calcularSaldos(movimentacoes);
-
-      comSaldo.forEach(m => {
-        const linha = document.createElement('tr');
-        const classeTipo = m.tipo === 'Receita' ? 'tipo-receita' : 'tipo-despesa';
-        const classeValor = m.tipo === 'Receita' ? 'valor-receita' : 'valor-despesa';
-        linha.innerHTML = `
-          <td>${formatarData(m.data)}</td>
-          <td>${m.descricao}</td>
-          <td class="${classeTipo}">${m.tipo}</td>
-          <td class="${classeValor}">${formatarMoeda(m.valor)}</td>
-          <td class="valor-saldo">${formatarMoeda(m.saldoAcumulado)}</td>
+      let acumulado = 0;
+      movimentacoes.forEach(m => {
+        acumulado += m.valor * m.sinal;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${m.data ? fmtData.format(new Date(m.data + 'T00:00:00')) : '-'}</td>
+          <td>${m.descricao || '-'}</td>
+          <td class="tipo-${m.tipo.toLowerCase()}">${m.tipo}</td>
+          <td>${m.categoria || '-'}</td>
+          <td>${m.forma_pagamento || '-'}</td>
+          <td class="valor-${m.tipo.toLowerCase()}">${m.tipo === 'RECEITA' ? '+' : '-'} ${fmt.format(m.valor || 0)}</td>
+          <td>${fmt.format(acumulado)}</td>
+          <td class="acoes">
+            <button class="btn btn-primary btn-sm" onclick='abrirModal(${JSON.stringify(m).replace(/'/g, "&#39;")})'>Editar</button>
+            <button class="btn btn-danger btn-sm" onclick="excluir('${m.id}', '${m.tipo}')">Excluir</button>
+          </td>
         `;
-        corpo.appendChild(linha);
+        tbody.appendChild(tr);
       });
     }
-
-    let todasMovimentacoes = [];
-
-    function carregar() {
-      try {
-        const receitas = window.db && typeof window.db.receitas_listar === 'function'
-          ? window.db.receitas_listar() : [];
-        const despesas = window.db && typeof window.db.despesas_listar === 'function'
-          ? window.db.despesas_listar() : [];
-        todasMovimentacoes = obterMovimentacoes(receitas || [], despesas || []);
-
-        const hoje = new Date();
-        const mesAtual = hoje.toISOString().slice(0, 7);
-        document.getElementById('filtroMes').value = mesAtual;
-        renderizar(filtrarPorMes(todasMovimentacoes, mesAtual));
-      } catch (e) {
-        console.error('Erro ao carregar fluxo de caixa:', e);
-      }
-    }
-
-    document.getElementById('filtroMes').addEventListener('change', function () {
-      renderizar(filtrarPorMes(todasMovimentacoes, this.value));
-    });
-
-    document.addEventListener('DOMContentLoaded', carregar);
   </script>
+
 </body>
 </html>
