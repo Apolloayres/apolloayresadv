@@ -1,5 +1,5 @@
 const ADMIN_EMAIL = 'admin@escritorio.com';
-const ADMIN_SENHA = '#Felipe01*';
+const ADMIN_SENHA = '*';
 
 function verificarAutenticacao() {
     const usuarioLogado = localStorage.getItem('usuarioLogado');
@@ -17,6 +17,7 @@ function verificarAdmin() {
 }
 
 async function fazerLogin(email, senha) {
+    // Admin padrão
     if (email === ADMIN_EMAIL && senha === ADMIN_SENHA) {
         const usuario = {
             nome: 'Administrador',
@@ -29,21 +30,34 @@ async function fazerLogin(email, senha) {
         return { sucesso: true, mensagem: 'Login realizado com sucesso.' };
     }
 
+    // 1. TENTAR buscar no Supabase
     try {
         const usuario = await window.db.usuarios_buscar(email);
+        if (usuario) {
+            if (usuario.senha !== senha) {
+                return { sucesso: false, mensagem: 'Senha incorreta.' };
+            }
+            localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+            window.location.href = 'home.html';
+            return { sucesso: true, mensagem: 'Login realizado com sucesso.' };
+        }
+    } catch (erro) {
+        console.log('Supabase falhou, tentando localStorage...');
+    }
 
+    // 2. FALLBACK: buscar no localStorage
+    try {
+        const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+        const usuario = usuarios.find(u => u.email === email);
+        
         if (!usuario) {
             return { sucesso: false, mensagem: 'Usuário não encontrado.' };
         }
-
+        
         if (usuario.senha !== senha) {
             return { sucesso: false, mensagem: 'Senha incorreta.' };
         }
-
-        if (usuario.status !== 'Ativo') {
-            return { sucesso: false, mensagem: 'Usuário inativo.' };
-        }
-
+        
         localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
         window.location.href = 'home.html';
         return { sucesso: true, mensagem: 'Login realizado com sucesso.' };
