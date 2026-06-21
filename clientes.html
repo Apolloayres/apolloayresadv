@@ -180,8 +180,6 @@
     <div>
       <a href="home.html">Início</a>
       <a href="clientes.html">Clientes</a>
-      <a href="empresas.html">Empresas</a>
-      <a href="tribunais.html">Tribunais</a>
     </div>
   </nav>
 
@@ -189,7 +187,7 @@
     <div class="header">
       <h1>👥 Clientes</h1>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <button class="btn btn-voltar" onclick="voltarHome()">← Voltar</button>
+        <button class="btn btn-voltar" onclick="window.location.href='home.html'">← Voltar</button>
         <button class="btn btn-novo" onclick="abrirModal()">+ Novo Cliente</button>
       </div>
     </div>
@@ -219,7 +217,6 @@
             <th>E-mail</th>
             <th>Telefone</th>
             <th>Localidade</th>
-            <th>Empresa</th>
             <th width="120">Ações</th>
           </tr>
         </thead>
@@ -228,7 +225,6 @@
     </div>
   </div>
 
-  <!-- Modal Cliente -->
   <div id="modalCliente" class="modal-overlay">
     <div class="modal">
       <div class="modal-header">
@@ -247,7 +243,6 @@
                 <option value="PF">Pessoa Física</option>
                 <option value="PJ">Pessoa Jurídica</option>
               </select>
-              <span class="mensagem-erro">Campo obrigatório.</span>
             </div>
             <div class="campo">
               <label id="labelNome" for="nome">Nome</label>
@@ -320,7 +315,6 @@
                 <option value="BSB">BSB</option>
                 <option value="CRG">CRG</option>
               </select>
-              <span class="mensagem-erro">Campo obrigatório.</span>
             </div>
             <div class="campo">
               <label for="tipoProcesso">Tipo de Processo</label>
@@ -349,7 +343,7 @@
             <div class="campo">
               <label for="empresa">Empresa</label>
               <div class="linha-autocomplete">
-                <div class="campo-autocomplete campo">
+                <div class="campo-autocomplete" style="width:100%;">
                   <input type="text" id="empresa" autocomplete="off" oninput="filtrarEmpresas(this.value)" onblur="setTimeout(() => document.getElementById('sugestoesEmpresas').style.display='none', 200)" />
                   <div id="sugestoesEmpresas" class="sugestoes"></div>
                 </div>
@@ -357,8 +351,8 @@
             </div>
             <div class="campo">
               <label for="tribunal">Tribunal</label>
-              <div class="linha-autocomplete">
-                <select id="tribunal" style="flex:1;">
+              <div style="display:flex;gap:8px;">
+                <select id="tribunal" style="flex:1;padding:10px;border:1px solid var(--borda);border-radius:6px;font-size:14px;">
                   <option value="">Selecione</option>
                 </select>
                 <button type="button" class="btn btn-novo btn-pequeno" onclick="abrirModalTribunal()">+ Novo</button>
@@ -396,7 +390,6 @@
     </div>
   </div>
 
-  <!-- Modal Tribunal -->
   <div id="modalTribunal" class="modal-overlay">
     <div class="modal modal-pequeno">
       <div class="modal-header">
@@ -416,33 +409,28 @@
     </div>
   </div>
 
+  <script src="db.js"></script>
   <script>
-    const estados = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
-
     let clientes = [];
     let empresas = [];
     let tribunais = [];
 
-    document.addEventListener('DOMContentLoaded', () => {
-      carregarDados();
-    });
+    document.addEventListener('DOMContentLoaded', carregarDados);
 
     async function carregarDados() {
       try {
         if (window.db && window.db.clientes_listar) clientes = await window.db.clientes_listar() || [];
         if (window.db && window.db.empresas_listar) empresas = await window.db.empresas_listar() || [];
         if (window.db && window.db.tribunais_listar) tribunais = await window.db.tribunais_listar() || [];
-      } catch (e) {
-        console.error('Erro ao carregar dados:', e);
-      }
+      } catch (e) { console.error(e); }
       renderizar();
       carregarTribunaisSelect();
     }
 
     function renderizar() {
       const total = clientes.length;
-      const pf = clientes.filter(c => c.tipoPessoa === 'PF').length;
-      const pj = clientes.filter(c => c.tipoPessoa === 'PJ').length;
+      const pf = clientes.filter(c => c.tipo_pessoa === 'PF').length;
+      const pj = clientes.filter(c => c.tipo_pessoa === 'PJ').length;
       document.getElementById('totalClientes').textContent = total;
       document.getElementById('totalPF').textContent = pf;
       document.getElementById('totalPJ').textContent = pj;
@@ -450,19 +438,18 @@
       const tbody = document.getElementById('tabelaClientes');
       tbody.innerHTML = '';
       if (!clientes.length) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Nenhum cliente cadastrado.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;">Nenhum cliente cadastrado.</td></tr>';
         return;
       }
       clientes.forEach(c => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td>${c.tipoPessoa || '-'}</td>
+          <td>${c.tipo_pessoa || '-'}</td>
           <td>${c.nome || '-'}</td>
-          <td>${c.cpfCnpj || '-'}</td>
+          <td>${c.cpf_cnpj || '-'}</td>
           <td>${c.email || '-'}</td>
           <td>${c.telefone || '-'}</td>
           <td>${c.localidade || '-'}</td>
-          <td>${c.empresa || '-'}</td>
           <td class="acoes">
             <button class="btn btn-editar btn-pequeno" onclick="editarCliente(${c.id})">Editar</button>
             <button class="btn btn-excluir btn-pequeno" onclick="excluirCliente(${c.id})">Excluir</button>
@@ -471,8 +458,6 @@
         tbody.appendChild(tr);
       });
     }
-
-    function voltarHome() { window.location.href = 'home.html'; }
 
     function abrirModal() {
       limparFormulario();
@@ -499,17 +484,14 @@
       document.getElementById('idCliente').value = '';
       document.getElementById('sugestoesEmpresas').style.display = 'none';
       atualizarLabelsTipo();
-      document.querySelectorAll('.erro').forEach(el => el.classList.remove('erro'));
-      document.querySelectorAll('.mensagem-erro').forEach(el => el.style.display = 'none');
     }
 
     function atualizarLabelsTipo() {
       const tipo = document.getElementById('tipoPessoa').value;
       document.getElementById('labelNome').textContent = tipo === 'PJ' ? 'Razão Social' : 'Nome';
       document.getElementById('labelCpfCnpj').textContent = tipo === 'PJ' ? 'CNPJ' : 'CPF';
-      const campo = document.getElementById('cpfCnpj');
-      campo.value = '';
-      campo.maxLength = tipo === 'PJ' ? 18 : 14;
+      document.getElementById('cpfCnpj').value = '';
+      document.getElementById('cpfCnpj').maxLength = tipo === 'PJ' ? 18 : 14;
     }
 
     function mascaraCpfCnpj(el) {
@@ -549,13 +531,13 @@
           document.getElementById('cidade').value = data.localidade || '';
           document.getElementById('uf').value = data.uf || '';
         }
-      } catch (e) { console.error('Erro ViaCEP:', e); }
+      } catch (e) { console.error(e); }
     }
 
     function carregarTribunaisSelect() {
       const select = document.getElementById('tribunal');
       select.innerHTML = '<option value="">Selecione</option>';
-      tribunais.forEach(t => {
+      (tribunais || []).forEach(t => {
         const opt = document.createElement('option');
         opt.value = t.id;
         opt.textContent = t.nome;
@@ -567,7 +549,7 @@
       const div = document.getElementById('sugestoesEmpresas');
       div.innerHTML = '';
       if (!texto) { div.style.display = 'none'; return; }
-      const filtradas = empresas.filter(e => e.nome && e.nome.toLowerCase().includes(texto.toLowerCase()));
+      const filtradas = (empresas || []).filter(e => e.nome && e.nome.toLowerCase().includes(texto.toLowerCase()));
       if (!filtradas.length) { div.style.display = 'none'; return; }
       filtradas.forEach(e => {
         const item = document.createElement('div');
@@ -594,9 +576,9 @@
       if (!c) return;
       limparFormulario();
       document.getElementById('idCliente').value = c.id;
-      document.getElementById('tipoPessoa').value = c.tipoPessoa || '';
+      document.getElementById('tipoPessoa').value = c.tipo_pessoa || '';
       document.getElementById('nome').value = c.nome || '';
-      document.getElementById('cpfCnpj').value = c.cpfCnpj || '';
+      document.getElementById('cpfCnpj').value = c.cpf_cnpj || '';
       document.getElementById('email').value = c.email || '';
       document.getElementById('telefone').value = c.telefone || '';
       document.getElementById('cep').value = c.cep || '';
@@ -607,16 +589,16 @@
       document.getElementById('cidade').value = c.cidade || '';
       document.getElementById('uf').value = c.uf || '';
       document.getElementById('localidade').value = c.localidade || '';
-      document.getElementById('tipoProcesso').value = c.tipoProcesso || '';
+      document.getElementById('tipoProcesso').value = c.tipo_processo || '';
       document.getElementById('empresa').value = c.empresa || '';
-      document.getElementById('tribunal').value = c.tribunalId || '';
-      document.getElementById('processoNumero').value = c.processoNumero || '';
-      document.getElementById('varaJuizo').value = c.varaJuizo || '';
+      document.getElementById('tribunal').value = c.tribunal_id || '';
+      document.getElementById('processoNumero').value = c.processo_numero || '';
+      document.getElementById('varaJuizo').value = c.vara || '';
       document.getElementById('acao').value = c.acao || '';
       document.getElementById('banco').value = c.banco || '';
       document.getElementById('operacao').value = c.operacao || '';
-      document.getElementById('contaCorrente').value = c.contaCorrente || '';
-      document.getElementById('chavePix').value = c.chavePix || '';
+      document.getElementById('contaCorrente').value = c.conta_corrente || '';
+      document.getElementById('chavePix').value = c.chave_pix || '';
       atualizarLabelsTipo();
       document.getElementById('tituloModal').textContent = 'Editar Cliente';
       document.getElementById('modalCliente').classList.add('active');
@@ -630,57 +612,40 @@
       carregarDados();
     }
 
-    function validarFormulario() {
-      let ok = true;
-      document.querySelectorAll('.erro').forEach(el => el.classList.remove('erro'));
-      document.querySelectorAll('.mensagem-erro').forEach(el => el.style.display = 'none');
-      ['tipoPessoa', 'localidade'].forEach(id => {
-        const el = document.getElementById(id);
-        if (!el.value.trim()) {
-          ok = false;
-          el.classList.add('erro');
-          el.nextElementSibling.style.display = 'block';
-        }
-      });
-      return ok;
-    }
-
     async function salvarCliente() {
-      if (!validarFormulario()) return;
       const id = document.getElementById('idCliente').value;
       let empresaNome = document.getElementById('empresa').value.trim();
-      if (empresaNome && !empresas.some(e => e.nome.toLowerCase() === empresaNome.toLowerCase())) {
+      if (empresaNome && !(empresas || []).some(e => e.nome && e.nome.toLowerCase() === empresaNome.toLowerCase())) {
         try {
           if (window.db && window.db.empresas_salvar) await window.db.empresas_salvar({ nome: empresaNome });
           empresas = await window.db.empresas_listar() || [];
         } catch (e) { console.error(e); }
       }
-      const obj = {
-        id: id ? parseInt(id) : null,
-        tipoPessoa: document.getElementById('tipoPessoa').value,
-        nome: document.getElementById('nome').value.trim(),
-        cpfCnpj: document.getElementById('cpfCnpj').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        telefone: document.getElementById('telefone').value.trim(),
-        cep: document.getElementById('cep').value.trim(),
-        logradouro: document.getElementById('logradouro').value.trim(),
-        numero: document.getElementById('numero').value.trim(),
-        complemento: document.getElementById('complemento').value.trim(),
-        bairro: document.getElementById('bairro').value.trim(),
-        cidade: document.getElementById('cidade').value.trim(),
-        uf: document.getElementById('uf').value,
-        localidade: document.getElementById('localidade').value,
-        tipoProcesso: document.getElementById('tipoProcesso').value,
-        empresa: empresaNome,
-        tribunalId: document.getElementById('tribunal').value,
-        processoNumero: document.getElementById('processoNumero').value.trim(),
-        varaJuizo: document.getElementById('varaJuizo').value.trim(),
-        acao: document.getElementById('acao').value.trim(),
-        banco: document.getElementById('banco').value.trim(),
-        operacao: document.getElementById('operacao').value.trim(),
-        contaCorrente: document.getElementById('contaCorrente').value.trim(),
-        chavePix: document.getElementById('chavePix').value.trim()
-      };
+      const obj = {};
+      if (id) obj.id = parseInt(id);
+      obj.tipo_pessoa = document.getElementById('tipoPessoa').value;
+      obj.nome = document.getElementById('nome').value.trim();
+      obj.cpf_cnpj = document.getElementById('cpfCnpj').value.trim();
+      obj.email = document.getElementById('email').value.trim();
+      obj.telefone = document.getElementById('telefone').value.trim();
+      obj.cep = document.getElementById('cep').value.trim();
+      obj.logradouro = document.getElementById('logradouro').value.trim();
+      obj.numero = document.getElementById('numero').value.trim();
+      obj.complemento = document.getElementById('complemento').value.trim();
+      obj.bairro = document.getElementById('bairro').value.trim();
+      obj.cidade = document.getElementById('cidade').value.trim();
+      obj.uf = document.getElementById('uf').value;
+      obj.localidade = document.getElementById('localidade').value;
+      obj.tipo_processo = document.getElementById('tipoProcesso').value;
+      obj.empresa = empresaNome;
+      obj.tribunal_id = document.getElementById('tribunal').value;
+      obj.processo_numero = document.getElementById('processoNumero').value.trim();
+      obj.vara = document.getElementById('varaJuizo').value.trim();
+      obj.acao = document.getElementById('acao').value.trim();
+      obj.banco = document.getElementById('banco').value.trim();
+      obj.operacao = document.getElementById('operacao').value.trim();
+      obj.conta_corrente = document.getElementById('contaCorrente').value.trim();
+      obj.chave_pix = document.getElementById('chavePix').value.trim();
       try {
         if (window.db && window.db.clientes_salvar) await window.db.clientes_salvar(obj);
       } catch (e) { console.error(e); alert('Erro ao salvar cliente.'); return; }

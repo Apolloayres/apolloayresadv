@@ -17,49 +17,56 @@ async function supabaseQuery(url, options) {
 
 // ================= COLABORADORES =================
 async function colaboradores_listar() {
-  const url = `${SUPABASE_URL}/rest/v1/colaboradores?select=*&order=nome.asc`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
-}
-
-async function colaboradores_buscar(id) {
-  const url = `${SUPABASE_URL}/rest/v1/colaboradores?id=eq.${id}&select=*`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  const data = await supabaseQuery(url, options);
-  return data && data.length ? data[0] : null;
-}
-
-async function colaboradores_salvar(obj) {
-  if (obj.id) {
-    const url = `${SUPABASE_URL}/rest/v1/colaboradores?id=eq.${obj.id}`;
-    const options = {
-      method: 'PATCH',
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/colaboradores?order=nome.asc`, {
+      method: 'GET',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
-      },
-      body: JSON.stringify(obj)
-    };
-    return await supabaseQuery(url, options);
-  } else {
-    const url = `${SUPABASE_URL}/rest/v1/colaboradores`;
-    const options = {
+        'Content-Type': 'application/json'
+      }
+    });
+    return data || [];
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+}
+
+async function colaboradores_buscar(id) {
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/colaboradores?id=eq.${id}&select=*`, {
+      method: 'GET',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
+async function colaboradores_salvar(obj) {
+  try {
+    const { id, ...body } = obj;
+    if (id) {
+      const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/colaboradores?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify(body)
+      });
+      return (data && data[0]) || null;
+    }
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/colaboradores`, {
       method: 'POST',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
@@ -68,69 +75,83 @@ async function colaboradores_salvar(obj) {
         'Prefer': 'return=representation'
       },
       body: JSON.stringify(obj)
-    };
-    return await supabaseQuery(url, options);
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
   }
 }
 
 async function colaboradores_excluir(id) {
-  const url = `${SUPABASE_URL}/rest/v1/colaboradores?id=eq.${id}`;
-  const options = {
-    method: 'DELETE',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
+  try {
+    await supabaseQuery(`${SUPABASE_URL}/rest/v1/colaboradores?id=eq.${id}`, {
+      method: 'DELETE',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
 }
 
 // ================= RECEITAS =================
 async function receitas_listar() {
-  const url = `${SUPABASE_URL}/rest/v1/receitas?select=*&order=data.desc`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
-}
-
-async function receitas_buscar(id) {
-  const url = `${SUPABASE_URL}/rest/v1/receitas?id=eq.${id}&select=*`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  const data = await supabaseQuery(url, options);
-  return data && data.length ? data[0] : null;
-}
-
-async function receitas_salvar(obj) {
-  if (obj.id) {
-    const url = `${SUPABASE_URL}/rest/v1/receitas?id=eq.${obj.id}`;
-    const options = {
-      method: 'PATCH',
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/receitas?order=data.desc`, {
+      method: 'GET',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
-      },
-      body: JSON.stringify(obj)
-    };
-    return await supabaseQuery(url, options);
-  } else {
-    const url = `${SUPABASE_URL}/rest/v1/receitas`;
-    const options = {
+        'Content-Type': 'application/json'
+      }
+    });
+    return data || [];
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+}
+
+async function receitas_buscar(id) {
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/receitas?id=eq.${id}`, {
+      method: 'GET',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
+async function receitas_salvar(obj) {
+  try {
+    const { id, ...body } = obj;
+    if (id) {
+      const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/receitas?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify(body)
+      });
+      return (data && data[0]) || null;
+    }
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/receitas`, {
       method: 'POST',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
@@ -139,69 +160,83 @@ async function receitas_salvar(obj) {
         'Prefer': 'return=representation'
       },
       body: JSON.stringify(obj)
-    };
-    return await supabaseQuery(url, options);
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
   }
 }
 
 async function receitas_excluir(id) {
-  const url = `${SUPABASE_URL}/rest/v1/receitas?id=eq.${id}`;
-  const options = {
-    method: 'DELETE',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
+  try {
+    await supabaseQuery(`${SUPABASE_URL}/rest/v1/receitas?id=eq.${id}`, {
+      method: 'DELETE',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
 }
 
 // ================= DESPESAS =================
 async function despesas_listar() {
-  const url = `${SUPABASE_URL}/rest/v1/despesas?select=*&order=data.desc`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
-}
-
-async function despesas_buscar(id) {
-  const url = `${SUPABASE_URL}/rest/v1/despesas?id=eq.${id}&select=*`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  const data = await supabaseQuery(url, options);
-  return data && data.length ? data[0] : null;
-}
-
-async function despesas_salvar(obj) {
-  if (obj.id) {
-    const url = `${SUPABASE_URL}/rest/v1/despesas?id=eq.${obj.id}`;
-    const options = {
-      method: 'PATCH',
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/despesas?order=data.desc`, {
+      method: 'GET',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
-      },
-      body: JSON.stringify(obj)
-    };
-    return await supabaseQuery(url, options);
-  } else {
-    const url = `${SUPABASE_URL}/rest/v1/despesas`;
-    const options = {
+        'Content-Type': 'application/json'
+      }
+    });
+    return data || [];
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+}
+
+async function despesas_buscar(id) {
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/despesas?id=eq.${id}`, {
+      method: 'GET',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
+async function despesas_salvar(obj) {
+  try {
+    const { id, ...body } = obj;
+    if (id) {
+      const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/despesas?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify(body)
+      });
+      return (data && data[0]) || null;
+    }
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/despesas`, {
       method: 'POST',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
@@ -210,82 +245,100 @@ async function despesas_salvar(obj) {
         'Prefer': 'return=representation'
       },
       body: JSON.stringify(obj)
-    };
-    return await supabaseQuery(url, options);
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
   }
 }
 
 async function despesas_excluir(id) {
-  const url = `${SUPABASE_URL}/rest/v1/despesas?id=eq.${id}`;
-  const options = {
-    method: 'DELETE',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
+  try {
+    await supabaseQuery(`${SUPABASE_URL}/rest/v1/despesas?id=eq.${id}`, {
+      method: 'DELETE',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
 }
 
 // ================= PROVENTOS =================
 async function proventos_listar() {
-  const url = `${SUPABASE_URL}/rest/v1/proventos?select=*&order=data.desc`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
-}
-
-async function proventos_listar_por_mes(mes) {
-  const url = `${SUPABASE_URL}/rest/v1/proventos?mes=eq.${mes}&select=*&order=colaborador_id.asc`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
-}
-
-async function proventos_buscar(id) {
-  const url = `${SUPABASE_URL}/rest/v1/proventos?id=eq.${id}&select=*`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  const data = await supabaseQuery(url, options);
-  return data && data.length ? data[0] : null;
-}
-
-async function proventos_salvar(obj) {
-  if (obj.id) {
-    const url = `${SUPABASE_URL}/rest/v1/proventos?id=eq.${obj.id}`;
-    const options = {
-      method: 'PATCH',
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/proventos?order=mes.asc`, {
+      method: 'GET',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
-      },
-      body: JSON.stringify(obj)
-    };
-    return await supabaseQuery(url, options);
-  } else {
-    const url = `${SUPABASE_URL}/rest/v1/proventos`;
-    const options = {
+        'Content-Type': 'application/json'
+      }
+    });
+    return data || [];
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+}
+
+async function proventos_listar_por_mes(mes, ano) {
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/proventos?mes=eq.${mes}&ano=eq.${ano}&order=nome.asc`, {
+      method: 'GET',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return data || [];
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+}
+
+async function proventos_buscar(id) {
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/proventos?id=eq.${id}`, {
+      method: 'GET',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
+async function proventos_salvar(obj) {
+  try {
+    const { id, ...body } = obj;
+    if (id) {
+      const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/proventos?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify(body)
+      });
+      return (data && data[0]) || null;
+    }
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/proventos`, {
       method: 'POST',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
@@ -294,82 +347,100 @@ async function proventos_salvar(obj) {
         'Prefer': 'return=representation'
       },
       body: JSON.stringify(obj)
-    };
-    return await supabaseQuery(url, options);
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
   }
 }
 
 async function proventos_excluir(id) {
-  const url = `${SUPABASE_URL}/rest/v1/proventos?id=eq.${id}`;
-  const options = {
-    method: 'DELETE',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
+  try {
+    await supabaseQuery(`${SUPABASE_URL}/rest/v1/proventos?id=eq.${id}`, {
+      method: 'DELETE',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
 }
 
-async function proventos_excluir_por_colaborador(colaborador_id) {
-  const url = `${SUPABASE_URL}/rest/v1/proventos?colaborador_id=eq.${colaborador_id}`;
-  const options = {
-    method: 'DELETE',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
+async function proventos_excluir_por_colaborador(id) {
+  try {
+    await supabaseQuery(`${SUPABASE_URL}/rest/v1/proventos?colaborador_id=eq.${id}`, {
+      method: 'DELETE',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
 }
 
 // ================= CONTAS =================
 async function contas_listar() {
-  const url = `${SUPABASE_URL}/rest/v1/contas?select=*&order=nome.asc`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
-}
-
-async function contas_buscar(id) {
-  const url = `${SUPABASE_URL}/rest/v1/contas?id=eq.${id}&select=*`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  const data = await supabaseQuery(url, options);
-  return data && data.length ? data[0] : null;
-}
-
-async function contas_salvar(obj) {
-  if (obj.id) {
-    const url = `${SUPABASE_URL}/rest/v1/contas?id=eq.${obj.id}`;
-    const options = {
-      method: 'PATCH',
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/contas?order=nome.asc`, {
+      method: 'GET',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
-      },
-      body: JSON.stringify(obj)
-    };
-    return await supabaseQuery(url, options);
-  } else {
-    const url = `${SUPABASE_URL}/rest/v1/contas`;
-    const options = {
+        'Content-Type': 'application/json'
+      }
+    });
+    return data || [];
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+}
+
+async function contas_buscar(id) {
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/contas?id=eq.${id}`, {
+      method: 'GET',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
+async function contas_salvar(obj) {
+  try {
+    const { id, ...body } = obj;
+    if (id) {
+      const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/contas?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify(body)
+      });
+      return (data && data[0]) || null;
+    }
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/contas`, {
       method: 'POST',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
@@ -378,69 +449,83 @@ async function contas_salvar(obj) {
         'Prefer': 'return=representation'
       },
       body: JSON.stringify(obj)
-    };
-    return await supabaseQuery(url, options);
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
   }
 }
 
 async function contas_excluir(id) {
-  const url = `${SUPABASE_URL}/rest/v1/contas?id=eq.${id}`;
-  const options = {
-    method: 'DELETE',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
+  try {
+    await supabaseQuery(`${SUPABASE_URL}/rest/v1/contas?id=eq.${id}`, {
+      method: 'DELETE',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
 }
 
 // ================= IMOVEIS =================
 async function imoveis_listar() {
-  const url = `${SUPABASE_URL}/rest/v1/imoveis?select=*&order=nome.asc`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
-}
-
-async function imoveis_buscar(id) {
-  const url = `${SUPABASE_URL}/rest/v1/imoveis?id=eq.${id}&select=*`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  const data = await supabaseQuery(url, options);
-  return data && data.length ? data[0] : null;
-}
-
-async function imoveis_salvar(obj) {
-  if (obj.id) {
-    const url = `${SUPABASE_URL}/rest/v1/imoveis?id=eq.${obj.id}`;
-    const options = {
-      method: 'PATCH',
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/imoveis?order=nome.asc`, {
+      method: 'GET',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
-      },
-      body: JSON.stringify(obj)
-    };
-    return await supabaseQuery(url, options);
-  } else {
-    const url = `${SUPABASE_URL}/rest/v1/imoveis`;
-    const options = {
+        'Content-Type': 'application/json'
+      }
+    });
+    return data || [];
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+}
+
+async function imoveis_buscar(id) {
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/imoveis?id=eq.${id}`, {
+      method: 'GET',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
+async function imoveis_salvar(obj) {
+  try {
+    const { id, ...body } = obj;
+    if (id) {
+      const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/imoveis?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify(body)
+      });
+      return (data && data[0]) || null;
+    }
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/imoveis`, {
       method: 'POST',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
@@ -449,69 +534,83 @@ async function imoveis_salvar(obj) {
         'Prefer': 'return=representation'
       },
       body: JSON.stringify(obj)
-    };
-    return await supabaseQuery(url, options);
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
   }
 }
 
 async function imoveis_excluir(id) {
-  const url = `${SUPABASE_URL}/rest/v1/imoveis?id=eq.${id}`;
-  const options = {
-    method: 'DELETE',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
+  try {
+    await supabaseQuery(`${SUPABASE_URL}/rest/v1/imoveis?id=eq.${id}`, {
+      method: 'DELETE',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
 }
 
 // ================= APLICACOES =================
 async function aplicacoes_listar() {
-  const url = `${SUPABASE_URL}/rest/v1/aplicacoes?select=*&order=data.desc`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
-}
-
-async function aplicacoes_buscar(id) {
-  const url = `${SUPABASE_URL}/rest/v1/aplicacoes?id=eq.${id}&select=*`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  const data = await supabaseQuery(url, options);
-  return data && data.length ? data[0] : null;
-}
-
-async function aplicacoes_salvar(obj) {
-  if (obj.id) {
-    const url = `${SUPABASE_URL}/rest/v1/aplicacoes?id=eq.${obj.id}`;
-    const options = {
-      method: 'PATCH',
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/aplicacoes?order=nome.asc`, {
+      method: 'GET',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
-      },
-      body: JSON.stringify(obj)
-    };
-    return await supabaseQuery(url, options);
-  } else {
-    const url = `${SUPABASE_URL}/rest/v1/aplicacoes`;
-    const options = {
+        'Content-Type': 'application/json'
+      }
+    });
+    return data || [];
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+}
+
+async function aplicacoes_buscar(id) {
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/aplicacoes?id=eq.${id}`, {
+      method: 'GET',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
+async function aplicacoes_salvar(obj) {
+  try {
+    const { id, ...body } = obj;
+    if (id) {
+      const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/aplicacoes?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify(body)
+      });
+      return (data && data[0]) || null;
+    }
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/aplicacoes`, {
       method: 'POST',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
@@ -520,69 +619,83 @@ async function aplicacoes_salvar(obj) {
         'Prefer': 'return=representation'
       },
       body: JSON.stringify(obj)
-    };
-    return await supabaseQuery(url, options);
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
   }
 }
 
 async function aplicacoes_excluir(id) {
-  const url = `${SUPABASE_URL}/rest/v1/aplicacoes?id=eq.${id}`;
-  const options = {
-    method: 'DELETE',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
+  try {
+    await supabaseQuery(`${SUPABASE_URL}/rest/v1/aplicacoes?id=eq.${id}`, {
+      method: 'DELETE',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
 }
 
 // ================= USUARIOS =================
 async function usuarios_listar() {
-  const url = `${SUPABASE_URL}/rest/v1/usuarios?select=*&order=email.asc`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
-}
-
-async function usuarios_buscar(id) {
-  const url = `${SUPABASE_URL}/rest/v1/usuarios?id=eq.${id}&select=*`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  const data = await supabaseQuery(url, options);
-  return data && data.length ? data[0] : null;
-}
-
-async function usuarios_salvar(obj) {
-  if (obj.id) {
-    const url = `${SUPABASE_URL}/rest/v1/usuarios?id=eq.${obj.id}`;
-    const options = {
-      method: 'PATCH',
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/usuarios?order=nome.asc`, {
+      method: 'GET',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
-      },
-      body: JSON.stringify(obj)
-    };
-    return await supabaseQuery(url, options);
-  } else {
-    const url = `${SUPABASE_URL}/rest/v1/usuarios`;
-    const options = {
+        'Content-Type': 'application/json'
+      }
+    });
+    return data || [];
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+}
+
+async function usuarios_buscar(email) {
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/usuarios?email=eq.${encodeURIComponent(email)}&select=*`, {
+      method: 'GET',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
+async function usuarios_salvar(obj) {
+  try {
+    const { id, ...body } = obj;
+    if (id) {
+      const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/usuarios?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify(body)
+      });
+      return (data && data[0]) || null;
+    }
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/usuarios`, {
       method: 'POST',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
@@ -591,83 +704,97 @@ async function usuarios_salvar(obj) {
         'Prefer': 'return=representation'
       },
       body: JSON.stringify(obj)
-    };
-    return await supabaseQuery(url, options);
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
   }
 }
 
 async function usuarios_excluir(id) {
-  const url = `${SUPABASE_URL}/rest/v1/usuarios?id=eq.${id}`;
-  const options = {
-    method: 'DELETE',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
+  try {
+    await supabaseQuery(`${SUPABASE_URL}/rest/v1/usuarios?id=eq.${id}`, {
+      method: 'DELETE',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
 }
 
 async function usuario_login(email, senha) {
-  const url = `${SUPABASE_URL}/auth/v1/token?grant_type=password`;
-  const options = {
-    method: 'POST',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ email, password: senha })
-  };
-  return await supabaseQuery(url, options);
+  try {
+    const usuario = await usuarios_buscar(email);
+    if (usuario && usuario.senha === senha) {
+      const { senha, ...usuarioSemSenha } = usuario;
+      return usuarioSemSenha;
+    }
+    return null;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
 }
 
 // ================= CLIENTES =================
 async function clientes_listar() {
-  const url = `${SUPABASE_URL}/rest/v1/clientes?select=*&order=nome.asc`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
-}
-
-async function clientes_buscar(id) {
-  const url = `${SUPABASE_URL}/rest/v1/clientes?id=eq.${id}&select=*`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  const data = await supabaseQuery(url, options);
-  return data && data.length ? data[0] : null;
-}
-
-async function clientes_salvar(obj) {
-  if (obj.id) {
-    const url = `${SUPABASE_URL}/rest/v1/clientes?id=eq.${obj.id}`;
-    const options = {
-      method: 'PATCH',
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/clientes?order=nome.asc`, {
+      method: 'GET',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
-      },
-      body: JSON.stringify(obj)
-    };
-    return await supabaseQuery(url, options);
-  } else {
-    const url = `${SUPABASE_URL}/rest/v1/clientes`;
-    const options = {
+        'Content-Type': 'application/json'
+      }
+    });
+    return data || [];
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+}
+
+async function clientes_buscar(id) {
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/clientes?id=eq.${id}&select=*`, {
+      method: 'GET',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
+async function clientes_salvar(obj) {
+  try {
+    const { id, ...body } = obj;
+    if (id) {
+      const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/clientes?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify(body)
+      });
+      return (data && data[0]) || null;
+    }
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/clientes`, {
       method: 'POST',
       headers: {
         'apikey': SUPABASE_ANON_KEY,
@@ -676,135 +803,148 @@ async function clientes_salvar(obj) {
         'Prefer': 'return=representation'
       },
       body: JSON.stringify(obj)
-    };
-    return await supabaseQuery(url, options);
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
   }
 }
 
 async function clientes_excluir(id) {
-  const url = `${SUPABASE_URL}/rest/v1/clientes?id=eq.${id}`;
-  const options = {
-    method: 'DELETE',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
+  try {
+    await supabaseQuery(`${SUPABASE_URL}/rest/v1/clientes?id=eq.${id}`, {
+      method: 'DELETE',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
 }
 
 // ================= EMPRESAS =================
 async function empresas_listar() {
-  const url = `${SUPABASE_URL}/rest/v1/empresas?select=*&order=nome.asc`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/empresas?order=nome.asc`, {
+      method: 'GET',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return data || [];
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
 }
 
 async function empresas_salvar(obj) {
-  const url = `${SUPABASE_URL}/rest/v1/empresas`;
-  const options = {
-    method: 'POST',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=representation'
-    },
-    body: JSON.stringify(obj)
-  };
-  return await supabaseQuery(url, options);
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/empresas`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      },
+      body: JSON.stringify(obj)
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
 }
 
 // ================= TRIBUNAIS =================
 async function tribunais_listar() {
-  const url = `${SUPABASE_URL}/rest/v1/tribunais?select=*&order=nome.asc`;
-  const options = {
-    method: 'GET',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  };
-  return await supabaseQuery(url, options);
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/tribunais?order=nome.asc`, {
+      method: 'GET',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return data || [];
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
 }
 
 async function tribunais_salvar(obj) {
-  const url = `${SUPABASE_URL}/rest/v1/tribunais`;
-  const options = {
-    method: 'POST',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=representation'
-    },
-    body: JSON.stringify(obj)
-  };
-  return await supabaseQuery(url, options);
+  try {
+    const data = await supabaseQuery(`${SUPABASE_URL}/rest/v1/tribunais`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      },
+      body: JSON.stringify(obj)
+    });
+    return (data && data[0]) || null;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
 }
 
+// ================= EXPORTAÇÃO =================
 window.db = {
-  // colaboradores
   colaboradores_listar,
   colaboradores_buscar,
   colaboradores_salvar,
   colaboradores_excluir,
-  // receitas
   receitas_listar,
   receitas_buscar,
   receitas_salvar,
   receitas_excluir,
-  // despesas
   despesas_listar,
   despesas_buscar,
   despesas_salvar,
   despesas_excluir,
-  // proventos
   proventos_listar,
   proventos_listar_por_mes,
   proventos_buscar,
   proventos_salvar,
   proventos_excluir,
   proventos_excluir_por_colaborador,
-  // contas
   contas_listar,
   contas_buscar,
   contas_salvar,
   contas_excluir,
-  // imoveis
   imoveis_listar,
   imoveis_buscar,
   imoveis_salvar,
   imoveis_excluir,
-  // aplicacoes
   aplicacoes_listar,
   aplicacoes_buscar,
   aplicacoes_salvar,
   aplicacoes_excluir,
-  // usuarios
   usuarios_listar,
   usuarios_buscar,
   usuarios_salvar,
   usuarios_excluir,
   usuario_login,
-  // clientes
   clientes_listar,
   clientes_buscar,
   clientes_salvar,
   clientes_excluir,
-  // empresas
   empresas_listar,
   empresas_salvar,
-  // tribunais
   tribunais_listar,
   tribunais_salvar
 };
