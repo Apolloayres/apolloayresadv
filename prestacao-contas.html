@@ -1,667 +1,733 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prestação de Contas</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            font-family: "Times New Roman", Times, Arial, serif;
-            background-color: #fff;
-            color: #000;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 30px;
-            border: 1px solid #000;
-        }
-        h1 {
-            text-align: center;
-            color: #0a58ca;
-            font-size: 24px;
-            margin-bottom: 25px;
-            text-transform: uppercase;
-        }
-        h2 {
-            color: #0a58ca;
-            font-size: 16px;
-            margin-top: 25px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #0a58ca;
-            padding-bottom: 4px;
-        }
-        h3 {
-            font-size: 14px;
-            margin-top: 15px;
-            margin-bottom: 8px;
-        }
-        .form-group {
-            margin-bottom: 10px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            margin-bottom: 3px;
-            font-weight: bold;
-        }
-        input[type="text"], input[type="number"], textarea, select {
-            width: 100%;
-            padding: 6px;
-            border: 1px solid #000;
-            font-family: "Times New Roman", Times, Arial, serif;
-            font-size: 13px;
-            background: #fff;
-        }
-        textarea {
-            resize: vertical;
-        }
-        .two-col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        .three-col {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 15px;
-        }
-        .four-col {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 15px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            font-size: 13px;
-        }
-        th, td {
-            border: 1px solid #000;
-            padding: 6px;
-            text-align: left;
-        }
-        th {
-            background-color: #f0f0f0;
-            font-weight: bold;
-        }
-        .right {
-            text-align: right;
-        }
-        .total-row td {
-            font-weight: bold;
-            background-color: #f8f8f8;
-        }
-        .inline-text input {
-            width: 60px;
-            text-align: center;
-            display: inline-block;
-            border: 1px solid #000;
-            padding: 4px;
-            font-family: "Times New Roman", Times, Arial, serif;
-            font-size: 13px;
-        }
-        .inline-text {
-            font-size: 13px;
-            margin-bottom: 15px;
-        }
-        .buttons {
-            text-align: center;
-            margin-top: 25px;
-        }
-        button {
-            margin: 5px;
-            padding: 8px 18px;
-            font-size: 13px;
-            border: 1px solid #000;
-            background: #f0f0f0;
-            cursor: pointer;
-            font-family: Arial, sans-serif;
-        }
-        button:hover {
-            background: #e0e0e0;
-        }
-        footer {
-            margin-top: 40px;
-            text-align: center;
-            font-size: 13px;
-        }
-        .signature-line {
-            margin-top: 50px;
-            text-align: center;
-            font-size: 13px;
-        }
-        .signature-line p {
-            margin-bottom: 0;
-        }
-        .signature-line .line {
-            width: 300px;
-            border-top: 1px solid #000;
-            margin: 0 auto 5px auto;
-        }
-        @media print {
-            body {
-                padding: 0;
-                background: #fff;
-            }
-            .container {
-                border: none;
-                padding: 0;
-                max-width: 100%;
-            }
-            .buttons {
-                display: none !important;
-            }
-            button {
-                display: none !important;
-            }
-            input, textarea, select {
-                border: none;
-                background: transparent;
-                padding: 0;
-            }
-            input[type="text"], input[type="number"] {
-                border-bottom: 1px solid #000;
-            }
-            textarea {
-                border: 1px solid #000;
-            }
-            h1, h2 {
-                color: #000;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prestação de Contas - Escritório de Advocacia Trabalhista</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: Arial, "Times New Roman", Times, serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f9fa;
+      color: #212529;
+      line-height: 1.5;
+    }
+    .navbar {
+      background: #0a58ca;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .navbar a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+    }
+    .navbar a:hover { text-decoration: underline; }
+    .navbar .brand { font-size: 16px; }
+
+    .container {
+      max-width: 960px;
+      margin: 24px auto;
+      background: #fff;
+      padding: 40px 48px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    }
+
+    h1 {
+      text-align: center;
+      color: #0a58ca;
+      font-size: 22px;
+      margin-bottom: 26px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    h2 {
+      font-size: 15px;
+      color: #0a58ca;
+      margin: 24px 0 12px 0;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #dee2e6;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      font-size: 14px;
+      color: #212529;
+      margin: 16px 0 10px 0;
+      font-weight: 700;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px 18px;
+      margin-bottom: 12px;
+    }
+    .field {
+      flex: 1 1 200px;
+      display: flex;
+      flex-direction: column;
+      min-width: 160px;
+    }
+    .field label {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #495057;
+    }
+    .field input,
+    .field textarea,
+    .field select {
+      padding: 6px 8px;
+      font-size: 13px;
+      border: 1px solid #ced4da;
+      border-radius: 3px;
+      font-family: Arial, "Times New Roman", Times, serif;
+    }
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      outline: none;
+      border-color: #0a58ca;
+    }
+    .field textarea { resize: vertical; min-height: 80px; }
+    .field.readonly input { background: #e9ecef; }
+
+    .full-width { flex: 1 1 100%; }
+    .half-width { flex: 1 1 45%; }
+    .third-width { flex: 1 1 30%; }
+    .quarter-width { flex: 1 1 22%; }
+
+    .readonly-input {
+      background: #e9ecef;
+      font-weight: 600;
+    }
+
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+    .bold { font-weight: 700; }
+    .note { font-size: 12px; color: #6c757d; }
+
+    .inline-group {
+      display: flex;
+      gap: 14px;
+      align-items: flex-end;
+      margin-bottom: 10px;
+    }
+    .inline-group .field { flex: 1; margin-bottom: 0; }
+    .inline-group .inline-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 14px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #dee2e6;
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: middle;
+    }
+    th {
+      background: #e9ecef;
+      font-weight: 700;
+      color: #0a58ca;
+    }
+    td input {
+      width: 100%;
+      border: 1px solid #ced4da;
+      padding: 5px 7px;
+      font-size: 13px;
+      font-family: Arial, "Times New Roman", Times, serif;
+    }
+    td input.subtotal,
+    td input.total {
+      font-weight: 700;
+      background: #f8f9fa;
+    }
+    .tbl-label { width: 55%; }
+    .tbl-value { width: 45%; }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 30px 0 12px 0;
+    }
+    .btn {
+      padding: 10px 22px;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-primary { background: #0a58ca; color: #fff; }
+    .btn-primary:hover { background: #084298; }
+    .btn-secondary { background: #6c757d; color: #fff; }
+    .btn-secondary:hover { background: #5c636a; }
+    .btn-success { background: #198754; color: #fff; }
+    .btn-success:hover { background: #146c43; }
+
+    footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #dee2e6;
+      text-align: center;
+      font-size: 14px;
+    }
+    footer .line { margin: 8px 0; }
+    footer .signature {
+      margin-top: 50px;
+      font-weight: 700;
+    }
+
+    .contrato-texto {
+      font-size: 13px;
+      margin: 10px 0 14px 0;
+      text-align: justify;
+    }
+    .contrato-texto input.percent-input {
+      width: 70px;
+      text-align: right;
+      padding: 4px 6px;
+      font-size: 13px;
+    }
+
+    .parcela-linha { display: flex; gap: 14px; margin-bottom: 8px; }
+    .parcela-linha .field { margin-bottom: 0; }
+
+    .fixed-paragraph {
+      white-space: pre-wrap;
+      font-size: 13px;
+    }
+
+    @media print {
+      .navbar, .buttons { display: none !important; }
+      body { background: #fff; }
+      .container { box-shadow: none; margin: 0; padding: 18px 22px; max-width: 100%; }
+      input, textarea, select { border: 1px solid #999; background: #fff; }
+      .btn { display: none; }
+    }
+  </style>
 </head>
 <body>
 
+<<nav class="navbar">
+  <span class="brand">Advocacia Trabalhista</span>
+  <a href="home.html">Voltar para Home</a>
+</nav>
+
 <div class="container">
-    <h1>Prestação de Contas</h1>
+  <h1>Prestação de Contas</h1>
 
-    <h2>1. Identificação do Cliente</h2>
-    <div class="two-col">
-        <div class="form-group">
-            <label for="cliente">Cliente</label>
-            <input type="text" id="cliente" name="cliente">
-        </div>
-        <div class="form-group">
-            <label for="cpf">CPF</label>
-            <input type="text" id="cpf" name="cpf">
-        </div>
+  <h2>1. Identificação do Cliente</h2>
+  <div class="row">
+    <div class="field half-width">
+      <label>Cliente</label>
+      <input type="text" id="cliente">
     </div>
-    <div class="two-col">
-        <div class="form-group">
-            <label for="processo">Processo nº</label>
-            <input type="text" id="processo" name="processo">
-        </div>
-        <div class="form-group">
-            <label for="vara">Vara/Juízo</label>
-            <input type="text" id="vara" name="vara">
-        </div>
+    <div class="field quarter-width">
+      <label>CPF</label>
+      <input type="text" id="cpf">
     </div>
-    <div class="form-group">
-        <label for="acao">Ação</label>
-        <input type="text" id="acao" name="acao">
+    <div class="field quarter-width">
+      <label>Processo nº</label>
+      <input type="text" id="processo">
     </div>
-    <div class="four-col">
-        <div class="form-group">
-            <label for="banco">Banco</label>
-            <input type="text" id="banco" name="banco">
-        </div>
-        <div class="form-group">
-            <label for="agencia">Agência</label>
-            <input type="text" id="agencia" name="agencia">
-        </div>
-        <div class="form-group">
-            <label for="conta">Conta</label>
-            <input type="text" id="conta" name="conta">
-        </div>
-        <div class="form-group">
-            <label for="pix">PIX</label>
-            <input type="text" id="pix" name="pix">
-        </div>
+  </div>
+  <div class="row">
+    <div class="field half-width">
+      <label>Vara/Juízo</label>
+      <input type="text" id="vara">
     </div>
-
-    <h2>2. Resumo Processual</h2>
-    <div class="form-group">
-        <textarea id="resumo" name="resumo" rows="5"></textarea>
+    <div class="field half-width">
+      <label>Ação</label>
+      <input type="text" id="acao">
     </div>
-
-    <h2>3. Valores Recebidos</h2>
-
-    <h3>3.1 Crédito Principal</h3>
-    <table>
-        <tr><th>Descrição</th><th class="right">Valor (R$)</th></tr>
-        <tr>
-            <td>Crédito líquido principal</td>
-            <td class="right"><input type="text" class="money" id="credito_liquido_principal" data-target="creditoPrincipal"></td>
-        </tr>
-        <tr>
-            <td>Crédito bruto</td>
-            <td class="right"><input type="text" class="money" id="credito_bruto" data-target="creditoPrincipal"></td>
-        </tr>
-        <tr>
-            <td>Juros</td>
-            <td class="right"><input type="text" class="money" id="juros" data-target="creditoPrincipal"></td>
-        </tr>
-        <tr>
-            <td>Correção monetária</td>
-            <td class="right"><input type="text" class="money" id="correcao" data-target="creditoPrincipal"></td>
-        </tr>
-        <tr class="total-row">
-            <td>Subtotal</td>
-            <td class="right" id="subtotal_credito_principal">R$ 0,00</td>
-        </tr>
-    </table>
-
-    <h3>3.2 FGTS</h3>
-    <table>
-        <tr><th>Descrição</th><th class="right">Valor (R$)</th></tr>
-        <tr>
-            <td>FGTS principal</td>
-            <td class="right"><input type="text" class="money" id="fgts_principal" data-target="fgts"></td>
-        </tr>
-        <tr>
-            <td>Atualização FGTS</td>
-            <td class="right"><input type="text" class="money" id="fgts_atualizacao" data-target="fgts"></td>
-        </tr>
-        <tr class="total-row">
-            <td>Subtotal</td>
-            <td class="right" id="subtotal_fgts">R$ 0,00</td>
-        </tr>
-    </table>
-
-    <h3>3.3 Previdência Privada</h3>
-    <table>
-        <tr><th>Descrição</th><th class="right">Valor (R$)</th></tr>
-        <tr>
-            <td>Cota Reclamante</td>
-            <td class="right"><input type="text" class="money" id="prev_reclamante" data-target="previdencia"></td>
-        </tr>
-        <tr>
-            <td>Cota Reclamada</td>
-            <td class="right"><input type="text" class="money" id="prev_reclamada" data-target="previdencia"></td>
-        </tr>
-        <tr>
-            <td>Atualizações</td>
-            <td class="right"><input type="text" class="money" id="prev_atualizacoes" data-target="previdencia"></td>
-        </tr>
-        <tr class="total-row">
-            <td>Subtotal</td>
-            <td class="right" id="subtotal_previdencia">R$ 0,00</td>
-        </tr>
-    </table>
-
-    <h3>3.4 Valores Recebidos por Liminar (se houver)</h3>
-    <table>
-        <tr><th>Ano/Período</th><th class="right">Valor (R$)</th></tr>
-        <tr>
-            <td><input type="text" id="liminar_periodo_1"></td>
-            <td class="right"><input type="text" class="money" id="liminar_valor_1" data-target="liminar"></td>
-        </tr>
-        <tr>
-            <td><input type="text" id="liminar_periodo_2"></td>
-            <td class="right"><input type="text" class="money" id="liminar_valor_2" data-target="liminar"></td>
-        </tr>
-        <tr>
-            <td><input type="text" id="liminar_periodo_3"></td>
-            <td class="right"><input type="text" class="money" id="liminar_valor_3" data-target="liminar"></td>
-        </tr>
-        <tr class="total-row">
-            <td>Total recebido por liminar</td>
-            <td class="right" id="total_liminar">R$ 0,00</td>
-        </tr>
-    </table>
-
-    <h3>3.5 Valores Incorporados em Folha (se houver)</h3>
-    <table>
-        <tr><th>Descrição</th><th class="right">Valor (R$)</th></tr>
-        <tr>
-            <td>CTVA incorporado</td>
-            <td class="right"><input type="text" class="money" id="ctva_incorporado"></td>
-        </tr>
-        <tr>
-            <td>Função incorporada</td>
-            <td class="right"><input type="text" class="money" id="funcao_incorporada"></td>
-        </tr>
-        <tr>
-            <td>Reflexos mensais</td>
-            <td class="right"><input type="text" class="money" id="reflexos_mensais"></td>
-        </tr>
-    </table>
-
-    <h3>3.6 Honorários de Sucumbência</h3>
-    <table>
-        <tr><th>Descrição</th><th class="right">Valor (R$)</th></tr>
-        <tr>
-            <td>Honorários sucumbenciais</td>
-            <td class="right"><input type="text" class="money" id="honorarios_sucumbencia"></td>
-        </tr>
-    </table>
-
-    <h2>4. Base de Cálculo dos Honorários Contratuais</h2>
-    <p class="inline-text">
-        Conforme contrato de honorários firmado entre as partes, os honorários advocatícios correspondem a
-        <input type="text" id="percentual_contratual" value="30">%
-        sobre as verbas contratualmente previstas.
-    </p>
-    <table>
-        <tr><th>Verba</th><th class="right">Valor (R$)</th></tr>
-        <tr>
-            <td>Crédito principal</td>
-            <td class="right" id="base_credito_principal">R$ 0,00</td>
-        </tr>
-        <tr>
-            <td>FGTS</td>
-            <td class="right" id="base_fgts">R$ 0,00</td>
-        </tr>
-        <tr>
-            <td>Previdência privada reclamante</td>
-            <td class="right" id="base_prev_reclamante">R$ 0,00</td>
-        </tr>
-        <tr>
-            <td>Previdência privada reclamada</td>
-            <td class="right" id="base_prev_reclamada">R$ 0,00</td>
-        </tr>
-        <tr>
-            <td>Valores recebidos por liminar</td>
-            <td class="right" id="base_liminar">R$ 0,00</td>
-        </tr>
-        <tr>
-            <td>Outros</td>
-            <td class="right"><input type="text" class="money" id="base_outros"></td>
-        </tr>
-        <tr class="total-row">
-            <td>Total da Base de Cálculo</td>
-            <td class="right" id="total_base_calculo">R$ 0,00</td>
-        </tr>
-    </table>
-
-    <h2>5. Cálculo dos Honorários Contratuais</h2>
-    <table>
-        <tr><th>Descrição</th><th class="right">Valor</th></tr>
-        <tr>
-            <td>Base de cálculo</td>
-            <td class="right" id="calc_base">R$ 0,00</td>
-        </tr>
-        <tr>
-            <td>Percentual contratual (%)</td>
-            <td class="right" id="calc_percentual">0%</td>
-        </tr>
-        <tr class="total-row">
-            <td>Honorários devidos</td>
-            <td class="right" id="calc_honorarios">R$ 0,00</td>
-        </tr>
-    </table>
-
-    <h2>6. Despesas Reembolsáveis (se houver)</h2>
-    <table>
-        <tr><th>Descrição</th><th class="right">Valor (R$)</th></tr>
-        <tr>
-            <td>Custas processuais</td>
-            <td class="right"><input type="text" class="money" id="despesa_custas" data-target="despesas"></td>
-        </tr>
-        <tr>
-            <td>Honorários periciais</td>
-            <td class="right"><input type="text" class="money" id="despesa_periciais" data-target="despesas"></td>
-        </tr>
-        <tr>
-            <td>Deslocamentos</td>
-            <td class="right"><input type="text" class="money" id="despesa_deslocamentos" data-target="despesas"></td>
-        </tr>
-        <tr>
-            <td>Cópias/Documentos</td>
-            <td class="right"><input type="text" class="money" id="despesa_copias" data-target="despesas"></td>
-        </tr>
-        <tr>
-            <td>Outros</td>
-            <td class="right"><input type="text" class="money" id="despesa_outros" data-target="despesas"></td>
-        </tr>
-        <tr class="total-row">
-            <td>Total de despesas</td>
-            <td class="right" id="total_despesas">R$ 0,00</td>
-        </tr>
-    </table>
-
-    <h2>7. Compensações e Ajustes (se houver)</h2>
-    <table>
-        <tr><th>Descrição</th><th class="right">Valor (R$)</th></tr>
-        <tr>
-            <td>Honorários cobrados anteriormente</td>
-            <td class="right"><input type="text" class="money" id="ajuste_honorarios_antes" data-target="ajustes"></td>
-        </tr>
-        <tr>
-            <td>Valores pagos pelo cliente</td>
-            <td class="right"><input type="text" class="money" id="ajuste_pagos_cliente" data-target="ajustes"></td>
-        </tr>
-        <tr>
-            <td>Restituições devidas</td>
-            <td class="right"><input type="text" class="money" id="ajuste_restituicoes" data-target="ajustes"></td>
-        </tr>
-        <tr>
-            <td>Diferenças apuradas</td>
-            <td class="right"><input type="text" class="money" id="ajuste_diferencas" data-target="ajustes"></td>
-        </tr>
-        <tr class="total-row">
-            <td>Total</td>
-            <td class="right" id="total_ajustes">R$ 0,00</td>
-        </tr>
-    </table>
-
-    <h2>8. Demonstrativo Final</h2>
-    <table>
-        <tr><th>Descrição</th><th class="right">Valor (R$)</th></tr>
-        <tr>
-            <td>Total recebido</td>
-            <td class="right" id="final_total_recebido">R$ 0,00</td>
-        </tr>
-        <tr>
-            <td>(-) Honorários contratuais</td>
-            <td class="right" id="final_honorarios">R$ 0,00</td>
-        </tr>
-        <tr>
-            <td>(-) Despesas reembolsáveis</td>
-            <td class="right" id="final_despesas">R$ 0,00</td>
-        </tr>
-        <tr>
-            <td>(+/-) Ajustes</td>
-            <td class="right" id="final_ajustes">R$ 0,00</td>
-        </tr>
-        <tr class="total-row">
-            <td>(=) Valor líquido do cliente</td>
-            <td class="right" id="final_liquido_cliente">R$ 0,00</td>
-        </tr>
-    </table>
-
-    <h2>9. Forma de Pagamento</h2>
-    <div class="two-col">
-        <div class="form-group">
-            <label for="pagamento_pix">PIX</label>
-            <input type="text" id="pagamento_pix" name="pagamento_pix">
-        </div>
-        <div class="form-group">
-            <label for="pagamento_banco">Banco</label>
-            <input type="text" id="pagamento_banco" name="pagamento_banco">
-        </div>
+  </div>
+  <div class="row">
+    <div class="field third-width">
+      <label>Banco</label>
+      <input type="text" id="banco">
     </div>
-    <div class="two-col">
-        <div class="form-group">
-            <label for="pagamento_agencia">Agência</label>
-            <input type="text" id="pagamento_agencia" name="pagamento_agencia">
-        </div>
-        <div class="form-group">
-            <label for="pagamento_conta">Conta</label>
-            <input type="text" id="pagamento_conta" name="pagamento_conta">
-        </div>
+    <div class="field quarter-width">
+      <label>Agência</label>
+      <input type="text" id="agencia">
     </div>
-    <div class="two-col">
-        <div class="form-group">
-            <label for="pagamento_data">Data prevista</label>
-            <input type="text" id="pagamento_data" name="pagamento_data">
-        </div>
-        <div class="form-group">
-            <label for="pagamento_valor">Valor líquido a transferir</label>
-            <input type="text" class="money" id="pagamento_valor" name="pagamento_valor">
-        </div>
+    <div class="field quarter-width">
+      <label>Conta</label>
+      <input type="text" id="conta">
     </div>
+    <div class="field quarter-width">
+      <label>PIX</label>
+      <input type="text" id="pix">
+    </div>
+  </div>
 
-    <h2>10. Observações</h2>
-    <div class="form-group">
-        <textarea id="observacoes" name="observacoes" rows="8" readonly>
-• Os valores de FGTS serão disponibilizados diretamente na conta vinculada, quando aplicável.
+  <h2>2. Resumo Processual</h2>
+  <div class="row">
+    <div class="field full-width">
+      <textarea id="resumoProcessual" rows="5"></textarea>
+    </div>
+  </div>
+
+  <h2>3. Valores Recebidos</h2>
+
+  <h3>3.1 Crédito Principal</h3>
+  <table>
+    <tr>
+      <td class="tbl-label">Crédito líquido principal</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="creditoLiquidoPrincipal" data-calc="creditoPrincipal"></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Crédito bruto</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="creditoBruto" data-calc="creditoPrincipal"></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Juros</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="juros" data-calc="creditoPrincipal"></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Correção monetária</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="correcaoMonetaria" data-calc="creditoPrincipal"></td>
+    </tr>
+    <tr>
+      <th class="tbl-label">Subtotal</th>
+      <td class="tbl-value"><input type="text" class="subtotal moeda" id="subtotalCreditoPrincipal" readonly></td>
+    </tr>
+  </table>
+
+  <h3>3.2 FGTS</h3>
+  <table>
+    <tr>
+      <td class="tbl-label">FGTS principal</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="fgtsPrincipal" data-calc="fgts"></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Atualização FGTS</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="atualizacaoFgts" data-calc="fgts"></td>
+    </tr>
+    <tr>
+      <th class="tbl-label">Subtotal</th>
+      <td class="tbl-value"><input type="text" class="subtotal moeda" id="subtotalFgts" readonly></td>
+    </tr>
+  </table>
+
+  <h3>3.3 Previdência Privada</h3>
+  <table>
+    <tr>
+      <td class="tbl-label">Cota Reclamante</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="cotaReclamante" data-calc="previdencia"></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Cota Reclamada</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="cotaReclamada" data-calc="previdencia"></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Atualizações</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="atualizacoesPrevidencia" data-calc="previdencia"></td>
+    </tr>
+    <tr>
+      <th class="tbl-label">Subtotal</th>
+      <td class="tbl-value"><input type="text" class="subtotal moeda" id="subtotalPrevidencia" readonly></td>
+    </tr>
+  </table>
+
+  <h3>3.4 Valores Recebidos por Liminar (se houver)</h3>
+  <table>
+    <tr>
+      <th class="tbl-label">Ano/Período</th>
+      <th class="tbl-value">Valor</th>
+    </tr>
+    <tr>
+      <td><input type="text" id="liminarPeriodo1"></td>
+      <td><input type="text" class="moeda" id="liminarValor1" data-calc="liminar"></td>
+    </tr>
+    <tr>
+      <td><input type="text" id="liminarPeriodo2"></td>
+      <td><input type="text" class="moeda" id="liminarValor2" data-calc="liminar"></td>
+    </tr>
+    <tr>
+      <td><input type="text" id="liminarPeriodo3"></td>
+      <td><input type="text" class="moeda" id="liminarValor3" data-calc="liminar"></td>
+    </tr>
+    <tr>
+      <th class="tbl-label">Total</th>
+      <td class="tbl-value"><input type="text" class="total moeda" id="totalLiminar" readonly></td>
+    </tr>
+  </table>
+
+  <h3>3.5 Valores Incorporados em Folha (se houver)</h3>
+  <table>
+    <tr>
+      <td class="tbl-label">CTVA incorporado</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="ctvaIncorporado"></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Função incorporada</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="funcaoIncorporada"></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Reflexos mensais</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="reflexosMensais"></td>
+    </tr>
+  </table>
+
+  <h3>3.6 Honorários de Sucumbência</h3>
+  <table>
+    <tr>
+      <td class="tbl-label">Honorários sucumbenciais</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="honorariosSucumbenciais"></td>
+    </tr>
+  </table>
+
+  <h2>4. Base de Cálculo dos Honorários Contratuais</h2>
+  <p class="contrato-texto">
+    Conforme contrato de honorários firmado entre as partes, os honorários advocatícios correspondem a
+    <input type="text" class="percent-input" id="percentualContratual" value="30">%
+    sobre as verbas contratualmente previstas.
+  </p>
+  <table>
+    <tr>
+      <td class="tbl-label">Crédito principal</td>
+      <td class="tbl-value"><input type="text" class="moeda base-calc" id="baseCreditoPrincipal" readonly></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">FGTS</td>
+      <td class="tbl-value"><input type="text" class="moeda base-calc" id="baseFgts" readonly></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Previdência privada reclamante</td>
+      <td class="tbl-value"><input type="text" class="moeda base-calc" id="basePrevidenciaReclamante" readonly></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Previdência privada reclamada</td>
+      <td class="tbl-value"><input type="text" class="moeda base-calc" id="basePrevidenciaReclamada" readonly></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Valores recebidos por liminar</td>
+      <td class="tbl-value"><input type="text" class="moeda base-calc" id="baseLiminar" readonly></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Outros</td>
+      <td class="tbl-value"><input type="text" class="moeda base-calc" id="baseOutros"></td>
+    </tr>
+    <tr>
+      <th class="tbl-label">Total da Base de Cálculo</th>
+      <td class="tbl-value"><input type="text" class="total moeda" id="totalBaseCalculo" readonly></td>
+    </tr>
+  </table>
+
+  <h2>5. Cálculo dos Honorários Contratuais</h2>
+  <table>
+    <tr>
+      <td class="tbl-label">Base de cálculo</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="calcBaseCalculo" readonly></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Percentual contratual (%)</td>
+      <td class="tbl-value"><input type="text" class="percent-input" id="calcPercentual" value="30"></td>
+    </tr>
+    <tr>
+      <th class="tbl-label">Honorários devidos</th>
+      <td class="tbl-value"><input type="text" class="total moeda" id="honorariosDevidos" readonly></td>
+    </tr>
+  </table>
+
+  <h2>6. Despesas Reembolsáveis (se houver)</h2>
+  <table>
+    <tr>
+      <td class="tbl-label">Custas processuais</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="custasProcessuais" data-calc="despesas"></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Honorários periciais</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="honorariosPericiais" data-calc="despesas"></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Deslocamentos</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="deslocamentos" data-calc="despesas"></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Cópias/Documentos</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="copiasDocumentos" data-calc="despesas"></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Outros</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="outrasDespesas" data-calc="despesas"></td>
+    </tr>
+    <tr>
+      <th class="tbl-label">Total</th>
+      <td class="tbl-value"><input type="text" class="total moeda" id="totalDespesas" readonly></td>
+    </tr>
+  </table>
+
+  <h2>7. Compensações e Ajustes (se houver)</h2>
+  <table>
+    <tr>
+      <td class="tbl-label">Honorários cobrados anteriormente</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="honorariosCobrados" data-calc="ajustes"></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Valores pagos pelo cliente</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="valoresPagosCliente" data-calc="ajustes"></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Restituições devidas</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="restituicoesDevidas" data-calc="ajustes"></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">Diferenças apuradas</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="diferencasApuradas" data-calc="ajustes"></td>
+    </tr>
+    <tr>
+      <th class="tbl-label">Total</th>
+      <td class="tbl-value"><input type="text" class="total moeda" id="totalAjustes" readonly></td>
+    </tr>
+  </table>
+
+  <h2>8. Demonstrativo Final</h2>
+  <table>
+    <tr>
+      <th class="tbl-label">Total recebido</th>
+      <td class="tbl-value"><input type="text" class="total moeda" id="totalRecebido" readonly></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">(-) Honorários contratuais</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="demoHonorariosContratuais" readonly></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">(-) Despesas reembolsáveis</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="demoDespesas" readonly></td>
+    </tr>
+    <tr>
+      <td class="tbl-label">(+/-) Ajustes</td>
+      <td class="tbl-value"><input type="text" class="moeda" id="demoAjustes" readonly></td>
+    </tr>
+    <tr>
+      <th class="tbl-label">(=) Valor líquido do cliente</th>
+      <td class="tbl-value"><input type="text" class="total moeda" id="valorLiquidoCliente" readonly></td>
+    </tr>
+  </table>
+
+  <h2>9. Forma de Pagamento</h2>
+  <div class="row">
+    <div class="field half-width">
+      <label>PIX</label>
+      <input type="text" id="pagamentoPix">
+    </div>
+    <div class="field half-width">
+      <label>Banco</label>
+      <input type="text" id="pagamentoBanco">
+    </div>
+  </div>
+  <div class="row">
+    <div class="field third-width">
+      <label>Agência</label>
+      <input type="text" id="pagamentoAgencia">
+    </div>
+    <div class="field third-width">
+      <label>Conta</label>
+      <input type="text" id="pagamentoConta">
+    </div>
+    <div class="field third-width">
+      <label>Data prevista</label>
+      <input type="text" id="pagamentoData">
+    </div>
+  </div>
+  <div class="row">
+    <div class="field half-width">
+      <label>Valor líquido a transferir</label>
+      <input type="text" class="moeda" id="valorLiquidoTransferir" readonly>
+    </div>
+  </div>
+
+  <h2>10. Observações</h2>
+  <div class="row">
+    <div class="field full-width">
+      <textarea id="observacoes" rows="8">• Os valores de FGTS serão disponibilizados diretamente na conta vinculada, quando aplicável.
 • Os valores de previdência privada serão disponibilizados diretamente pela entidade previdenciária, quando aplicável.
 • Os honorários sucumbenciais pertencem exclusivamente aos patronos da causa, nos termos do art. 85, §14, do CPC e art. 791-A da CLT.
 • Os valores incorporados em folha não integram o montante transferido ao cliente, por representarem vantagem salarial futura.
-• Eventuais atualizações posteriores poderão gerar ajustes complementares.
-        </textarea>
+• Eventuais atualizações posteriores poderão gerar ajustes complementares.</textarea>
     </div>
+  </div>
 
-    <div class="buttons">
-        <button type="button" onclick="salvar()">Salvar Prestação</button>
-        <button type="button" onclick="limpar()">Limpar</button>
-        <button type="button" onclick="imprimir()">Imprimir</button>
-    </div>
+  <div class="buttons">
+    <button type="button" class="btn btn-primary" onclick="salvar()">Salvar Prestação</button>
+    <button type="button" class="btn btn-secondary" onclick="limpar()">Limpar</button>
+    <button type="button" class="btn btn-success" onclick="imprimir()">Imprimir</button>
+  </div>
 
-    <footer>
-        <p>Brasília/DF, ___ de __________ de ______.</p>
-        <div class="signature-line">
-            <div class="line"></div>
-            <p>Advogada</p>
-        </div>
-    </footer>
+  <footer>
+    <div class="line">Brasília/DF, ___ de __________ de ______.</div>
+    <div class="signature">Advogada</div>
+  </footer>
 </div>
 
 <script>
-    const formatMoney = (value) => {
-        if (value === null || value === undefined || value === '') return '';
-        let num = parseFloat(value.toString().replace(/[^\d,-]/g, '').replace(',', '.'));
-        if (isNaN(num)) return '';
-        return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    };
+  // Máscara de moeda R$ (formato brasileiro)
+  function formatarMoeda(valor) {
+    if (valor === null || valor === undefined || isNaN(valor)) valor = 0;
+    return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
 
-    const parseMoney = (value) => {
-        if (!value) return 0;
-        let num = parseFloat(value.toString().replace(/[^\d,-]/g, '').replace(',', '.'));
-        return isNaN(num) ? 0 : num;
-    };
+  function parseMoeda(texto) {
+    if (!texto) return 0;
+    return parseFloat(texto.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+  }
 
-    const formatCurrencyCell = (value) => {
-        return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    };
+  function aplicarMascaraMoeda(input) {
+    input.addEventListener('input', function () {
+      let valor = input.value.replace(/[^\d]/g, '');
+      if (valor === '') { input.value = ''; calcular(); return; }
+      let numero = parseFloat(valor) / 100;
+      input.value = formatarMoeda(numero);
+      calcular();
+    });
+    input.addEventListener('blur', function () {
+      let numero = parseMoeda(input.value);
+      input.value = numero ? formatarMoeda(numero) : '';
+      calcular();
+    });
+  }
 
-    const maskMoney = (input) => {
-        input.addEventListener('input', function (e) {
-            let value = e.target.value.replace(/\D/g, '');
-            value = (value / 100).toFixed(2) + '';
-            value = value.replace('.', ',');
-            value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-            e.target.value = value ? 'R$ ' + value : '';
-            calcular();
-        });
-        input.addEventListener('blur', function (e) {
-            if (!e.target.value) e.target.value = '';
-        });
-    };
+  function getValor(id) { return parseMoeda(document.getElementById(id).value); }
+  function setValor(id, valor) { document.getElementById(id).value = formatarMoeda(valor); }
+  function setValorAllowBlank(id, valor) { document.getElementById(id).value = valor ? formatarMoeda(valor) : ''; }
 
-    document.querySelectorAll('input.money').forEach(maskMoney);
+  function calcular() {
+    // 3.1 Crédito Principal
+    let creditoLiquido = getValor('creditoLiquidoPrincipal');
+    let creditoBruto = getValor('creditoBruto');
+    let juros = getValor('juros');
+    let correcao = getValor('correcaoMonetaria');
+    let subtotalCreditoPrincipal = creditoLiquido + creditoBruto + juros + correcao;
+    setValor('subtotalCreditoPrincipal', subtotalCreditoPrincipal);
 
-    const getValue = (id) => parseMoney(document.getElementById(id).value);
+    // 3.2 FGTS
+    let fgtsPrincipal = getValor('fgtsPrincipal');
+    let atualizacaoFgts = getValor('atualizacaoFgts');
+    let subtotalFgts = fgtsPrincipal + atualizacaoFgts;
+    setValor('subtotalFgts', subtotalFgts);
 
-    const sum = (...ids) => ids.reduce((acc, id) => acc + getValue(id), 0);
+    // 3.3 Previdência
+    let cotaReclamante = getValor('cotaReclamante');
+    let cotaReclamada = getValor('cotaReclamada');
+    let atualizacoesPrevidencia = getValor('atualizacoesPrevidencia');
+    let subtotalPrevidencia = cotaReclamante + cotaReclamada + atualizacoesPrevidencia;
+    setValor('subtotalPrevidencia', subtotalPrevidencia);
 
-    const setText = (id, value) => {
-        document.getElementById(id).textContent = formatCurrencyCell(value);
-    };
+    // 3.4 Liminar
+    let liminar1 = getValor('liminarValor1');
+    let liminar2 = getValor('liminarValor2');
+    let liminar3 = getValor('liminarValor3');
+    let totalLiminar = liminar1 + liminar2 + liminar3;
+    setValor('totalLiminar', totalLiminar);
 
-    const calcular = () => {
-        const subtotalCreditoPrincipal = sum('credito_liquido_principal', 'credito_bruto', 'juros', 'correcao');
-        setText('subtotal_credito_principal', subtotalCreditoPrincipal);
+    // 4. Base de cálculo dos honorários contratuais
+    document.getElementById('baseCreditoPrincipal').value = formatarMoeda(subtotalCreditoPrincipal);
+    document.getElementById('baseFgts').value = formatarMoeda(subtotalFgts);
+    document.getElementById('basePrevidenciaReclamante').value = formatarMoeda(cotaReclamante);
+    document.getElementById('basePrevidenciaReclamada').value = formatarMoeda(cotaReclamada);
+    document.getElementById('baseLiminar').value = formatarMoeda(totalLiminar);
+    let baseOutros = getValor('baseOutros');
+    let totalBaseCalculo = subtotalCreditoPrincipal + subtotalFgts + cotaReclamante + cotaReclamada + totalLiminar + baseOutros;
+    setValor('totalBaseCalculo', totalBaseCalculo);
 
-        const subtotalFgts = sum('fgts_principal', 'fgts_atualizacao');
-        setText('subtotal_fgts', subtotalFgts);
+    // 5. Cálculo dos honorários contratuais
+    let percentual = parseFloat(document.getElementById('calcPercentual').value.replace(',', '.')) || 0;
+    document.getElementById('calcBaseCalculo').value = formatarMoeda(totalBaseCalculo);
+    let honorariosDevidos = totalBaseCalculo * (percentual / 100);
+    setValor('honorariosDevidos', honorariosDevidos);
 
-        const subtotalPrevidencia = sum('prev_reclamante', 'prev_reclamada', 'prev_atualizacoes');
-        setText('subtotal_previdencia', subtotalPrevidencia);
+    // 6. Despesas reembolsáveis
+    let custas = getValor('custasProcessuais');
+    let honorariosPericiais = getValor('honorariosPericiais');
+    let deslocamentos = getValor('deslocamentos');
+    let copias = getValor('copiasDocumentos');
+    let outrasDespesas = getValor('outrasDespesas');
+    let totalDespesas = custas + honorariosPericiais + deslocamentos + copias + outrasDespesas;
+    setValor('totalDespesas', totalDespesas);
 
-        const totalLiminar = sum('liminar_valor_1', 'liminar_valor_2', 'liminar_valor_3');
-        setText('total_liminar', totalLiminar);
+    // 7. Compensações e ajustes
+    let honorariosCobrados = getValor('honorariosCobrados');
+    let valoresPagos = getValor('valoresPagosCliente');
+    let restituicoes = getValor('restituicoesDevidas');
+    let diferencas = getValor('diferencasApuradas');
+    let totalAjustes = honorariosCobrados + valoresPagos + restituicoes + diferencas;
+    setValor('totalAjustes', totalAjustes);
 
-        const baseOutros = getValue('base_outros');
-        const totalBaseCalculo = subtotalCreditoPrincipal + subtotalFgts + getValue('prev_reclamante') + getValue('prev_reclamada') + totalLiminar + baseOutros;
-        setText('total_base_calculo', totalBaseCalculo);
-        setText('base_credito_principal', subtotalCreditoPrincipal);
-        setText('base_fgts', subtotalFgts);
-        setText('base_prev_reclamante', getValue('prev_reclamante'));
-        setText('base_prev_reclamada', getValue('prev_reclamada'));
-        setText('base_liminar', totalLiminar);
+    // 8. Demonstrativo final
+    // Total recebido = subtotal crédito principal + subtotal FGTS + subtotal previdência + total liminar
+    let totalRecebido = subtotalCreditoPrincipal + subtotalFgts + subtotalPrevidencia + totalLiminar;
+    setValor('totalRecebido', totalRecebido);
+    document.getElementById('demoHonorariosContratuais').value = formatarMoeda(honorariosDevidos);
+    document.getElementById('demoDespesas').value = formatarMoeda(totalDespesas);
+    document.getElementById('demoAjustes').value = formatarMoeda(totalAjustes);
 
-        const percentual = parseFloat(document.getElementById('percentual_contratual').value.replace(',', '.')) || 0;
-        const honorariosDevidos = totalBaseCalculo * (percentual / 100);
-        setText('calc_base', totalBaseCalculo);
-        document.getElementById('calc_percentual').textContent = percentual + '%';
-        setText('calc_honorarios', honorariosDevidos);
+    let valorLiquido = totalRecebido - honorariosDevidos - totalDespesas + totalAjustes;
+    setValor('valorLiquidoCliente', valorLiquido);
+    setValor('valorLiquidoTransferir', valorLiquido);
+  }
 
-        const totalDespesas = sum('despesa_custas', 'despesa_periciais', 'despesa_deslocamentos', 'despesa_copias', 'despesa_outros');
-        setText('total_despesas', totalDespesas);
+  function salvar() {
+    const dados = {};
+    document.querySelectorAll('input, textarea').forEach(el => {
+      dados[el.id] = el.value;
+    });
+    localStorage.setItem('prestacaoContas', JSON.stringify(dados));
+    alert('Prestação de contas salva com sucesso.');
+  }
 
-        const totalAjustes = sum('ajuste_honorarios_antes', 'ajuste_pagos_cliente', 'ajuste_restituicoes', 'ajuste_diferencas');
-        setText('total_ajustes', totalAjustes);
+  function carregar() {
+    const dados = JSON.parse(localStorage.getItem('prestacaoContas') || '{}');
+    Object.keys(dados).forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = dados[id];
+    });
+    calcular();
+  }
 
-        const totalRecebido = subtotalCreditoPrincipal + subtotalFgts + subtotalPrevidencia + totalLiminar;
-        setText('final_total_recebido', totalRecebido);
-        setText('final_honorarios', honorariosDevidos);
-        setText('final_despesas', totalDespesas);
-        setText('final_ajustes', totalAjustes);
+  function limpar() {
+    if (!confirm('Deseja limpar todos os campos?')) return;
+    document.querySelectorAll('input:not([readonly]), textarea').forEach(el => {
+      if (el.id === 'observacoes') {
+        el.value = "• Os valores de FGTS serão disponibilizados diretamente na conta vinculada, quando aplicável.\n• Os valores de previdência privada serão disponibilizados diretamente pela entidade previdenciária, quando aplicável.\n• Os honorários sucumbenciais pertencem exclusivamente aos patronos da causa, nos termos do art. 85, §14, do CPC e art. 791-A da CLT.\n• Os valores incorporados em folha não integram o montante transferido ao cliente, por representarem vantagem salarial futura.\n• Eventuais atualizações posteriores poderão gerar ajustes complementares.";
+      } else if (el.id === 'percentualContratual' || el.id === 'calcPercentual') {
+        el.value = '30';
+      } else {
+        el.value = '';
+      }
+    });
+    localStorage.removeItem('prestacaoContas');
+    calcular();
+  }
 
-        const liquidoCliente = totalRecebido - honorariosDevidos - totalDespesas + totalAjustes;
-        setText('final_liquido_cliente', liquidoCliente);
-    };
+  function imprimir() { window.print(); }
 
-    document.getElementById('percentual_contratual').addEventListener('input', calcular);
-
-    const salvar = () => {
-        const data = {};
-        document.querySelectorAll('input, textarea, select').forEach(el => {
-            data[el.id] = el.value;
-        });
-        localStorage.setItem('prestacao_contas', JSON.stringify(data));
-        alert('Prestação de contas salva com sucesso.');
-    };
-
-    const limpar = () => {
-        if (!confirm('Deseja realmente limpar todos os dados?')) return;
-        document.querySelectorAll('input, textarea').forEach(el => {
-            if (el.id !== 'observacoes') {
-                el.value = '';
-            }
-        });
-        localStorage.removeItem('prestacao_contas');
-        calcular();
-    };
-
-    const imprimir = () => {
-        window.print();
-    };
-
-    const carregar = () => {
-        const saved = localStorage.getItem('prestacao_contas');
-        if (saved) {
-            const data = JSON.parse(saved);
-            Object.keys(data).forEach(key => {
-                const el = document.getElementById(key);
-                if (el) el.value = data[key];
-            });
-        }
-        calcular();
-    };
-
-    window.addEventListener('load', carregar);
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('input.moeda').forEach(aplicarMascaraMoeda);
+    document.querySelectorAll('input[data-calc]').forEach(input => input.addEventListener('change', calcular));
+    document.getElementById('percentualContratual').addEventListener('input', calcular);
+    document.getElementById('calcPercentual').addEventListener('input', calcular);
+    document.getElementById('baseOutros').addEventListener('input', calcular);
+    carregar();
+  });
 </script>
 
 </body>
