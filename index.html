@@ -1,528 +1,132 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apollo Ayres - Sistema de Documentos Jurídicos</title>
-  <style>
-    :root {
-      --primary: #1a3a6b;
-      --bg-light: #f5f7fa;
-      --white: #ffffff;
-      --border: #c7d1e0;
-      --text: #1e2b3d;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: Arial, sans-serif;
-      background-color: var(--bg-light);
-      color: var(--text);
-      min-height: 100vh;
-    }
-
-    header {
-      background-color: var(--white);
-      padding: 20px;
-      text-align: center;
-      border-bottom: 3px solid var(--primary);
-    }
-
-    header img { max-width: 240px; height: auto; }
-
-    header h1 {
-      color: var(--primary);
-      font-size: 1.3rem;
-      margin-top: 10px;
-      font-weight: 700;
-    }
-
-    .container { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
-
-    .tabs { display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 2px solid var(--primary); margin-bottom: 20px; }
-
-    .tab {
-      background-color: var(--white);
-      color: var(--primary);
-      border: 2px solid var(--primary);
-      border-bottom: none;
-      padding: 12px 24px;
-      cursor: pointer;
-      font-weight: 700;
-      border-radius: 8px 8px 0 0;
-      transition: background-color 0.2s, color 0.2s;
-    }
-
-    .tab.active { background-color: var(--primary); color: var(--white); }
-    .tab:hover:not(.active) { background-color: #e8eef6; }
-
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
-
-    .card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px;
-    }
-
-    .card h2 {
-      color: var(--primary);
-      font-size: 1.1rem;
-      margin-bottom: 15px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 8px;
-    }
-
-    .form-group { margin-bottom: 12px; }
-    label { display: block; font-weight: 700; margin-bottom: 5px; font-size: 0.9rem; color: var(--primary); }
-    input[type="text"], input[type="email"], input[type="date"], input[type="number"], select {
-      width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-family: Arial, sans-serif; font-size: 0.95rem;
-    }
-
-    .btn {
-      background-color: var(--primary);
-      color: var(--white);
-      border: none;
-      padding: 12px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.95rem;
-      margin-top: 10px;
-      transition: opacity 0.2s;
-    }
-    .btn:hover { opacity: 0.9; }
-    .btn-block { width: 100%; }
-
-    .doc-preview {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 30px;
-      font-family: Arial, sans-serif;
-      font-size: 12pt;
-      line-height: 1.5;
-      text-align: justify;
-      color: #000;
-    }
-
-    .doc-preview h3 {
-      text-align: center;
-      font-weight: bold;
-      margin-bottom: 20px;
-      font-size: 13pt;
-    }
-
-    .doc-preview .logo-print { text-align: center; margin-bottom: 20px; }
-    .doc-preview .logo-print img { max-width: 200px; }
-
-    .doc-preview p { margin-bottom: 12px; }
-    .doc-preview .label { font-weight: bold; }
-    .doc-preview .signature { margin-top: 30px; text-align: center; }
-    .doc-preview .signature-line { border-top: 1px solid #000; width: 80%; margin: 40px auto 5px auto; padding-top: 5px; }
-
-    .clausula { margin-bottom: 14px; }
-    .clausula strong { display: block; margin-bottom: 4px; }
-
-    @media print {
-      body { background: #fff; }
-      header, .tabs, .card, .btn { display: none !important; }
-      .tab-content { display: none !important; }
-      .tab-content.active-print { display: block !important; }
-      .doc-preview { border: none; padding: 0; box-shadow: none; }
-      .no-print { display: none !important; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Controle do Escritório</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            max-width: 420px;
+            width: 100%;
+            padding: 40px 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+            text-align: center;
+        }
+        .logo { height: 80px; margin-bottom: 20px; }
+        h1 { color: #333; font-size: 24px; margin-bottom: 8px; }
+        .subtitle { color: #666; font-size: 15px; margin-bottom: 28px; }
+        .form-group { margin-bottom: 18px; text-align: left; position: relative; }
+        .form-group label { display: block; margin-bottom: 6px; color: #444; font-size: 14px; font-weight: 500; }
+        .input-wrapper { position: relative; }
+        .input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #777; }
+        .form-group input {
+            width: 100%; padding: 12px 12px 12px 42px;
+            border: 1px solid #ddd; border-radius: 10px; font-size: 15px;
+            outline: none; transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .form-group input:focus { border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.15); }
+        .toggle-senha {
+            position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; font-size: 18px; cursor: pointer; color: #777;
+            padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+        }
+        .toggle-senha:hover { color: #333; }
+        .btn-entrar {
+            width: 100%; padding: 14px; border: none; border-radius: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white; font-size: 16px; font-weight: 600; cursor: pointer;
+            transition: opacity 0.3s, transform 0.2s; margin-top: 10px;
+        }
+        .btn-entrar:hover:not(:disabled) { opacity: 0.95; transform: translateY(-1px); }
+        .btn-entrar:disabled { opacity: 0.7; cursor: not-allowed; }
+        .mensagem { margin-top: 16px; min-height: 20px; font-size: 14px; font-weight: 500; }
+        .mensagem.erro { color: #d32f2f; }
+        .mensagem.loading { color: #667eea; }
+        .mensagem.sucesso { color: #2e7d32; }
+        footer { margin-top: 24px; color: rgba(255,255,255,0.85); font-size: 13px; }
+    </style>
 </head>
 <body>
-
-<<header>
-  <img src="https://raw.githubusercontent.com/apolloayres/apolloayresadv/main/logo.png" alt="Apollo Ayres">
-  <h1>Sistema de Geração de Documentos Jurídicos</h1>
-</header>
-
-<div class="container">
-  <div class="tabs">
-    <button class="tab active" onclick="openTab('tab-procuracao')">Procuração</button>
-    <button class="tab" onclick="openTab('tab-hipossuficiencia')">Declaração de Hipossuficiência</button>
-    <button class="tab" onclick="openTab('tab-contrato')">Contrato de Honorários</button>
-  </div>
-
-  <!-- ABA 1: PROCURAÇÃO -->
-  <div id="tab-procuracao" class="tab-content active">
-    <div class="grid">
-      <div class="card">
-        <h2>Dados do Outorgante</h2>
-        <div id="form-procuracao"></div>
-        <button class="btn btn-block" onclick="printTab('preview-procuracao')">Imprimir / Gerar PDF</button>
-      </div>
-      <div class="card no-print">
-        <h2>Preview</h2>
-        <div id="preview-procuracao" class="doc-preview"></div>
-      </div>
+    <div class="login-container">
+        <img src="https://raw.githubusercontent.com/apolloayres/apolloayresadv/main/logo.png" alt="Logo" class="logo">
+        <h1>Controle do Escritório</h1>
+        <p class="subtitle">Acesse sua conta</p>
+        <form id="formLogin" onsubmit="event.preventDefault(); logar();">
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">✉️</span>
+                    <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" id="senha" name="senha" placeholder="Sua senha" required>
+                    <button type="button" class="toggle-senha" onclick="toggleSenha()">👁️</button>
+                </div>
+            </div>
+            <button type="submit" id="btnEntrar" class="btn-entrar">Entrar</button>
+        </form>
+        <div id="mensagem" class="mensagem"></div>
     </div>
-  </div>
+    <footer>Sistema de gestão do escritório</footer>
+    <script src="db.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        const emailInput = document.getElementById('email');
+        const senhaInput = document.getElementById('senha');
+        const btnEntrar = document.getElementById('btnEntrar');
+        const mensagem = document.getElementById('mensagem');
 
-  <!-- ABA 2: HIPOSSUFICIÊNCIA -->
-  <div id="tab-hipossuficiencia" class="tab-content">
-    <div class="grid">
-      <div class="card">
-        <h2>Dados do Declarante</h2>
-        <div id="form-hipossuficiencia"></div>
-        <button class="btn btn-block" onclick="printTab('preview-hipossuficiencia')">Imprimir / Gerar PDF</button>
-      </div>
-      <div class="card no-print">
-        <h2>Preview</h2>
-        <div id="preview-hipossuficiencia" class="doc-preview"></div>
-      </div>
-    </div>
-  </div>
+        function mostrarErro(texto) { mensagem.textContent = texto; mensagem.className = 'mensagem erro'; }
+        function mostrarLoading(texto) { mensagem.textContent = texto; mensagem.className = 'mensagem loading'; }
+        function mostrarSucesso(texto) { mensagem.textContent = texto; mensagem.className = 'mensagem sucesso'; }
+        function limparMensagem() { mensagem.textContent = ''; mensagem.className = 'mensagem'; }
 
-  <!-- ABA 3: CONTRATO -->
-  <div id="tab-contrato" class="tab-content">
-    <div class="grid">
-      <div class="card">
-        <h2>Dados do Contratante e do Contrato</h2>
-        <div id="form-contrato"></div>
-        <button class="btn btn-block" onclick="printTab('preview-contrato')">Imprimir / Gerar PDF</button>
-      </div>
-      <div class="card no-print">
-        <h2>Preview</h2>
-        <div id="preview-contrato" class="doc-preview"></div>
-      </div>
-    </div>
-  </div>
-</div>
+        function toggleSenha() {
+            if (senhaInput.type === 'password') { senhaInput.type = 'text'; }
+            else { senhaInput.type = 'password'; }
+        }
 
-<script>
-  // ============= CONFIGURAÇÃO DOS FORMULÁRIOS =============
-  const clientFields = [
-    { id: 'nome', label: 'NOME' },
-    { id: 'nacionalidade', label: 'NACIONALIDADE' },
-    { id: 'estadoCivil', label: 'ESTADO CIVIL' },
-    { id: 'profissao', label: 'PROFISSÃO' },
-    { id: 'cpfCnpj', label: 'CPF/CNPJ' },
-    { id: 'rg', label: 'RG' },
-    { id: 'endereco', label: 'ENDEREÇO' },
-    { id: 'cidade', label: 'CIDADE' },
-    { id: 'uf', label: 'UF' },
-    { id: 'email', label: 'E-MAIL', type: 'email' }
-  ];
-
-  const contractClientFields = [
-    ...clientFields,
-    { id: 'cep', label: 'CEP' },
-    { id: 'telefone', label: 'TELEFONE' }
-  ];
-
-  const contractExtraFields = [
-    { id: 'tribunal', label: 'TRIBUNAL' },
-    { id: 'valor', label: 'VALOR (R$)' },
-    { id: 'parcelas', label: 'PARCELAS' },
-    { id: 'percentual', label: 'PERCENTUAL (%)' },
-    { id: 'data', label: 'DATA', type: 'date' }
-  ];
-
-  const allIds = [];
-
-  function buildForm(containerId, fields, extra = []) {
-    const container = document.getElementById(containerId);
-    const allFields = [...fields, ...extra];
-    allFields.forEach(f => {
-      allIds.push(f.id);
-      const div = document.createElement('div');
-      div.className = 'form-group';
-      div.innerHTML = `
-        <label for="${f.id}">${f.label}</label>
-        <input type="${f.type || 'text'}" id="${f.id}" data-label="${f.label}" oninput="updateAll()">
-      `;
-      container.appendChild(div);
-    });
-  }
-
-  buildForm('form-procuracao', clientFields, [
-    { id: 'tribunalProc', label: 'TRIBUNAL' },
-    { id: 'dataProc', label: 'DATA', type: 'date' }
-  ]);
-
-  buildForm('form-hipossuficiencia', clientFields, [
-    { id: 'dataHip', label: 'DATA', type: 'date' }
-  ]);
-
-  buildForm('form-contrato', contractClientFields, contractExtraFields);
-
-  // ============= UTILITÁRIOS =============
-  function val(id) {
-    const el = document.getElementById(id);
-    return el ? el.value.trim() : '';
-  }
-
-  function today() {
-    return new Date().toISOString().split('T')[0];
-  }
-
-  function formatDateInput(dateStr) {
-    if (!dateStr) return '';
-    const [y, m, d] = dateStr.split('-');
-    return `${d}/${m}/${y}`;
-  }
-
-  function logoImg() {
-    return `<div class="logo-print"><img src="https://raw.githubusercontent.com/apolloayres/apolloayresadv/main/logo.png" alt="Apollo Ayres"></div>`;
-  }
-
-  function renderClientLines() {
-    return clientFields.map(f => {
-      const value = val(f.id);
-      return value ? `<p><span class="label">${f.label}:</span> ${value}</p>` : '';
-    }).join('');
-  }
-
-  function renderContractClientLines() {
-    return contractClientFields.map(f => {
-      const value = val(f.id);
-      return value ? `<p><span class="label">${f.label}:</span> ${value}</p>` : '';
-    }).join('');
-  }
-
-  function openTab(id) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    event.target.classList.add('active');
-    document.getElementById(id).classList.add('active');
-  }
-
-  function updateAll() {
-    renderProcuracao();
-    renderHipossuficiencia();
-    renderContrato();
-  }
-
-  // ============= PROCURAÇÃO =============
-  function renderProcuracao() {
-    const tribunal = val('tribunalProc') || '________________________';
-    const data = val('dataProc') ? formatDateInput(val('dataProc')) : formatDateInput(today());
-    const cidadeUf = (val('cidade') && val('uf')) ? `${val('cidade')}/${val('uf')}` : '________________________';
-    const nome = val('nome') || '________________________';
-
-    document.getElementById('preview-procuracao').innerHTML = `
-      ${logoImg()}
-      <h3>PROCURAÇÃO</h3>
-      ${renderClientLines()}
-      <p><strong>NOMEIA E CONSTITUI</strong> seus bastantes procuradores os advogados integrantes da <strong>Sociedade APOLLO AYRES SOCIEDADE INDIVIDUAL DE ADVOGADOS</strong>, inscrita na OAB-DF sob o n.º 3.865, com sede na SCN, quadra 2, Bloco D, Torre B, sala 903, Shopping Liberty Mall, Brasília – DF, CEP 70.712-903, tel.: (67) 3968-5074 e Rua Hélio Yoshiaki Ikieziri, n.º 34, sala 307, York Park, Campo Grande – MS, CEP 79.021-435, tel.: (61) 9-8343-5599, endereço eletrônico: apolloayres@apolloayres.adv.br, que atuará através de seus advogados: <strong>Dr. Apollo Ayres de Andrade Neto</strong>, inscrito na OAB-MS sob o n.º 21057-B e OAB-DF sob o n.º 55444, <strong>Dra. Daniella Alves de Laya</strong>, inscrita na OAB-DF sob o n.º 56313, <strong>Dra. Bruna Nayara dos Santos Martins de Queiroz</strong>, inscrita na OAB-DF sob o n.º 46966, <strong>Dra. Camila Semidei de Barros</strong>, inscrita na OAB-MS sob o n.º 15665, aos quais conferem os mais amplos e gerais poderes e, principalmente os das cláusulas "ad judicia et extra judicia" para o fim especial de, em conjunto ou separadamente da ordem de nomeação, representarem o(a) outorgante perante quaisquer juízos, instâncias ou tribunais, Cartórios, Autarquias, Caixa Econômica Federal, Banco do Brasil ou qualquer órgão público Federal, Estadual, Municipal ou Distrital, podendo para tanto, propor as ações competentes e oferecer as defesas nas que lhe forem contrárias, recorrer, variar, desistir, renunciar, reconvir, confessar, transigir, fazer acordos e composições, firmar termos de compromisso, rerratificar, promover levantamentos e tudo mais que se fizer necessário e for em direito permitido, visando o fiel cumprimento deste mandato na defesa dos direitos e interesse do(a) outorgante, podendo, ainda, substabelecer no todo ou em parte, o que tudo se dará por bom, firme e valioso, mandato em especial para representá-lo(s) perante <strong>${tribunal}</strong>.</p>
-      <p style="text-align:center; margin-top:20px;"><strong>${cidadeUf}, ${data}.</strong></p>
-      <div class="signature">
-        <div class="signature-line">${nome}</div>
-        <p>OUTORGANTE</p>
-      </div>
-    `;
-  }
-
-  // ============= HIPOSSUFICIÊNCIA =============
-  function renderHipossuficiencia() {
-    const data = val('dataHip') ? formatDateInput(val('dataHip')) : formatDateInput(today());
-    const nome = val('nome') || '________________________';
-    const cpf = val('cpfCnpj') || '________________________';
-
-    document.getElementById('preview-hipossuficiencia').innerHTML = `
-      ${logoImg()}
-      <h3>DECLARAÇÃO DE HIPOSSUFICIÊNCIA ECONÔMICA</h3>
-      ${renderClientLines()}
-      <p>Declaro a quem interessar e para todos os fins de direito, sob pena de ser responsabilizado criminalmente por falsa declaração, que sou pobre no sentido jurídico do termo, pois não possuo condições de pagar as custas e despesas do processo, assim como os honorários advocatícios, sem prejuízo de meu sustento próprio e de minha família, necessitando, portanto, da gratuidade judiciária nos termos do art. 98 do Código de Processo Civil.</p>
-      <p style="text-align:center; margin-top:20px;"><strong>Brasília/DF, ${data}.</strong></p>
-      <div class="signature">
-        <div class="signature-line">${nome}</div>
-        <p>CPF: ${cpf}</p>
-        <p>DECLARANTE</p>
-      </div>
-    `;
-  }
-
-  // ============= CONTRATO =============
-  function renderContrato() {
-    const tribunal = val('tribunal') || '________________________';
-    const valor = val('valor') || '________________________';
-    const parcelas = val('parcelas') || '________________________';
-    const percentual = val('percentual') || '________________________';
-    const data = val('data') ? formatDateInput(val('data')) : formatDateInput(today());
-    const nome = val('nome') || '________________________';
-    const cpf = val('cpfCnpj') || '________________________';
-
-    document.getElementById('preview-contrato').innerHTML = `
-      ${logoImg()}
-      <h3>CONTRATO DE PRESTAÇÃO DE SERVIÇOS JURÍDICOS</h3>
-      <p>Pelo presente instrumento particular e na melhor forma de direito, as partes abaixo qualificadas:</p>
-
-      <div class="clausula">
-        <strong>CONTRATANTE:</strong>
-        ${renderContractClientLines()}
-      </div>
-
-      <div class="clausula">
-        <strong>CONTRATADA:</strong>
-        <p><strong>APOLLO AYRES SOCIEDADE INDIVIDUAL DE ADVOCACIA</strong>, inscrita no CNPJ/MF sob o nº 28.648.230/0001-80, com sede na SCN Quadra 2, Torre B, Sala 903, Shopping Liberty Mall, Asa Norte, Brasília, DF, CEP 70.712-903, e Rua Hélio Yoshiaki Ikieziri, nº 34, Sala 304, Campo Grande, MS, CEP 79.021-435, Tel: (61) 3968-5074 e 61. 98343-5599, representada pelo seu sócio proprietário <strong>Dr. Apollo Ayres de Andrade Neto</strong>, brasileiro, divorciado, advogado, inscrito no CPF/MF sob o nº 181.885.401-53, inscrito na OAB/DF sob o nº 55444-A, e OAB-MS sob o nº 21057-B.</p>
-      </div>
-
-      <p>Resolvem de comum acordo, celebrar o presente contrato de prestação de serviços jurídicos, com as cláusulas e condições a seguir elencadas:</p>
-
-      <div class="clausula">
-        <strong>1. DO OBJETO</strong>
-        <p>1.1. O objeto do presente contrato é a prestação de serviços jurídicos para atuação consultiva e representativa, referente ao ajuizamento de ação perante <strong>${tribunal}</strong>.</p>
-        <p>1.2. A contratada se obriga a prestar os serviços jurídicos com a diligência, lealdade e zelo inerentes à profissão, observando as normas do Estatuto da Advocacia e do Código de Ética e Disciplina da OAB, bem como a legislação processual pertinente.</p>
-      </div>
-
-      <div class="clausula">
-        <strong>2. DOS HONORÁRIOS</strong>
-        <p>a) Pelos serviços de estudos, confecção das planilhas de cálculo e da inicial, a contratante pagará à contratada o valor de <strong>R$ ${valor}</strong>, dividido em <strong>${parcelas}</strong> parcelas iguais e sucessivas, vencendo-se a primeira no ato da assinatura do presente contrato e as demais a cada 30 (trinta) dias, consecutivamente.</p>
-        <p>b) Percentual de honorários de êxito: <strong>${percentual}%</strong> sobre o valor total da condenação ou acordo, quando houver êxito na demanda, ou qualquer proveito econômico auferido pelo contratante em decorrência dos serviços prestados, nos termos do art. 585, § 1º, do Código de Processo Civil.</p>
-        <p>1. Ainda que encerrado o contrato com passivo judicial, fica a contratada obrigada a atuar nos autos até o trânsito em julgado, assegurando-se a ela o direito aos honorários contratuais e de êxito eventualmente pactuados.</p>
-        <p>2. O Contratante poderá, após o trânsito em julgado, buscar junto à parte ex-adversa a restituição dos custos e despesas processuais eventualmente adiantadas, a quem competir, sem prejuízo dos honorários advocatícios.</p>
-        <p>3. Os prazos são contados em dias úteis, excluindo-se para tanto sábados, domingos e feriados, na forma do art. 218, § 4º, do Código de Processo Civil.</p>
-      </div>
-
-      <div class="clausula">
-        <strong>3. CONDIÇÕES DE PAGAMENTO</strong>
-        <p>As parcelas referentes aos honorários contratuais serão depositadas na conta bancária da <strong>APOLLO AYRES SOCIEDADE INDIVIDUAL DE ADVOCACIA</strong>:</p>
-        <p>Banco Caixa Econômica Federal, Agência 2403, Operação 1292, Conta-Corrente 578961077-0.</p>
-        <p>PIX: CNPJ 28.648.230/0001-80.</p>
-        <p>a) O atraso no pagamento de qualquer parcela acarretará a incidência de multa moratória de 2% (dois por cento) sobre o valor devido, acrescida de juros de 1% (um por cento) ao mês e correção monetária pelo IGP-M, desde a data do vencimento até o efetivo pagamento.</p>
-        <p>b) Em caso de inadimplência superior a 30 (trinta) dias, a contratada poderá suspender os serviços até a regularização do pagamento, sem prejuízo das demais medidas legais cabíveis.</p>
-        <p>c) O pagamento dos honorários de êxito deverá ser efetuado no prazo de até 5 (cinco) dias úteis após o recebimento do valor pela contratante, independentemente de notificação prévia.</p>
-      </div>
-
-      <div class="clausula">
-        <strong>4. OBRIGAÇÕES DO CONTRATADO</strong>
-        <p>a) Prestar os serviços jurídicos conforme o objeto contratual, com dedicação, lealdade e técnica, observando as normas éticas e legais da profissão.</p>
-        <p>b) Manter o contratante informado sobre os atos e providências necessários ao desenvolvimento da demanda, prestando-lhe esclarecimentos sobre os riscos, custos e probabilidades de êxito.</p>
-        <p>c) Zelar pelos interesses do contratante, observando o dever de confidencialidade e sigilo profissional, nos termos do art. 7º, II, da Lei nº 8.906/1994 e do Código de Ética e Disciplina da OAB.</p>
-        <p>d) Entregar ao contratante, quando solicitado, cópias dos documentos e peças processuais pertinentes à prestação dos serviços.</p>
-      </div>
-
-      <div class="clausula">
-        <strong>5. OBRIGAÇÕES DA(O) CONTRATANTE</strong>
-        <p>a) Fornecer à contratada todos os documentos, informações e esclarecimentos necessários à correta prestação dos serviços, especialmente:</p>
-        <p>1. Documento de identidade, CPF/CNPJ, comprovante de residência e demais documentos pessoais;</p>
-        <p>2. Documentos, contratos, notas fiscais, recibos, planilhas e quaisquer outros elementos probatórios relacionados ao objeto da demanda;</p>
-        <p>3. Informações verdadeiras e atualizadas sobre os fatos narrados, sob pena de responsabilidade civil e criminal.</p>
-        <p>b) Efetuar o pagamento dos honorários contratuais e de êxito nas condições pactuadas, bem como reembolsar a contratada das custas, despesas processuais e extrajudiciais devidamente comprovadas.</p>
-        <p>1. O contratante é responsável pelo pagamento das custas judiciais, taxas, emolumentos, perícias, transporte, hospedagem e outras despesas necessárias ao deslinde da causa, quando aplicáveis.</p>
-        <p>2. A contratada não se responsabiliza por eventuais prejuízos decorrentes de informações inexatas, omissões ou documentos inidôneos fornecidos pelo contratante.</p>
-        <p>Observação 1: O contratante declara estar ciente de que o resultado da demanda não é garantido pela contratada, dependendo de avaliação probatória e decisão do Poder Judiciário.</p>
-        <p>Observação 2: O contratante autoriza a contratada a praticar todos os atos processuais necessários ao regular desenvolvimento da demanda, inclusive recebimento de intimações e citações.</p>
-      </div>
-
-      <div class="clausula">
-        <strong>6. DO INADIMPLEMENTO</strong>
-        <p>Em caso de inadimplemento das obrigações de pagamento pela contratante, fica estabelecida a incidência de multa moratória de 2% (dois por cento) sobre o valor em atraso, acrescida de juros de 1% (um por cento) ao mês e correção monetária pelo IGP-M, ou outro índice que venha a substituí-lo, desde o vencimento até o efetivo pagamento. Adicionalmente, a contratada terá direito a honorários de 20% (vinte por cento) sobre o valor total do contrato em caso de cobrança judicial ou extrajudicial do débito.</p>
-      </div>
-
-      <div class="clausula">
-        <strong>7. PRAZO DE EXECUÇÃO E VIGÊNCIA</strong>
-        <p>7.1. O presente contrato tem vigência a partir de sua assinatura e perdurará até o término dos serviços contratados ou até o trânsito em julgado da decisão final, observado o disposto na cláusula 2, item 1.</p>
-        <p>7.2. O encerramento da relação contratual não exime a contratante do pagamento dos honorários contratuais e de êxito eventualmente devidos.</p>
-      </div>
-
-      <div class="clausula">
-        <strong>8. REVISÃO E MODIFICAÇÃO DO CONTRATO</strong>
-        <p>8.1. As partes poderão, de comum acordo e por escrito, revisar ou modificar as cláusulas do presente contrato, observando-se sempre a forma escrita e a concordância de ambas as partes.</p>
-        <p>§1º. Nenhuma alteração verbal ou informal terá eficácia jurídica, devendo qualquer modificação ser formalizada em termo aditivo devidamente assinado pelas partes.</p>
-      </div>
-
-      <div class="clausula">
-        <strong>9. RENÚNCIA OU RESCISÃO</strong>
-        <p>a) O presente contrato poderá ser rescindido por qualquer das partes, mediante notificação prévia por escrito, com antecedência mínima de 30 (trinta) dias.</p>
-        <p>b) A rescisão unilateral por parte do contratante não o exime do pagamento dos honorários contratuais e de êxito devidos, proporcionalmente aos serviços já prestados ou resultados obtidos.</p>
-        <p>c) Em caso de rescisão por inadimplemento do contratante, a contratada fica autorizada a reter os documentos e valores recebidos até a total quitação dos débitos.</p>
-        <p>d) A renúncia ao mandato pelo advogado deverá ser comunicada por escrito ao contratante e ao juízo, observando o prazo mínimo de 10 (dez) dias previsto no art. 9º, § 3º, da Lei nº 8.906/1994.</p>
-        <p>e) A rescisão não prejudicará o direito da contratada ao recebimento dos honorários de êxito eventualmente pactuados, caso haja procedência do pedido ou acordo posterior.</p>
-      </div>
-
-      <div class="clausula">
-        <strong>10. POLÍTICAS E PRÁTICAS DE COMPLIANCE</strong>
-        <p>a) As partes comprometem-se a observar, na execução do presente contrato, as leis anticorrupção, antilavagem de dinheiro e demais normas de compliance aplicáveis.</p>
-        <p>b) É vedado às partes oferecer, prometer, autorizar ou efetuar pagamento de qualquer vantagem indevida a agentes públicos ou privados, nacionais ou estrangeiros.</p>
-        <p>c) O contratante declara que os recursos utilizados para o pagamento dos honorários e despesas são de origem lícita, não decorrendo de atividades ilícitas ou criminosas.</p>
-        <p>d) A contratada poderá recusar-se a prestar serviços ou rescindir o contrato caso identifique indícios de irregularidades, ilícitos ou violações às normas de compliance.</p>
-        <p>e) As partes manterão registros contábeis e documentais adequados e precisos sobre as transações decorrentes do presente contrato.</p>
-        <p>f) Eventuais denúncias ou comunicações relacionadas a compliance poderão ser encaminhadas pelo canal oficial da contratada.</p>
-        <p>g) O descumprimento das disposições desta cláusula acarretará a rescisão imediata do contrato e a responsabilização civil e criminal do infrator.</p>
-        <p>§1º. As obrigações de compliance aqui estabelecidas permanecerão válidas mesmo após a rescisão ou término do contrato.</p>
-      </div>
-
-      <div class="clausula">
-        <strong>11. CONFIDENCIALIDADE</strong>
-        <p>11.1. As partes se obrigam a manter sigilo e confidencialidade sobre todas as informações, documentos, dados e estratégias a que tiverem acesso em razão da execução do presente contrato.</p>
-        <p>§1º. O dever de confidencialidade abrange informações técnicas, comerciais, financeiras, estratégicas, pessoais e processuais.</p>
-        <p>§2º. O dever de sigilo não se aplica às informações que devam ser obrigatoriamente reveladas em cumprimento à ordem judicial ou determinação legal, desde que limitadas ao estritamente necessário.</p>
-        <p>§3º. O descumprimento do dever de confidencialidade acarretará a responsabilização civil e criminal da parte infratora pelos prejuízos causados.</p>
-        <p>§4º. O dever de confidencialidade permanece mesmo após a rescisão ou término do contrato, pelo prazo de 5 (cinco) anos ou pelo prazo legal superior, quando aplicável.</p>
-      </div>
-
-      <div class="clausula">
-        <strong>12. FORÇA EXECUTIVA DO CONTRATO</strong>
-        <p>12.1. O presente contrato, quando firmado por partes capazes e observados os requisitos legais, constitui título executivo extrajudicial, nos termos do art. 784, inciso III, do Código de Processo Civil.</p>
-        <p>12.2. Em caso de inadimplemento das obrigações de pagamento, a contratada poderá promover a execução do contrato diretamente perante o Poder Judiciário, sem necessidade de prévia sentença condenatória.</p>
-      </div>
-
-      <div class="clausula">
-        <strong>13. FORO</strong>
-        <p>13.1. Para dirimir quaisquer controvérsias oriundas do presente contrato, as partes elegem o foro da Comarca de Brasília/DF, renunciando a qualquer outro, por mais privilegiado que seja.</p>
-        <p>13.2. Antes de ajuizamento de qualquer ação judicial, as partes comprometem-se a buscar a solução amigável do conflito por meio de mediação ou arbitragem, conforme legislação aplicável.</p>
-      </div>
-
-      <p style="text-align:center; margin-top:25px;"><strong>Brasília – Distrito Federal, ${data}.</strong></p>
-
-      <div class="signature" style="margin-top:40px;">
-        <div class="signature-line">${nome}</div>
-        <p>CPF: ${cpf}</p>
-        <p><strong>CONTRATANTE</strong></p>
-      </div>
-
-      <div class="signature" style="margin-top:40px;">
-        <div class="signature-line">Apollo Ayres de Andrade Neto</div>
-        <p>APOLLO AYRES SOCIEDADE INDIVIDUAL DE ADVOCACIA</p>
-        <p>CNPJ: 28.648.230/0001-80</p>
-        <p>OAB-MS 21057-B / OAB-DF 55444-A</p>
-        <p><strong>CONTRATADO</strong></p>
-      </div>
-
-      <div style="margin-top:40px;">
-        <p><strong>TESTEMUNHAS:</strong></p>
-        <p style="margin-top:20px;">1. ____________________________________________ RG: __________________ CPF: __________________</p>
-        <p style="margin-top:20px;">2. ____________________________________________ RG: __________________ CPF: __________________</p>
-      </div>
-    `;
-  }
-
-  // ============= IMPRESSÃO =============
-  function printTab(previewId) {
-    const activeContent = document.querySelector('.tab-content.active');
-    activeContent.classList.add('active-print');
-    const preview = document.getElementById(previewId);
-    preview.classList.add('active-print');
-    window.print();
-    setTimeout(() => {
-      activeContent.classList.remove('active-print');
-      preview.classList.remove('active-print');
-    }, 100);
-  }
-
-  // Inicialização
-  document.getElementById('dataProc').value = today();
-  document.getElementById('dataHip').value = today();
-  document.getElementById('data').value = today();
-  updateAll();
-</script>
-
+        async function logar() {
+            limparMensagem();
+            const email = emailInput.value.trim();
+            const senha = senhaInput.value;
+            if (!email) { mostrarErro('Informe o e-mail.'); emailInput.focus(); return; }
+            if (!senha) { mostrarErro('Informe a senha.'); senhaInput.focus(); return; }
+            btnEntrar.disabled = true;
+            btnEntrar.textContent = 'Entrando...';
+            mostrarLoading('Verificando credenciais...');
+            try {
+                const resultado = await window.fazerLogin(email, senha);
+                if (resultado && resultado.sucesso) { mostrarSucesso('Login realizado com sucesso!'); }
+                else {
+                    mostrarErro((resultado && resultado.mensagem) || 'E-mail ou senha inválidos.');
+                    btnEntrar.disabled = false;
+                    btnEntrar.textContent = 'Entrar';
+                }
+            } catch (erro) {
+                console.error('Erro no login:', erro);
+                mostrarErro('Erro ao fazer login. Tente novamente.');
+                btnEntrar.disabled = false;
+                btnEntrar.textContent = 'Entrar';
+            }
+        }
+    </script>
 </body>
 </html>
