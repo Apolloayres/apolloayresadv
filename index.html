@@ -1,132 +1,116 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Controle do Escritório</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .login-container {
-            background: white;
-            border-radius: 20px;
-            max-width: 420px;
-            width: 100%;
-            padding: 40px 30px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-            text-align: center;
-        }
-        .logo { height: 80px; margin-bottom: 20px; }
-        h1 { color: #333; font-size: 24px; margin-bottom: 8px; }
-        .subtitle { color: #666; font-size: 15px; margin-bottom: 28px; }
-        .form-group { margin-bottom: 18px; text-align: left; position: relative; }
-        .form-group label { display: block; margin-bottom: 6px; color: #444; font-size: 14px; font-weight: 500; }
-        .input-wrapper { position: relative; }
-        .input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #777; }
-        .form-group input {
-            width: 100%; padding: 12px 12px 12px 42px;
-            border: 1px solid #ddd; border-radius: 10px; font-size: 15px;
-            outline: none; transition: border-color 0.3s, box-shadow 0.3s;
-        }
-        .form-group input:focus { border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.15); }
-        .toggle-senha {
-            position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-            background: none; border: none; font-size: 18px; cursor: pointer; color: #777;
-            padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
-        }
-        .toggle-senha:hover { color: #333; }
-        .btn-entrar {
-            width: 100%; padding: 14px; border: none; border-radius: 10px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white; font-size: 16px; font-weight: 600; cursor: pointer;
-            transition: opacity 0.3s, transform 0.2s; margin-top: 10px;
-        }
-        .btn-entrar:hover:not(:disabled) { opacity: 0.95; transform: translateY(-1px); }
-        .btn-entrar:disabled { opacity: 0.7; cursor: not-allowed; }
-        .mensagem { margin-top: 16px; min-height: 20px; font-size: 14px; font-weight: 500; }
-        .mensagem.erro { color: #d32f2f; }
-        .mensagem.loading { color: #667eea; }
-        .mensagem.sucesso { color: #2e7d32; }
-        footer { margin-top: 24px; color: rgba(255,255,255,0.85); font-size: 13px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Controle do Escritório</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background: linear-gradient(135deg, #667eea, #764ba2);
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+padding: 20px;
+}
+.login-container {
+background: white;
+border-radius: 20px;
+max-width: 420px;
+width: 100%;
+padding: 40px 30px;
+box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+text-align: center;
+}
+.logo { height: 80px; margin-bottom: 20px; }
+h1 { color: #333; font-size: 24px; margin-bottom: 8px; }
+.subtitle { color: #666; font-size: 15px; margin-bottom: 28px; }
+.form-group { margin-bottom: 18px; text-align: left; }
+.form-group label { display: block; margin-bottom: 6px; color: #444; font-size: 14px; font-weight: 500; }
+.input-wrapper { position: relative; }
+.input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #777; }
+.form-group input {
+width: 100%; padding: 12px 12px 12px 42px;
+border: 1px solid #ddd; border-radius: 10px; font-size: 15px;
+outline: none; transition: border-color 0.3s, box-shadow 0.3s;
+}
+.form-group input:focus { border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.15); }
+.toggle-senha {
+position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+background: none; border: none; font-size: 18px; cursor: pointer; color: #777;
+}
+.btn-entrar {
+width: 100%; padding: 14px; border: none; border-radius: 10px;
+background: linear-gradient(135deg, #667eea, #764ba2);
+color: white; font-size: 16px; font-weight: 600; cursor: pointer;
+transition: 0.3s; margin-top: 10px;
+}
+.btn-entrar:hover:not(:disabled) { opacity: 0.95; transform: translateY(-1px); }
+.btn-entrar:disabled { opacity: 0.7; cursor: not-allowed; }
+.mensagem { margin-top: 16px; min-height: 20px; font-size: 14px; font-weight: 500; }
+.mensagem.erro { color: #d32f2f; }
+.mensagem.loading { color: #667eea; }
+.mensagem.sucesso { color: #2e7d32; }
+footer { margin-top: 24px; color: rgba(255,255,255,0.85); font-size: 13px; }
+</style>
 </head>
 <body>
-    <div class="login-container">
-        <img src="https://raw.githubusercontent.com/apolloayres/apolloayresadv/main/logo.png" alt="Logo" class="logo">
-        <h1>Controle do Escritório</h1>
-        <p class="subtitle">Acesse sua conta</p>
-        <form id="formLogin" onsubmit="event.preventDefault(); logar();">
-            <div class="form-group">
-                <label for="email">E-mail</label>
-                <div class="input-wrapper">
-                    <span class="input-icon">✉️</span>
-                    <input type="email" id="email" name="email" placeholder="seu@email.com" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="senha">Senha</label>
-                <div class="input-wrapper">
-                    <span class="input-icon">🔒</span>
-                    <input type="password" id="senha" name="senha" placeholder="Sua senha" required>
-                    <button type="button" class="toggle-senha" onclick="toggleSenha()">👁️</button>
-                </div>
-            </div>
-            <button type="submit" id="btnEntrar" class="btn-entrar">Entrar</button>
-        </form>
-        <div id="mensagem" class="mensagem"></div>
-    </div>
-    <footer>Sistema de gestão do escritório</footer>
-    <script src="db.js"></script>
-    <script src="auth.js"></script>
-    <script>
-        const emailInput = document.getElementById('email');
-        const senhaInput = document.getElementById('senha');
-        const btnEntrar = document.getElementById('btnEntrar');
-        const mensagem = document.getElementById('mensagem');
-
-        function mostrarErro(texto) { mensagem.textContent = texto; mensagem.className = 'mensagem erro'; }
-        function mostrarLoading(texto) { mensagem.textContent = texto; mensagem.className = 'mensagem loading'; }
-        function mostrarSucesso(texto) { mensagem.textContent = texto; mensagem.className = 'mensagem sucesso'; }
-        function limparMensagem() { mensagem.textContent = ''; mensagem.className = 'mensagem'; }
-
-        function toggleSenha() {
-            if (senhaInput.type === 'password') { senhaInput.type = 'text'; }
-            else { senhaInput.type = 'password'; }
-        }
-
-        async function logar() {
-            limparMensagem();
-            const email = emailInput.value.trim();
-            const senha = senhaInput.value;
-            if (!email) { mostrarErro('Informe o e-mail.'); emailInput.focus(); return; }
-            if (!senha) { mostrarErro('Informe a senha.'); senhaInput.focus(); return; }
-            btnEntrar.disabled = true;
-            btnEntrar.textContent = 'Entrando...';
-            mostrarLoading('Verificando credenciais...');
-            try {
-                const resultado = await window.fazerLogin(email, senha);
-                if (resultado && resultado.sucesso) { mostrarSucesso('Login realizado com sucesso!'); }
-                else {
-                    mostrarErro((resultado && resultado.mensagem) || 'E-mail ou senha inválidos.');
-                    btnEntrar.disabled = false;
-                    btnEntrar.textContent = 'Entrar';
-                }
-            } catch (erro) {
-                console.error('Erro no login:', erro);
-                mostrarErro('Erro ao fazer login. Tente novamente.');
-                btnEntrar.disabled = false;
-                btnEntrar.textContent = 'Entrar';
-            }
-        }
-    </script>
+<div class="login-container">
+<img src="https://raw.githubusercontent.com/apolloayres/apolloayresadv/main/logo.png" alt="Logo" class="logo">
+<h1>Controle do Escritório</h1>
+<p class="subtitle">Acesse sua conta</p>
+<form id="formLogin" onsubmit="event.preventDefault(); logar();">
+<div class="form-group">
+<label for="email">E-mail</label>
+<div class="input-wrapper">
+<span class="input-icon">✉️</span>
+<input type="email" id="email" name="email" placeholder="seu@email.com" required>
+</div>
+</div>
+<div class="form-group">
+<label for="senha">Senha</label>
+<div class="input-wrapper">
+<span class="input-icon">🔒</span>
+<input type="password" id="senha" name="senha" placeholder="Sua senha" required>
+<button type="button" class="toggle-senha" onclick="toggleSenha()">👁️</button>
+</div>
+</div>
+<button type="submit" id="btnEntrar" class="btn-entrar">Entrar</button>
+</form>
+<div id="mensagem" class="mensagem"></div>
+</div>
+<footer>Sistema de gestão do escritório</footer>
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script>
+function toggleSenha() {
+const s = document.getElementById('senha');
+s.type = s.type === 'password' ? 'text' : 'password';
+}
+async function logar() {
+const email = document.getElementById('email').value.trim();
+const senha = document.getElementById('senha').value;
+const btn = document.getElementById('btnEntrar');
+const m = document.getElementById('mensagem');
+if (!email) { m.textContent='Informe o e-mail.'; m.className='mensagem erro'; return; }
+if (!senha) { m.textContent='Informe a senha.'; m.className='mensagem erro'; return; }
+btn.disabled=true; btn.textContent='Entrando...';
+m.textContent='Verificando...'; m.className='mensagem loading';
+try {
+const r = await window.fazerLogin(email, senha);
+if (r&&r.sucesso) { m.textContent='Login realizado!'; m.className='mensagem sucesso'; }
+else {
+m.textContent=(r&&r.mensagem)||'E-mail ou senha inválidos.'; m.className='mensagem erro';
+btn.disabled=false; btn.textContent='Entrar';
+}
+} catch(e) {
+m.textContent='Erro ao fazer login.'; m.className='mensagem erro';
+btn.disabled=false; btn.textContent='Entrar';
+}
+}
+</script>
 </body>
 </html>
